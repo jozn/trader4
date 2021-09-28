@@ -14,8 +14,8 @@ pub struct KlineTA {
 
 impl KlineTA {}
 
-impl VolumeId for KlineTA {
-    fn get_volume_id(&self) -> u64 {
+impl KlineId for KlineTA {
+    fn get_kline_id(&self) -> u64 {
         self.kline.bucket
     }
 }

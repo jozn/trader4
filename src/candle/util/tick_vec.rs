@@ -10,7 +10,7 @@ pub type VVResult<T> = std::result::Result<T, VolVecErr>;
 // VolVec is used to hold trades/ticks and add an id to each trade/tick
 // Todo change to TickVec
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct VolVec<T> {
+pub struct TickVec<T> {
     next_id: u64,
     arr: Vec<Item<T>>,
 }
@@ -21,7 +21,7 @@ pub struct Item<T> {
     pub data: Box<T>,
 }
 
-impl<T: Clone> VolVec<T> {
+impl<T: Clone> TickVec<T> {
     pub fn new() -> Self {
         Self {
             next_id: 0,
@@ -114,8 +114,8 @@ impl<T: Clone> VolVec<T> {
     }
 }
 
-impl<T: Clone> Default for VolVec<T> {
-    fn default() -> VolVec<T> {
-        VolVec::new()
+impl<T: Clone> Default for TickVec<T> {
+    fn default() -> TickVec<T> {
+        TickVec::new()
     }
 }

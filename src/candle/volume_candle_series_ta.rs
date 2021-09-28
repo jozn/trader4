@@ -11,14 +11,14 @@ pub struct VolumeCandleSeriesTA {
 
     // Ticking is just for offline data analyse not any for realtime
     pub ticking_tip: VolumeTickingTipHolder,
-    pub ticking: VolSerVec<KlineTATick>,
+    pub ticking: KlineSerVec<KlineTATick>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct VolumeCandleTimeFrameTA {
     pub length_ms: u64,
     pub ta_holder: TAMethods,
-    pub klines_ta: VolSerVec<KlineTA>,
+    pub klines_ta: KlineSerVec<KlineTA>,
     pub kline_ta_tip: Option<KlineTA>,
 }
 
@@ -27,7 +27,7 @@ impl VolumeCandleSeriesTA {
         Self::default()
     }
 
-    pub fn add_trades(&mut self, trades: SerVec<CSVTradeRecord>) {
+    pub fn add_trades(&mut self, trades: SerVec<Tick>) {
         let diff = self.klines.add_trades(trades);
         self.process_diff(diff);
     }
@@ -130,8 +130,8 @@ pub struct KlineTATick {
     pub big: KlineTA,
 }
 
-impl VolumeId for KlineTATick {
-    fn get_volume_id(&self) -> u64 {
+impl KlineId for KlineTATick {
+    fn get_kline_id(&self) -> u64 {
         self.small.kline.bucket
     }
 }

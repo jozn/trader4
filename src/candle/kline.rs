@@ -18,8 +18,8 @@ pub struct Kline {
     pub volume: f64,
 }
 
-impl VolumeId for Kline {
-    fn get_volume_id(&self) -> u64 {
+impl KlineId for Kline {
+    fn get_kline_id(&self) -> u64 {
         self.bucket
     }
 }

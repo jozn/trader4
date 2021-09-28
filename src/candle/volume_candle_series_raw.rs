@@ -5,7 +5,7 @@ use std::collections::VecDeque;
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct VolumeCandleSeriesRaw {
     // pub trades: SerVec<CSVTradeRecord>,
-    pub trades: VolVec<CSVTradeRecord>,
+    pub trades: TickVec<Tick>,
     pub small: VolumeCandleTimeFrameRaw,
     pub medium: VolumeCandleTimeFrameRaw,
     pub big: VolumeCandleTimeFrameRaw,
@@ -15,7 +15,7 @@ pub struct VolumeCandleSeriesRaw {
 #[derive(Debug, Default, Serialize, Deserialize, Clone)]
 pub struct VolumeCandleTimeFrameRaw {
     pub small_multi: u64, // how many of small candle this candle should be
-    pub klines: VolSerVec<Kline>,
+    pub klines: KlineSerVec<Kline>,
 }
 
 pub type VolumeVolCandleAddDiff = VolumeCandleSeriesRaw; // Only trades is not set
@@ -25,10 +25,7 @@ impl VolumeCandleSeriesRaw {
         Self::default()
     }
 
-    pub fn add_trades(
-        &mut self,
-        trades: SerVec<CSVTradeRecord>,
-    ) -> TResult<VolumeVolCandleAddDiff> {
+    pub fn add_trades(&mut self, trades: SerVec<Tick>) -> TResult<VolumeVolCandleAddDiff> {
         if trades.len() == 0 {
             println!(">> Trades are empty.");
             return Err(TErr::EmptyTradesErr);
@@ -91,7 +88,7 @@ impl VolumeCandleSeriesRaw {
             sum += trade.qty;
 
             if sum > self.small_volume_size {
-                let mut kline = aggregate_trades_to_kline(&VolVec::transform_seq(&stage_trades));
+                let mut kline = aggregate_trades_to_kline(&TickVec::transform_seq(&stage_trades));
                 let first_trade = stage_trades.first().unwrap();
                 kline.bucket = first_trade.id;
                 self.small.klines.push_replace(kline);
@@ -103,7 +100,7 @@ impl VolumeCandleSeriesRaw {
         // Not fully formed candle tip
         if stage_trades.len() > 0 {
             // copy of above code
-            let mut kline = aggregate_trades_to_kline(&VolVec::transform_seq(&stage_trades));
+            let mut kline = aggregate_trades_to_kline(&TickVec::transform_seq(&stage_trades));
             let first_trade = stage_trades.first().unwrap();
             kline.bucket = first_trade.id;
             self.small.klines.push_replace(kline);
@@ -140,7 +137,7 @@ impl VolumeCandleSeriesRaw {
 impl Default for VolumeCandleSeriesRaw {
     fn default() -> Self {
         Self {
-            trades: VolVec::new(),
+            trades: TickVec::new(),
             small: Default::default(),
             medium: VolumeCandleTimeFrameRaw {
                 small_multi: MEDIUM_VOLUME,
@@ -155,7 +152,7 @@ impl Default for VolumeCandleSeriesRaw {
     }
 }
 
-fn aggregate_trades_to_kline(trades: &Vec<CSVTradeRecord>) -> Kline {
+fn aggregate_trades_to_kline(trades: &Vec<Tick>) -> Kline {
     let num = trades.len() as u32;
     assert!(num > 0);
     let bucket_id = 7;
@@ -201,7 +198,7 @@ fn aggregate_trades_to_kline(trades: &Vec<CSVTradeRecord>) -> Kline {
 }
 
 fn regenerate_last_other_klines(
-    small_klines: &VolSerVec<Kline>,
+    small_klines: &KlineSerVec<Kline>,
     candle_raw: &mut VolumeCandleTimeFrameRaw,
     small_volume: f64,
 ) {
@@ -243,7 +240,7 @@ fn regenerate_last_other_klines(
     }
 }
 
-fn sum_klines_from_small(arr: VolSerVec<Kline>) -> Kline {
+fn sum_klines_from_small(arr: KlineSerVec<Kline>) -> Kline {
     assert!(arr.len() > 0);
     // println!(">>>>>>>>>****: {}  ", arr.len());
 
