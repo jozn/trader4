@@ -1,0 +1,15 @@
+/target
+trader2.iml
+#/debug
+/old
+/.idea
+o*.txt
+/diff*
+/data
+**.idea
+*.png
+*.svg
+o*.json
+*.csv
+
+nohup.out
