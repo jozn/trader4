@@ -1,41 +1,43 @@
-pub mod candle_series_raw;
-pub mod candle_series_ta;
-pub mod candles;
-pub mod cross;
-pub mod csv_out;
-pub mod data_utils;
-pub mod events;
+// pub mod candle_series_raw;
+// pub mod candle_series_ta;
+// pub mod candles;
+// pub mod cross;
+// pub mod csv_out;
+// pub mod data_utils;
+// pub mod events;
 pub mod kline;
 pub mod kline_ta;
-pub mod loader_kline;
-pub mod loader_trade;
-pub mod ml;
-pub mod ohlcv;
-pub mod play_dep;
+// pub mod loader_kline;
+// pub mod loader_trade;
+// pub mod ml;
+// pub mod ohlcv;
+// pub mod play_dep;
 pub mod position;
-pub mod proc;
-pub mod ser_vec;
-pub mod ticker;
+// pub mod proc;
+// pub mod ser_vec;
+// pub mod ticker;
 pub mod vol_ser_vec;
 pub mod vol_vec;
 pub mod volume_candle_series_raw;
 // pub mod volume_candle_series_raw_dep;
+pub mod ser_vec;
 pub mod volume_candle_series_ta;
 
-pub use candle_series_raw::*;
-pub use candle_series_ta::*;
-pub use cross::*;
-pub use csv_out::*;
-pub use data_utils::*;
-pub use events::*;
+// pub use candle_series_raw::*;
+// pub use candle_series_ta::*;
+// pub use cross::*;
+// pub use csv_out::*;
+// pub use data_utils::*;
+// pub use events::*;
 pub use kline::*;
 pub use kline_ta::*;
-pub use loader_kline::*;
-pub use loader_trade::*;
-pub use ohlcv::*;
+// pub use loader_kline::*;
+// pub use loader_trade::*;
+// pub use ohlcv::*;
 pub use position::*;
+// pub use ser_vec::*;
+// pub use ticker::*;
 pub use ser_vec::*;
-pub use ticker::*;
 pub use vol_ser_vec::*;
 pub use vol_vec::*;
 pub use volume_candle_series_raw::*;
@@ -49,6 +51,19 @@ pub enum TErr {
     KlineDurationNotSmallErr,
     EmptyTradesErr,
     TradesTimeErr,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct CSVTradeRecord {
+    pub time: u64,
+    pub price: f64,
+    pub qty: f64, // todo
+} // todo change to Tick
+
+impl TimeKey for CSVTradeRecord {
+    fn get_time(&self) -> u64 {
+        0 // todo
+    }
 }
 
 const SMALL_TIME: u64 = 60_000;

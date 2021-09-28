@@ -5,6 +5,7 @@
 #![allow(soft_unstable)]
 
 pub mod base;
+pub mod candle;
 pub mod ctrader;
 pub mod forex;
 pub mod pb;
