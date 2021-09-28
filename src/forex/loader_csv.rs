@@ -26,7 +26,7 @@ impl CSVForexRecord {
         let open_time = NaiveDateTime::parse_from_str(&time_str, "%Y%m%d %H:%M:%S:%f").unwrap();
         let ots = open_time.format("%Y-%m-%d %H:%M:%S").to_string();
 
-        CSVForexRecord{
+        CSVForexRecord {
             // time: i.next().unwrap().parse().unwrap(),
             // time: open_time.t,
             time: open_time.timestamp() as u64,
@@ -43,7 +43,9 @@ pub(crate) fn _load(num: u32, file_path: &str) -> Vec<CSVForexRecord> {
     let mut arr = Vec::new();
     let file = std::fs::File::open(file_path).unwrap();
     let mut reader = BufReader::with_capacity(8 * 1024 * 1000, file);
-    let mut rdr = csv::ReaderBuilder::new().delimiter(b'\t').from_reader(reader);
+    let mut rdr = csv::ReaderBuilder::new()
+        .delimiter(b'\t')
+        .from_reader(reader);
     // let mut rdr = csv::Reader::from_reader(reader);
     let mut i = 0;
     for result in rdr.records().take(num as usize) {

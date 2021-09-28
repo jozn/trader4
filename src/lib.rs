@@ -5,5 +5,3 @@
 #![allow(soft_unstable)]
 
 pub mod forex;
-
-
