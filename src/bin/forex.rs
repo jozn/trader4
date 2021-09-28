@@ -1,6 +1,6 @@
-use trader;
-use trader::forex;
+use trader2;
+
 
 fn main() {
-    forex::play::play1();
+    trader2::forex::play::play1();
 }
