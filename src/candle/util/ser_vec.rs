@@ -21,9 +21,9 @@ impl<T> TimeKey for &T {
 
 // The none unique Time Series Vector for Trades vector for example.
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SerVec<T: TimeKey>(Vec<T>);
+pub struct TimeSerVec<T: TimeKey>(Vec<T>);
 
-impl<T: TimeKey + Clone> SerVec<T> {
+impl<T: TimeKey + Clone> TimeSerVec<T> {
     pub fn new() -> Self {
         Self(Vec::new())
     }
@@ -80,12 +80,12 @@ impl<T: TimeKey + Clone> SerVec<T> {
         self.0
     }
 
-    pub fn get_from(&self, time_start: u64) -> SerVec<T> {
+    pub fn get_from(&self, time_start: u64) -> TimeSerVec<T> {
         self.get_range(time_start, u64::MAX)
     }
 
     // Note: time_end_ex is exclusive range
-    pub fn get_range(&self, time_start: u64, time_end_ex: u64) -> SerVec<T> {
+    pub fn get_range(&self, time_start: u64, time_end_ex: u64) -> TimeSerVec<T> {
         let idx = self.0.binary_search_by(|p| p.get_time().cmp(&time_start));
         let mut id = match idx {
             Ok(id) => id,
@@ -124,9 +124,9 @@ impl<T: TimeKey + Clone> SerVec<T> {
     }
 }
 
-impl<T: TimeKey + Clone> Default for SerVec<T> {
-    fn default() -> SerVec<T> {
-        SerVec::new()
+impl<T: TimeKey + Clone> Default for TimeSerVec<T> {
+    fn default() -> TimeSerVec<T> {
+        TimeSerVec::new()
     }
 }
 
@@ -151,7 +151,7 @@ mod tests {
 
     #[test]
     fn test_ser_vec() {
-        let mut a = SerVec::new();
+        let mut a = TimeSerVec::new();
 
         a.push(new(1)).unwrap();
         assert_eq!(a.len(), 1);

@@ -3,43 +3,44 @@ use serde::{Deserialize, Serialize};
 use std::borrow::BorrowMut;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct VolumeCandleSeriesTA {
-    pub klines: VolumeCandleSeriesRaw,
-    pub small: VolumeCandleTimeFrameTA,
-    pub medium: VolumeCandleTimeFrameTA,
-    pub big: VolumeCandleTimeFrameTA,
+pub struct CandleSeriesTA {
+    pub klines: CandleSeries,
+    pub small: KlineHolderFrameTA,
+    pub medium: KlineHolderFrameTA,
+    pub big: KlineHolderFrameTA,
 
+    // todo add flag is we should process ticking
     // Ticking is just for offline data analyse not any for realtime
-    pub ticking_tip: VolumeTickingTipHolder,
+    pub ticking_tip: TickingTipHolderTA,
     pub ticking: KlineSerVec<KlineTATick>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct VolumeCandleTimeFrameTA {
+pub struct KlineHolderFrameTA {
     pub length_ms: u64,
     pub ta_holder: TAMethods,
     pub klines_ta: KlineSerVec<KlineTA>,
     pub kline_ta_tip: Option<KlineTA>,
 }
 
-impl VolumeCandleSeriesTA {
+impl CandleSeriesTA {
     pub fn new() -> Self {
         Self::default()
     }
 
-    pub fn add_trades(&mut self, trades: SerVec<Tick>) {
-        let diff = self.klines.add_trades(trades);
+    pub fn add_trades(&mut self, trades: TimeSerVec<Tick>) {
+        let diff = self.klines.add_ticks(trades);
         self.process_diff(diff);
     }
 
-    fn process_diff(&mut self, diff: TResult<VolumeVolCandleAddDiff>) {
+    fn process_diff(&mut self, diff: TResult<CandleSeriesDiff>) {
         if diff.is_err() {
             return;
         }
         let diff_cp = diff.clone();
         let diff = diff.unwrap();
 
-        fn doer(ctf: VolumeCandleTimeFrameRaw, cta: &mut VolumeCandleTimeFrameTA) {
+        fn doer(ctf: KlineHolderFrame, cta: &mut KlineHolderFrameTA) {
             for k in ctf.klines.get_vec() {
                 let kta = cal_indicators(&mut cta.ta_holder.clone(), k);
                 // cta.klines_ta.push_replace(kta);
@@ -66,7 +67,7 @@ impl VolumeCandleSeriesTA {
         self.process_tip(diff_cp);
     }
 
-    fn process_tip(&mut self, diff: TResult<VolumeVolCandleAddDiff>) {
+    fn process_tip(&mut self, diff: TResult<CandleSeriesDiff>) {
         if diff.is_err() {
             return;
         }
@@ -121,6 +122,17 @@ impl VolumeCandleSeriesTA {
             self.ticking_tip.big.kline = new_big_kline;
         }
     }
+
+    pub fn print_klines(&self) {
+        println!("SMALL: {:#?}", self.small);
+        println!("MEDIUM: {:#?}", self.medium);
+        println!("BIG: {:#?}", self.big);
+    }
+
+    pub fn print_tip(&self) {
+        println!("{:#?}", self.ticking);
+        println!("{:#?}", self.ticking_tip);
+    }
 }
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
@@ -137,14 +149,14 @@ impl KlineId for KlineTATick {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct VolumeTickingTipHolder {
-    pub small: VolumeTickingTipEntry,
-    pub medium: VolumeTickingTipEntry,
-    pub big: VolumeTickingTipEntry,
+pub struct TickingTipHolderTA {
+    pub small: TickingTipEntry,
+    pub medium: TickingTipEntry,
+    pub big: TickingTipEntry,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct VolumeTickingTipEntry {
+pub struct TickingTipEntry {
     pub method: TAMethods,
     pub kline: Kline,
 }

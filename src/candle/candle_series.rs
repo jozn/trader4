@@ -3,70 +3,67 @@ use serde::{Deserialize, Serialize};
 use std::collections::VecDeque;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct VolumeCandleSeriesRaw {
-    // pub trades: SerVec<CSVTradeRecord>,
-    pub trades: TickVec<Tick>,
-    pub small: VolumeCandleTimeFrameRaw,
-    pub medium: VolumeCandleTimeFrameRaw,
-    pub big: VolumeCandleTimeFrameRaw,
-    pub small_volume_size: f64,
+pub struct CandleSeries {
+    pub ticks: TickVec<Tick>,
+    pub small: KlineHolderFrame,
+    pub medium: KlineHolderFrame,
+    pub big: KlineHolderFrame,
+    // pub small_tick_count: f64,
+    pub small_tick_count: u64,
 }
 
+// Holder of small, medium, big, ... Frame.
 #[derive(Debug, Default, Serialize, Deserialize, Clone)]
-pub struct VolumeCandleTimeFrameRaw {
+pub struct KlineHolderFrame {
     pub small_multi: u64, // how many of small candle this candle should be
     pub klines: KlineSerVec<Kline>,
 }
 
-pub type VolumeVolCandleAddDiff = VolumeCandleSeriesRaw; // Only trades is not set
+pub type CandleSeriesDiff = CandleSeries; // Only trades is not set
 
-impl VolumeCandleSeriesRaw {
+impl CandleSeries {
     pub fn new() -> Self {
         Self::default()
     }
 
-    pub fn add_trades(&mut self, trades: SerVec<Tick>) -> TResult<VolumeVolCandleAddDiff> {
-        if trades.len() == 0 {
+    pub fn add_ticks(&mut self, ticks: TimeSerVec<Tick>) -> TResult<CandleSeriesDiff> {
+        if ticks.len() == 0 {
             println!(">> Trades are empty.");
             return Err(TErr::EmptyTradesErr);
         }
 
-        let first = trades.first().unwrap();
-        let _last = trades.last().unwrap();
+        let first = ticks.first().unwrap();
+        let _last = ticks.last().unwrap();
 
         // New trades times must be newer than the last one.
-        match self.trades.last() {
+        match self.ticks.last() {
             None => {}
             Some(last) => {
                 let new_first = first;
                 if !(new_first.time >= last.data.time) {
-                    println!(">> Trades are invalid (they must be newer).");
-                    return Err(TErr::TradesTimeErr);
+                    println!(">> Ticks are invalid (they must be newer).");
+                    return Err(TErr::TickTimeErr);
                 }
             }
         }
 
         let mut first_bucket = 0;
-        for (idx, t) in trades.get_vec().iter().enumerate() {
+        for (idx, t) in ticks.get_vec().iter().enumerate() {
             if idx == 0 {
-                let res = self.trades.push(t.clone()).unwrap(); // todo unwerp
+                let res = self.ticks.push(t.clone()).unwrap(); // todo unwerp
                 first_bucket = res.id;
             } else {
-                self.trades.push(t.clone()).unwrap(); // todo fix unearp
+                self.ticks.push(t.clone()).unwrap(); // todo fix unearp
             }
         }
 
-        self.add_new_small_klines_from_new_trades();
+        self.add_new_small_klines_from_new_ticks();
         self.add_other_klines();
 
-        //todo return VolCandleAddDiff
-        // Err(TErr::TradesTimeErr)
-        // Ok(())
         self.get_diff_klines(first_bucket)
     }
 
-    fn add_new_small_klines_from_new_trades(&mut self) {
-        // let mut _kline_bucket_id = 0;
+    fn add_new_small_klines_from_new_ticks(&mut self) {
         let last_kline = self.small.klines.last();
         let mut last_bucket = match last_kline {
             None => 0,
@@ -75,96 +72,94 @@ impl VolumeCandleSeriesRaw {
                 kline.bucket
             }
         };
-        // println!("new trades {} 111111111111", last_bucket,);
-        let tip_trades = self.trades.get_from(last_bucket);
+        let tip_ticks = self.ticks.get_from(last_bucket);
 
-        // println!("new trades {} : {:#?}", last_bucket, &tip_trades.len());
-        let mut stage_trades = vec![];
-        let mut sum = 0.0;
+        let mut stage_ticks = vec![];
+        let mut count = 0;
 
-        for trade_item in tip_trades.iter() {
+        for trade_item in tip_ticks.iter() {
             let trade = trade_item.data.as_ref();
-            stage_trades.push(trade_item.clone());
-            sum += trade.qty;
+            stage_ticks.push(trade_item.clone());
+            count += 1;
 
-            if sum > self.small_volume_size {
-                let mut kline = aggregate_trades_to_kline(&TickVec::transform_seq(&stage_trades));
-                let first_trade = stage_trades.first().unwrap();
-                kline.bucket = first_trade.id;
+            if count >= self.small_tick_count {
+                let mut kline = aggregate_tickss_to_kline(&TickVec::transform_seq(&stage_ticks));
+                let first_tick = stage_ticks.first().unwrap();
+                kline.bucket = first_tick.id;
                 self.small.klines.push_replace(kline);
-                sum = 0.0;
-                stage_trades.clear();
+                count = 0;
+                stage_ticks.clear();
             }
         }
 
-        // Not fully formed candle tip
-        if stage_trades.len() > 0 {
+        // Check for remaing not fully formed tikcs - Not fully formed candle tip
+        if stage_ticks.len() > 0 {
             // copy of above code
-            let mut kline = aggregate_trades_to_kline(&TickVec::transform_seq(&stage_trades));
-            let first_trade = stage_trades.first().unwrap();
-            kline.bucket = first_trade.id;
+            let mut kline = aggregate_tickss_to_kline(&TickVec::transform_seq(&stage_ticks));
+            let first_tick = stage_ticks.first().unwrap();
+            kline.bucket = first_tick.id;
             self.small.klines.push_replace(kline);
         }
     }
 
-    fn get_diff_klines(&self, first_bucket: u64) -> TResult<VolumeVolCandleAddDiff> {
-        let res = VolumeVolCandleAddDiff {
-            trades: Default::default(),
-            small: VolumeCandleTimeFrameRaw {
+    fn get_diff_klines(&self, first_bucket: u64) -> TResult<CandleSeriesDiff> {
+        let res = CandleSeriesDiff {
+            ticks: Default::default(),
+            small: KlineHolderFrame {
                 small_multi: 0,
                 klines: self.small.klines.get_from_lower(first_bucket),
             },
-            medium: VolumeCandleTimeFrameRaw {
+            medium: KlineHolderFrame {
                 small_multi: self.medium.small_multi,
                 klines: self.medium.klines.get_from_lower(first_bucket),
             },
-            big: VolumeCandleTimeFrameRaw {
+            big: KlineHolderFrame {
                 small_multi: self.big.small_multi,
                 klines: self.big.klines.get_from_lower(first_bucket),
             },
-            small_volume_size: 0.0, // not relevent
+            small_tick_count: 0, // not relevent
         };
 
         Ok(res)
     }
 
     fn add_other_klines(&mut self) {
-        regenerate_last_other_klines(&self.small.klines, &mut self.medium, self.small_volume_size);
-        regenerate_last_other_klines(&self.small.klines, &mut self.big, self.small_volume_size);
+        regenerate_last_other_klines(&self.small.klines, &mut self.medium, self.small_tick_count);
+        regenerate_last_other_klines(&self.small.klines, &mut self.big, self.small_tick_count);
     }
 }
 
-impl Default for VolumeCandleSeriesRaw {
+impl Default for CandleSeries {
     fn default() -> Self {
         Self {
-            trades: TickVec::new(),
+            ticks: TickVec::new(),
             small: Default::default(),
-            medium: VolumeCandleTimeFrameRaw {
-                small_multi: MEDIUM_VOLUME,
+            medium: KlineHolderFrame {
+                small_multi: MEDIUM_TICK,
                 klines: Default::default(),
             },
-            big: VolumeCandleTimeFrameRaw {
-                small_multi: BIG_VOLUME,
+            big: KlineHolderFrame {
+                small_multi: BIG_TICK,
                 klines: Default::default(),
             },
-            small_volume_size: SMALL_VOLUME,
+            small_tick_count: SMALL_TICK,
         }
     }
 }
 
-fn aggregate_trades_to_kline(trades: &Vec<Tick>) -> Kline {
-    let num = trades.len() as u32;
+fn aggregate_tickss_to_kline(ticks: &Vec<Tick>) -> Kline {
+    let num = ticks.len() as u32;
     assert!(num > 0);
-    let bucket_id = 7;
+    let bucket_id = 0;
 
-    let first = trades.first().unwrap().clone();
-    let last = trades.last().unwrap().clone();
+    let first = ticks.first().unwrap().clone();
+    let last = ticks.last().unwrap().clone();
 
     let mut high = 0.;
     let mut low = f64::MAX;
     let mut volume = 0.;
 
-    for trade in trades.iter() {
+    for trade in ticks.iter() {
         if trade.price > high {
             high = trade.price;
         }
@@ -176,18 +171,12 @@ fn aggregate_trades_to_kline(trades: &Vec<Tick>) -> Kline {
         volume += trade.qty;
     }
 
-    // println!(">>>> Volume #{:#?}", volume);
-
     let kline = Kline {
         open_time: first.time,
         close_time: last.time,
-        bucket: bucket_id,
-        // num: num,
-        // trades: arr,
-        // kline_num: -9,
-        // trades: SerVec::new(),
+        bucket: bucket_id, // this should be override in codes who calls this
         tick_count: num,
-        kline_num: -1,
+        kline_num: -1, // -1 shows kline is build from ticks - just in samll
         open: first.price,
         high: high,
         low: low,
@@ -199,12 +188,12 @@ fn aggregate_trades_to_kline(trades: &Vec<Tick>) -> Kline {
 
 fn regenerate_last_other_klines(
     small_klines: &KlineSerVec<Kline>,
-    candle_raw: &mut VolumeCandleTimeFrameRaw,
-    small_volume: f64,
+    candle_raw: &mut KlineHolderFrame,
+    small_volume: u64,
 ) {
-    let last = candle_raw.klines.last();
-    let total_volume = candle_raw.small_multi as f64 * small_volume;
+    let total_volume = candle_raw.small_multi * small_volume;
 
+    let last = candle_raw.klines.last();
     let mut from_bucket = match last {
         None => {
             // add first
@@ -222,7 +211,6 @@ fn regenerate_last_other_klines(
         if arr.len() == 0 {
             break;
         }
-        // println!("{}", arr.len());
 
         let last = arr.last().unwrap().clone();
 
@@ -250,7 +238,7 @@ fn sum_klines_from_small(arr: KlineSerVec<Kline>) -> Kline {
     let mut high = 0.;
     let mut low = f64::MAX;
     let mut volume = 0.;
-    let mut trades_num = 0;
+    let mut ticks_count = 0;
 
     for kline in arr.iter() {
         if kline.high > high {
@@ -262,20 +250,14 @@ fn sum_klines_from_small(arr: KlineSerVec<Kline>) -> Kline {
         }
 
         volume += kline.volume;
-        trades_num += kline.tick_count;
-
-        //println!(">> Volume {}  ", volume);
+        ticks_count += kline.tick_count;
     }
 
     Kline {
         open_time: first.open_time,
         close_time: last.close_time,
         bucket: first.bucket, // todo
-        // num: trades_num,
-        // kline_num: arr.len() as i32,
-        // trades: arr,
-        // trades: SerVec::new(),
-        tick_count: trades_num,
+        tick_count: ticks_count,
         kline_num: arr.len() as i32,
         open: first.open,
         high: high,

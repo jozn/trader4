@@ -111,6 +111,7 @@ impl<T: KlineId + Clone> KlineSerVec<T> {
         res
     }
 
+    // Returns Kline from equal bucket_start or one below if no match found.
     pub fn get_from_lower(&self, bucket_start: u64) -> KlineSerVec<T> {
         let idx = self
             .0

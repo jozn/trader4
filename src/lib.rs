@@ -9,4 +9,5 @@ pub mod candle;
 pub mod ctrader;
 pub mod forex;
 pub mod pb;
+pub mod play;
 pub mod ta;

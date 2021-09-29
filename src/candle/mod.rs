@@ -2,18 +2,19 @@ use std::rc::Rc;
 
 use serde::{Deserialize, Serialize};
 
+pub use candle_series::*;
+pub use candle_series_ta::*;
 pub use kline::*;
 pub use kline_ta::*;
 pub use position::*;
 pub use util::*;
-pub use volume_candle_series_raw::*;
 
+pub mod candle_series;
+pub mod candle_series_ta;
 pub mod kline;
 pub mod kline_ta;
 pub mod position;
 pub mod util;
-pub mod volume_candle_series_raw;
-pub mod volume_candle_series_ta;
 
 pub type TResult<T> = std::result::Result<T, TErr>;
 
@@ -21,7 +22,7 @@ pub type TResult<T> = std::result::Result<T, TErr>;
 pub enum TErr {
     KlineDurationNotSmallErr,
     EmptyTradesErr,
-    TradesTimeErr,
+    TickTimeErr,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -29,7 +30,7 @@ pub struct Tick {
     pub time: u64,
     pub price: f64,
     pub qty: f64, // todo
-} // todo change to Tick
+}
 
 impl TimeKey for Tick {
     fn get_time(&self) -> u64 {
@@ -37,16 +38,12 @@ impl TimeKey for Tick {
     }
 }
 
-const SMALL_TIME: u64 = 60_000;
-const MEDIUM_TIME: u64 = 7 * SMALL_TIME;
-const BIG_TIME: u64 = 13 * SMALL_TIME;
-
-const SMALL_VOLUME: f64 = 10.;
-const MEDIUM_VOLUME: u64 = 5;
-const BIG_VOLUME: u64 = 15;
+const SMALL_TICK: u64 = 10;
+const MEDIUM_TICK: u64 = 5; // 50
+const BIG_TICK: u64 = 15; // 150
 
 // todo - migrate
-//  ticker
+//  ticker + some namnign convention to not get confused
 
 // Notes:
 //  + SerVecUnique is not used

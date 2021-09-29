@@ -10,7 +10,7 @@ pub struct Kline {
     pub close_time: u64,
     pub bucket: u64,
     pub tick_count: u32,
-    pub kline_num: i32, // -2: from kline vsv -1: from trades sums >0 sums of klines
+    pub kline_num: i32, // -1: from trades sums >0 sums of klines
     pub open: f64,
     pub high: f64,
     pub low: f64,
