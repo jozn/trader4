@@ -6,14 +6,14 @@ pub use candle_series::*;
 pub use candle_series_ta::*;
 pub use kline::*;
 pub use kline_ta::*;
-pub use position::*;
+pub use position_dep::*;
 pub use util::*;
 
 pub mod candle_series;
 pub mod candle_series_ta;
 pub mod kline;
 pub mod kline_ta;
-pub mod position;
+pub mod position_dep;
 pub mod util;
 
 pub type TResult<T> = std::result::Result<T, TErr>;
