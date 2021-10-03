@@ -12,4 +12,5 @@ pub mod offline;
 pub mod pb;
 pub mod play;
 pub mod portfolio;
+pub mod sim;
 pub mod ta;

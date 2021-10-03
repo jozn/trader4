@@ -4,16 +4,16 @@ use PosDir::{Long, Short};
 const FEE_RATE: f64 = 0.001;
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct Portfolio {
+pub struct Portfolio_Dep {
     pub pos_id: u64,
     pub free_usd: f64,
     pub free_coin: f64, // todo wallet along usd
-    pub opens: Vec<Position>,
-    pub closed: Vec<Position>,
+    pub opens: Vec<Position_Dep>,
+    pub closed: Vec<Position_Dep>,
 }
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct Position {
+pub struct Position_Dep {
     pub pos_id: u64,
     pub direction: PosDir,
     pub long: Option<PositionLong>,
@@ -58,12 +58,12 @@ impl Default for PosDir {
     }
 }
 
-impl Portfolio {
+impl Portfolio_Dep {
     pub fn new() -> Self {
         Self::default()
     }
 
-    pub fn add_pos(&mut self, pos: &mut Position) {
+    pub fn add_pos(&mut self, pos: &mut Position_Dep) {
         self.pos_id += 1;
         assert_eq!(pos.pos_id, 0);
         pos.pos_id = self.pos_id;
@@ -76,7 +76,7 @@ impl Portfolio {
             return;
         }
 
-        let mut pos = Position::new_long(price, usd, time);
+        let mut pos = Position_Dep::new_long(price, usd, time);
 
         self.free_usd -= usd;
 
@@ -107,7 +107,7 @@ impl Portfolio {
             return;
         }
 
-        let mut pos = Position::new_short(price, coin, time);
+        let mut pos = Position_Dep::new_short(price, coin, time);
 
         self.free_coin -= coin;
 
@@ -148,12 +148,12 @@ impl Portfolio {
         }
     }
 
-    pub fn update_pos(&mut self, pos: &mut Position) {
+    pub fn update_pos(&mut self, pos: &mut Position_Dep) {
         self._remove_pos(pos.pos_id);
         self.opens.push(pos.clone());
     }
 
-    fn _close_pos(&mut self, pos: &mut Position) {
+    fn _close_pos(&mut self, pos: &mut Position_Dep) {
         self._remove_pos(pos.pos_id);
         self.closed.push(pos.clone());
     }
@@ -189,7 +189,7 @@ impl Portfolio {
     }
 }
 
-impl Position {
+impl Position_Dep {
     pub fn new_long(price: f64, usd: f64, time: u64) -> Self {
         assert!(usd > 10.);
 

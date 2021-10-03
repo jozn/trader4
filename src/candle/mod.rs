@@ -6,7 +6,6 @@ pub use candle_series::*;
 pub use candle_series_ta::*;
 pub use kline::*;
 pub use kline_ta::*;
-pub use position_dep::*;
 pub use util::*;
 
 pub mod candle_series;

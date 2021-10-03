@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 use std::io::{BufRead, BufReader, Read, Write};
 
 use super::*;
+use crate::candle::Tick;
 use chrono::prelude::*;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
@@ -16,6 +17,18 @@ pub struct CSVForexRecord {
 }
 
 impl CSVForexRecord {
+    pub fn get_price(&self) -> f64 {
+        self.bid_price
+    }
+
+    pub fn to_tick(&self) -> Tick {
+        Tick {
+            time: self.time,
+            price: self.bid_price,
+            qty: 0.0,
+        }
+    }
+
     fn from_csv(csv_row: csv::StringRecord) -> Self {
         use std::convert::*;
         let mut i = csv_row.iter();
