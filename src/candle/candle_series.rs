@@ -40,7 +40,7 @@ impl CandleSeries {
             None => {}
             Some(last) => {
                 let new_first = first;
-                if !(new_first.time >= last.data.time) {
+                if !(new_first.time_s >= last.data.time_s) {
                     println!(">> Ticks are invalid (they must be newer).");
                     return Err(TErr::TickTimeErr);
                 }
@@ -172,8 +172,8 @@ fn aggregate_tickss_to_kline(ticks: &Vec<Tick>) -> Kline {
     }
 
     let kline = Kline {
-        open_time: first.time,
-        close_time: last.time,
+        open_time: first.time_s,
+        close_time: last.time_s,
         bucket: bucket_id, // this should be override in codes who calls this
         tick_count: num,
         kline_num: -1, // -1 shows kline is build from ticks - just in samll

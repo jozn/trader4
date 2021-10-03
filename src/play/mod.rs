@@ -11,7 +11,7 @@ pub fn play5() {
     let mut i = 0;
     for v in arr {
         let tt = super::candle::Tick {
-            time: v.time,
+            time_s: v.time,
             price: v.ask_price * 100_000.,
             qty: 0.0,
         };
@@ -46,7 +46,7 @@ pub fn play4() {
     let mut i = 0;
     for v in arr {
         let tt = super::candle::Tick {
-            time: v.time,
+            time_s: v.time,
             price: v.ask_price * 100_000.,
             qty: 0.0,
         };
@@ -81,7 +81,7 @@ pub fn play3() {
     let mut i = 0;
     for v in arr {
         let tt = super::candle::Tick {
-            time: v.time,
+            time_s: v.time,
             price: v.ask_price * 100_000.,
             qty: 0.0,
         };
@@ -95,7 +95,7 @@ pub fn play3() {
         }
     }
 
-    ts.print_tip();
+    ts.print_ticking();
 }
 
 pub fn play2() {
@@ -107,7 +107,7 @@ pub fn play2() {
     let mut i = 0;
     for v in arr {
         let tt = super::candle::Tick {
-            time: v.time,
+            time_s: v.time,
             price: v.ask_price * 100_000.,
             qty: 0.0,
         };
@@ -142,7 +142,7 @@ pub fn play1() {
     let mut i = 0;
     for v in arr {
         let tt = super::candle::Tick {
-            time: v.time,
+            time_s: v.time,
             price: v.ask_price * 100_000.,
             qty: 0.0,
         };

@@ -129,7 +129,7 @@ impl CandleSeriesTA {
         println!("BIG: {:#?}", self.big);
     }
 
-    pub fn print_tip(&self) {
+    pub fn print_ticking(&self) {
         println!("{:#?}", self.ticking);
         println!("{:#?}", self.ticking_tip);
     }

@@ -1,7 +1,7 @@
 use super::*;
 use crate::base::SimpleCrossEvent;
 
-pub fn proc_tick_buy(cst: &CandleSeriesTA, port: &mut Portfolio) {
+pub fn proc_tick_buy(cst: &CandleSeriesTA, port: &mut Portfolio, tick: &Tick) {
     let tip = cst.big.kline_ta_tip.clone();
     // let tip = cst.big.klines_ta.last().clone();
     if tip.is_none() {
@@ -27,7 +27,9 @@ pub fn proc_tick_buy(cst: &CandleSeriesTA, port: &mut Portfolio) {
             if min < 15. {
                 return;
             }
-            port.buy_long(k.close as i64, 1 as i64, k.close_time);
+            if m.signal_old < 0. {
+                port.buy_long(k.close as i64, 1 as i64, tick.time_s);
+            }
         }
         SimpleCrossEvent::None => {}
         SimpleCrossEvent::Bear(_) => {

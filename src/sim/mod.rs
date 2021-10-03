@@ -1,4 +1,5 @@
 pub mod proc;
+pub mod trend;
 
 use super::candle::*;
 use super::portfolio::*;
@@ -43,13 +44,13 @@ impl Runner {
             if should {
                 println!("Ticked: >>> {:#?} - {}", tick_id, trade_cnt);
                 tick_id += 1;
-                let old = mt.trades;
+                let old = mt.ticks_arr;
                 mt = MiniTick::new(tick.price);
                 cst.add_trades(old);
 
                 // LOGIC MUST BE ADDED HERE
-                self.port.try_close_pos(tick.price as i64, tick.time);
-                proc::proc_tick_buy(&cst, &mut self.port);
+                self.port.try_close_pos(tick.price as i64, tick.time_s);
+                proc::proc_tick_buy(&cst, &mut self.port, &tick);
                 // END OF LOGIC
             }
 
@@ -65,7 +66,7 @@ impl Runner {
                 // proc::proc_tick_buy_random(&cst, &mut self.port)
             }
         }
-        cst.add_trades(mt.trades);
+        cst.add_trades(mt.ticks_arr);
         // println!("{:#?}", cst.medium);
         println!("ticks: >>> {:#?}", tick_id);
         println!("candle serires: >>> {:#?}", trade_cnt);
@@ -127,7 +128,7 @@ pub struct MiniTick {
     last_tick_price: f64,
     high_price: f64,
     low_price: f64,
-    trades: TimeSerVec<Tick>,
+    ticks_arr: TimeSerVec<Tick>,
 }
 
 impl MiniTick {
@@ -143,18 +144,22 @@ impl MiniTick {
     fn add(&mut self, forex_tick: Tick) -> bool {
         assert!(self.active);
         if self.tick_start_milli == 0 {
-            self.tick_start_milli = forex_tick.time;
+            self.tick_start_milli = forex_tick.time_s;
         }
 
-        let tdiff = forex_tick.time - self.tick_start_milli;
+        let tdiff = forex_tick.time_s - self.tick_start_milli;
 
         self.high_price = self.high_price.max(forex_tick.price);
         self.low_price = self.low_price.min(forex_tick.price);
 
         let mut should_tick = false;
 
-        self.trades.push(forex_tick.clone());
-        if tdiff < 1000 {
+        self.ticks_arr.push(forex_tick.clone());
+
+        if self.ticks_arr.len() >= 10 {
+            should_tick = true;
+        } else if tdiff < 1000 {
+            // todo remove or change this as we are working with seconds
             // at least one second for each tick
             should_tick = false;
         } else if tdiff > 300_000 {

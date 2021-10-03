@@ -23,7 +23,7 @@ impl CSVForexRecord {
 
     pub fn to_tick(&self) -> Tick {
         Tick {
-            time: self.time,
+            time_s: self.time,
             price: self.bid_price,
             qty: 0.0,
         }

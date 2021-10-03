@@ -14,3 +14,4 @@ pub mod play;
 pub mod portfolio;
 pub mod sim;
 pub mod ta;
+pub mod trend;

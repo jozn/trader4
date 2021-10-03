@@ -26,18 +26,18 @@ pub enum TErr {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Tick {
-    pub time: u64,
+    pub time_s: u64,
     pub price: f64,
     pub qty: f64, // todo
 }
 
 impl TimeKey for Tick {
     fn get_time(&self) -> u64 {
-        self.time
+        self.time_s
     }
 }
 
-const SMALL_TICK: u64 = 10;
+const SMALL_TICK: u64 = 30;
 const MEDIUM_TICK: u64 = 5; // 50
 const BIG_TICK: u64 = 15; // 150
 

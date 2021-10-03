@@ -1,5 +1,5 @@
+use chrono::*;
 use serde::{Deserialize, Serialize};
-
 // TODO: Short selling is not ready as we need to have a live dept toatl balance of opened short postions when of account
 
 // Note: we use signed numbers for easier cal.
@@ -26,12 +26,15 @@ pub struct Position {
     pub pos_size_xlot: XLot,
     pub open_xprice: XPrice,
     pub open_time: u64,
+    pub open_time_str: String,
     pub to_exit_xpip: XPip,
     pub to_stop_loss_xpip: XPip,
     pub spread: XSpread,
     pub close_xprice: XPrice,
     pub close_time: u64,
+    pub close_time_str: String,
     pub finished: bool, // tod: status
+    pub duration: String,
     pub profit_xpip: XPip,
     pub profit: f64,
     pub spread_fees: f64,
@@ -234,6 +237,7 @@ impl Position {
             pos_size_xlot: pos_size,
             open_xprice: open_price,
             open_time: time,
+            open_time_str: to_date(time),
             to_exit_xpip: 80,
             to_stop_loss_xpip: 80,
             spread: 8,
@@ -257,6 +261,7 @@ impl Position {
             pos_size_xlot: pos_size,
             open_xprice: open_price,
             open_time: time,
+            open_time_str: to_date(time),
             to_exit_xpip: 50,
             to_stop_loss_xpip: 35,
             spread: 8,
@@ -271,6 +276,9 @@ impl Position {
     }
 
     pub fn close_pos(&mut self, close_price: XPrice, time: u64) {
+        self.close_time_str = to_date(time);
+        self.duration = to_duration(self.open_time as i64 - time as i64);
+
         match self.direction {
             PosDir::Long => self.close_long(close_price, time),
             PosDir::Short => {}
@@ -336,4 +344,17 @@ impl Position {
         self.profit = pure_pl;
         self.final_balance = self.pos_size_usd + pure_pl;
     }
+}
+
+pub fn to_date(time_s: u64) -> String {
+    let open_time = NaiveDateTime::from_timestamp(time_s as i64, 0);
+    open_time.format("%Y-%m-%d %H:%M:%S").to_string()
+}
+
+pub fn to_duration(time_s: i64) -> String {
+    let time_s = time_s.abs();
+    let seconds = time_s % 60;
+    let minutes = (time_s / 60) % 60;
+    let hours = (time_s / 3660);
+    format!("{}:{:02}:{:02}", hours, minutes, seconds)
 }
