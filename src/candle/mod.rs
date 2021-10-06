@@ -12,7 +12,6 @@ pub mod candle_series;
 pub mod candle_series_ta;
 pub mod kline;
 pub mod kline_ta;
-pub mod position_dep;
 pub mod util;
 
 pub type TResult<T> = std::result::Result<T, TErr>;
