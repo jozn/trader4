@@ -9,7 +9,7 @@ fn main() {
 fn build_pb() {
     println!("======================= INSIDE THE BUILD PROJECT =========================");
 
-    let dir = std::fs::read_dir("src/oapi/").unwrap();
+    let dir = std::fs::read_dir("src/ctrader/oapi/").unwrap();
 
     let mut vec_protos = vec![];
     for fl in dir {
@@ -25,7 +25,7 @@ fn build_pb() {
     // config.type_attribute(".","#[derive(Smg)]");
     // config.message_attribute(".", "#[derive(Default)]");
     // config.att(".", "#[derive(Smg)]");
-    let v = config.compile_protos(&vec_protos, &["src/oapi".to_string()]);
+    let v = config.compile_protos(&vec_protos, &["src/ctrader/oapi".to_string()]);
     println!("{:?}", v);
     v.unwrap();
 
