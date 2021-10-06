@@ -67,7 +67,7 @@ pub fn play4() {
     }
 
     // let o = serde_json::to_string_pretty(&arr_out).unwrap();
-    let o = offline::to_csv_out(&arr_out);
+    let o = offline::to_csv_out_old(&arr_out);
 
     println!("{:}", o);
 }
@@ -128,7 +128,7 @@ pub fn play2() {
     }
 
     // let o = serde_json::to_string_pretty(&arr_out).unwrap();
-    let o = offline::to_csv_out(&arr_out);
+    let o = offline::to_csv_out_old(&arr_out);
 
     println!("{:}", o);
 }

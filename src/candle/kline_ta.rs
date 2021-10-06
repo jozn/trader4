@@ -31,6 +31,13 @@ pub struct TA1 {
     pub cci: f64,
     pub macd: MACDOutput,
     pub fisher: FisherRes,
+    // New trending
+    pub t_hull1: f64,
+    pub t_hull2: f64,
+    pub t_hull3: f64,
+    pub t_ema1: f64,
+    pub t_ema2: f64,
+    pub t_ema3: f64,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -44,6 +51,13 @@ pub struct TAMethods {
     pub cci: ta::CCI,
     pub macd: ta::MACD,
     pub fisher: ta::Fisher,
+    // For trending
+    pub t_hull1: HMA,
+    pub t_hull2: HMA,
+    pub t_hull3: HMA,
+    pub t_ema1: EMA,
+    pub t_ema2: EMA,
+    pub t_ema3: EMA,
 }
 
 // should not be used, just to satasfy compiler for Default
@@ -59,6 +73,13 @@ impl Default for TAMethods {
             cci: ta::CCI::new(14).unwrap(),
             macd: ta::MACD::new(12, 26, 9).unwrap(),
             fisher: ta::Fisher::new(9, 6).unwrap(),
+            // For trending
+            t_hull1: HMA::new(3).unwrap(),
+            t_hull2: HMA::new(15).unwrap(),
+            t_hull3: HMA::new(55).unwrap(),
+            t_ema1: EMA::new(5).unwrap(),
+            t_ema2: EMA::new(15).unwrap(),
+            t_ema3: EMA::new(50).unwrap(),
         }
     }
 }
@@ -81,6 +102,13 @@ pub fn cal_indicators(tam: &mut TAMethods, kline: &Kline) -> KlineTA {
             cci: tam.cci.next(&r),
             macd: tam.macd.next(r.close),
             fisher: tam.fisher.next(&r),
+            // For trending
+            t_hull1: tam.t_hull1.next(r.hlc3()),
+            t_hull2: tam.t_hull2.next(r.hlc3()),
+            t_hull3: tam.t_hull3.next(r.hlc3()),
+            t_ema1: tam.t_ema1.next(r.hlc3()),
+            t_ema2: tam.t_ema2.next(r.hlc3()),
+            t_ema3: tam.t_ema3.next(r.hlc3()),
         },
     };
     kta

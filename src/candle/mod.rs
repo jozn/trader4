@@ -37,7 +37,7 @@ impl TimeKey for Tick {
     }
 }
 
-const SMALL_TICK: u64 = 30;
+const SMALL_TICK: u64 = 20;
 const MEDIUM_TICK: u64 = 5; // 50
 const BIG_TICK: u64 = 15; // 150
 
