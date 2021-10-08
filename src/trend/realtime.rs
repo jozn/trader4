@@ -1,23 +1,49 @@
-pub mod realtime;
+// Note this moudle focus on ticking rather than only one kline timeframe type.
 
-use super::forex::loader_csv;
-use super::forex::loader_csv::*;
-use super::offline;
+use super::super::*;
+// use super::super::forex::loader_csv;
+// use super::super::forex::loader_csv::*;
+use super::super::offline;
 use crate::base::OHLCV;
-use crate::candle::CandleSeriesTA;
+use crate::candle::{CandleSeriesTA, TimeSerVec};
 use crate::offline::{to_csv_out, to_csv_out_old};
-use crate::trend::Dir::{DOWN, UP, ZERO};
 use serde::{Deserialize, Serialize};
+use Dir::*;
 
 pub fn trend_play1() {
-    use super::candle::*;
-    let arr = loader_csv::_load(50_000, "/media/hamid/K/forex1/EURUSD_tab3.csv");
+    let arr = forex::loader_csv::_load(50_000, "/media/hamid/K/forex1/EURUSD_tab3.csv");
 
-    let mut ts = super::candle::CandleSeriesTA::new();
+    let mut ts = candle::CandleSeriesTA::new();
     let mut ticks_arr = TimeSerVec::new();
     let mut i = 0;
     for v in arr {
-        let tt = super::candle::Tick {
+        let tt = candle::Tick {
+            time_s: v.time,
+            price: v.ask_price * 100_000.,
+            qty: 0.0,
+        };
+        ticks_arr.push(tt);
+        i += 1;
+
+        if i == 50 {
+            ts.add_ticks(ticks_arr.clone());
+            i = 0;
+            ticks_arr.clear();
+        }
+    }
+
+    println!("{:#?}", ts.small);
+}
+
+////////////////////////////////////
+pub fn trend_play2() {
+    let arr = forex::loader_csv::_load(50_000, "/media/hamid/K/forex1/EURUSD_tab3.csv");
+
+    let mut ts = candle::CandleSeriesTA::new();
+    let mut ticks_arr = TimeSerVec::new();
+    let mut i = 0;
+    for v in arr {
+        let tt = candle::Tick {
             time_s: v.time,
             price: v.ask_price * 100_000.,
             qty: 0.0,
@@ -34,8 +60,8 @@ pub fn trend_play1() {
 
     let d = diff(ts);
 
-    let out = to_csv_out(&d);
-    println!("{}", out);
+    // let out = to_csv_out(&d);
+    // println!("{}", out);
 
     // ts.print_ticking();
 
@@ -43,15 +69,16 @@ pub fn trend_play1() {
 }
 
 fn diff(arr: CandleSeriesTA) -> Vec<Trend> {
-    let klines = &arr.small.klines_ta;
+    // let klines = &arr.small.klines_ta;
+    let klines = &arr.ticking;
     let first = klines.first().unwrap();
 
     let mut res = vec![];
-    let mut last_kline = &first.ta1;
+    let mut last_kline = &first.medium.ta1;
     for k in klines.iter() {
-        let kt = &k.ta1;
+        let kt = &k.medium.ta1;
         let t = Trend {
-            price: k.kline.hlc3().round() as u64,
+            price: k.medium.kline.hlc3().round() as u64,
             line1: to_dir(kt.t_hull1 - last_kline.t_hull1),
             line2: to_dir(kt.t_hull2 - last_kline.t_hull2),
             line3: to_dir(kt.t_hull3 - last_kline.t_hull3),
@@ -63,7 +90,7 @@ fn diff(arr: CandleSeriesTA) -> Vec<Trend> {
         res.push(t);
     }
 
-    // println!("{:#?}", res);
+    println!("{:#?}", res);
     res
 }
 

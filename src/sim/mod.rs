@@ -46,7 +46,7 @@ impl Runner {
                 tick_id += 1;
                 let old = mt.ticks_arr;
                 mt = MiniTick::new(tick.price);
-                cst.add_trades(old);
+                cst.add_ticks(old);
 
                 // LOGIC MUST BE ADDED HERE
                 self.port.try_close_pos(tick.price as i64, tick.time_s);
@@ -66,7 +66,7 @@ impl Runner {
                 // proc::proc_tick_buy_random(&cst, &mut self.port)
             }
         }
-        cst.add_trades(mt.ticks_arr);
+        cst.add_ticks(mt.ticks_arr);
         // println!("{:#?}", cst.medium);
         println!("ticks: >>> {:#?}", tick_id);
         println!("candle serires: >>> {:#?}", trade_cnt);

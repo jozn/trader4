@@ -28,7 +28,7 @@ impl CandleSeriesTA {
         Self::default()
     }
 
-    pub fn add_trades(&mut self, trades: TimeSerVec<Tick>) {
+    pub fn add_ticks(&mut self, trades: TimeSerVec<Tick>) {
         let diff = self.klines.add_ticks(trades);
         self.process_diff(diff);
     }
@@ -64,10 +64,10 @@ impl CandleSeriesTA {
         doer(diff.medium, &mut self.medium);
         doer(diff.big, &mut self.big);
 
-        self.process_tip(diff_cp);
+        self.process_tick_offline(diff_cp);
     }
 
-    fn process_tip(&mut self, diff: TResult<CandleSeriesDiff>) {
+    fn process_tick_offline(&mut self, diff: TResult<CandleSeriesDiff>) {
         if diff.is_err() {
             return;
         }

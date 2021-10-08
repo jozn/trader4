@@ -19,7 +19,7 @@ pub fn play5() {
         i += 1;
 
         if i == 50 {
-            ts.add_trades(ticks_arr.clone());
+            ts.add_ticks(ticks_arr.clone());
             i = 0;
             ticks_arr.clear();
         }
@@ -54,7 +54,7 @@ pub fn play4() {
         i += 1;
 
         if i == 50 {
-            ts.add_trades(ticks_arr.clone());
+            ts.add_ticks(ticks_arr.clone());
             i = 0;
             ticks_arr.clear();
         }
@@ -89,7 +89,7 @@ pub fn play3() {
         i += 1;
 
         if i == 50 {
-            ts.add_trades(ticks_arr.clone());
+            ts.add_ticks(ticks_arr.clone());
             i = 0;
             ticks_arr.clear();
         }
@@ -115,7 +115,7 @@ pub fn play2() {
         i += 1;
 
         if i == 50 {
-            ts.add_trades(ticks_arr.clone());
+            ts.add_ticks(ticks_arr.clone());
             i = 0;
             ticks_arr.clear();
         }
@@ -150,7 +150,7 @@ pub fn play1() {
         i += 1;
 
         if i == 50 {
-            ts.add_trades(ticks_arr.clone());
+            ts.add_ticks(ticks_arr.clone());
             i = 0;
             ticks_arr.clear();
         }
