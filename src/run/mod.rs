@@ -6,6 +6,7 @@ use std::ops::{Deref, DerefMut};
 pub trait TRunner: Debug {
     fn get_next_tick(&mut self) -> Option<Tick>;
     fn on_next_tick_bulk(&mut self, cst: &CandleSeriesTA);
+    fn on_price_tick(&mut self, cst: &CandleSeriesTA , tikc: &Tick);
     fn on_exit(&mut self);
 }
 
@@ -33,7 +34,7 @@ impl WorldRunner {
             let tick_opt = world.get_next_tick();
 
             let mut is_exist = false;
-            let should_run = match tick_opt {
+            let should_run = match tick_opt.clone() {
                 None => {
                     // last run
                     is_exist = true;
@@ -54,6 +55,13 @@ impl WorldRunner {
                     world.on_next_tick_bulk(&self.candles)
                 }
                 mt = MiniTick::new(last_price);
+            }
+
+            match tick_opt {
+                None => {}
+                Some(t) => {
+                    world.on_price_tick(&self.candles, &t);
+                }
             }
 
             if is_exist {

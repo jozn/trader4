@@ -1,5 +1,6 @@
 use chrono::*;
 use serde::{Deserialize, Serialize};
+use crate::candle::Tick;
 // TODO: Short selling is not ready as we need to have a live dept toatl balance of opened short postions when of account
 
 // Note: we use signed numbers for easier cal.
@@ -54,8 +55,12 @@ impl Default for PosDir {
 }
 
 impl Portfolio {
-    pub fn new() -> Self {
-        Self::default()
+    pub fn new(balance: f64) -> Self {
+        Self {
+            pos_id: 0,
+            free_usd: balance,
+            ..Default::default()
+        }
     }
 
     // Manual - Not Working balance should be implemented
@@ -121,6 +126,7 @@ impl Portfolio {
                 p.close_pos(price, time);
 
                 let got_coin = p.final_balance;
+                self.free_usd += p.profit;
 
                 // self.free_asset += got_coin;
 
@@ -134,7 +140,23 @@ impl Portfolio {
     pub fn try_close_pos(&mut self, price: XPrice, time: u64) {
         for p in self.opens.clone().iter() {
             if p.should_close(price) {
+                // todo improve this
                 self.sell_long(price, p.pos_id, time);
+                self.buy_short(price, p.pos_id, time);
+            }
+        }
+    }
+
+    // Close
+    pub fn close_all_positions(&mut self, price: XPrice, time: u64) {
+        for p in self.opens.clone().iter() {
+            match p.direction {
+                PosDir::Long => {
+                    self.sell_long(price,p.pos_id,time);
+                }
+                PosDir::Short => {
+                    self.buy_short(price,p.pos_id,time);
+                }
             }
         }
     }
@@ -177,7 +199,17 @@ impl Portfolio {
         }
     }
 
-    fn get_total_balance(&self) {}
+    pub fn get_total_balance(&self,  price: XPrice ) -> f64 {
+        let mut  ob = 0.0;
+        for p in self.opens.iter() {
+            // ob += p.pos_size_xlot * price;
+            if p.direction == PosDir::Long {
+                ob += p.pos_size_usd;
+            }
+        }
+
+        self.free_usd + ob
+    }
 
     fn get_free_balance(&self) -> f64 {
         let mut short_debt = 0.0;
@@ -224,6 +256,52 @@ impl Portfolio {
             self.opens.remove(idx as usize);
         }
     }
+
+    pub fn report(&self, t: &Tick) {
+        println!("Report of buy - sell");
+
+        let mut val = 0.0;
+        let port = &self;
+        for p in &port.opens {
+            if !p.finished {
+                val += p.pos_size_usd;
+                // val += p
+                // val += p.long.clone().unwrap().got_coin;
+            }
+        }
+
+        let mut winer_num = 0;
+        let mut winer = 0.;
+        let mut looser_num = 0;
+        let mut looser = 0.;
+        let mut fees = 0.;
+        for p in &port.closed {
+            if p.finished {
+                if p.profit > 0. {
+                    winer_num += 1;
+                    winer += p.profit
+                }
+                if p.profit < 0. {
+                    looser_num += 1;
+                    looser += p.profit
+                }
+                fees += p.spread_fees;
+                // let l = p.clone().long.unwrap();
+                // fees = l.fee_sell_usd + l.buy_fee_coin;
+            }
+        }
+        let last = t;
+
+        let toatl_balnce = val + port.free_usd;
+        // println!("{:#?}", port.longs);
+        // println!("{:#?}", port);
+        println!(" pos : {:#?} ", port);
+
+        println!("{:} {} {} ", port.free_usd, val * last.price, toatl_balnce);
+        println!(" win : {} {} ", winer_num, winer);
+        println!(" loose : {} {} ", looser_num, looser);
+        println!(" fees : {} ", fees);
+    }
 }
 
 impl Position {
@@ -238,9 +316,9 @@ impl Position {
             open_xprice: open_price,
             open_time: time,
             open_time_str: to_date(time),
-            to_exit_xpip: 80,
-            to_stop_loss_xpip: 80,
-            spread: 8,
+            to_exit_xpip: 50,
+            to_stop_loss_xpip: 50,
+            spread: 0,
             close_xprice: 0,
             close_time: 0,
             finished: false,
@@ -263,8 +341,8 @@ impl Position {
             open_time: time,
             open_time_str: to_date(time),
             to_exit_xpip: 50,
-            to_stop_loss_xpip: 35,
-            spread: 8,
+            to_stop_loss_xpip: 50,
+            spread: 0,
             close_xprice: 0,
             close_time: 0,
             finished: false,
@@ -281,12 +359,27 @@ impl Position {
 
         match self.direction {
             PosDir::Long => self.close_long(close_price, time),
-            PosDir::Short => {}
+            PosDir::Short => self.close_long(close_price, time),
         };
     }
 
     fn close_long(&mut self, close_price: XPrice, time: u64) {
         let pl_xpip = close_price - self.open_xprice;
+        let pure_pl_xpip = pl_xpip - self.spread;
+
+        self.close_xprice = close_price;
+        self.close_time = time;
+        self.finished = true;
+
+        let pure_pl = self.pos_size_usd * (pure_pl_xpip as f64 / 100_000.);
+        self.profit_xpip = pure_pl_xpip;
+        self.profit = pure_pl;
+        self.spread_fees = self.pos_size_usd * (self.spread as f64 / 100_000.);
+        self.final_balance = self.pos_size_usd + pure_pl;
+    }
+
+    fn close_short(&mut self, close_price: XPrice, time: u64) {
+        let pl_xpip =  self.open_xprice - close_price;
         let pure_pl_xpip = pl_xpip - self.spread;
 
         self.close_xprice = close_price;
@@ -314,7 +407,14 @@ impl Position {
                 }
             }
             PosDir::Short => {
-                // todo cal
+                let pl = self.open_xprice - close_price;
+                if pl > 0 && pl >= self.to_exit_xpip {
+                    trig = true
+                }
+
+                if pl < 0 && pl.abs() >= self.to_stop_loss_xpip {
+                    trig = true
+                }
             }
         };
         trig

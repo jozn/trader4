@@ -1,5 +1,4 @@
 pub mod proc;
-pub mod trend;
 
 use super::candle::*;
 use super::portfolio::*;

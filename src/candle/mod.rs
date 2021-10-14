@@ -23,7 +23,7 @@ pub enum TErr {
     TickTimeErr,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug,Default, Serialize, Deserialize, Clone)]
 pub struct Tick {
     pub time_s: u64,
     pub price: f64,
