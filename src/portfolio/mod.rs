@@ -1,6 +1,6 @@
+use crate::candle::Tick;
 use chrono::*;
 use serde::{Deserialize, Serialize};
-use crate::candle::Tick;
 // TODO: Short selling is not ready as we need to have a live dept toatl balance of opened short postions when of account
 
 // Note: we use signed numbers for easier cal.
@@ -152,10 +152,10 @@ impl Portfolio {
         for p in self.opens.clone().iter() {
             match p.direction {
                 PosDir::Long => {
-                    self.sell_long(price,p.pos_id,time);
+                    self.sell_long(price, p.pos_id, time);
                 }
                 PosDir::Short => {
-                    self.buy_short(price,p.pos_id,time);
+                    self.buy_short(price, p.pos_id, time);
                 }
             }
         }
@@ -199,8 +199,8 @@ impl Portfolio {
         }
     }
 
-    pub fn get_total_balance(&self,  price: XPrice ) -> f64 {
-        let mut  ob = 0.0;
+    pub fn get_total_balance(&self, price: XPrice) -> f64 {
+        let mut ob = 0.0;
         for p in self.opens.iter() {
             // ob += p.pos_size_xlot * price;
             if p.direction == PosDir::Long {
@@ -379,7 +379,7 @@ impl Position {
     }
 
     fn close_short(&mut self, close_price: XPrice, time: u64) {
-        let pl_xpip =  self.open_xprice - close_price;
+        let pl_xpip = self.open_xprice - close_price;
         let pure_pl_xpip = pl_xpip - self.spread;
 
         self.close_xprice = close_price;

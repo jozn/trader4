@@ -1,10 +1,10 @@
 use crate::candle::{CandleSeriesTA, Tick};
 use crate::forex::CSVForexRecord;
 use crate::forex::*;
+use crate::offline::to_csv_out;
+use crate::portfolio::*;
 use crate::run::*;
 use crate::*;
-use crate::portfolio::*;
-use crate::offline::to_csv_out;
 
 #[derive(Debug, Default, Clone)]
 pub struct HullWorld {
@@ -57,16 +57,16 @@ impl TRunner for HullWorld {
         // Close
         self.port.try_close_pos(t.price as i64, t.time_s);
 
-        let price =  t.price;
-        let kt =  &cst.small.kline_ta_tip.clone().unwrap();
+        let price = t.price;
+        let kt = &cst.small.kline_ta_tip.clone().unwrap();
         if self.tick_cnt % 10 == 0 {
-            if price > kt.ta1.sma50  {
-                self.port.buy_long(t.price as i64,1,t.time_s);
+            if price > kt.ta1.sma50 {
+                self.port.buy_long(t.price as i64, 1, t.time_s);
             } else {
-                self.port.sell_short(t.price as i64,1,t.time_s);
+                self.port.sell_short(t.price as i64, 1, t.time_s);
             }
 
-            self.pos_id +=1;
+            self.pos_id += 1;
         }
 
         /*if self.tick_cnt % 100 == 0 {
@@ -94,16 +94,18 @@ impl TRunner for HullWorld {
         // self.port.close_all_positions()
         println!("on exit - all pos {}", self.pos_id);
         self.ticks.clear(); // for debug - clear array
-        // println!("{:#?}", self);
-        self.port.close_all_positions(self.last_tick.price as i64, self.last_tick.time_s);
+                            // println!("{:#?}", self);
+        self.port
+            .close_all_positions(self.last_tick.price as i64, self.last_tick.time_s);
         // self.port.report(&self.last_tick);
         // println!("on exit");
 
-        self.balance.push(self.port.get_total_balance(self.last_tick.price as i64));
+        self.balance
+            .push(self.port.get_total_balance(self.last_tick.price as i64));
         // println!("{:#?}", self.balance);
 
         // balance csv
-        let o:Vec<f64> = self.port.closed.iter().map(|p| p.final_balance).collect();
+        let o: Vec<f64> = self.port.closed.iter().map(|p| p.final_balance).collect();
         let os = to_csv_out(&o);
         println!("{}", os);
     }

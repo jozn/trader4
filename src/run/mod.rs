@@ -6,7 +6,7 @@ use std::ops::{Deref, DerefMut};
 pub trait TRunner: Debug {
     fn get_next_tick(&mut self) -> Option<Tick>;
     fn on_next_tick_bulk(&mut self, cst: &CandleSeriesTA);
-    fn on_price_tick(&mut self, cst: &CandleSeriesTA , tikc: &Tick);
+    fn on_price_tick(&mut self, cst: &CandleSeriesTA, tikc: &Tick);
     fn on_exit(&mut self);
 }
 

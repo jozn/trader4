@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 pub use average_absolute_deviation::*;
+pub use average_true_range::*;
 pub use cci::*;
 pub use ema::*;
 pub use fisher::*;
@@ -12,10 +13,12 @@ pub use momentum::*;
 pub use roc::*;
 pub use rsi::*;
 pub use sma::*;
+pub use true_range::*;
 pub use window::*;
 pub use wma::*;
 
 pub mod average_absolute_deviation;
+pub mod average_true_range;
 pub mod cci;
 pub mod ema;
 pub mod fisher;
@@ -27,6 +30,7 @@ pub mod momentum;
 pub mod roc;
 pub mod rsi;
 pub mod sma;
+pub mod true_range;
 pub mod window;
 pub mod wma;
 
