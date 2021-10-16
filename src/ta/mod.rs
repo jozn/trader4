@@ -20,6 +20,7 @@ pub use wma::*;
 pub mod average_absolute_deviation;
 pub mod average_true_range;
 pub mod cci;
+pub mod donchain_channel;
 pub mod ema;
 pub mod fisher;
 pub mod hull;
@@ -50,3 +51,6 @@ pub fn round(num: f64) -> f64 {
 // Notes:
 // Spec: No more next_peek() methods > cumbersome to develop, inconsistent results, not worth it >
 //   > just clone when needed.
+
+// + There is not much value in tripple moving average > it's like EMA with more inaccuate data.
+// + Do not use hull or Tripple Moving average > EMA/WMA with lower period is enough.

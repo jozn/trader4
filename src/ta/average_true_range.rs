@@ -30,7 +30,7 @@ impl AverageTrueRange {
 
 impl Default for AverageTrueRange {
     fn default() -> Self {
-        Self::new(9).unwrap()
+        Self::new(14).unwrap()
     }
 }
 
