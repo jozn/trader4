@@ -34,7 +34,7 @@ impl AverageAbsoluteDeviation {
         let mut mad = 0.;
 
         // Note:
-        //   this loop can be avoided with some fancy algorithms with but it not worth the complexity
+        //   this loop can be avoided with some fancy algorithms but it not worth the complexity
         for v in self.window.iter() {
             mad += (v - mean).abs();
         }

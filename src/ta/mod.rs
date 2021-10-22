@@ -34,6 +34,7 @@ pub mod sma;
 pub mod true_range;
 pub mod window;
 pub mod wma;
+mod tangant;
 
 ////////// Some other shared types //////////
 
@@ -54,3 +55,4 @@ pub fn round(num: f64) -> f64 {
 
 // + There is not much value in tripple moving average > it's like EMA with more inaccuate data.
 // + Do not use hull or Tripple Moving average > EMA/WMA with lower period is enough.
+// + Hull and Triple EMA gives false number of price > number it has not touched yet.

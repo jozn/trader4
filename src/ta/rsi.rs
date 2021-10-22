@@ -45,6 +45,7 @@ impl RelativeStrengthIndex {
         }
 
         self.prev_val = next_val;
+        // todo correct?
         let up_ema = self.up_ma.next(up);
         let down_ema = self.down_ma.next(down);
 

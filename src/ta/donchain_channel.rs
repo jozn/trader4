@@ -8,7 +8,6 @@ pub type DC = DonchainChannel;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DonchainChannel {
     period: usize,
-    is_start: bool,
     window_low: Window,
     window_high: Window,
 }
@@ -26,7 +25,6 @@ impl DonchainChannel {
             0 => Err(TAErr::WrongArgs),
             _ => Ok(Self {
                 period,
-                is_start: false,
                 window_low: Window::new(period).unwrap(),
                 window_high: Window::new(period).unwrap(),
             }),

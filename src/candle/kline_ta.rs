@@ -65,7 +65,7 @@ impl Default for TAMethods {
     fn default() -> Self {
         TAMethods {
             sma50: ta::SMA::new(100).unwrap(),
-            ema: ta::EMA::new(14).unwrap(),
+            ema: ta::EMA::new(100).unwrap(),
             hull: ta::HMA::new(10).unwrap(),
             mom: ta::Momentum::new(10).unwrap(),
             roc: ta::ROC::new(10).unwrap(),
