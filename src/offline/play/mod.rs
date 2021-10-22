@@ -2,6 +2,8 @@ use super::forex::loader_csv;
 use super::forex::loader_csv::*;
 use super::offline;
 
+// MODULE NOT USED
+
 pub fn play5() {
     use super::candle::*;
     let arr = loader_csv::_load(50_000, "/media/hamid/K/forex1/EURUSD_tab3.csv");

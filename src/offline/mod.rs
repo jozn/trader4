@@ -1,5 +1,11 @@
+pub mod forex;
 pub mod kline_ta_csv;
+pub mod portfolio;
+pub mod sim;
 pub mod tok_kline_ta_csv;
+pub mod trend;
+pub mod world;
+// pub mod play;
 
 pub use kline_ta_csv::*;
 pub use tok_kline_ta_csv::*;

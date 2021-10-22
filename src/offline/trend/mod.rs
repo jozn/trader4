@@ -1,23 +1,26 @@
 pub mod realtime;
 
-use super::forex::loader_csv;
-use super::forex::loader_csv::*;
-use super::offline;
+use crate::offline::forex::*;
+use crate::offline::*;
+use crate::*;
+// use super::forex::loader_csv;
+// use super::forex::loader_csv::*;
+// use super::offline;
 use crate::base::OHLCV;
-use crate::candle::CandleSeriesTA;
+use crate::candle::{CandleSeriesTA, TimeSerVec};
 use crate::offline::{to_csv_out, to_csv_out_old};
 use crate::trend::Dir::{DOWN, UP, ZERO};
 use serde::{Deserialize, Serialize};
 
 pub fn trend_play3_tang() {
-    use super::candle::*;
+    use crate::candle::*;
     let arr = loader_csv::_load(100_000, "/media/hamid/K/forex1/EURUSD_tab3.csv");
 
-    let mut ts = super::candle::CandleSeriesTA::new();
+    let mut ts = crate::candle::CandleSeriesTA::new();
     let mut ticks_arr = TimeSerVec::new();
     let mut i = 0;
     for v in arr {
-        let tt = super::candle::Tick {
+        let tt = crate::candle::Tick {
             time_s: v.time,
             price: v.ask_price * 100_000.,
             qty: 0.0,
@@ -42,16 +45,15 @@ pub fn trend_play3_tang() {
     // println!("{:}", ts);
 }
 
-
 pub fn trend_play1() {
-    use super::candle::*;
+    use crate::candle::*;
     let arr = loader_csv::_load(50_000, "/media/hamid/K/forex1/EURUSD_tab3.csv");
 
-    let mut ts = super::candle::CandleSeriesTA::new();
+    let mut ts = crate::candle::CandleSeriesTA::new();
     let mut ticks_arr = TimeSerVec::new();
     let mut i = 0;
     for v in arr {
-        let tt = super::candle::Tick {
+        let tt = crate::candle::Tick {
             time_s: v.time,
             price: v.ask_price * 100_000.,
             qty: 0.0,
@@ -82,15 +84,15 @@ fn diff_tang(arr: CandleSeriesTA) -> Vec<TangDiff> {
 
     let mut res = vec![];
     let mut last_kline = &first.ta1;
-    for (i,k) in klines.iter().enumerate() {
+    for (i, k) in klines.iter().enumerate() {
         let kt = &k.ta1;
         let t = TangDiff {
             price: k.kline.hlc3().round() as u64,
             ema: round2(k.ta1.ema10) as u64,
-            diff: round2((k.ta1.ema10 - last_kline.ema10 )),
+            diff: round2((k.ta1.ema10 - last_kline.ema10)),
         };
         last_kline = kt;
-        if i> 50 {
+        if i > 50 {
             res.push(t);
         }
     }
@@ -165,6 +167,6 @@ struct TangDiff {
     pub diff: f64,
 }
 
-fn round2(n :f64) -> f64 {
+fn round2(n: f64) -> f64 {
     ((n * 100.) as i64) as f64 / 100.
 }

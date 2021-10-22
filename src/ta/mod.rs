@@ -31,10 +31,10 @@ pub mod momentum;
 pub mod roc;
 pub mod rsi;
 pub mod sma;
+mod tangant;
 pub mod true_range;
 pub mod window;
 pub mod wma;
-mod tangant;
 
 ////////// Some other shared types //////////
 

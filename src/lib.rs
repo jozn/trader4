@@ -7,13 +7,14 @@
 pub mod base;
 pub mod candle;
 pub mod ctrader;
-pub mod forex;
 pub mod offline;
 pub mod pb;
-pub mod play;
-pub mod portfolio;
 pub mod run;
-pub mod sim;
 pub mod ta;
-pub mod trend;
-pub mod world;
+
+// For merged in offline folder
+pub use offline::forex;
+pub use offline::portfolio;
+pub use offline::sim;
+pub use offline::trend;
+pub use offline::world;
