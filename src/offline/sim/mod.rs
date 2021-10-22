@@ -1,9 +1,11 @@
 pub mod proc;
 
+// Code is deprecated > use world runner
+
 use super::portfolio::*;
 use super::*;
 use crate::candle::*;
-use crate::forex::CSVForexRecord;
+use crate::loader::CSVForexRecord;
 
 #[derive(Debug, Default, Clone)]
 pub struct Runner {
@@ -27,7 +29,7 @@ impl Runner {
 
     pub fn run(&mut self) {
         // let trades = loader_trade::load_trades_from_bin();
-        let trades = forex::_load(1000_000, "/media/hamid/K/forex1/EURUSD_tab3.csv");
+        let trades = loader::_load(1000_000, "/media/hamid/K/forex1/EURUSD_tab3.csv");
         let mut cst = CandleSeriesTA::new();
 
         let mut mt = MiniTick::new(0.0);

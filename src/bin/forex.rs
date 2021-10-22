@@ -15,5 +15,5 @@ pub fn run_sim() {
 }
 
 fn main_2() {
-    trader2::forex::play::play1();
+    trader2::loader::play::play1();
 }

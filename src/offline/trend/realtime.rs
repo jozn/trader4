@@ -1,8 +1,8 @@
 // Note this moudle focus on ticking rather than only one kline timeframe type.
 
 use crate::*;
-// use super::super::forex::loader_csv;
-// use super::super::forex::loader_csv::*;
+// use super::super::loader::loader_csv;
+// use super::super::loader::loader_csv::*;
 use crate::base::OHLCV;
 use crate::candle::{CandleSeriesTA, TimeSerVec};
 use crate::offline::{to_csv_out, to_csv_out_old};
@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 use Dir::*;
 
 pub fn trend_play1() {
-    let arr = forex::loader_csv::_load(50_000, "/media/hamid/K/forex1/EURUSD_tab3.csv");
+    let arr = loader::loader_csv::_load(50_000, "/media/hamid/K/forex1/EURUSD_tab3.csv");
 
     let mut ts = candle::CandleSeriesTA::new();
     let mut ticks_arr = TimeSerVec::new();
@@ -36,7 +36,7 @@ pub fn trend_play1() {
 
 ////////////////////////////////////
 pub fn trend_play2() {
-    let arr = forex::loader_csv::_load(50_000, "/media/hamid/K/forex1/EURUSD_tab3.csv");
+    let arr = loader::loader_csv::_load(50_000, "/media/hamid/K/forex1/EURUSD_tab3.csv");
 
     let mut ts = candle::CandleSeriesTA::new();
     let mut ticks_arr = TimeSerVec::new();

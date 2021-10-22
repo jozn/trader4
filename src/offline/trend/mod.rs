@@ -1,10 +1,10 @@
 pub mod realtime;
 
-use crate::offline::forex::*;
+use crate::offline::loader::*;
 use crate::offline::*;
 use crate::*;
-// use super::forex::loader_csv;
-// use super::forex::loader_csv::*;
+// use super::loader::loader_csv;
+// use super::loader::loader_csv::*;
 // use super::offline;
 use crate::base::OHLCV;
 use crate::candle::{CandleSeriesTA, TimeSerVec};
