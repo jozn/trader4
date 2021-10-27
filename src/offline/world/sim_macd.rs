@@ -12,8 +12,6 @@ use crate::*;
 pub struct SimMacdWorld {
     ticks: Vec<CSVForexRecord>,
     last_tick: Tick,
-    // balance: Vec<f64>,
-    // pub port: Portfolio,
     strategy1: Strategy1,
     it_num: usize,
     pos_id: usize,
@@ -59,11 +57,9 @@ impl TRunner for SimMacdWorld {
         let t = &self.last_tick;
 
         // Close
-        // self.port.try_close_satasfied_postions(t.price as i64, t.time_s);
         self.strategy1.try_close_satasfied_postions(t);
 
         let price = t.price;
-        // let kt = &cst.medium.kline_ta_tip.clone().unwrap();
         let kt_opt = &cst.medium.klines_ta.last();
         if kt_opt.is_none() {
             return;
@@ -103,42 +99,22 @@ impl TRunner for SimMacdWorld {
     }
 
     fn on_price_tick(&mut self, cst: &CandleSeriesTA, tikc: &Tick) {
-        // let t = tikc;
-        // let b = self.port.get_total_balance(tikc.price as i64);
         if self.tick_cnt % 2000 == 0 {
-            // self.balance.push(b);
             self.strategy1.collect_balance(tikc);
         }
         self.strategy1.try_close_satasfied_postions(tikc);
     }
 
     fn on_exit(&mut self) {
-        // self.port.close_all_positions()
         println!("on exit - all pos {}", self.pos_id);
-        self.ticks.clear(); // for debug - clear array
-                            // println!("{:#?}", self);
-                            // self.port
-                            //     .close_all_positions(self.last_tick.price as i64, self.last_tick.time_s);
+        self.ticks.clear();
         self.strategy1.close_all_exit(&self.last_tick);
-        // self.port.report(&self.last_tick);
-        // println!("on exit");
 
-        // self.balance
-        //     .push(self.port.get_total_balance(self.last_tick.price as i64));
+        // println!("on exit");
 
         self.strategy1.collect_balance(&self.last_tick);
 
-        // println!("balance {:#?}", self.balance);
-
-        // balance csv
-        // let o: Vec<f64> = self.port.closed.iter().map(|p| p.final_balance).collect();
-        // let os = to_csv_out(&o);
-        // println!("{}", os);
-
         self.strategy1.report();
-
         println!("=====================================================");
-
-        // println!("{:#?}", self.port);
     }
 }
