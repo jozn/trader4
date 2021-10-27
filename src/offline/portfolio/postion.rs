@@ -51,8 +51,8 @@ impl Position {
             open_xprice: open_price,
             open_time: time,
             open_time_str: to_date(time),
-            to_exit_xpip: 50,
-            to_stop_loss_xpip: 50,
+            to_exit_xpip: 100,
+            to_stop_loss_xpip: 100,
             spread: 0,
             close_xprice: 0,
             close_time: 0,
@@ -75,8 +75,8 @@ impl Position {
             open_xprice: open_price,
             open_time: time,
             open_time_str: to_date(time),
-            to_exit_xpip: 50,
-            to_stop_loss_xpip: 50,
+            to_exit_xpip: 100,
+            to_stop_loss_xpip: 100,
             spread: 0,
             close_xprice: 0,
             close_time: 0,
@@ -94,7 +94,7 @@ impl Position {
 
         match self.direction {
             PosDir::Long => self.close_long(close_price, time),
-            PosDir::Short => self.close_long(close_price, time),
+            PosDir::Short => self.close_short(close_price, time),
         };
     }
 

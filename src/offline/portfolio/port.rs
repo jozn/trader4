@@ -97,12 +97,17 @@ impl Portfolio {
     }
 
     // Close
-    pub fn try_close_pos(&mut self, price: XPrice, time: u64) {
+    pub fn try_close_satasfied_postions(&mut self, price: XPrice, time: u64) {
         for p in self.opens.clone().iter() {
             if p.should_close(price) {
-                // todo improve this
-                self.sell_long(price, p.pos_id, time);
-                self.buy_short(price, p.pos_id, time);
+                match p.direction {
+                    PosDir::Long => {
+                        self.sell_long(price, p.pos_id, time);
+                    }
+                    PosDir::Short => {
+                        self.buy_short(price, p.pos_id, time);
+                    }
+                }
             }
         }
     }
@@ -255,7 +260,7 @@ impl Portfolio {
         let toatl_balnce = val + port.free_usd;
         // println!("{:#?}", port.longs);
         // println!("{:#?}", port);
-        println!(" pos : {:#?} ", port);
+        // println!(" pos : {:#?} ", port);
 
         println!("{:} {} {} ", port.free_usd, val * last.price, toatl_balnce);
         println!(" win : {} {} ", winer_num, winer);

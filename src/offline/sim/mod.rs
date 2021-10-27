@@ -50,7 +50,8 @@ impl Runner {
                 cst.add_ticks(old);
 
                 // LOGIC MUST BE ADDED HERE
-                self.port.try_close_pos(tick.price as i64, tick.time_s);
+                self.port
+                    .try_close_satasfied_postions(tick.price as i64, tick.time_s);
                 proc::proc_tick_buy(&cst, &mut self.port, &tick);
                 // END OF LOGIC
             }

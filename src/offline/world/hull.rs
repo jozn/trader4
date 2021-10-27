@@ -55,7 +55,8 @@ impl TRunner for HullWorld {
         let t = &self.last_tick;
 
         // Close
-        self.port.try_close_pos(t.price as i64, t.time_s);
+        self.port
+            .try_close_satasfied_postions(t.price as i64, t.time_s);
 
         let price = t.price;
         let kt = &cst.small.kline_ta_tip.clone().unwrap();
@@ -87,7 +88,8 @@ impl TRunner for HullWorld {
         if self.tick_cnt % 200 == 0 {
             self.balance.push(b);
         }
-        self.port.try_close_pos(t.price as i64, t.time_s);
+        self.port
+            .try_close_satasfied_postions(t.price as i64, t.time_s);
     }
 
     fn on_exit(&mut self) {

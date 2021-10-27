@@ -4,9 +4,9 @@ use std::fmt::Debug;
 use std::ops::{Deref, DerefMut};
 
 pub trait TRunner: Debug {
-    fn get_next_tick(&mut self) -> Option<Tick>;
-    fn on_next_tick_bulk(&mut self, cst: &CandleSeriesTA);
-    fn on_price_tick(&mut self, cst: &CandleSeriesTA, tikc: &Tick);
+    fn get_next_tick(&mut self) -> Option<Tick>; // should blocks and returns next tick, None means end of data, exist.
+    fn on_next_tick_bulk(&mut self, cst: &CandleSeriesTA); // Called in each MiniTick full,
+    fn on_price_tick(&mut self, cst: &CandleSeriesTA, tikc: &Tick); // Called after each price tick
     fn on_exit(&mut self);
 }
 
