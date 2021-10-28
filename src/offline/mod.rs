@@ -1,6 +1,7 @@
 pub mod kline_ta_csv;
 pub mod loader;
 pub mod portfolio;
+pub mod report;
 pub mod sim;
 pub mod strategy1;
 pub mod tok_kline_ta_csv;

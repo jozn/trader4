@@ -2,6 +2,7 @@ use super::*;
 use crate::candle::Tick;
 use chrono::*;
 use serde::{Deserialize, Serialize};
+use std::cmp::Ordering;
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Position {
@@ -25,6 +26,9 @@ pub struct Position {
     pub spread_fees: f64,
     pub final_balance: f64,
     // Add tailing max/min prices
+    pub max_touch: XPrice,
+    pub min_touch: XPrice,
+    pub tailing_loose: XPrice,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -56,11 +60,17 @@ impl Position {
             spread: 0,
             close_xprice: 0,
             close_time: 0,
+            close_time_str: "".to_string(),
             finished: false,
+            duration: "".to_string(),
             profit_xpip: 0,
             profit: 0.0,
+            spread_fees: 0.0,
             final_balance: 0.0,
-            ..Default::default()
+
+            max_touch: open_price,
+            min_touch: open_price,
+            tailing_loose: open_price - 50,
         }
     }
 
@@ -80,11 +90,17 @@ impl Position {
             spread: 0,
             close_xprice: 0,
             close_time: 0,
+            close_time_str: "".to_string(),
             finished: false,
+            duration: "".to_string(),
             profit_xpip: 0,
             profit: 0.0,
+            spread_fees: 0.0,
             final_balance: 0.0,
-            ..Default::default()
+
+            max_touch: open_price,
+            min_touch: open_price,
+            tailing_loose: open_price + 50,
         }
     }
 
@@ -128,7 +144,45 @@ impl Position {
         self.final_balance = self.pos_size_usd + pure_pl;
     }
 
-    pub(crate) fn should_close(&self, close_price: XPrice) -> bool {
+    pub(crate) fn update_ailing(&mut self, price: XPrice) {
+        let pl_xpip = match self.direction {
+            PosDir::Long => {
+                let new_sl = price - 50;
+                if self.tailing_loose < new_sl {
+                    self.tailing_loose = new_sl;
+                }
+            }
+            PosDir::Short => {
+                let new_sl = price + 50;
+                if self.tailing_loose > new_sl {
+                    self.tailing_loose = new_sl;
+                }
+            }
+        };
+    }
+
+    pub(crate) fn should_close_tailing(&self, close_price: XPrice) -> bool {
+        let mut trig = false;
+        let pl_xpip = match self.direction {
+            PosDir::Long => {
+                if close_price < self.tailing_loose {
+                    true
+                } else {
+                    false
+                }
+            }
+            PosDir::Short => {
+                if close_price > self.tailing_loose {
+                    true
+                } else {
+                    false
+                }
+            }
+        };
+        pl_xpip
+    }
+
+    pub(crate) fn should_close_bk_simple(&self, close_price: XPrice) -> bool {
         let mut trig = false;
         let pl_xpip = match self.direction {
             PosDir::Long => {
@@ -180,3 +234,17 @@ impl Position {
         self.final_balance = self.pos_size_usd + pure_pl;
     }
 }
+
+/*
+impl Ord for Position {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.pos_id.cmp(&other.pos_id)
+    }
+}
+
+impl PartialOrd for Position {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        self.pos_id.partial_cmp(&other.pos_id)
+    }
+}
+*/

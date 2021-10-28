@@ -1,5 +1,6 @@
 use super::*;
 use crate::candle::Tick;
+use crate::offline::report::Report;
 use chrono::*;
 use serde::{Deserialize, Serialize};
 
@@ -12,6 +13,7 @@ pub struct Portfolio {
     pub free_asset_dep: f64, // todo wallet along usd // todo asset
     pub opens: Vec<Position>,
     pub closed: Vec<Position>,
+    pub report: Report,
 }
 
 impl Portfolio {
@@ -39,6 +41,9 @@ impl Portfolio {
 
         let mut pos = Position::new_long(price, usd, time);
 
+        self.report
+            .on_new_trade(&pos, self.get_total_balance(price));
+
         self.free_usd -= usd as f64 * 1000.;
 
         pos.pos_id = self.next_pos_id();
@@ -52,6 +57,9 @@ impl Portfolio {
             Some(p) => {
                 let mut p = p.clone();
                 p.close_pos(price, time);
+
+                self.report
+                    .on_close_trade(&p, self.get_total_balance(price));
 
                 let got_usd = p.final_balance;
                 self.free_usd += got_usd;
@@ -73,6 +81,9 @@ impl Portfolio {
 
         let mut pos = Position::new_short(price, usd_size, time);
 
+        self.report
+            .on_new_trade(&pos, self.get_total_balance(price));
+
         pos.pos_id = self.next_pos_id();
         self.opens.push(pos);
     }
@@ -84,6 +95,9 @@ impl Portfolio {
             Some(p) => {
                 let mut p = p.clone();
                 p.close_pos(price, time);
+
+                self.report
+                    .on_close_trade(&p, self.get_total_balance(price));
 
                 let got_coin = p.final_balance;
                 self.free_usd += p.profit;
@@ -97,19 +111,31 @@ impl Portfolio {
     }
 
     // Close
-    pub fn try_close_satasfied_postions(&mut self, price: XPrice, time: u64) {
-        for p in self.opens.clone().iter() {
-            if p.should_close(price) {
+    pub fn try_close_satasfied_postions(&mut self, price: XPrice, time: u64) -> bool {
+        let mut done = false;
+        for p in self.opens.clone().iter_mut() {
+            // // todo
+            // let new_sl = price + 50;
+            // if p.tailing_loose < new_sl {
+            //     p.tailing_loose = new_sl;
+            // }
+
+            p.update_ailing(price);
+
+            if p.should_close_bk_simple(price) {
                 match p.direction {
                     PosDir::Long => {
+                        done = true;
                         self.sell_long(price, p.pos_id, time);
                     }
                     PosDir::Short => {
+                        done = true;
                         self.buy_short(price, p.pos_id, time);
                     }
                 }
             }
         }
+        done
     }
 
     // Close

@@ -21,7 +21,10 @@ pub struct SimMacdWorld {
 impl SimMacdWorld {
     pub fn new() -> Self {
         Self {
-            ticks: loader::_load(14000_000, "/media/hamid/K/forex1/EURUSD_tab3.csv"),
+            ticks: loader::_load(1400_000, "/media/hamid/K/forex1/EURUSD_tab3.csv"),
+            // ticks: loader::_load(1400_000, "/media/hamid/K/forex1/GBPUSD_tab1.csv"),
+            // ticks: loader::_load(1400_000, "/media/hamid/K/forex1/AUDCAD_tab1.csv"),
+            // ticks: loader::_load(14000_000, "/media/hamid/K/forex1/EURJPY_tab.csv"),
             it_num: 0,
             strategy1: Strategy1::new(),
             // port: Portfolio::new(100_000.),
@@ -66,7 +69,8 @@ impl TRunner for SimMacdWorld {
         }
         let kt = kt_opt.unwrap();
         let kid = kt.kline.bucket;
-        let ma = kt.ta1.sma50;
+        let ma = kt.ta1.ema10;
+        let ma = kt.ta1.ema10;
         let macd_out = kt.ta1.macd.clone();
 
         let up = macd_out.signal.0;
@@ -74,9 +78,11 @@ impl TRunner for SimMacdWorld {
 
         match up {
             SimpleCrossEvent::Bull(_) => {
+                // self.strategy1.buy(kid, t);
                 if macd_out.macd < 0. && price > ma {
+                    // if macd_out.macd < 0. {
                     self.strategy1.buy(kid, t);
-                    println!("long {} - {} - {:#?}", price, kt.kline.bucket, &macd_out);
+                    // println!("long {} - {} - {:#?}", price, kt.kline.bucket, &macd_out);
                     // self.port.buy_long(t.price as i64, 10, t.time_s);
                 }
             }
@@ -85,12 +91,12 @@ impl TRunner for SimMacdWorld {
         }
 
         match down {
-            SimpleCrossEvent::Bull(_) => {
-                // self.port.buy_long(t.price as i64, 1, t.time_s);
-            }
+            SimpleCrossEvent::Bull(_) => {}
             SimpleCrossEvent::None => {}
             SimpleCrossEvent::Bear(_) => {
+                // self.strategy1.sell(kid, t);
                 if macd_out.macd > 0. && price < ma {
+                    // if macd_out.macd > 0.  {
                     self.strategy1.sell(kid, t);
                     // self.port.sell_short(t.price as i64, 10, t.time_s);
                 }
@@ -99,9 +105,9 @@ impl TRunner for SimMacdWorld {
     }
 
     fn on_price_tick(&mut self, cst: &CandleSeriesTA, tikc: &Tick) {
-        if self.tick_cnt % 2000 == 0 {
-            self.strategy1.collect_balance(tikc);
-        }
+        // if self.tick_cnt % 2000 == 0 {
+        //     // self.strategy1.collect_balance(tikc);
+        // }
         self.strategy1.try_close_satasfied_postions(tikc);
     }
 
@@ -112,7 +118,7 @@ impl TRunner for SimMacdWorld {
 
         // println!("on exit");
 
-        self.strategy1.collect_balance(&self.last_tick);
+        // self.strategy1.collect_balance(&self.last_tick);
 
         self.strategy1.report();
         println!("=====================================================");
