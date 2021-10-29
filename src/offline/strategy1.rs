@@ -12,7 +12,7 @@ pub struct Strategy1 {
 impl Strategy1 {
     pub fn new() -> Self {
         Self {
-            port: Portfolio::new(100_000.),
+            port: Portfolio::new(1000_000.),
             ..Default::default()
         }
     }
@@ -22,9 +22,8 @@ impl Strategy1 {
             return;
         }
         self.acted.push(kline_id);
-        self.collect_balance(t);
 
-        self.port.buy_long(t.price as i64, 40, t.time_s);
+        self.port.buy_long(t.price as i64, 10, t.time_s);
     }
 
     pub fn sell(&mut self, kline_id: u64, t: &Tick) {
@@ -33,14 +32,8 @@ impl Strategy1 {
             return;
         }
         self.acted.push(kline_id);
-        self.collect_balance(t);
 
-        self.port.sell_short(t.price as i64, 40, t.time_s);
-    }
-
-    pub fn collect_balance(&mut self, t: &Tick) {
-        let b = self.port.get_total_balance(t.price as i64);
-        self.balance.push(b);
+        self.port.sell_short(t.price as i64, 10, t.time_s);
     }
 
     pub fn try_close_satasfied_postions(&mut self, t: &Tick) {
@@ -48,20 +41,21 @@ impl Strategy1 {
             .port
             .try_close_satasfied_postions(t.price as i64, t.time_s);
 
-        if done {
-            self.collect_balance(t);
-        }
+        if done {}
     }
 
     pub fn close_all_exit(&mut self, t: &Tick) {
-        self.collect_balance(t);
+        self.port
+            .report
+            .collect_balance(self.port.get_total_balance((t.price * 100_000.) as i64));
         self.port.close_all_positions(t.price as i64, t.time_s);
     }
 
     pub fn report(&self) {
-        self.port.report.report_all(&self.port);
+        self.port.report.write_to_folder(&self.port);
         self.report_old();
     }
+
     pub fn report_old(&self) {
         println!("balance {:#?}", self.balance);
 

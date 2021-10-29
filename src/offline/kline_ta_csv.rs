@@ -23,7 +23,12 @@ pub struct CsvOut {
 
 impl CsvOut {}
 
-pub fn to_json_out(arr: &Vec<CsvOut>) -> String {
+pub fn to_json_out_csv_out(arr: &Vec<CsvOut>) -> String {
+    let o = serde_json::to_string_pretty(arr).unwrap();
+    o
+}
+
+pub fn to_json_out<T: Serialize>(arr: &Vec<T>) -> String {
     let o = serde_json::to_string_pretty(arr).unwrap();
     o
 }
