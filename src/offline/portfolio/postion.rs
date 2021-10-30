@@ -1,8 +1,16 @@
 use super::*;
-use crate::candle::Tick;
+use crate::candle::{Tick, TA1};
 use chrono::*;
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
+
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct PosParam {
+    pub open_price: XPrice,
+    pub pos_size: XLot,
+    pub time: u64,
+    pub ta: TA1,
+}
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Position {
@@ -29,6 +37,15 @@ pub struct Position {
     pub max_touch: XPrice,
     pub min_touch: XPrice,
     pub tailing_loose: XPrice,
+
+    // Context flat - When rust fixed csv out move it to ctx
+    pub s_ema: f64,
+    pub s_mom: f64,
+    pub s_roc: f64,
+    pub s_rsi: f64,
+    pub s_cci: f64,
+    pub s_macd: f64,
+    pub s_fisher: f64,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -71,6 +88,7 @@ impl Position {
             max_touch: open_price,
             min_touch: open_price,
             tailing_loose: open_price - 50,
+            ..Default::default()
         }
     }
 
@@ -101,6 +119,7 @@ impl Position {
             max_touch: open_price,
             min_touch: open_price,
             tailing_loose: open_price + 50,
+            ..Default::default()
         }
     }
 
