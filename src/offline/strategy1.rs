@@ -53,52 +53,5 @@ impl Strategy1 {
 
     pub fn report(&self) {
         self.port.report.write_to_folder(&self.port);
-        self.report_old();
-    }
-
-    pub fn report_old(&self) {
-        println!("balance {:#?}", self.balance);
-
-        let o: Vec<f64> = self.port.closed.iter().map(|p| p.final_balance).collect();
-        let os = to_csv_out(&o);
-        println!("{}", os);
-
-        let mut total_time = 0;
-        let mut win_cnt = 0;
-        let mut win_amount = 0.;
-        let mut lose_cnt = 0;
-        let mut lose_amount = 0.;
-        for p in &self.port.closed {
-            total_time += p.close_time - p.open_time;
-            if p.profit > 0. {
-                win_cnt += 1;
-                win_amount += p.profit;
-            } else {
-                lose_cnt += 1;
-                lose_amount += p.profit;
-            }
-        }
-
-        let win_ratio = win_cnt as f32 / lose_cnt as f32 / 2.;
-        let pl_ratio = win_amount / lose_amount.abs();
-        println!(
-            "win count:{} - {}$ \n loose count: {} - {}& ",
-            win_cnt, win_amount, lose_cnt, lose_amount
-        );
-        println!("win ratio:{} - P/L ratio amount {}$ ", win_ratio, pl_ratio);
-
-        println!(
-            "time :{} mins -  {} hours ",
-            total_time / 60,
-            total_time / 3600
-        );
-
-        println!(
-            "acted kiline buckets {} \n {:?}",
-            self.acted.len(),
-            self.acted
-        );
-
-        println!("{:#?}", self.port);
     }
 }

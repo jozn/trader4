@@ -71,7 +71,7 @@ impl Report {
         std::fs::write("balance.csv", txt);
 
         let js = to_json_out(&self.middles);
-        std::fs::write("balance.json", format!("{}", js));
+        std::fs::write("./json/balance.json", format!("{}", js));
     }
 
     pub fn report_success(&self, port: &Portfolio) -> ReportResult {
@@ -185,35 +185,41 @@ impl Report {
     }
 
     pub fn report_wins(&self, port: &Portfolio) {
-        let mut res = vec![];
+        let mut all_arr = vec![];
+        let mut longs_arr = vec![];
+        let mut short_arr = vec![];
         for p in port.closed.iter() {
             if p.profit > 0. {
-                res.push(p.clone())
+                all_arr.push(p.clone());
+                match p.direction {
+                    PosDir::Long => longs_arr.push(p.clone()),
+                    PosDir::Short => short_arr.push(p.clone()),
+                }
             }
         }
 
-        let os = to_csv_out(&res);
-        let txt = format!("{}", os);
-        std::fs::write("wins.csv", txt);
-
-        let js = to_json_out(&res);
-        std::fs::write("wins.json", format!("{}", js));
+        write_pos("wins_all", all_arr);
+        write_pos("wins_long", longs_arr);
+        write_pos("wins_short", short_arr);
     }
 
     pub fn report_loose(&self, port: &Portfolio) {
-        let mut res = vec![];
+        let mut all_arr = vec![];
+        let mut longs_arr = vec![];
+        let mut short_arr = vec![];
         for p in port.closed.iter() {
             if p.profit < 0. {
-                res.push(p.clone())
+                all_arr.push(p.clone());
+                match p.direction {
+                    PosDir::Long => longs_arr.push(p.clone()),
+                    PosDir::Short => short_arr.push(p.clone()),
+                }
             }
         }
 
-        let os = to_csv_out(&res);
-        let txt = format!("{}", os);
-        std::fs::write("looses.csv", txt);
-
-        let js = to_json_out(&res);
-        std::fs::write("looses.json", format!("{}", js));
+        write_pos("lose_all", all_arr);
+        write_pos("lose_long", longs_arr);
+        write_pos("lose_short", short_arr);
     }
 }
 
@@ -261,4 +267,13 @@ pub fn get_all_postions(port: &Portfolio) -> Vec<Position> {
     all_pos.sort_by(|p1, p2| p1.pos_id.cmp(&p2.pos_id));
 
     all_pos
+}
+
+fn write_pos(name: &str, arr: Vec<Position>) {
+    let os = to_csv_out(&arr);
+    let txt = format!("{}", os);
+    std::fs::write(format!("{}.csv", name), txt);
+
+    let js = to_json_out(&arr);
+    std::fs::write(format!("./json/{}.json", name), format!("{}", js));
 }
