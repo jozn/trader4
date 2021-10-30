@@ -101,37 +101,6 @@ impl Position {
         }
     }
 
-    /*    pub fn new_long(open_price: XPrice, pos_size: XLot, time: u64) -> Self {
-        assert!(pos_size > 0);
-
-        Self {
-            pos_id: 0,
-            direction: PosDir::Long,
-            pos_size_usd: (pos_size * 1_000) as f64,
-            pos_size_xlot: pos_size,
-            open_xprice: open_price,
-            open_time: time,
-            open_time_str: to_date(time),
-            to_exit_xpip: 100,
-            to_stop_loss_xpip: 100,
-            spread: 0,
-            close_xprice: 0,
-            close_time: 0,
-            close_time_str: "".to_string(),
-            finished: false,
-            duration: "".to_string(),
-            profit_xpip: 0,
-            profit: 0.0,
-            spread_fees: 0.0,
-            final_balance: 0.0,
-
-            max_touch: open_price,
-            min_touch: open_price,
-            tailing_loose: open_price - 50,
-            ..Default::default()
-        }
-    }*/
-
     pub fn new_short(p: &PosParam) -> Self {
         assert!(p.pos_size > 0);
 
@@ -162,37 +131,6 @@ impl Position {
             ..Default::default()
         }
     }
-
-    /*    pub fn new_short(open_price: XPrice, pos_size: XLot, time: u64) -> Self {
-        assert!(pos_size > 0);
-
-        Self {
-            pos_id: 0,
-            direction: PosDir::Short,
-            pos_size_usd: (pos_size * 1_000) as f64,
-            pos_size_xlot: pos_size,
-            open_xprice: open_price,
-            open_time: time,
-            open_time_str: to_date(time),
-            to_exit_xpip: 100,
-            to_stop_loss_xpip: 100,
-            spread: 0,
-            close_xprice: 0,
-            close_time: 0,
-            close_time_str: "".to_string(),
-            finished: false,
-            duration: "".to_string(),
-            profit_xpip: 0,
-            profit: 0.0,
-            spread_fees: 0.0,
-            final_balance: 0.0,
-
-            max_touch: open_price,
-            min_touch: open_price,
-            tailing_loose: open_price + 50,
-            ..Default::default()
-        }
-    }*/
 
     pub fn close_pos(&mut self, close_price: XPrice, time: u64) {
         self.close_time_str = to_date(time);

@@ -42,22 +42,6 @@ impl Portfolio {
         self.opens.push(pos);
     }
 
-    /*pub fn buy_long_bk(&mut self, price: XPrice, usd: XLot, time: u64) {
-        if !self.has_enough_balance() {
-            return;
-        }
-
-        let mut pos = Position::new_long(price, usd, time);
-
-        self.report
-            .on_new_trade(&pos, self.get_total_balance(price));
-
-        self.free_usd -= usd as f64 * 1000.;
-
-        pos.pos_id = self.next_pos_id();
-        self.opens.push(pos);
-    }*/
-
     pub fn sell_long(&mut self, param: &PosParam) {
         let pos = self.opens.iter().find(|p| p.pos_id == param.pos_id);
         match pos {
@@ -78,26 +62,6 @@ impl Portfolio {
         }
     }
 
-    /*    pub fn sell_long(&mut self, price: XPrice, pos_id: u64, time: u64) {
-        let pos = self.opens.iter().find(|p| p.pos_id == pos_id);
-        match pos {
-            None => {}
-            Some(p) => {
-                let mut p = p.clone();
-                p.close_pos(price, time);
-
-                self.report
-                    .on_close_trade(&p, self.get_total_balance(price));
-
-                let got_usd = p.final_balance;
-                self.free_usd += got_usd;
-
-                self._remove_pos(p.pos_id);
-                self.closed.push(p);
-            }
-        }
-    }*/
-
     pub fn sell_short(&mut self, param: &PosParam) {
         if !self.has_enough_balance() {
             return;
@@ -112,24 +76,6 @@ impl Portfolio {
         self.opens.push(pos);
     }
 
-    /*    pub fn sell_short(&mut self, price: XPrice, usd_size: XLot, time: u64) {
-        // let val = price * coin;
-        // if val < 10. {
-        //     return;
-        // }
-        if !self.has_enough_balance() {
-            return;
-        }
-
-        let mut pos = Position::new_short(price, usd_size, time);
-
-        self.report
-            .on_new_trade(&pos, self.get_total_balance(price));
-
-        pos.pos_id = self.next_pos_id();
-        self.opens.push(pos);
-    }
-    */
     pub fn buy_short(&mut self, param: &PosParam) {
         let pos = self.opens.iter().find(|p| p.pos_id == param.pos_id);
         match pos {
@@ -151,28 +97,6 @@ impl Portfolio {
             }
         }
     }
-
-    /*    pub fn buy_short(&mut self, price: XPrice, pos_id: u64, time: u64) {
-        let pos = self.opens.iter().find(|p| p.pos_id == pos_id);
-        match pos {
-            None => {}
-            Some(p) => {
-                let mut p = p.clone();
-                p.close_pos(price, time);
-
-                self.report
-                    .on_close_trade(&p, self.get_total_balance(price));
-
-                let got_coin = p.final_balance;
-                self.free_usd += p.profit;
-
-                // self.free_asset += got_coin;
-
-                self._remove_pos(p.pos_id);
-                self.closed.push(p);
-            }
-        }
-    }*/
 
     // Close
     pub fn try_close_satasfied_postions(&mut self, param: &PosParam) -> bool {
@@ -202,33 +126,6 @@ impl Portfolio {
         done
     }
 
-    /*    pub fn try_close_satasfied_postions(&mut self, price: XPrice, time: u64) -> bool {
-        let mut done = false;
-        for p in self.opens.clone().iter_mut() {
-            // // todo
-            // let new_sl = price + 50;
-            // if p.tailing_loose < new_sl {
-            //     p.tailing_loose = new_sl;
-            // }
-
-            p.update_ailing(price);
-
-            if p.should_close_bk_simple(price) {
-                match p.direction {
-                    PosDir::Long => {
-                        done = true;
-                        self.sell_long(price, p.pos_id, time);
-                    }
-                    PosDir::Short => {
-                        done = true;
-                        self.buy_short(price, p.pos_id, time);
-                    }
-                }
-            }
-        }
-        done
-    }*/
-
     // Close
     pub fn close_all_positions(&mut self, param: &PosParam) {
         for p in self.opens.clone().iter() {
@@ -243,48 +140,7 @@ impl Portfolio {
         }
     }
 
-    /*    pub fn close_all_positions(&mut self, price: XPrice, time: u64) {
-        for p in self.opens.clone().iter() {
-            match p.direction {
-                PosDir::Long => {
-                    self.sell_long(price, p.pos_id, time);
-                }
-                PosDir::Short => {
-                    self.buy_short(price, p.pos_id, time);
-                }
-            }
-        }
-    }*/
-
-    /*    pub fn try_close_pos_bk(&mut self, price: XPrice, time: u64) {
-        for p in self.opens.clone().iter() {
-            match p.direction {
-                PosDir::Long => {
-                    // Profit
-                    if p.open_xprice + p.profit_xpip <= price {
-                        self.sell_long(price, p.pos_id, time);
-                    }
-                    // Lose
-                    if p.open_xprice - p.to_stop_loss_xpip >= price {
-                        self.sell_long(price, p.pos_id, time);
-                    }
-                }
-                PosDir::Short => {
-                    // Profit
-                    if p.open_xprice - p.profit_xpip >= price {
-                        self.buy_short(price, p.pos_id, time);
-                    }
-                    // Lose
-                    if p.open_xprice + p.to_stop_loss_xpip <= price {
-                        self.buy_short(price, p.pos_id, time);
-                    }
-                }
-            }
-        }
-    }*/
-
     // Utils
-
     fn has_enough_balance(&self) -> bool {
         let b = self.get_free_balance();
         if b > 0.1 * self.free_usd {
@@ -360,8 +216,6 @@ impl Portfolio {
         for p in &port.opens {
             if !p.finished {
                 val += p.pos_size_usd;
-                // val += p
-                // val += p.long.clone().unwrap().got_coin;
             }
         }
 
