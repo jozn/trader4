@@ -23,7 +23,16 @@ impl Strategy1 {
         }
         self.acted.push(kline_id);
 
-        self.port.buy_long(t.price as i64, 10, t.time_s);
+        let param = PosParam {
+            open_price: t.price as i64,
+            price: t.price as i64,
+            pos_size: 10,
+            usd: 10. * 1000.,
+            pos_id: 0,
+            time: t.time_s,
+            ta: Default::default(),
+        };
+        self.port.buy_long(&param);
     }
 
     pub fn sell(&mut self, kline_id: u64, t: &Tick) {
@@ -33,22 +42,49 @@ impl Strategy1 {
         }
         self.acted.push(kline_id);
 
-        self.port.sell_short(t.price as i64, 10, t.time_s);
+        let param = PosParam {
+            open_price: t.price as i64,
+            price: t.price as i64,
+            pos_size: 10,
+            usd: 10. * 1000.,
+            pos_id: 0,
+            time: t.time_s,
+            ta: Default::default(),
+        };
+        self.port.sell_short(&param);
     }
 
     pub fn try_close_satasfied_postions(&mut self, t: &Tick) {
-        let done = self
-            .port
-            .try_close_satasfied_postions(t.price as i64, t.time_s);
+        let param = PosParam {
+            open_price: t.price as i64,
+            price: t.price as i64,
+            pos_size: 10,
+            usd: 10. * 1000.,
+            pos_id: 0,
+            time: t.time_s,
+            ta: Default::default(),
+        };
+
+        let done = self.port.try_close_satasfied_postions(&param);
 
         if done {}
     }
 
     pub fn close_all_exit(&mut self, t: &Tick) {
+        let param = PosParam {
+            open_price: t.price as i64,
+            price: t.price as i64,
+            pos_size: 10,
+            usd: 10. * 1000.,
+            pos_id: 0,
+            time: t.time_s,
+            ta: Default::default(),
+        };
+
         self.port
             .report
             .collect_balance(self.port.get_total_balance((t.price * 100_000.) as i64));
-        self.port.close_all_positions(t.price as i64, t.time_s);
+        self.port.close_all_positions(&param);
     }
 
     pub fn report(&self) {

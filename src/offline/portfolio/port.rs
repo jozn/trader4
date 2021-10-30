@@ -25,16 +25,24 @@ impl Portfolio {
         }
     }
 
-    // Manual - Not Working balance should be implemented
-    pub fn add_pos_incorrect(&mut self, pos: &mut Position) {
-        self.pos_id += 1;
-        assert_eq!(pos.pos_id, 0);
-        pos.pos_id = self.pos_id;
+    pub fn buy_long(&mut self, param: &PosParam) {
+        if !self.has_enough_balance() {
+            return;
+        }
 
-        self.opens.push(pos.clone());
+        let mut pos = Position::new_long(param);
+
+        self.report
+            .on_new_trade(&pos, self.get_total_balance(param.price));
+
+        // self.free_usd -= usd as f64 * 1000.;
+        self.free_usd -= param.get_usd();
+
+        pos.pos_id = self.next_pos_id();
+        self.opens.push(pos);
     }
 
-    pub fn buy_long(&mut self, price: XPrice, usd: XLot, time: u64) {
+    /*pub fn buy_long_bk(&mut self, price: XPrice, usd: XLot, time: u64) {
         if !self.has_enough_balance() {
             return;
         }
@@ -48,9 +56,29 @@ impl Portfolio {
 
         pos.pos_id = self.next_pos_id();
         self.opens.push(pos);
+    }*/
+
+    pub fn sell_long(&mut self, param: &PosParam) {
+        let pos = self.opens.iter().find(|p| p.pos_id == param.pos_id);
+        match pos {
+            None => {}
+            Some(p) => {
+                let mut p = p.clone();
+                p.close_pos(param.price, param.time);
+
+                self.report
+                    .on_close_trade(&p, self.get_total_balance(param.price));
+
+                let got_usd = p.final_balance;
+                self.free_usd += got_usd;
+
+                self._remove_pos(p.pos_id);
+                self.closed.push(p);
+            }
+        }
     }
 
-    pub fn sell_long(&mut self, price: XPrice, pos_id: u64, time: u64) {
+    /*    pub fn sell_long(&mut self, price: XPrice, pos_id: u64, time: u64) {
         let pos = self.opens.iter().find(|p| p.pos_id == pos_id);
         match pos {
             None => {}
@@ -68,9 +96,23 @@ impl Portfolio {
                 self.closed.push(p);
             }
         }
+    }*/
+
+    pub fn sell_short(&mut self, param: &PosParam) {
+        if !self.has_enough_balance() {
+            return;
+        }
+
+        let mut pos = Position::new_short(param);
+
+        self.report
+            .on_new_trade(&pos, self.get_total_balance(param.price));
+
+        pos.pos_id = self.next_pos_id();
+        self.opens.push(pos);
     }
 
-    pub fn sell_short(&mut self, price: XPrice, usd_size: XLot, time: u64) {
+    /*    pub fn sell_short(&mut self, price: XPrice, usd_size: XLot, time: u64) {
         // let val = price * coin;
         // if val < 10. {
         //     return;
@@ -87,8 +129,30 @@ impl Portfolio {
         pos.pos_id = self.next_pos_id();
         self.opens.push(pos);
     }
+    */
+    pub fn buy_short(&mut self, param: &PosParam) {
+        let pos = self.opens.iter().find(|p| p.pos_id == param.pos_id);
+        match pos {
+            None => {}
+            Some(p) => {
+                let mut p = p.clone();
+                p.close_pos(param.price, param.time);
 
-    pub fn buy_short(&mut self, price: XPrice, pos_id: u64, time: u64) {
+                self.report
+                    .on_close_trade(&p, self.get_total_balance(param.price));
+
+                let got_coin = p.final_balance;
+                self.free_usd += p.profit;
+
+                // self.free_asset += got_coin;
+
+                self._remove_pos(p.pos_id);
+                self.closed.push(p);
+            }
+        }
+    }
+
+    /*    pub fn buy_short(&mut self, price: XPrice, pos_id: u64, time: u64) {
         let pos = self.opens.iter().find(|p| p.pos_id == pos_id);
         match pos {
             None => {}
@@ -108,10 +172,37 @@ impl Portfolio {
                 self.closed.push(p);
             }
         }
-    }
+    }*/
 
     // Close
-    pub fn try_close_satasfied_postions(&mut self, price: XPrice, time: u64) -> bool {
+    pub fn try_close_satasfied_postions(&mut self, param: &PosParam) -> bool {
+        let mut done = false;
+        for p in self.opens.clone().iter_mut() {
+            // // todo
+            // let new_sl = price + 50;
+            // if p.tailing_loose < new_sl {
+            //     p.tailing_loose = new_sl;
+            // }
+
+            p.update_ailing(param.price);
+
+            if p.should_close_bk_simple(param.price) {
+                match p.direction {
+                    PosDir::Long => {
+                        done = true;
+                        self.sell_long(param);
+                    }
+                    PosDir::Short => {
+                        done = true;
+                        self.buy_short(param);
+                    }
+                }
+            }
+        }
+        done
+    }
+
+    /*    pub fn try_close_satasfied_postions(&mut self, price: XPrice, time: u64) -> bool {
         let mut done = false;
         for p in self.opens.clone().iter_mut() {
             // // todo
@@ -136,10 +227,23 @@ impl Portfolio {
             }
         }
         done
-    }
+    }*/
 
     // Close
-    pub fn close_all_positions(&mut self, price: XPrice, time: u64) {
+    pub fn close_all_positions(&mut self, param: &PosParam) {
+        for p in self.opens.clone().iter() {
+            match p.direction {
+                PosDir::Long => {
+                    self.sell_long(param);
+                }
+                PosDir::Short => {
+                    self.buy_short(param);
+                }
+            }
+        }
+    }
+
+    /*    pub fn close_all_positions(&mut self, price: XPrice, time: u64) {
         for p in self.opens.clone().iter() {
             match p.direction {
                 PosDir::Long => {
@@ -150,9 +254,9 @@ impl Portfolio {
                 }
             }
         }
-    }
+    }*/
 
-    pub fn try_close_pos_bk(&mut self, price: XPrice, time: u64) {
+    /*    pub fn try_close_pos_bk(&mut self, price: XPrice, time: u64) {
         for p in self.opens.clone().iter() {
             match p.direction {
                 PosDir::Long => {
@@ -177,7 +281,7 @@ impl Portfolio {
                 }
             }
         }
-    }
+    }*/
 
     // Utils
 

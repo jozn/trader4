@@ -1,6 +1,6 @@
 use super::*;
-use serde::{Deserialize, Serialize};
 use crate::candle::TA1;
+use serde::{Deserialize, Serialize};
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Context {

@@ -16,6 +16,6 @@ pub mod ta;
 // For merged in offline folder
 pub use offline::loader;
 pub use offline::portfolio;
-pub use offline::sim;
+// pub use offline::sim;
 pub use offline::trend;
 pub use offline::world;
