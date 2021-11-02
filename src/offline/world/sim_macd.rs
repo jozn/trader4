@@ -1,5 +1,5 @@
 use crate::base::SimpleCrossEvent;
-use crate::candle::{CandleSeriesTA, Tick};
+use crate::candle::{CandleSeriesTA, KlineTA, Tick};
 use crate::loader::CSVForexRecord;
 use crate::loader::*;
 use crate::offline::strategy1::Strategy1;
@@ -59,11 +59,9 @@ impl TRunner for SimMacdWorld {
         self.tick_cnt += 1;
         let t = &self.last_tick;
 
-        // Close
-        self.strategy1.try_close_satasfied_postions(t);
-
         let price = t.price;
-        let kt_opt = &cst.medium.klines_ta.last();
+        // let kt_opt = &cst.medium.klines_ta.last();
+        let kt_opt = get_frame_klineta(cst);
         if kt_opt.is_none() {
             return;
         }
@@ -76,12 +74,16 @@ impl TRunner for SimMacdWorld {
         let up = macd_out.signal.0;
         let down = macd_out.signal.1;
 
+        let ta = &kt.ta1;
+        // Close
+        self.strategy1.try_close_satasfied_postions(t, ta);
+
         match up {
             SimpleCrossEvent::Bull(_) => {
                 // self.strategy1.buy(kid, t);
                 if macd_out.macd < 0. && price > ma {
                     // if macd_out.macd < 0. {
-                    self.strategy1.buy(kid, t);
+                    self.strategy1.buy(kid, t, ta);
                     // println!("long {} - {} - {:#?}", price, kt.kline.bucket, &macd_out);
                     // self.port.buy_long(t.price as i64, 10, t.time_s);
                 }
@@ -97,7 +99,7 @@ impl TRunner for SimMacdWorld {
                 // self.strategy1.sell(kid, t);
                 if macd_out.macd > 0. && price < ma {
                     // if macd_out.macd > 0.  {
-                    self.strategy1.sell(kid, t);
+                    self.strategy1.sell(kid, t, ta);
                     // self.port.sell_short(t.price as i64, 10, t.time_s);
                 }
             }
@@ -108,13 +110,21 @@ impl TRunner for SimMacdWorld {
         // if self.tick_cnt % 2000 == 0 {
         //     // self.strategy1.collect_balance(tikc);
         // }
-        self.strategy1.try_close_satasfied_postions(tikc);
+        let kt_opt = get_frame_klineta(cst);
+        if kt_opt.is_none() {
+            return;
+        }
+        let kt = kt_opt.unwrap();
+
+        self.strategy1.try_close_satasfied_postions(tikc, &kt.ta1);
     }
 
-    fn on_exit(&mut self) {
+    fn on_exit(&mut self, cst: &CandleSeriesTA) {
         println!("on exit - all pos {}", self.pos_id);
         self.ticks.clear();
-        self.strategy1.close_all_exit(&self.last_tick);
+
+        let kt = get_frame_klineta(cst).unwrap();
+        self.strategy1.close_all_exit(&self.last_tick, &kt.ta1);
 
         // println!("on exit");
 
@@ -123,4 +133,9 @@ impl TRunner for SimMacdWorld {
         self.strategy1.report();
         println!("=====================================================");
     }
+}
+
+fn get_frame_klineta(cst: &CandleSeriesTA) -> Option<KlineTA> {
+    let res = cst.medium.klines_ta.last().cloned();
+    res
 }

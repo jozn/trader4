@@ -4,13 +4,10 @@ use crate::offline::report::Report;
 use chrono::*;
 use serde::{Deserialize, Serialize};
 
-// TODO: Short selling is not ready as we need to have a live dept toatl balance of opened short postions when of account
-
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Portfolio {
     pub pos_id: u64,
-    pub free_usd: f64,       // todo xlot
-    pub free_asset_dep: f64, // todo wallet along usd // todo asset
+    pub free_usd: f64, // todo xlot
     pub opens: Vec<Position>,
     pub closed: Vec<Position>,
     pub report: Report,
@@ -26,9 +23,11 @@ impl Portfolio {
     }
 
     pub fn buy_long(&mut self, param: &PosParam) {
-        if !self.has_enough_balance() {
+        let usd_vol = param.get_usd();
+        if !self.has_enough_balance(usd_vol) {
             return;
         }
+        println!("buy long long");
 
         let mut pos = Position::new_long(param);
 
@@ -63,7 +62,8 @@ impl Portfolio {
     }
 
     pub fn sell_short(&mut self, param: &PosParam) {
-        if !self.has_enough_balance() {
+        let usd_vol = param.get_usd();
+        if !self.has_enough_balance(usd_vol) {
             return;
         }
 
@@ -102,11 +102,8 @@ impl Portfolio {
     pub fn try_close_satasfied_postions(&mut self, param: &PosParam) -> bool {
         let mut done = false;
         for p in self.opens.clone().iter_mut() {
-            // // todo
-            // let new_sl = price + 50;
-            // if p.tailing_loose < new_sl {
-            //     p.tailing_loose = new_sl;
-            // }
+            let mut param2 = param.clone();
+            param2.pos_id = p.pos_id;
 
             p.update_ailing(param.price);
 
@@ -114,11 +111,11 @@ impl Portfolio {
                 match p.direction {
                     PosDir::Long => {
                         done = true;
-                        self.sell_long(param);
+                        self.sell_long(&param2);
                     }
                     PosDir::Short => {
                         done = true;
-                        self.buy_short(param);
+                        self.buy_short(&param2);
                     }
                 }
             }
@@ -129,25 +126,24 @@ impl Portfolio {
     // Close
     pub fn close_all_positions(&mut self, param: &PosParam) {
         for p in self.opens.clone().iter() {
+            let mut param2 = param.clone();
+            param2.pos_id = p.pos_id;
             match p.direction {
                 PosDir::Long => {
-                    self.sell_long(param);
+                    self.sell_long(&param2);
                 }
                 PosDir::Short => {
-                    self.buy_short(param);
+                    self.buy_short(&param2);
                 }
             }
         }
     }
 
     // Utils
-    fn has_enough_balance(&self) -> bool {
+    fn has_enough_balance(&self, usd_vol: f64) -> bool {
         let b = self.get_free_balance();
-        if b > 0.1 * self.free_usd {
-            true
-        } else {
-            false
-        }
+        let res = if b > usd_vol { true } else { false };
+        res
     }
 
     pub fn get_total_balance(&self, price: XPrice) -> f64 {
@@ -165,7 +161,9 @@ impl Portfolio {
     fn get_free_balance(&self) -> f64 {
         let mut short_debt = 0.0;
         for (i, p) in self.opens.iter().enumerate() {
-            short_debt += p.pos_size_usd;
+            if p.direction == PosDir::Short {
+                short_debt += p.pos_size_usd;
+            }
         }
         self.free_usd - short_debt
     }

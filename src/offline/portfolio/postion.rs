@@ -9,7 +9,7 @@ pub struct PosParam {
     pub open_price: XPrice,
     pub price: XPrice,
     pub pos_size: XLot,
-    pub usd: f64,
+    // pub usd: f64,
     pub pos_id: u64,
     pub time: u64,
     pub ta: TA1,
@@ -76,7 +76,7 @@ impl Position {
         Self {
             pos_id: 0,
             direction: PosDir::Long,
-            pos_size_usd: (p.pos_size * 1_000) as f64,
+            pos_size_usd: p.get_usd(),
             pos_size_xlot: p.pos_size,
             open_xprice: p.open_price,
             open_time: p.time,
@@ -107,7 +107,7 @@ impl Position {
         Self {
             pos_id: 0,
             direction: PosDir::Short,
-            pos_size_usd: (p.pos_size * 1_000) as f64,
+            pos_size_usd: p.get_usd(),
             pos_size_xlot: p.pos_size,
             open_xprice: p.open_price,
             open_time: p.time,
@@ -235,6 +235,18 @@ impl Position {
             }
         };
         trig
+    }
+
+    pub fn set_techichal_anylse(&mut self, p: &PosParam) {
+        let t = &p.ta;
+
+        self.s_ema = t.ema10;
+        self.s_mom = t.mom;
+        self.s_roc = t.roc;
+        self.s_rsi = t.rsi;
+        self.s_cci = t.cci;
+        self.s_macd = t.macd.macd;
+        self.s_fisher = t.fisher.fisher;
     }
 
     // bk

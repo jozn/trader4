@@ -7,7 +7,7 @@ pub trait TRunner: Debug {
     fn get_next_tick(&mut self) -> Option<Tick>; // should blocks and returns next tick, None means end of data, exist.
     fn on_next_tick_bulk(&mut self, cst: &CandleSeriesTA); // Called in each MiniTick full,
     fn on_price_tick(&mut self, cst: &CandleSeriesTA, tikc: &Tick); // Called after each price tick
-    fn on_exit(&mut self);
+    fn on_exit(&mut self, cst: &CandleSeriesTA);
 }
 
 #[derive(Debug)]
@@ -66,7 +66,7 @@ impl WorldRunner {
 
             if is_exist {
                 // println!("Report of buy - sell");
-                world.on_exit();
+                world.on_exit(&self.candles);
                 break;
             }
         }
