@@ -92,7 +92,7 @@ impl Report {
             }
         }
 
-        let win_ratio = win_cnt as f32 / lose_cnt as f32 / 2.;
+        let win_ratio = win_cnt as f32 / (win_cnt + lose_cnt) as f32;
         let pl_ratio = win_amount / lose_amount.abs();
         let net_profit = win_amount - lose_amount.abs();
         let total_time_str = to_duration(total_time as i64);

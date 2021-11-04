@@ -27,7 +27,6 @@ impl SimMacdWorld {
             // ticks: loader::_load(14000_000, "/media/hamid/K/forex1/EURJPY_tab.csv"),
             it_num: 0,
             strategy1: Strategy1::new(),
-            // port: Portfolio::new(100_000.),
             ..Default::default()
         }
     }
@@ -81,11 +80,11 @@ impl TRunner for SimMacdWorld {
         match up {
             SimpleCrossEvent::Bull(_) => {
                 // self.strategy1.buy(kid, t);
-                if macd_out.macd < 0. && price > ma {
+                if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 {
+                    // if macd_out.macd < 0. && price > ma {
                     // if macd_out.macd < 0. {
                     self.strategy1.buy(kid, t, ta);
                     // println!("long {} - {} - {:#?}", price, kt.kline.bucket, &macd_out);
-                    // self.port.buy_long(t.price as i64, 10, t.time_s);
                 }
             }
             SimpleCrossEvent::None => {}
@@ -97,9 +96,10 @@ impl TRunner for SimMacdWorld {
             SimpleCrossEvent::None => {}
             SimpleCrossEvent::Bear(_) => {
                 // self.strategy1.sell(kid, t);
-                if macd_out.macd > 0. && price < ma {
+                // if macd_out.macd > 0. && price < ma {
+                if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 {
                     // if macd_out.macd > 0.  {
-                    self.strategy1.sell(kid, t, ta);
+                    // self.strategy1.sell(kid, t, ta);
                     // self.port.sell_short(t.price as i64, 10, t.time_s);
                 }
             }
@@ -107,9 +107,6 @@ impl TRunner for SimMacdWorld {
     }
 
     fn on_price_tick(&mut self, cst: &CandleSeriesTA, tikc: &Tick) {
-        // if self.tick_cnt % 2000 == 0 {
-        //     // self.strategy1.collect_balance(tikc);
-        // }
         let kt_opt = get_frame_klineta(cst);
         if kt_opt.is_none() {
             return;
@@ -126,12 +123,8 @@ impl TRunner for SimMacdWorld {
         let kt = get_frame_klineta(cst).unwrap();
         self.strategy1.close_all_exit(&self.last_tick, &kt.ta1);
 
-        // println!("on exit");
-
-        // self.strategy1.collect_balance(&self.last_tick);
-
         self.strategy1.report();
-        println!("=====================================================");
+        println!("========================= on exit ============================");
     }
 }
 

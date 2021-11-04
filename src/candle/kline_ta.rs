@@ -29,6 +29,7 @@ pub struct TA1 {
     pub roc: f64,
     pub rsi: f64,
     pub cci: f64,
+    pub vel: VelRes,
     pub macd: MACDOutput,
     pub fisher: FisherRes,
     // New trending
@@ -49,6 +50,7 @@ pub struct TAMethods {
     pub roc: ta::ROC,
     pub rsi: ta::RSI,
     pub cci: ta::CCI,
+    pub vel: ta::Vel,
     pub macd: ta::MACD,
     pub fisher: ta::Fisher,
     // For trending
@@ -71,6 +73,7 @@ impl Default for TAMethods {
             roc: ta::ROC::new(10).unwrap(),
             rsi: ta::RSI::new(14).unwrap(),
             cci: ta::CCI::new(14).unwrap(),
+            vel: ta::Vel::new(50).unwrap(),
             macd: ta::MACD::new(12, 26, 9).unwrap(),
             fisher: ta::Fisher::new(9, 6).unwrap(),
             // For trending
@@ -85,30 +88,31 @@ impl Default for TAMethods {
 }
 
 pub fn cal_indicators(tam: &mut TAMethods, kline: &Kline) -> KlineTA {
-    let r = kline;
+    let kl = kline;
 
-    let val = r.hlc3();
+    let price = kl.hlc3();
 
     let kta = KlineTA {
         kline: kline.clone(),
         is_completed: false,
         ta1: TA1 {
-            sma50: tam.sma50.next(val),
-            ema10: tam.ema.next(val),
-            hull: tam.hull.next(val),
-            mom: tam.mom.next(val),
-            roc: tam.roc.next(val),
-            rsi: tam.rsi.next(r.close),
-            cci: tam.cci.next(&r),
-            macd: tam.macd.next(r.close),
-            fisher: tam.fisher.next(&r),
+            sma50: tam.sma50.next(price),
+            ema10: tam.ema.next(price),
+            hull: tam.hull.next(price),
+            mom: tam.mom.next(price),
+            roc: tam.roc.next(price),
+            rsi: tam.rsi.next(kl.close),
+            cci: tam.cci.next(&kl),
+            vel: tam.vel.next(&kl),
+            macd: tam.macd.next(kl.close),
+            fisher: tam.fisher.next(&kl),
             // For trending
-            t_hull1: tam.t_hull1.next(r.hlc3()),
-            t_hull2: tam.t_hull2.next(r.hlc3()),
-            t_hull3: tam.t_hull3.next(r.hlc3()),
-            t_ema1: tam.t_ema1.next(r.hlc3()),
-            t_ema2: tam.t_ema2.next(r.hlc3()),
-            t_ema3: tam.t_ema3.next(r.hlc3()),
+            t_hull1: tam.t_hull1.next(kl.hlc3()),
+            t_hull2: tam.t_hull2.next(kl.hlc3()),
+            t_hull3: tam.t_hull3.next(kl.hlc3()),
+            t_ema1: tam.t_ema1.next(kl.hlc3()),
+            t_ema2: tam.t_ema2.next(kl.hlc3()),
+            t_ema3: tam.t_ema3.next(kl.hlc3()),
         },
     };
     kta

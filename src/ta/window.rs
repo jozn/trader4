@@ -58,6 +58,10 @@ impl Window {
         self.arr.len()
     }
 
+    pub fn clear(&mut self) {
+        self.arr.clear();
+    }
+
     // todo: should revers
     pub fn iter(&self) -> vec_deque::Iter<f64> {
         self.arr.iter()

@@ -14,6 +14,7 @@ pub use roc::*;
 pub use rsi::*;
 pub use sma::*;
 pub use true_range::*;
+pub use vel::*;
 pub use window::*;
 pub use wma::*;
 
@@ -31,8 +32,8 @@ pub mod momentum;
 pub mod roc;
 pub mod rsi;
 pub mod sma;
-mod tangant;
 pub mod true_range;
+pub mod vel;
 pub mod window;
 pub mod wma;
 

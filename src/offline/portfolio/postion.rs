@@ -48,6 +48,7 @@ pub struct Position {
     pub tailing_loose: XPrice,
 
     // Context flat - When rust fixed csv out move it to ctx
+    // s_ prefix: start_
     pub s_ema: f64,
     pub s_mom: f64,
     pub s_roc: f64,
@@ -55,6 +56,10 @@ pub struct Position {
     pub s_cci: f64,
     pub s_macd: f64,
     pub s_fisher: f64,
+    pub s_start_vel: f64,
+    pub s_count: u32,
+    pub s_avg_vel: f64,
+    pub s_end_vel: f64,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -73,7 +78,7 @@ impl Position {
     pub fn new_long(p: &PosParam) -> Self {
         assert!(p.pos_size > 0);
 
-        Self {
+        let mut res = Self {
             pos_id: 0,
             direction: PosDir::Long,
             pos_size_usd: p.get_usd(),
@@ -98,13 +103,15 @@ impl Position {
             min_touch: p.open_price,
             tailing_loose: p.open_price - 50,
             ..Default::default()
-        }
+        };
+        res.set_techichal_anylse(p);
+        res
     }
 
     pub fn new_short(p: &PosParam) -> Self {
         assert!(p.pos_size > 0);
 
-        Self {
+        let mut res = Self {
             pos_id: 0,
             direction: PosDir::Short,
             pos_size_usd: p.get_usd(),
@@ -129,7 +136,9 @@ impl Position {
             min_touch: p.open_price,
             tailing_loose: p.open_price + 50,
             ..Default::default()
-        }
+        };
+        res.set_techichal_anylse(p);
+        res
     }
 
     pub fn close_pos(&mut self, close_price: XPrice, time: u64) {
@@ -247,6 +256,13 @@ impl Position {
         self.s_cci = t.cci;
         self.s_macd = t.macd.macd;
         self.s_fisher = t.fisher.fisher;
+
+        // Set vel resutl
+        let vel = &t.vel;
+        self.s_start_vel = vel.start_vel;
+        self.s_count = vel.count;
+        self.s_avg_vel = vel.avg_vel;
+        self.s_end_vel = vel.end_vel;
     }
 
     // bk
