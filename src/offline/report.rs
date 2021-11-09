@@ -6,9 +6,9 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct Report {
-    acted: Vec<u64>,
-    balance: Vec<f64>,
-    middles: Vec<MiddleStatic>,
+    pub acted: Vec<u64>,
+    pub balance: Vec<f64>,
+    pub middles: Vec<MiddleStatic>,
 }
 
 impl Report {
@@ -44,9 +44,9 @@ impl Report {
         self.middles.push(ms);
     }
 
-    pub fn write_to_folder(&self, port: &Portfolio) {
+    pub fn write_to_folder(&self, port: &Portfolio, name: &str) {
         let time = get_time_sec();
-        let folder = format!("../trader2_out/{}", time);
+        let folder = format!("../trader2_out/{}_{}", time,name);
         let folder_json = format!("{}/json", folder);
         std::fs::create_dir(&folder);
         std::fs::create_dir(&folder_json);
@@ -60,6 +60,8 @@ impl Report {
         self.report_seq_profit(port);
         self.report_wins(port);
         self.report_loose(port);
+
+        println!("balance: {:#?}", self.middles.last().unwrap().balance);
 
         std::env::set_current_dir(dir);
     }

@@ -1,6 +1,7 @@
 pub mod connection;
 pub mod helper;
 pub mod proc;
+pub mod play;
 
 pub use connection::*;
 pub use helper::*;
@@ -12,8 +13,8 @@ pub fn play() {
         port: 5035,
         client_id: "3042_mso8gOm4NPAzIYizUC0gp941QCGvnXcRPJzTrNjVZNG0EeRFYT".to_string(),
         client_secret: "geDkrRiRyfbanU6OUwZMXKIjr4vKQyfs1Ete0unffXtS8Ah14o".to_string(),
-        client_token: "KY38LUX8bXJxVGyIDRJfAz0PsEn-mRypVOpEsQd1C8k".to_string(),
-        ctid: 22758966,
+        client_token: "bPrpDF99EoiKt7dFgr73WExkB2Iur0buYJj4JVe2fEw".to_string(),
+        ctid: 22851452,
     };
     let mut cti = CTrader::connect(&cfg);
     // let mut ct = cti.lock().unwrap();

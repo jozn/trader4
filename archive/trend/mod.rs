@@ -23,6 +23,8 @@ pub fn trend_play3_tang() {
         let tt = crate::candle::Tick {
             time_s: v.time,
             price: v.ask_price * 100_000.,
+            price_raw: v.ask_price,
+            price_multi: 100_000.0,
             qty: 0.0,
         };
         ticks_arr.push(tt);

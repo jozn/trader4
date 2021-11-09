@@ -6,10 +6,9 @@ use std::cmp::Ordering;
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct PosParam {
-    pub open_price: XPrice,
     pub price: XPrice,
+    pub price_multi: f64,
     pub pos_size: XLot,
-    // pub usd: f64,
     pub pos_id: u64,
     pub time: u64,
     pub ta: TA1,
@@ -83,7 +82,7 @@ impl Position {
             direction: PosDir::Long,
             pos_size_usd: p.get_usd(),
             pos_size_xlot: p.pos_size,
-            open_xprice: p.open_price,
+            open_xprice: p.price,
             open_time: p.time,
             open_time_str: to_date(p.time),
             to_exit_xpip: 100,
@@ -99,9 +98,9 @@ impl Position {
             spread_fees: 0.0,
             final_balance: 0.0,
 
-            max_touch: p.open_price,
-            min_touch: p.open_price,
-            tailing_loose: p.open_price - 50,
+            max_touch: p.price,
+            min_touch: p.price,
+            tailing_loose: p.price - 50,
             ..Default::default()
         };
         res.set_techichal_anylse(p);
@@ -116,7 +115,7 @@ impl Position {
             direction: PosDir::Short,
             pos_size_usd: p.get_usd(),
             pos_size_xlot: p.pos_size,
-            open_xprice: p.open_price,
+            open_xprice: p.price,
             open_time: p.time,
             open_time_str: to_date(p.time),
             to_exit_xpip: 100,
@@ -132,52 +131,52 @@ impl Position {
             spread_fees: 0.0,
             final_balance: 0.0,
 
-            max_touch: p.open_price,
-            min_touch: p.open_price,
-            tailing_loose: p.open_price + 50,
+            max_touch: p.price,
+            min_touch: p.price,
+            tailing_loose: p.price + 50,
             ..Default::default()
         };
         res.set_techichal_anylse(p);
         res
     }
 
-    pub fn close_pos(&mut self, close_price: XPrice, time: u64) {
-        self.close_time_str = to_date(time);
-        self.duration = to_duration(self.open_time as i64 - time as i64);
+    pub fn close_pos(&mut self, param: &PosParam) {
+        self.close_time_str = to_date(param.time);
+        self.duration = to_duration(self.open_time as i64 - param.time as i64);
 
         match self.direction {
-            PosDir::Long => self.close_long(close_price, time),
-            PosDir::Short => self.close_short(close_price, time),
+            PosDir::Long => self.close_long(param),
+            PosDir::Short => self.close_short(param),
         };
     }
 
-    fn close_long(&mut self, close_price: XPrice, time: u64) {
-        let pl_xpip = close_price - self.open_xprice;
+    fn close_long(&mut self, param: &PosParam) {
+        let pl_xpip = param.price - self.open_xprice;
         let pure_pl_xpip = pl_xpip - self.spread;
 
-        self.close_xprice = close_price;
-        self.close_time = time;
+        self.close_xprice = param.price;
+        self.close_time = param.time;
         self.finished = true;
 
-        let pure_pl = self.pos_size_usd * (pure_pl_xpip as f64 / 100_000.);
+        let pure_pl = self.pos_size_usd * (pure_pl_xpip as f64 / param.price_multi);
         self.profit_xpip = pure_pl_xpip;
         self.profit = pure_pl;
-        self.spread_fees = self.pos_size_usd * (self.spread as f64 / 100_000.);
+        self.spread_fees = self.pos_size_usd * (self.spread as f64 / param.price_multi);
         self.final_balance = self.pos_size_usd + pure_pl;
     }
 
-    fn close_short(&mut self, close_price: XPrice, time: u64) {
-        let pl_xpip = self.open_xprice - close_price;
+    fn close_short(&mut self, param: &PosParam) {
+        let pl_xpip = self.open_xprice - param.price;
         let pure_pl_xpip = pl_xpip - self.spread;
 
-        self.close_xprice = close_price;
-        self.close_time = time;
+        self.close_xprice = param.price;
+        self.close_time = param.time;
         self.finished = true;
 
-        let pure_pl = self.pos_size_usd * (pure_pl_xpip as f64 / 100_000.);
+        let pure_pl = self.pos_size_usd * (pure_pl_xpip as f64 / param.price_multi);
         self.profit_xpip = pure_pl_xpip;
         self.profit = pure_pl;
-        self.spread_fees = self.pos_size_usd * (self.spread as f64 / 100_000.);
+        self.spread_fees = self.pos_size_usd * (self.spread as f64 / param.price_multi);
         self.final_balance = self.pos_size_usd + pure_pl;
     }
 
@@ -249,7 +248,7 @@ impl Position {
     pub fn set_techichal_anylse(&mut self, p: &PosParam) {
         let t = &p.ta;
 
-        self.s_ema = t.ema10;
+        self.s_ema = t.ema200;
         self.s_mom = t.mom;
         self.s_roc = t.roc;
         self.s_rsi = t.rsi;
@@ -263,31 +262,6 @@ impl Position {
         self.s_count = vel.count;
         self.s_avg_vel = vel.avg_vel;
         self.s_end_vel = vel.end_vel;
-    }
-
-    // bk
-    pub fn close_pos_bk(&mut self, close_price: XPrice, time: u64) {
-        // let pl_xpip = match self.direction {
-        //     PosDir::Long => self.open_xprice - close_price,
-        //     PosDir::Short => close_price - self.open_xprice,
-        // };
-
-        let pl_xpip = match self.direction {
-            PosDir::Long => close_price - self.open_xprice,
-            PosDir::Short => self.open_xprice - close_price,
-        };
-
-        let pure_pl_xpip = pl_xpip - self.spread;
-
-        self.close_xprice = close_price;
-        self.close_time = time;
-        self.finished = true;
-
-        // let pure_pl = (self.pos_size_xlot * pure_pl_xpip) as f64 / 100_000.; // todo fix cal
-        let pure_pl = self.pos_size_usd * (pure_pl_xpip as f64 / 100_000.); // todo fix cal
-        self.profit_xpip = pure_pl_xpip;
-        self.profit = pure_pl;
-        self.final_balance = self.pos_size_usd + pure_pl;
     }
 }
 

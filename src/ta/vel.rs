@@ -2,15 +2,19 @@ use serde::{Deserialize, Serialize};
 
 use super::*;
 use crate::base::*;
+use std::collections::VecDeque;
 
 // Velocity
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Vel {
     period: usize,
     ema: EMA,
+    last_ema: f64,
     diff: Momentum, // diferece to prev
-    window: Window, // diferece to prev
-    _buff: Window,  // A buffer to avoid allocating in each call
+    store: VecDeque<f64>,
+    store_ema: VecDeque<f64>,
+    window_1: Window,    // diferece to prev
+    buff: VecDeque<f64>, // A buffer to avoid allocating in each call
     is_new: bool,
 }
 
@@ -24,15 +28,19 @@ pub struct VelRes {
 
 impl Vel {
     pub fn new(period: usize) -> TAResult<Self> {
-        println!("period: {}", period);
+        // println!("period: {}", period);
         match period {
             0 => Err(TAErr::WrongArgs),
             _ => Ok(Self {
                 period,
                 ema: EMA::new(period).unwrap(),
+                last_ema: 0.0,
                 diff: Momentum::new(1).unwrap(),
-                window: Window::new(200).unwrap(),
-                _buff: Window::new(200).unwrap(),
+                store: VecDeque::with_capacity(200),
+                store_ema: VecDeque::with_capacity(200),
+                window_1: Window::new(200).unwrap(),
+                // _buff: Window::new(200).unwrap(),
+                buff: VecDeque::with_capacity(200),
                 is_new: true,
             }),
         }
@@ -45,46 +53,63 @@ impl Vel {
 
     fn _next_(&mut self, typical_price: f64) -> VelRes {
         let p = typical_price;
-        let sma_val = self.ema.next(typical_price);
-        let end_vel = self.diff.next(sma_val);
+        let new_ema = self.ema.next(typical_price);
+        if self.is_new {
+            self.is_new = false;
+            self.last_ema = new_ema;
+        }
 
-        self.window.push(end_vel);
+        let end_vel = new_ema - self.last_ema;
+        self.last_ema = new_ema;
+
+        self.store.push_front(end_vel);
+        self.store_ema.push_front(new_ema);
+        if self.store.len() == self.period {
+            self.store.pop_back(); // remove
+            self.store_ema.pop_back(); // remove
+        }
 
         let mut sum = 0.0;
         let mut count = 0;
-        self._buff.clear();
+        self.buff.clear();
+
+        /*
+             println!("eeema dif: {:?}", self.store);
+             println!("eeema: {:?}", self.store_ema);
+             println!("=============");
+        */
 
         if end_vel > 0. {
             // MARK A
-            for v in self.window.iter().rev() {
+            for v in self.store.iter() {
                 let v = *v;
                 if v > 0. {
                     sum += v;
                     count += 1;
-                    self._buff.push(v);
+                    self.buff.push_front(v);
                 } else {
                     break;
                 }
             }
         } else {
             // COPY OF A WITH NEGATIVE CHECK
-            for v in self.window.iter().rev() {
+            for v in self.store.iter() {
                 let v = *v;
                 if v < 0. {
                     sum += v;
                     count += 1;
-                    self._buff.push(v);
+                    self.buff.push_front(v);
                 } else {
                     break;
                 }
             }
         }
 
-        let start_sum: f64 = self._buff.iter().rev().take(3).sum();
-        let start_size: f64 = self._buff.iter().rev().take(3).count() as f64;
+        let start_sum: f64 = self.buff.iter().take(3).sum();
+        let start_size: f64 = self.buff.iter().take(3).count() as f64;
 
         VelRes {
-            start_vel: start_sum / sma_val,
+            start_vel: start_sum / new_ema,
             count: count,
             avg_vel: sum / count as f64,
             end_vel,

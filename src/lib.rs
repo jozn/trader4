@@ -17,5 +17,5 @@ pub mod ta;
 pub use offline::loader;
 pub use offline::portfolio;
 // pub use offline::sim;
-pub use offline::trend;
+// pub use offline::trend;
 pub use offline::world;

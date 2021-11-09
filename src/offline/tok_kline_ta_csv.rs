@@ -80,9 +80,9 @@ pub fn tok_kline_to_csv_out(kt: &KlineTATick) -> TokCsvOut {
         hlc3_medium: mk.hlc3(),
         hlc3_big: bk.hlc3(),
         // TA
-        ema_small: num5(st.ema10),
-        ema_medium: num5(mt.ema10),
-        ema_big: num5(bt.ema10),
+        ema_small: num5(st.ema200),
+        ema_medium: num5(mt.ema200),
+        ema_big: num5(bt.ema200),
         hull_small: num5(st.hull),
         hull_medium: num5(mt.hull),
         hull_big: num5(bt.hull),

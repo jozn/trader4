@@ -42,7 +42,7 @@ impl TRunner for HullWorld {
         if idx < self.ticks.len() {
             let forex_csv_rec = self.ticks.get(idx).unwrap();
             let mut t = forex_csv_rec.to_tick();
-            t.price = t.price * 100_000.;
+            // t.price = t.price * 100_000.;
             self.last_tick = t.clone();
             Some(t)
         } else {
