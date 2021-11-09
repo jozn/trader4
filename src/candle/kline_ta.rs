@@ -22,8 +22,8 @@ impl KlineId for KlineTA {
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct TA1 {
-    pub sma50: f64,
-    pub ema10: f64,
+    pub sma100: f64,
+    pub ema200: f64,
     pub hull: f64,
     pub mom: f64,
     pub roc: f64,
@@ -43,8 +43,8 @@ pub struct TA1 {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TAMethods {
-    pub sma50: ta::SMA,
-    pub ema: ta::EMA,
+    pub sma100: ta::SMA,
+    pub ema200: ta::EMA,
     pub hull: ta::HMA,
     pub mom: ta::Momentum,
     pub roc: ta::ROC,
@@ -66,8 +66,8 @@ pub struct TAMethods {
 impl Default for TAMethods {
     fn default() -> Self {
         TAMethods {
-            sma50: ta::SMA::new(100).unwrap(),
-            ema: ta::EMA::new(100).unwrap(),
+            sma100: ta::SMA::new(100).unwrap(),
+            ema200: ta::EMA::new(50).unwrap(),
             hull: ta::HMA::new(10).unwrap(),
             mom: ta::Momentum::new(10).unwrap(),
             roc: ta::ROC::new(10).unwrap(),
@@ -75,6 +75,7 @@ impl Default for TAMethods {
             cci: ta::CCI::new(14).unwrap(),
             vel: ta::Vel::new(50).unwrap(),
             macd: ta::MACD::new(12, 26, 9).unwrap(),
+            // macd: ta::MACD::new(18, 34, 9).unwrap(),
             fisher: ta::Fisher::new(9, 6).unwrap(),
             // For trending
             t_hull1: HMA::new(3).unwrap(),
@@ -96,8 +97,8 @@ pub fn cal_indicators(tam: &mut TAMethods, kline: &Kline) -> KlineTA {
         kline: kline.clone(),
         is_completed: false,
         ta1: TA1 {
-            sma50: tam.sma50.next(price),
-            ema10: tam.ema.next(price),
+            sma100: tam.sma100.next(price),
+            ema200: tam.ema200.next(price),
             hull: tam.hull.next(price),
             mom: tam.mom.next(price),
             roc: tam.roc.next(price),

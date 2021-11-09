@@ -27,7 +27,7 @@ impl Portfolio {
         if !self.has_enough_balance(usd_vol) {
             return;
         }
-        println!("buy long long");
+        // println!("buy long long");
 
         let mut pos = Position::new_long(param);
 
@@ -47,7 +47,8 @@ impl Portfolio {
             None => {}
             Some(p) => {
                 let mut p = p.clone();
-                p.close_pos(param.price, param.time);
+                // p.close_pos(param.price, param.time);
+                p.close_pos(param);
 
                 self.report
                     .on_close_trade(&p, self.get_total_balance(param.price));
@@ -82,7 +83,8 @@ impl Portfolio {
             None => {}
             Some(p) => {
                 let mut p = p.clone();
-                p.close_pos(param.price, param.time);
+                // p.close_pos(param.price, param.time);
+                p.close_pos(param);
 
                 self.report
                     .on_close_trade(&p, self.get_total_balance(param.price));

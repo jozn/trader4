@@ -5,7 +5,7 @@ pub mod report;
 // pub mod sim;
 pub mod strategy1;
 pub mod tok_kline_ta_csv;
-pub mod trend;
+// pub mod trend;
 pub mod world;
 // pub mod play;
 

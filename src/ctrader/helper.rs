@@ -53,7 +53,7 @@ pub fn dispatch_read_thread(ctrader: CTraderInst) {
                     }
                 }
                 Err(e) => {
-                    // println!(">>> read err {} {:?}", cnt, e);
+                    println!(">>> read err  {:?}", e);
                 }
             }
 

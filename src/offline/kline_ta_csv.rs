@@ -80,7 +80,7 @@ pub fn kline_to_csv_out(kt: &KlineTA) -> CsvOut {
         close: num5(k.close),
         volume: num5(k.volume),
         hlc3: num5((k.high + k.low + k.close) / 3.0),
-        ema: num5(t.ema10),
+        ema: num5(t.ema200),
         hull: num5(t.hull),
         mom: num5(t.mom * 1.).round() as i64, // from 1 million part
         roc: num5(t.roc * 10000.).round() as i64, // from 1 million part

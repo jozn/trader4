@@ -22,9 +22,12 @@ impl CSVForexRecord {
     }
 
     pub fn to_tick(&self) -> Tick {
+        let multi = 100_000.;
         Tick {
             time_s: self.time,
-            price: self.bid_price,
+            price: self.bid_price * multi,
+            price_raw: self.bid_price,
+            price_multi: multi,
             qty: 0.0,
         }
     }

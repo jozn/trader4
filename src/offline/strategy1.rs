@@ -23,15 +23,8 @@ impl Strategy1 {
             return;
         }
         self.acted.push(kline_id);
-        println!("bying");
-        let param = PosParam {
-            open_price: t.price as i64,
-            price: t.price as i64,
-            pos_size: 10,
-            pos_id: 0,
-            time: t.time_s,
-            ta: ta.clone(),
-        };
+        // println!("bying");
+        let param = to_param(t, ta);
         self.port.buy_long(&param);
     }
 
@@ -41,54 +34,46 @@ impl Strategy1 {
             return;
         }
         self.acted.push(kline_id);
-        println!("selling");
+        // println!("selling");
 
-        let param = PosParam {
-            open_price: t.price as i64,
-            price: t.price as i64,
-            pos_size: 10,
-            pos_id: 0,
-            time: t.time_s,
-            ta: ta.clone(),
-        };
+        let param = to_param(t, ta);
         self.port.sell_short(&param);
     }
 
     pub fn try_close_satasfied_postions(&mut self, t: &Tick, ta: &TA1) {
-        let param = PosParam {
-            open_price: t.price as i64,
-            price: t.price as i64,
-            pos_size: 0,
-            pos_id: 0,
-            time: t.time_s,
-            ta: ta.clone(),
-        };
+        let param = to_param(t, ta);
 
         let done = self.port.try_close_satasfied_postions(&param);
 
         if done {
-            println!("==== sold at clodes");
+            // println!("==== sold at clodes");
         }
     }
 
     pub fn close_all_exit(&mut self, t: &Tick, ta: &TA1) {
-        let param = PosParam {
-            open_price: t.price as i64,
-            price: t.price as i64,
-            pos_size: 10,
-            pos_id: 0,
-            time: t.time_s,
-            ta: ta.clone(),
-        };
+        let param = to_param(t, ta);
 
-        self.port
-            .report
-            .collect_balance(self.port.get_total_balance((t.price * 100_000.) as i64));
+        self.port.report.collect_balance(
+            self.port
+                .get_total_balance((t.price * t.price_multi) as i64),
+        );
         self.port.close_all_positions(&param);
     }
 
-    pub fn report(&self) {
-        println!("portfolio #{:#?}", self.port);
-        self.port.report.write_to_folder(&self.port);
+    pub fn report(&self, name: &str) {
+        // println!("portfolio #{:#?}", self.port);
+        // println!("portfolio #{:#?}", self.port.report.);
+        self.port.report.write_to_folder(&self.port, name);
+    }
+}
+
+fn to_param(t: &Tick, ta: &TA1) -> PosParam {
+    PosParam {
+        price: t.price as i64,
+        price_multi: 100_000.0,
+        pos_size: 10,
+        pos_id: 0,
+        time: t.time_s,
+        ta: ta.clone(),
     }
 }
