@@ -1,0 +1,675 @@
+syntax = "proto3";
+
+package pb;
+
+option java_multiple_files = true;
+
+option java_generate_equals_and_hash = true;
+
+option java_package = "com.xtrader.protocol.openapi.v2";
+
+option java_outer_classname = "ContainerOpenApiV2Messages";
+
+import "OpenApiModelMessages.proto";
+
+/** Request for the authorizing an application to work with the cTrader platform Proxies. */
+message ApplicationAuthReq {
+   PayloadType payloadType = 1 [default = OA_APPLICATION_AUTH_REQ];
+
+    /*required*/ string clientId = 2; //The unique Client ID provided during the registration.
+    /*required*/ string clientSecret = 3; //The unique Client Secret provided during the registration.
+}
+
+/** Response to the ApplicationAuthReq request. */
+message ApplicationAuthRes {
+   PayloadType payloadType = 1 [default = OA_APPLICATION_AUTH_RES];
+}
+
+/** Request for the authorizing trading account session. Requires established authorized connection with the client application using ApplicationAuthReq. */
+message AccountAuthReq {
+   PayloadType payloadType = 1 [default = OA_ACCOUNT_AUTH_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // The unique identifier of the trader's account in cTrader platform.
+    /*required*/ string accessToken = 3; // The Access Token issued for providing access to the Trader's Account.
+}
+
+/** Response to the ApplicationAuthRes request. */
+message AccountAuthRes {
+   PayloadType payloadType = 1 [default = OA_ACCOUNT_AUTH_RES];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // The unique identifier of the trader's account in cTrader platform.
+}
+
+/** Generic response when an ERROR occurred. */
+message ErrorRes {
+   PayloadType payloadType = 1 [default = OA_ERROR_RES];
+
+   int64 ctidTraderAccountId = 2; //The unique identifier of the trader's account in cTrader platform.
+    /*required*/ string errorCode = 3; // The name of the ProtoErrorCode or the other custom ErrorCodes (e.g. ProtoCHErrorCode).
+   string description = 4; // The error description.
+   int64 maintenanceEndTimestamp = 5; // The timestamp in seconds when the current maintenance session will be ended.
+}
+
+/** Event that is sent when the connection with the client application is cancelled by the server. All the sessions for the traders' accounts will be terminated. */
+message ClientDisconnectEvent {
+   PayloadType payloadType = 1 [default = OA_CLIENT_DISCONNECT_EVENT];
+
+   string reason = 2; // The disconnection reason explained. For example: The application access was blocked by cTrader Administrator.
+}
+
+/** Event that is sent when a session to a specific trader's account is terminated by the server but the existing connections with the other trader's accounts are maintained. */
+message AccountsTokenInvalidatedEvent {
+   PayloadType payloadType = 1 [default = OA_ACCOUNTS_TOKEN_INVALIDATED_EVENT];
+
+    repeated int64 ctidTraderAccountIds = 2; // The unique identifier of the trader's account in cTrader platform.
+   string reason = 3; // The disconnection reason explained. For example: Access Token is expired or recalled.
+}
+
+/** Request for getting the proxy version. Can be used to check the current version of the Open API scheme. */
+message VersionReq {
+   PayloadType payloadType = 1 [default = OA_VERSION_REQ];
+}
+
+/** Response to the VersionReq request. */
+message VersionRes {
+   PayloadType payloadType = 1 [default = OA_VERSION_RES];
+
+    /*required*/ string version = 2; // The current version of the server application.
+}
+
+/** Request for sending a new trading order. Allowed only if the accessToken has the "trade" permissions for the trading account. */
+message NewOrderReq {
+   PayloadType payloadType = 1 [default = OA_NEW_ORDER_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // The unique identifier of the trader's account in cTrader platform.
+    /*required*/ int64 symbolId = 3; // The unique identifier of a symbol in cTrader platform.
+    /*required*/ OrderType orderType = 4; // The type of an order - MARKET, LIMIT, STOP, MARKET_RANGE, STOP_LIMIT.
+    /*required*/ TradeSide tradeSide = 5; // The trade direction - BUY or SELL.
+    /*required*/ int64 volume = 6; // The volume represented in 0.01 of a unit (e.g. US$ 10.00 = 1000).
+   double limitPrice = 7; // The limit price, can be specified for the LIMIT order only.
+   double stopPrice = 8; // Stop Price, can be specified for the STOP and the STOP_LIMIT orders only.
+   TimeInForce timeInForce = 9 [default = GOOD_TILL_CANCEL]; // The specific order execution or expiration instruction - GOOD_TILL_DATE, GOOD_TILL_CANCEL, IMMEDIATE_OR_CANCEL, FILL_OR_KILL, MARKET_ON_OPEN.
+   int64 expirationTimestamp = 10; // The exact Order expiration time. Should be set for the Good Till Date orders.
+   double stopLoss = 11; // The absolute Stop Loss price (1.23456 for example). Not supported for the MARKER orders.
+   double takeProfit = 12; // The absolute Take Profit price (1.23456 for example). Unsupported for the MARKER orders.
+   string comment = 13; // User-specified comment. MaxLength = 512.
+   double baseSlippagePrice = 14; // Base price to calculate relative slippage price for MARKET_RANGE order.
+   int32 slippageInPoints = 15; // Slippage distance for MARKET_RANGE and STOP_LIMIT order.
+   string label = 16; // User-specified label. MaxLength = 100.
+   int64 positionId = 17; // Reference to the existing position if the Order is intended to modify it.
+   string clientOrderId = 18; //user-specific clientOrderId (similar to FIX ClOrderID). MaxLength = 50.
+   int64 relativeStopLoss = 19; // Relative Stop Loss that can be specified instead of the absolute as one. Specified in 1/100000 of unit of a price. For BUY stopLoss = entryPrice - relativeStopLoss, for SELL stopLoss = entryPrice + relativeStopLoss.
+   int64 relativeTakeProfit = 20; // Relative Take Profit that can be specified instead of the absolute one. Specified in 1/100000 of unit of a price. For BUY takeProfit = entryPrice + relativeTakeProfit, for SELL takeProfit = entryPrice - relativeTakeProfit.
+   bool guaranteedStopLoss = 21; // If TRUE then stopLoss is guaranteed. Available for the French Risk or the Guaranteed Stop Loss Accounts.
+   bool trailingStopLoss = 22; // If TRUE then the Stop Loss is Trailing.
+   OrderTriggerMethod stopTriggerMethod = 23 [default = TRADE]; // Trigger method for the STOP or the STOP_LIMIT pending order.
+}
+
+/** Event that is sent following the successful order acceptance or execution by the server. Acts as response to the NewOrderReq, CancelOrderReq, AmendOrderReq, AmendPositionSLTPReq, ClosePositionReq requests. Also, the event is sent when a Deposit/Withdrawal took place. */
+message ExecutionEvent {
+   PayloadType payloadType = 1 [default = OA_EXECUTION_EVENT];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    /*required*/ ExecutionType executionType = 3; // Type of the order operation. For example: ACCEPTED, FILLED, etc.
+   Position position = 4; // Reference to the position linked with the execution
+   Order order = 5; // Reference to the initial order.
+   Deal deal = 6; // Reference to the deal (execution).
+   BonusDepositWithdraw bonusDepositWithdraw = 7; // Reference to the Bonus Deposit or Withdrawal operation.
+   DepositWithdraw depositWithdraw = 8; // Reference to the Deposit or Withdrawal operation.
+   string errorCode = 9; //The name of the ProtoErrorCode or the other custom ErrorCodes (e.g. ProtoCHErrorCode).
+   bool isServerEvent = 10; // If TRUE then the event generated by the server logic instead of the trader's request. (e.g. stop-out).
+}
+
+/** Request for cancelling existing pending order. Allowed only if the accessToken has "trade" permissions for the trading account. */
+message CancelOrderReq {
+   PayloadType payloadType = 1 [default = OA_CANCEL_ORDER_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    /*required*/ int64 orderId = 3; // The unique ID of the order.
+}
+
+/** Request for amending the existing pending order. Allowed only if the Access Token has "trade" permissions for the trading account. */
+message AmendOrderReq {
+   PayloadType payloadType = 1 [default = OA_AMEND_ORDER_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    /*required*/ int64 orderId = 3; // The unique ID of the order.
+   int64 volume = 4; // Volume, represented in 0.01 of a unit (e.g. cents).
+   double limitPrice = 5; // The Limit Price, can be specified for the LIMIT order only.
+   double stopPrice = 6; // The Stop Price, can be specified for the STOP and the STOP_LIMIT orders.
+   int64 expirationTimestamp = 7; // The exact Order expiration time. Should be set for the Good Till Date orders.
+   double stopLoss = 8; // The absolute Stop Loss price (e.g. 1.23456). Not supported for the MARKER orders.
+   double takeProfit = 9; // The absolute Take Profit price (e.g. 1.23456). Not supported for the MARKER orders.
+   int32 slippageInPoints = 10; // Slippage distance for the MARKET_RANGE and the STOP_LIMIT orders.
+   int64 relativeStopLoss = 11; // The relative Stop Loss can be specified instead of the absolute one. Specified in 1/100000 of a unit of price. For BUY stopLoss = entryPrice - relativeStopLoss, for SELL stopLoss = entryPrice + relativeStopLoss.
+   int64 relativeTakeProfit = 12; // The relative Take Profit can be specified instead of the absolute one. Specified in 1/100000 of a unit of price. For BUY takeProfit = entryPrice + relativeTakeProfit, for SELL takeProfit = entryPrice - relativeTakeProfit.
+   bool guaranteedStopLoss = 13; // If TRUE then the Stop Loss is guaranteed. Available for the French Risk or the Guaranteed Stop Loss Accounts.
+   bool trailingStopLoss = 14; // If TRUE then the Trailing Stop Loss is applied.
+   OrderTriggerMethod stopTriggerMethod = 15 [default = TRADE]; // Trigger method for the STOP or the STOP_LIMIT pending order.
+}
+
+/** Request for amending StopLoss and TakeProfit of existing position. Allowed only if the accessToken has "trade" permissions for the trading account. */
+message AmendPositionSLTPReq {
+   PayloadType payloadType = 1 [default = OA_AMEND_POSITION_SLTP_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    /*required*/ int64 positionId = 3; // The unique ID of the position to amend.
+   double stopLoss = 4; // Absolute Stop Loss price (1.23456 for example).
+   double takeProfit = 5; // Absolute Take Profit price (1.26543 for example).
+   bool guaranteedStopLoss = 7; //If TRUE then the Stop Loss is guaranteed. Available for the French Risk or the Guaranteed Stop Loss Accounts.
+   bool trailingStopLoss = 8; //If TRUE then the Trailing Stop Loss is applied.
+   OrderTriggerMethod stopLossTriggerMethod = 9 [default = TRADE]; // The Stop trigger method for the Stop Loss/Take Profit order.
+}
+
+/** Request for closing or partially closing of an existing position. Allowed only if the accessToken has "trade" permissions for the trading account. */
+message ClosePositionReq {
+   PayloadType payloadType = 1 [default = OA_CLOSE_POSITION_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    /*required*/ int64 positionId = 3; // The unique ID of the position to close.
+    /*required*/ int64 volume = 4; // Volume to close, represented in 0.01 of a unit (e.g. cents).
+}
+
+/** Event that is sent when the level of the Trailing Stop Loss is changed due to the price level changes. */
+message TrailingSLChangedEvent {
+   PayloadType payloadType = 1 [default = OA_TRAILING_SL_CHANGED_EVENT];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    /*required*/ int64 positionId = 3; // The unique ID of the position.
+    /*required*/ int64 orderId = 4; // The unique ID of the order.
+    /*required*/ double stopPrice = 5; // New value of the Stop Loss price.
+    /*required*/ int64 utcLastUpdateTimestamp = 6; // The exact UTC time when the Stop Loss was updated.
+}
+
+/** Request for the list of assets available for a trader's account. */
+message AssetListReq {
+   PayloadType payloadType = 1 [default = OA_ASSET_LIST_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+}
+
+/** Response to the AssetListReq request. */
+message AssetListRes {
+   PayloadType payloadType = 1 [default = OA_ASSET_LIST_RES];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    repeated Asset asset = 3; // The list of assets.
+}
+
+/** Request for a list of symbols available for a trading account. Symbol entries are returned with the limited set of fields. */
+message SymbolsListReq {
+   PayloadType payloadType = 1 [default = OA_SYMBOLS_LIST_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+   bool includeArchivedSymbols = 3 [default = false];
+}
+
+/** Response to the SymbolsListReq request. */
+message SymbolsListRes {
+   PayloadType payloadType = 1 [default = OA_SYMBOLS_LIST_RES];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    repeated LightSymbol symbol = 3; // The list of symbols.
+    repeated ArchivedSymbol archivedSymbol = 4; // The list of archived symbols.
+}
+
+/** Request for getting a full symbol entity. */
+message SymbolByIdReq {
+   PayloadType payloadType = 1 [default = OA_SYMBOL_BY_ID_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    repeated int64 symbolId = 3; // Unique identifier of the symbol in cTrader platform.
+}
+
+/** Response to the SymbolByIdReq request. */
+message SymbolByIdRes {
+   PayloadType payloadType = 1 [default = OA_SYMBOL_BY_ID_RES];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    repeated Symbol symbol = 3; // Symbol entity with the full set of fields.
+    repeated ArchivedSymbol archivedSymbol = 4; // Archived symbols.
+}
+
+/** Request for getting a conversion chain between two assets that consists of several symbols. Use when no direct quote is available */
+message SymbolsForConversionReq {
+   PayloadType payloadType = 1 [default = OA_SYMBOLS_FOR_CONVERSION_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    /*required*/ int64 firstAssetId = 3; // The ID of the firs asset in the conversation chain. e.g.: for EUR/USD the firstAssetId is EUR ID and lastAssetId is USD ID.
+    /*required*/ int64 lastAssetId = 4; // The ID of the last asset in the conversation chain. e.g.: for EUR/USD the firstAssetId is EUR ID and lastAssetId is USD ID.
+}
+
+/** Response to the SymbolsForConversionReq request. */
+message SymbolsForConversionRes {
+   PayloadType payloadType = 1 [default = OA_SYMBOLS_FOR_CONVERSION_RES];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    repeated LightSymbol symbol = 3; // Conversion chain of the symbols (e.g. EUR/USD, USD/JPY, GBP/JPY -> EUR/GBP).
+}
+
+/** Event that is sent when the symbol is changed on the Server side. */
+message SymbolChangedEvent {
+   PayloadType payloadType = 1 [default = OA_SYMBOL_CHANGED_EVENT];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    repeated int64 symbolId = 3; // Unique identifier of the Symbol in cTrader platform.
+}
+
+/** Request for a list of asset classes available for the trader's account. */
+message AssetClassListReq {
+   PayloadType payloadType = 1 [default = OA_ASSET_CLASS_LIST_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+}
+
+/** Response to the AssetListReq request. */
+message AssetClassListRes {
+   PayloadType payloadType = 1 [default = OA_ASSET_CLASS_LIST_RES];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    repeated AssetClass assetClass = 3; // List of the asset classes.
+}
+
+/** Request for getting data of Trader's Account. */
+message TraderReq {
+   PayloadType payloadType = 1 [default = OA_TRADER_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+}
+
+/** Response to the TraderReq request. */
+message TraderRes {
+   PayloadType payloadType = 1 [default = OA_TRADER_RES];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    /*required*/ Trader trader = 3; // The Trader account information.
+}
+
+/** Event that is sent when a Trader is updated on Server side. */
+message TraderUpdatedEvent {
+   PayloadType payloadType = 1 [default = OA_TRADER_UPDATE_EVENT];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    /*required*/ Trader trader = 3; // The Trader account information.
+}
+
+/** Request for getting Trader's current open positions and pending orders data. */
+message ReconcileReq {
+   PayloadType payloadType = 1 [default = OA_RECONCILE_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+}
+
+/** The response to the ReconcileReq request. */
+message ReconcileRes {
+   PayloadType payloadType = 1 [default = OA_RECONCILE_RES];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    repeated Position position = 3; // The list of trader's account open positions.
+    repeated Order order = 4; // The list of trader's account pending orders.
+}
+
+/** Event that is sent when errors occur during the order requests. */
+message OrderErrorEvent {
+   PayloadType payloadType = 1 [default = OA_ORDER_ERROR_EVENT];
+
+    /*required*/ int64 ctidTraderAccountId = 5; //Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    /*required*/ string errorCode = 2; // The name of the ProtoErrorCode or the other custom ErrorCodes (e.g. ProtoCHErrorCode).
+   int64 orderId = 3; // The unique ID of the order.
+   int64 positionId = 6; // The unique ID of the position.
+   string description = 7; // The error description.
+}
+
+/** Request for getting Trader's deals historical data (execution details). */
+message DealListReq {
+   PayloadType payloadType = 1 [default = OA_DEAL_LIST_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    /*required*/ int64 fromTimestamp = 3; // The UNIX time from which the search starts >=0 (1-1-1970). Validation: toTimestamp - fromTimestamp <= 604800000 (1 week).
+    /*required*/ int64 toTimestamp = 4; // The UNIX time where to stop searching <= 2147483646000 (19-1-2038).
+   int32 maxRows = 5; // The maximum number of the deals to return.
+}
+
+/** The response to the DealListRes request. */
+message DealListRes {
+   PayloadType payloadType = 1 [default = OA_DEAL_LIST_RES];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    repeated Deal deal = 3; // The list of the deals.
+    /*required*/ bool hasMore = 4; // If TRUE then the response will provide more than 10000 deals.
+}
+
+/** Request for getting the margin estimate. Can be used before sending a new order request. */
+message ExpectedMarginReq {
+   PayloadType payloadType = 1 [default = OA_EXPECTED_MARGIN_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    /*required*/ int64 symbolId = 3; // Unique identifier of the Symbol in cTrader platform.
+    repeated int64 volume = 4; // Volume represented in 0.01 of a unit (e.g. cents).
+}
+
+/**The response to the ExpectedMarginReq request. */
+message ExpectedMarginRes {
+   PayloadType payloadType = 1 [default = OA_EXPECTED_MARGIN_RES];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    repeated ExpectedMargin margin = 3; // The buy and sell margin estimate.
+   uint32 moneyDigits = 4; // Specifies the exponent of the monetary values. E.g. moneyDigits = 8 must be interpret as business value multiplied by 10^8, then real balance would be 10053099944 / 10^8 = 100.53099944. Affects margin.buyMargin, margin.sellMargin.
+}
+
+/** Event that is sent when the margin allocated to a specific position is changed. */
+message MarginChangedEvent {
+   PayloadType payloadType = 1 [default = OA_MARGIN_CHANGED_EVENT];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    /*required*/ uint64 positionId = 3; // The unique ID of the position.
+    /*required*/ uint64 usedMargin = 4; // The new value of the margin used.
+   uint32 moneyDigits = 5; // Specifies the exponent of the monetary values. E.g. moneyDigits = 8 must be interpret as business value multiplied by 10^8, then real balance would be 10053099944 / 10^8 = 100.53099944. Affects usedMargin.
+}
+
+/** Request for getting Trader's historical data of deposits and withdrawals. */
+message CashFlowHistoryListReq {
+   PayloadType payloadType = 1 [default = OA_CASH_FLOW_HISTORY_LIST_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    /*required*/ int64 fromTimestamp = 3; // The UNIX time from which the search starts >=0 (1-1-1970). Validation: toTimestamp - fromTimestamp <= 604800000 (1 week).
+    /*required*/ int64 toTimestamp = 4; // The UNIX time where to stop searching <= 2147483646000 (19-1-2038).
+}
+
+/** Response to the CashFlowHistoryListReq request. */
+message CashFlowHistoryListRes {
+   PayloadType payloadType = 1 [default = OA_CASH_FLOW_HISTORY_LIST_RES];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    repeated DepositWithdraw depositWithdraw = 3; // The list of deposit and withdrawal operations.
+}
+
+/** Request for getting the list of granted trader's account for the access token. */
+message GetAccountListByAccessTokenReq {
+   PayloadType payloadType = 1 [default = OA_GET_ACCOUNTS_BY_ACCESS_TOKEN_REQ];
+
+    /*required*/ string accessToken = 2; // The Access Token issued for providing access to the Trader's Account.
+}
+
+/** Response to the GetAccountListByAccessTokenReq request. */
+message GetAccountListByAccessTokenRes {
+   PayloadType payloadType = 1 [default = OA_GET_ACCOUNTS_BY_ACCESS_TOKEN_RES];
+
+    /*required*/ string accessToken = 2; // The Access Token issued for providing access to the Trader's Account.
+   ClientPermissionScope permissionScope = 3; // SCOPE_VIEW, SCOPE_TRADE.
+    repeated CtidTraderAccount ctidTraderAccount = 4; // The list of the accounts.
+}
+
+/** Request to refresh the access token using refresh token of granted trader's account. */
+message RefreshTokenReq {
+   PayloadType payloadType = 1 [default = OA_REFRESH_TOKEN_REQ];
+
+    /*required*/ string refreshToken = 2; // The Refresh Token issued for updating Access Token.
+}
+
+/** Response to the RefreshTokenReq request. */
+message RefreshTokenRes {
+   PayloadType payloadType = 1 [default = OA_REFRESH_TOKEN_RES];
+
+    /*required*/ string accessToken = 2; // The Access Token issued for providing access to the Trader's Account.
+    /*required*/ string tokenType = 3; // bearer
+    /*required*/ int64 expiresIn = 4; // Access Token expiration in seconds
+    /*required*/ string refreshToken = 5;
+}
+
+//+------------------------------------------------------------------+
+//|                              Quotes                              |
+//+------------------------------------------------------------------+
+/** Request for subscribing on spot events of the specified symbol. */
+message SubscribeSpotsReq {
+   PayloadType payloadType = 1 [default = OA_SUBSCRIBE_SPOTS_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    repeated int64 symbolId = 3; // Unique identifier of the Symbol in cTrader platform.
+}
+
+/** Response to the SubscribeSpotsReq request. */
+message SubscribeSpotsRes {
+   PayloadType payloadType = 1 [default = OA_SUBSCRIBE_SPOTS_RES];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+}
+
+/** Request for unsubscribing from the spot events of the specified symbol. */
+message UnsubscribeSpotsReq {
+   PayloadType payloadType = 1 [default = OA_UNSUBSCRIBE_SPOTS_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    repeated int64 symbolId = 3; // Unique identifier of the Symbol in cTrader platform.
+}
+
+/** Response to the SubscribeSpotsRes request. */
+message UnsubscribeSpotsRes {
+   PayloadType payloadType = 1 [default = OA_UNSUBSCRIBE_SPOTS_RES];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+}
+
+/** Event that is sent when a new spot event is generated on the server side. Requires subscription on the spot events, see SubscribeSpotsReq. */
+message SpotEvent {
+   PayloadType payloadType = 1 [default = OA_SPOT_EVENT];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    /*required*/ int64 symbolId = 3; // Unique identifier of the Symbol in cTrader platform.
+   uint64 bid = 4; // Bid price. Specified in 1/100_000 of unit of a price. (e.g. 1.23 -> 123_000)
+   uint64 ask = 5; // Ask price. Specified in 1/100_000 of unit of a price.
+    repeated Trendbar trendbar = 6; // Returns live trend bar. Requires subscription on the trend bars.
+   uint64 sessionClose = 7;//Last session close. Specified in 1/100_000 of unit of a price.
+}
+
+/** Request for subscribing for live trend bars. Requires subscription on the spot events, see SubscribeSpotsReq. */
+message SubscribeLiveTrendbarReq {
+   PayloadType payloadType = 1 [default = OA_SUBSCRIBE_LIVE_TRENDBAR_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    /*required*/ TrendbarPeriod period = 3; // Specifies period of trend bar series (e.g. M1, M10, etc.).
+    /*required*/ int64 symbolId = 4; // Unique identifier of the Symbol in cTrader platform.
+}
+
+/** Response to the SubscribeLiveTrendbarReq request. */
+message SubscribeLiveTrendbarRes {
+   PayloadType payloadType = 1 [default = OA_SUBSCRIBE_LIVE_TRENDBAR_RES];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+}
+
+/** Request for unsubscribing from the live trend bars. */
+message UnsubscribeLiveTrendbarReq {
+   PayloadType payloadType = 1 [default = OA_UNSUBSCRIBE_LIVE_TRENDBAR_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    /*required*/ TrendbarPeriod period = 3; // Specifies period of trend bar series (e.g. M1, M10, etc.).
+    /*required*/ int64 symbolId = 4; // Unique identifier of the Symbol in cTrader platform.
+}
+
+/** Response to the SubscribeLiveTrendbarReq request. */
+message UnsubscribeLiveTrendbarRes {
+   PayloadType payloadType = 1 [default = OA_UNSUBSCRIBE_LIVE_TRENDBAR_RES];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+}
+
+/** Request for getting historical trend bars for the symbol. */
+message GetTrendbarsReq {
+   PayloadType payloadType = 1 [default = OA_GET_TRENDBARS_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    /*required*/ int64 fromTimestamp = 3; // The exact time of starting the search in milliseconds. Must be bigger or equal to zero (1-1-1970). Validation: toTimestamp - fromTimestamp <= X, where X depends on series period: M1, M2, M3, M4, M5: 302400000 (5 weeks); M10, M15, M30, H1: 21168000000 (35 weeks), H4, H12, D1: 31622400000 (1 year); W1, MN1: 158112000000 (5 years).
+    /*required*/ int64 toTimestamp = 4; // The exact time of finishing the search in milliseconds. Smaller or equal to 2147483646000 (19-1-2038).
+    /*required*/ TrendbarPeriod period = 5; // Specifies period of trend bar series (e.g. M1, M10, etc.).
+    /*required*/ int64 symbolId = 6; // Unique identifier of the Symbol in cTrader platform.
+}
+
+/** Response to the GetTrendbarsReq request. */
+message GetTrendbarsRes {
+   PayloadType payloadType = 1 [default = OA_GET_TRENDBARS_RES];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    /*required*/ TrendbarPeriod period = 3; // Specifies period of trend bar series (e.g. M1, M10, etc.).
+    /*required*/ int64 timestamp = 4; // Equals to toTimestamp from the request.
+    repeated Trendbar trendbar = 5; // The list of trend bars.
+   int64 symbolId = 6; // Unique identifier of the Symbol in cTrader platform.
+}
+
+/** Request for getting historical tick data for the symbol. */
+message GetTickDataReq {
+   PayloadType payloadType = 1 [default = OA_GET_TICKDATA_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    /*required*/ int64 symbolId = 3; // Unique identifier of the Symbol in cTrader platform.
+    /*required*/ QuoteType type = 4; // Bid/Ask (1/2).
+    /*required*/ int64 fromTimestamp = 5; // The exact time of starting the search in milliseconds. Must be bigger of equal to zero (1-1-1970). Validation: toTimestamp - fromTimestamp <= 604800000 (1 week).
+    /*required*/ int64 toTimestamp = 6; // The exact time of finishing the search in milliseconds <= 2147483646000 (19-1-2038).
+}
+
+/** Response to the GetTickDataReq request. */
+message GetTickDataRes {
+   PayloadType payloadType = 1 [default = OA_GET_TICKDATA_RES];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    repeated TickData tickData = 3; // The list of ticks.
+    /*required*/ bool hasMore = 4; // If TRUE then the number of records by filter is larger than chunkSize, the response contains the number of records that is equal to chunkSize.
+}
+
+//+------------------------------------------------------------------+
+//|                      End quotes section                          |
+//+------------------------------------------------------------------+
+
+/** Request for getting details of Trader's profile. Limited due to GDRP requirements. */
+message GetCtidProfileByTokenReq {
+   PayloadType payloadType = 1 [default = OA_GET_CTID_PROFILE_BY_TOKEN_REQ];
+
+    /*required*/ string accessToken = 2; // The Access Token issued for providing access to the Trader's Account.
+}
+
+/** Response to the GetCtidProfileByTokenReq request. */
+message GetCtidProfileByTokenRes {
+   PayloadType payloadType = 1 [default = OA_GET_CTID_PROFILE_BY_TOKEN_RES];
+
+    /*required*/ CtidProfile profile = 2; // Trader's profile.
+}
+
+/** Event that is sent when the structure of depth of market is changed. Requires subscription on the depth of markets for the symbol, see SubscribeDepthQuotesReq. */
+message DepthEvent {
+   PayloadType payloadType = 1 [default = OA_DEPTH_EVENT];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    /*required*/ uint64 symbolId = 3; // Unique identifier of the Symbol in cTrader platform.
+    repeated DepthQuote newQuotes = 4; // The list of changes in the depth of market quotes.
+    repeated uint64 deletedQuotes = 5 [packed = true]; // The list of quotes to delete.
+}
+
+/** Request for subscribing on depth of market of the specified symbol. */
+message SubscribeDepthQuotesReq {
+   PayloadType payloadType = 1 [default = OA_SUBSCRIBE_DEPTH_QUOTES_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    repeated int64 symbolId = 3; // Unique identifier of the Symbol in cTrader platform.
+}
+
+/** Response to the SubscribeDepthQuotesReq request. */
+message SubscribeDepthQuotesRes {
+   PayloadType payloadType = 1 [default = OA_SUBSCRIBE_DEPTH_QUOTES_RES];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+}
+
+/** Request for unsubscribing from the depth of market of the specified symbol. */
+message UnsubscribeDepthQuotesReq {
+   PayloadType payloadType = 1 [default = OA_UNSUBSCRIBE_DEPTH_QUOTES_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    repeated int64 symbolId = 3; // Unique identifier of the Symbol in cTrader platform.
+}
+
+/** Response to the UnsubscribeDepthQuotesReq request. */
+message UnsubscribeDepthQuotesRes {
+   PayloadType payloadType = 1 [default = OA_UNSUBSCRIBE_DEPTH_QUOTES_RES];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+}
+
+/** Request for a list of symbol categories available for a trading account. */
+message SymbolCategoryListReq {
+   PayloadType payloadType = 1 [default = OA_SYMBOL_CATEGORY_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+}
+
+/** Response to the ProtoSymbolCategoryListReq request. */
+message SymbolCategoryListRes {
+   PayloadType payloadType = 1 [default = OA_SYMBOL_CATEGORY_RES];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // Unique identifier of the trader's account. Used to match responses to trader's accounts.
+    repeated SymbolCategory symbolCategory = 3; // The list of symbol categories.
+}
+
+/** Request for logout of  trading account session.*/
+message AccountLogoutReq {
+   PayloadType payloadType = 1 [default = OA_ACCOUNT_LOGOUT_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // The unique identifier of the trader's account in cTrader platform.
+}
+
+/** Response to the TraderLogoutReq request. */
+message AccountLogoutRes {
+   PayloadType payloadType = 1 [default = OA_ACCOUNT_LOGOUT_RES];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // The unique identifier of the trader's account in cTrader platform.
+}
+
+/** Event that is sent when the established session for an account is dropped on the server side.
+ A new session must be authorized for the account.  */
+message AccountDisconnectEvent {
+   PayloadType payloadType = 1 [default = OA_ACCOUNT_DISCONNECT_EVENT];
+
+    /*required*/ int64 ctidTraderAccountId = 2; // The unique identifier of the trader's account in cTrader platform.
+}
+
+/** Request for a list of existing margin call thresholds configured for a user. */
+message MarginCallListReq {
+   PayloadType payloadType = 1 [default = OA_MARGIN_CALL_LIST_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2;
+}
+
+/** Response with a list of existing user Margin Calls, usually contains 3 items. */
+message MarginCallListRes {
+   PayloadType payloadType = 1 [default = OA_MARGIN_CALL_LIST_RES];
+
+    repeated MarginCall marginCall = 2;
+}
+
+/** Request to modify marginLevelThreshold of specified marginCallType for ctidTraderAccountId. */
+message MarginCallUpdateReq {
+   PayloadType payloadType = 1 [default = OA_MARGIN_CALL_UPDATE_REQ];
+
+    /*required*/ int64 ctidTraderAccountId = 2;
+    /*required*/ MarginCall marginCall = 3;
+}
+
+/** If this response received, it means that margin call was successfully updated. */
+message MarginCallUpdateRes {
+   PayloadType payloadType = 1 [default = OA_MARGIN_CALL_UPDATE_RES];
+}
+
+/** Event that is sent when a Margin Call threshold configuration is updated. */
+message MarginCallUpdateEvent {
+   PayloadType payloadType = 1 [default = OA_MARGIN_CALL_UPDATE_EVENT];
+
+    /*required*/ int64 ctidTraderAccountId = 2;
+    /*required*/ MarginCall marginCall = 3;
+}
+
+/** Event that is sent when account margin level reaches target marginLevelThreshold. Event is sent no more than once every 10 minutes to avoid spamming. */
+message MarginCallTriggerEvent {
+   PayloadType payloadType = 1 [default = OA_MARGIN_CALL_TRIGGER_EVENT];
+
+    /*required*/ int64 ctidTraderAccountId = 2;
+    /*required*/ MarginCall marginCall = 3;
+}

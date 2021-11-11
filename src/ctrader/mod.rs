@@ -1,9 +1,11 @@
 pub mod connection;
+pub mod event_listener;
 pub mod helper;
 pub mod play;
 pub mod proc;
 
 pub use connection::*;
+pub use event_listener::*;
 pub use helper::*;
 pub use proc::*;
 
@@ -16,7 +18,7 @@ pub fn play() {
         client_token: "bPrpDF99EoiKt7dFgr73WExkB2Iur0buYJj4JVe2fEw".to_string(),
         ctid: 22851452,
     };
-    let mut cti = CTrader::connect(&cfg);
+    let (mut cti, rc_event) = CTrader::connect(&cfg);
     // let mut ct = cti.lock().unwrap();
     let mut ct = cti;
     ct.application_auth_req(&cfg.client_id, &cfg.client_secret);
@@ -31,7 +33,7 @@ pub fn play() {
     // ct.subscribe_spots_req(vec![22397,22398]);
 
     ct.get_trendbars_req();
-    ct.get_tick_data_req();
+    ct.get_tick_data_req_old_bk();
 
     std::thread::sleep(std::time::Duration::new(100000, 0));
 }

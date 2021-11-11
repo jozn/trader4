@@ -21,9 +21,11 @@ use super::*;
 pub fn dispatch_read_thread(ctrader: CTraderInst) {
     let stream_lock = ctrader.stream.clone();
     thread::spawn(move || {
-        // Note: Each cTrader send frame seems to be maxed at 16KB.
-        let mut total_buff = bytes::BytesMut::with_capacity(1000000);
+        let mut total_buff = bytes::BytesMut::with_capacity(100_000_000); // ~100MB
+
+        let mut refresh_cnt = 0;
         loop {
+            // Note: Each cTrader send frame seems to be maxed at 16KB.
             let mut read_vec = [0; 1024 * 1024].to_vec();
 
             let mut locket_stream = stream_lock.lock().unwrap();
@@ -53,8 +55,15 @@ pub fn dispatch_read_thread(ctrader: CTraderInst) {
                     }
                 }
                 Err(e) => {
-                    println!(">>> read err  {:?}", e);
+                    // we do not lock, it will be error if there is nothing to read
+                    //println!(">>> read err  {:?}", e);
                 }
+            }
+
+            // Tick(Refresh) the world
+            refresh_cnt += 1;
+            if refresh_cnt % 60 == 0 {
+                ctrader.response_chan.clone().send(RE::Refresh);
             }
 
             std::thread::sleep(Duration::new(1, 0));

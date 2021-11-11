@@ -111,6 +111,7 @@ impl TRunner for SimMacdWorld {
             SimpleCrossEvent::Bull(_) => {
                 // self.strategy1.buy(kid, t);
                 // if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 && price > big_ema {
+                // if  price > ma && ta.vel.count >= 3 && price > big_ema {
                 if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 {
                     // if macd_out.macd < 0. && price > ma  {
                     //     if macd_out.macd < 0. && price > ma && ta.vel.count >= 3  {
@@ -131,6 +132,7 @@ impl TRunner for SimMacdWorld {
                 // self.strategy1.sell(kid, t);
                 // if macd_out.macd > 0. && price < ma {
                 // if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 && price < big_ema {
+                // if  price < ma && ta.vel.count >= 3 && price < big_ema {
                 if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 {
                     // if macd_out.macd > 0. && price < ma  {
                     //     if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 {

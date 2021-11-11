@@ -37,11 +37,12 @@ pub struct CTrader {
     // req_counter2: std::cell::RefCell<u64>,
     cfg: Config,
     w_ch: std::sync::mpsc::SyncSender<Vec<u8>>,
+    pub response_chan: std::sync::mpsc::SyncSender<ResponseEvent>,
     pub(crate) stream: Arc<Mutex<TlsStream<TcpStream>>>,
 }
 
 impl CTrader {
-    pub fn connect(cfg: &Config) -> Arc<CTrader> {
+    pub fn connect(cfg: &Config) -> (Arc<CTrader>, std::sync::mpsc::Receiver<ResponseEvent>) {
         let addr = format!("{}:{}", cfg.host, cfg.port);
 
         let connector = TlsConnector::new().unwrap();
@@ -55,11 +56,13 @@ impl CTrader {
 
         // Channel making
         let (sender_ch, reciver_ch) = std::sync::mpsc::sync_channel(1000);
+        let (sender_event_ch, reciver_event_ch) = std::sync::mpsc::sync_channel(1000);
         let mut out = Self {
             // req_counter: Box::new(0),
             // req_counter2: Default::default(),
             cfg: cfg.clone(),
             w_ch: sender_ch,
+            response_chan: sender_event_ch,
             stream: Arc::new(Mutex::new(stream)),
         };
 
@@ -68,7 +71,7 @@ impl CTrader {
         dispatch_write_thread(ro.clone(), reciver_ch);
         dispatch_read_thread(ro.clone());
 
-        ro
+        (ro, reciver_event_ch)
     }
 
     fn send(&self, msg: impl prost::Message, msg_type: u32) {
@@ -188,6 +191,38 @@ impl CTrader {
         self.send(req_pb, api_id)
     }
 
+    pub fn open_postion_req(&self) {
+        let api_id = pb::PayloadType::OaNewOrderReq as u32;
+
+        let req_pb = pb::NewOrderReq {
+            payload_type: None,
+            ctid_trader_account_id: self.cfg.ctid,
+            symbol_id: 1,
+            order_type: pb::OrderType::Market as i32,
+            trade_side: pb::TradeSide::Buy as i32,
+            volume: 10_000_00, // 1000$
+            limit_price: None,
+            stop_price: None,
+            time_in_force: None,
+            expiration_timestamp: None,
+            stop_loss: None,
+            take_profit: None,
+            comment: Some("first comment".to_string()),
+            base_slippage_price: None,
+            slippage_in_points: None,
+            label: Some("My label".to_string()),
+            position_id: None,
+            client_order_id: None,
+            relative_stop_loss: None,
+            relative_take_profit: None,
+            guaranteed_stop_loss: None,
+            trailing_stop_loss: None,
+            stop_trigger_method: None,
+        };
+
+        self.send(req_pb, api_id)
+    }
+
     //todo
     pub fn deal_list_req(&self, symbols: Vec<i64>) {
         let api_id = pb::PayloadType::OaSubscribeSpotsReq as u32;
@@ -203,6 +238,7 @@ impl CTrader {
         self.send(req_pb, api_id)
     }
 
+    // todo: add param
     pub fn get_trendbars_req(&self) {
         let api_id = pb::PayloadType::OaGetTrendbarsReq as u32;
 
@@ -219,7 +255,8 @@ impl CTrader {
         self.send(req_pb, api_id)
     }
 
-    pub fn get_tick_data_req(&self) {
+    // todo: add param
+    pub fn get_tick_data_req_old_bk(&self) {
         let api_id = pb::PayloadType::OaGetTickdataReq as u32;
 
         let d = 1630000000_000;
@@ -230,6 +267,36 @@ impl CTrader {
             r#type: 1,
             from_timestamp: d - 100_000,
             to_timestamp: d,
+        };
+
+        self.send(req_pb, api_id)
+    }
+
+    pub fn get_bid_tick_data_req(&self, symbol_id: i64, time_ms: i64, to_time_ms: i64) {
+        let api_id = pb::PayloadType::OaGetTickdataReq as u32;
+
+        let req_pb = pb::GetTickDataReq {
+            payload_type: None,
+            ctid_trader_account_id: self.cfg.ctid,
+            symbol_id: symbol_id,
+            r#type: 1,
+            from_timestamp: time_ms,
+            to_timestamp: to_time_ms,
+        };
+
+        self.send(req_pb, api_id)
+    }
+
+    pub fn get_ask_tick_data_req(&self, symbol_id: i64, time_ms: i64, to_time_ms: i64) {
+        let api_id = pb::PayloadType::OaGetTickdataReq as u32;
+
+        let req_pb = pb::GetTickDataReq {
+            payload_type: None,
+            ctid_trader_account_id: self.cfg.ctid,
+            symbol_id: symbol_id,
+            r#type: 2,
+            from_timestamp: time_ms,
+            to_timestamp: to_time_ms,
         };
 
         self.send(req_pb, api_id)

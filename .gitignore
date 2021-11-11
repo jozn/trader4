@@ -11,5 +11,6 @@ o*.txt
 *.svg
 o*.json
 *.csv
-
 nohup.out
+
+ctrader_dubg

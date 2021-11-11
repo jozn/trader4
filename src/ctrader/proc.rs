@@ -19,7 +19,7 @@ use tcp_stream::HandshakeError;
 use super::*;
 
 pub fn id_to_res_event(pb_msg: pb::ProtoMessage, ctrader: CTraderInst) {
-    println!("++++++++++++++ {}", pb_msg.payload_type);
+    //println!("++++++++++++++ {}", pb_msg.payload_type);
     // This is ping request
     if pb_msg.payload_type == pb::ProtoPayloadType::HeartbeatEvent as u32 {
         ctrader.send_heartbeat_event();
@@ -51,6 +51,7 @@ pub fn id_to_res_event(pb_msg: pb::ProtoMessage, ctrader: CTraderInst) {
         return;
     }
 
+    let event_res = ctrader.response_chan.clone();
     let pl_type = e.unwrap();
 
     use PayloadType::*;
@@ -58,16 +59,19 @@ pub fn id_to_res_event(pb_msg: pb::ProtoMessage, ctrader: CTraderInst) {
         OaApplicationAuthReq => {}
         OaApplicationAuthRes => {
             let msg: pb::ApplicationAuthRes = prost::Message::decode(b.as_slice()).unwrap();
-            println!("======> res auth: {:#?}", msg);
+            // println!("======> res auth: {:#?}", msg);
             ctrader.account_auth_req();
+            event_res.send(RE::ApplicationAuthRes(msg));
         }
         OaAccountAuthReq => {}
         OaAccountAuthRes => {
             let msg: pb::AccountAuthRes = to_pb_res(&b);
+            event_res.send(RE::AccountAuthRes(msg));
         }
         OaVersionReq => {}
         OaVersionRes => {
             let msg: pb::VersionRes = to_pb_res(&b);
+            event_res.send(RE::VersionRes(msg));
         }
         OaNewOrderReq => {}
         OaTrailingSlChangedEvent => {}
@@ -78,59 +82,79 @@ pub fn id_to_res_event(pb_msg: pb::ProtoMessage, ctrader: CTraderInst) {
         OaAssetListReq => {}
         OaAssetListRes => {
             let msg: pb::AssetListRes = to_pb_res(&b);
+            event_res.send(RE::AssetListRes(msg));
         }
         OaSymbolsListReq => {}
         OaSymbolsListRes => {
             let msg: pb::SymbolsListRes = to_pb_res(&b);
+            event_res.send(RE::SymbolsListRes(msg));
         }
         OaSymbolByIdReq => {}
         OaSymbolByIdRes => {
             let msg: pb::SymbolByIdRes = to_pb_res(&b);
+            event_res.send(RE::SymbolByIdRes(msg));
         }
         OaSymbolsForConversionReq => {}
         OaSymbolsForConversionRes => {
             let msg: pb::SymbolsForConversionRes = to_pb_res(&b);
+            event_res.send(RE::SymbolsForConversionRes(msg));
         }
         OaSymbolChangedEvent => {}
         OaTraderReq => {}
-        OaTraderRes => {}
+        OaTraderRes => {
+            let msg: pb::TraderRes = to_pb_res(&b);
+            event_res.send(RE::TraderRes(msg));
+        }
         OaTraderUpdateEvent => {}
         OaReconcileReq => {}
         OaReconcileRes => {}
-        OaExecutionEvent => {}
+        OaExecutionEvent => {
+            let msg: pb::ExecutionEvent = to_pb_res(&b);
+            event_res.send(RE::ExecutionEvent(msg));
+        }
         OaSubscribeSpotsReq => {}
         OaSubscribeSpotsRes => {
             let msg: pb::SubscribeSpotsRes = to_pb_res(&b);
+            event_res.send(RE::SubscribeSpotsRes(msg));
         }
         OaUnsubscribeSpotsReq => {}
         OaUnsubscribeSpotsRes => {
             let msg: pb::UnsubscribeSpotsReq = to_pb_res(&b);
+            event_res.send(RE::UnsubscribeSpotsReq(msg));
         }
         OaSpotEvent => {
             let msg: pb::SpotEvent = to_pb_res(&b);
+            event_res.send(RE::SpotEvent(msg));
         }
-        OaOrderErrorEvent => {}
+        OaOrderErrorEvent => {
+            let msg: pb::OrderErrorEvent = to_pb_res(&b);
+            event_res.send(RE::OrderErrorEvent(msg));
+        }
         OaDealListReq => {}
         OaDealListRes => {
             let msg: pb::DealListRes = to_pb_res(&b);
+            event_res.send(RE::DealListRes(msg));
         }
         OaSubscribeLiveTrendbarReq => {}
         OaUnsubscribeLiveTrendbarReq => {}
         OaGetTrendbarsReq => {}
         OaGetTrendbarsRes => {
             let msg: pb::GetTrendbarsRes = to_pb_res(&b);
+            event_res.send(RE::GetTrendbarsRes(msg));
         }
         OaExpectedMarginReq => {}
         OaExpectedMarginRes => {}
         OaMarginChangedEvent => {}
         OaErrorRes => {
             let msg: pb::ErrorRes = to_pb_res(&b);
+            event_res.send(RE::ErrorRes(msg));
         }
         OaCashFlowHistoryListReq => {}
         OaCashFlowHistoryListRes => {}
         OaGetTickdataReq => {}
         OaGetTickdataRes => {
             let msg: pb::GetTickDataRes = to_pb_res(&b);
+            event_res.send(RE::GetTickDataRes(msg));
         }
         OaAccountsTokenInvalidatedEvent => {}
         OaClientDisconnectEvent => {}
@@ -139,14 +163,26 @@ pub fn id_to_res_event(pb_msg: pb::ProtoMessage, ctrader: CTraderInst) {
         OaGetCtidProfileByTokenReq => {}
         OaGetCtidProfileByTokenRes => {}
         OaAssetClassListReq => {}
-        OaAssetClassListRes => {}
+        OaAssetClassListRes => {
+            let msg: pb::AssetClassListRes = to_pb_res(&b);
+            event_res.send(RE::AssetClassListRes(msg));
+        }
         OaDepthEvent => {}
         OaSubscribeDepthQuotesReq => {}
-        OaSubscribeDepthQuotesRes => {}
+        OaSubscribeDepthQuotesRes => {
+            let msg: pb::SubscribeDepthQuotesRes = to_pb_res(&b);
+            event_res.send(RE::SubscribeDepthQuotesRes(msg));
+        }
         OaUnsubscribeDepthQuotesReq => {}
-        OaUnsubscribeDepthQuotesRes => {}
+        OaUnsubscribeDepthQuotesRes => {
+            let msg: pb::UnsubscribeDepthQuotesRes = to_pb_res(&b);
+            event_res.send(RE::UnsubscribeDepthQuotesRes(msg));
+        }
         OaSymbolCategoryReq => {}
-        OaSymbolCategoryRes => {}
+        OaSymbolCategoryRes => {
+            let msg: pb::SymbolCategoryListRes = to_pb_res(&b);
+            event_res.send(RE::SymbolCategoryListRes(msg));
+        }
         OaAccountLogoutReq => {}
         OaAccountLogoutRes => {}
         OaAccountDisconnectEvent => {}
@@ -166,6 +202,6 @@ pub fn id_to_res_event(pb_msg: pb::ProtoMessage, ctrader: CTraderInst) {
 // todo: error
 fn to_pb_res<T: prost::Message + Default>(arr: &Vec<u8>) -> T {
     let msg: T = prost::Message::decode(arr.as_slice()).unwrap();
-    println!("======> res ============ : {:#?}", msg);
+    // println!("======> res ============ : {:#?}", msg);
     msg
 }
