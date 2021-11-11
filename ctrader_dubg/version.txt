@@ -1,0 +1,4 @@
+VersionRes {
+    payload_type: None,
+    version: "76",
+}

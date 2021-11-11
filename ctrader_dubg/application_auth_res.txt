@@ -1,0 +1,3 @@
+ApplicationAuthRes {
+    payload_type: None,
+}

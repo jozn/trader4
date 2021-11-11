@@ -1,0 +1,4 @@
+AccountAuthRes {
+    payload_type: None,
+    ctid_trader_account_id: 22851452,
+}

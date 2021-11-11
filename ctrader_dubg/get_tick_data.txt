@@ -1,0 +1,95 @@
+GetTickDataRes {
+    payload_type: None,
+    ctid_trader_account_id: 22851452,
+    tick_data: [
+        TickData {
+            timestamp: 1629999998163,
+            tick: 117525,
+        },
+        TickData {
+            timestamp: -16059,
+            tick: -1,
+        },
+        TickData {
+            timestamp: -7472,
+            tick: 1,
+        },
+        TickData {
+            timestamp: -1740,
+            tick: -1,
+        },
+        TickData {
+            timestamp: -4472,
+            tick: 1,
+        },
+        TickData {
+            timestamp: -5516,
+            tick: -1,
+        },
+        TickData {
+            timestamp: -1157,
+            tick: 1,
+        },
+        TickData {
+            timestamp: -199,
+            tick: 1,
+        },
+        TickData {
+            timestamp: -195,
+            tick: 1,
+        },
+        TickData {
+            timestamp: -11820,
+            tick: -2,
+        },
+        TickData {
+            timestamp: -7231,
+            tick: -1,
+        },
+        TickData {
+            timestamp: -12374,
+            tick: 1,
+        },
+        TickData {
+            timestamp: -1540,
+            tick: -1,
+        },
+        TickData {
+            timestamp: -817,
+            tick: 1,
+        },
+        TickData {
+            timestamp: -6135,
+            tick: -1,
+        },
+        TickData {
+            timestamp: -1418,
+            tick: -1,
+        },
+        TickData {
+            timestamp: -2014,
+            tick: -1,
+        },
+        TickData {
+            timestamp: -3146,
+            tick: -2,
+        },
+        TickData {
+            timestamp: -280,
+            tick: 4,
+        },
+        TickData {
+            timestamp: -10124,
+            tick: 1,
+        },
+        TickData {
+            timestamp: -152,
+            tick: -1,
+        },
+        TickData {
+            timestamp: -4090,
+            tick: -4,
+        },
+    ],
+    has_more: false,
+}
