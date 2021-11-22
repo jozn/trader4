@@ -1,0 +1,288 @@
+>> enum Some(OaExecutionEvent)   - len = 194
+EVENT: ExecutionEvent(
+    ExecutionEvent {
+        payload_type: None,
+        ctid_trader_account_id: 22851452,
+        execution_type: OrderAccepted,
+        position: Some(
+            Position {
+                position_id: 33298439,
+                trade_data: TradeData {
+                    symbol_id: 1,
+                    volume: 1000000,
+                    trade_side: Sell,
+                    open_timestamp: Some(
+                        1636565438615,
+                    ),
+                    label: None,
+                    guaranteed_stop_loss: Some(
+                        false,
+                    ),
+                    comment: Some(
+                        "HKJH",
+                    ),
+                },
+                position_status: Open,
+                swap: -27,
+                price: Some(
+                    1.15106,
+                ),
+                stop_loss: None,
+                take_profit: None,
+                utc_last_update_timestamp: Some(
+                    1636577940168,
+                ),
+                commission: Some(
+                    -45,
+                ),
+                margin_rate: Some(
+                    1.0,
+                ),
+                mirroring_commission: Some(
+                    0,
+                ),
+                guaranteed_stop_loss: Some(
+                    false,
+                ),
+                used_margin: Some(
+                    10000,
+                ),
+                stop_loss_trigger_method: None,
+                money_digits: Some(
+                    2,
+                ),
+            },
+        ),
+        order: Some(
+            Order {
+                order_id: 58812727,
+                trade_data: TradeData {
+                    symbol_id: 1,
+                    volume: 1000000,
+                    trade_side: Buy,
+                    open_timestamp: Some(
+                        1636625099059,
+                    ),
+                    label: None,
+                    guaranteed_stop_loss: Some(
+                        false,
+                    ),
+                    comment: Some(
+                        "HKJH",
+                    ),
+                },
+                order_type: Market,
+                order_status: Accepted,
+                expiration_timestamp: None,
+                execution_price: None,
+                executed_volume: Some(
+                    0,
+                ),
+                utc_last_update_timestamp: Some(
+                    1636625099059,
+                ),
+                base_slippage_price: None,
+                slippage_in_points: None,
+                closing_order: Some(
+                    true,
+                ),
+                limit_price: None,
+                stop_price: None,
+                stop_loss: None,
+                take_profit: None,
+                client_order_id: Some(
+                    "dc2528a6-d4d7-4936-84e2-6ec4c735b825",
+                ),
+                time_in_force: Some(
+                    ImmediateOrCancel,
+                ),
+                position_id: Some(
+                    33298439,
+                ),
+                relative_stop_loss: None,
+                relative_take_profit: None,
+                is_stop_out: None,
+                trailing_stop_loss: None,
+                stop_trigger_method: None,
+            },
+        ),
+        deal: None,
+        bonus_deposit_withdraw: None,
+        deposit_withdraw: None,
+        error_code: None,
+        is_server_event: Some(
+            false,
+        ),
+    },
+)
+>> enum Some(OaExecutionEvent)   - len = 338
+EVENT: ExecutionEvent(
+    ExecutionEvent {
+        payload_type: None,
+        ctid_trader_account_id: 22851452,
+        execution_type: OrderFilled,
+        position: Some(
+            Position {
+                position_id: 33298439,
+                trade_data: TradeData {
+                    symbol_id: 1,
+                    volume: 0,
+                    trade_side: Sell,
+                    open_timestamp: Some(
+                        1636565438615,
+                    ),
+                    label: None,
+                    guaranteed_stop_loss: Some(
+                        false,
+                    ),
+                    comment: Some(
+                        "HKJH",
+                    ),
+                },
+                position_status: Closed,
+                swap: 0,
+                price: Some(
+                    0.0,
+                ),
+                stop_loss: None,
+                take_profit: None,
+                utc_last_update_timestamp: Some(
+                    1636625099309,
+                ),
+                commission: Some(
+                    0,
+                ),
+                margin_rate: Some(
+                    0.0,
+                ),
+                mirroring_commission: Some(
+                    0,
+                ),
+                guaranteed_stop_loss: Some(
+                    false,
+                ),
+                used_margin: Some(
+                    0,
+                ),
+                stop_loss_trigger_method: None,
+                money_digits: Some(
+                    2,
+                ),
+            },
+        ),
+        order: Some(
+            Order {
+                order_id: 58812727,
+                trade_data: TradeData {
+                    symbol_id: 1,
+                    volume: 1000000,
+                    trade_side: Buy,
+                    open_timestamp: Some(
+                        1636625099059,
+                    ),
+                    label: None,
+                    guaranteed_stop_loss: Some(
+                        false,
+                    ),
+                    comment: Some(
+                        "HKJH",
+                    ),
+                },
+                order_type: Market,
+                order_status: Filled,
+                expiration_timestamp: None,
+                execution_price: Some(
+                    1.14683,
+                ),
+                executed_volume: Some(
+                    1000000,
+                ),
+                utc_last_update_timestamp: Some(
+                    1636625099309,
+                ),
+                base_slippage_price: None,
+                slippage_in_points: None,
+                closing_order: Some(
+                    true,
+                ),
+                limit_price: None,
+                stop_price: None,
+                stop_loss: None,
+                take_profit: None,
+                client_order_id: Some(
+                    "dc2528a6-d4d7-4936-84e2-6ec4c735b825",
+                ),
+                time_in_force: Some(
+                    ImmediateOrCancel,
+                ),
+                position_id: Some(
+                    33298439,
+                ),
+                relative_stop_loss: None,
+                relative_take_profit: None,
+                is_stop_out: None,
+                trailing_stop_loss: None,
+                stop_trigger_method: None,
+            },
+        ),
+        deal: Some(
+            Deal {
+                deal_id: 71851250,
+                order_id: 58812727,
+                position_id: 33298439,
+                volume: 1000000,
+                filled_volume: 1000000,
+                symbol_id: 1,
+                create_timestamp: 1636625099059,
+                execution_timestamp: 1636625099309,
+                utc_last_update_timestamp: Some(
+                    1636625099309,
+                ),
+                execution_price: Some(
+                    1.14683,
+                ),
+                trade_side: Buy,
+                deal_status: Filled,
+                margin_rate: Some(
+                    1.0,
+                ),
+                commission: Some(
+                    -45,
+                ),
+                base_to_usd_conversion_rate: Some(
+                    1.14683,
+                ),
+                close_position_detail: Some(
+                    ClosePositionDetail {
+                        entry_price: 1.15106,
+                        gross_profit: 3688,
+                        swap: -27,
+                        commission: -90,
+                        balance: 103761,
+                        quote_to_deposit_conversion_rate: Some(
+                            0.8719688183950541,
+                        ),
+                        closed_volume: Some(
+                            1000000,
+                        ),
+                        balance_version: Some(
+                            4,
+                        ),
+                        money_digits: Some(
+                            2,
+                        ),
+                    },
+                ),
+                money_digits: Some(
+                    2,
+                ),
+            },
+        ),
+        bonus_deposit_withdraw: None,
+        deposit_withdraw: None,
+        error_code: None,
+        is_server_event: Some(
+            false,
+        ),
+    },
+)

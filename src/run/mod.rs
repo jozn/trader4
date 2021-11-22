@@ -82,7 +82,7 @@ pub struct MiniTick {
     last_tick_price: f64,
     high_price: f64,
     low_price: f64,
-    ticks_arr: TimeSerVec<Tick>,
+    pub ticks_arr: TimeSerVec<Tick>,
 }
 
 impl MiniTick {
@@ -95,7 +95,7 @@ impl MiniTick {
         }
     }
 
-    fn add(&mut self, forex_tick: Tick) -> bool {
+    pub fn add(&mut self, forex_tick: Tick) -> bool {
         assert!(self.active);
         if self.tick_start_milli == 0 {
             self.tick_start_milli = forex_tick.time_s;

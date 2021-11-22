@@ -42,7 +42,7 @@ pub fn id_to_res_event(pb_msg: pb::ProtoMessage, ctrader: CTraderInst) {
     let b = pb_msg.payload.unwrap();
     // Note: we Added type as IDE can find .from_i32 from prost macros
     let e: Option<pb::PayloadType> = pb::PayloadType::from_i32(pb_msg.payload_type as i32);
-    println!(">> enum {:?}   - len = {}", e, b.len());
+    // println!(">> enum {:?}   - len = {}", e, b.len());
     if e.is_none() {
         println!(
             "[Error]: could not pares recived recived proto. {}",
@@ -105,9 +105,15 @@ pub fn id_to_res_event(pb_msg: pb::ProtoMessage, ctrader: CTraderInst) {
             let msg: pb::TraderRes = to_pb_res(&b);
             event_res.send(RE::TraderRes(msg));
         }
-        OaTraderUpdateEvent => {}
+        OaTraderUpdateEvent => {
+            let msg: pb::TraderUpdatedEvent = to_pb_res(&b);
+            event_res.send(RE::TraderUpdatedEvent(msg));
+        }
         OaReconcileReq => {}
-        OaReconcileRes => {}
+        OaReconcileRes => {
+            let msg: pb::ReconcileRes = to_pb_res(&b);
+            event_res.send(RE::ReconcileRes(msg));
+        }
         OaExecutionEvent => {
             let msg: pb::ExecutionEvent = to_pb_res(&b);
             event_res.send(RE::ExecutionEvent(msg));

@@ -52,7 +52,7 @@ impl CTrader {
 
         stream
             .get_mut()
-            .set_read_timeout(Some(Duration::new(0, 500000))); // 0.5 second
+            .set_read_timeout(Some(Duration::new(0, 500_000))); // 0.5 second
 
         // Channel making
         let (sender_ch, reciver_ch) = std::sync::mpsc::sync_channel(1000);
@@ -69,6 +69,7 @@ impl CTrader {
         // let ro = Arc::new(Mutex::new(out));
         let ro = Arc::new(out);
         dispatch_write_thread(ro.clone(), reciver_ch);
+        dispatch_ping_loop(ro.clone());
         dispatch_read_thread(ro.clone());
 
         (ro, reciver_event_ch)
@@ -207,10 +208,10 @@ impl CTrader {
             expiration_timestamp: None,
             stop_loss: None,
             take_profit: None,
-            comment: Some("first comment".to_string()),
+            comment: Some("long comment #2".to_string()),
             base_slippage_price: None,
             slippage_in_points: None,
-            label: Some("My label".to_string()),
+            label: Some("My long label #2".to_string()),
             position_id: None,
             client_order_id: None,
             relative_stop_loss: None,
@@ -223,6 +224,37 @@ impl CTrader {
         self.send(req_pb, api_id)
     }
 
+    pub fn open_postion_short_req(&self) {
+        let api_id = pb::PayloadType::OaNewOrderReq as u32;
+
+        let req_pb = pb::NewOrderReq {
+            payload_type: None,
+            ctid_trader_account_id: self.cfg.ctid,
+            symbol_id: 1,
+            order_type: pb::OrderType::Market as i32,
+            trade_side: pb::TradeSide::Sell as i32,
+            volume: 10_000_00, // 1000$
+            limit_price: None,
+            stop_price: None,
+            time_in_force: None,
+            expiration_timestamp: None,
+            stop_loss: None,
+            take_profit: None,
+            comment: Some("short comment #2".to_string()),
+            base_slippage_price: None,
+            slippage_in_points: None,
+            label: Some("My short label".to_string()),
+            position_id: None,
+            client_order_id: None,
+            relative_stop_loss: None,
+            relative_take_profit: None,
+            guaranteed_stop_loss: None,
+            trailing_stop_loss: None,
+            stop_trigger_method: None,
+        };
+
+        self.send(req_pb, api_id)
+    }
     //todo
     pub fn deal_list_req(&self, symbols: Vec<i64>) {
         let api_id = pb::PayloadType::OaSubscribeSpotsReq as u32;

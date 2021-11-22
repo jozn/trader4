@@ -20,6 +20,7 @@ pub fn open_trade() {
     std::thread::sleep(std::time::Duration::new(2, 0));
 
     ct.open_postion_req();
+    ct.subscribe_spots_req(vec![1, 2]);
 
     // event handling
     for e in rc_event {

@@ -20,6 +20,8 @@ pub enum ResponseEvent {
     SymbolByIdRes(pb::SymbolByIdRes),
     SymbolsForConversionRes(pb::SymbolsForConversionRes),
     TraderRes(pb::TraderRes),
+    TraderUpdatedEvent(pb::TraderUpdatedEvent),
+    ReconcileRes(pb::ReconcileRes),
     ExecutionEvent(pb::ExecutionEvent),
     SubscribeSpotsRes(pb::SubscribeSpotsRes),
     UnsubscribeSpotsReq(pb::UnsubscribeSpotsReq),

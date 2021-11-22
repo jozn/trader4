@@ -73,20 +73,25 @@ pub fn dispatch_read_thread(ctrader: CTraderInst) {
 
 pub fn dispatch_write_thread(ctrader: CTraderInst, ch: mpsc::Receiver<Vec<u8>>) {
     let stream_lock = ctrader.stream.clone();
-    thread::spawn(move || {
-        loop {
-            let msg_data = ch.recv();
-            match msg_data {
-                Ok(msg_data) => {
-                    // println!("------------- wire {:?}", msg_data.len());
-                    let mut locket_stream = stream_lock.lock().unwrap();
-                    locket_stream.write(&msg_data);
-                }
-                Err(e) => {
-                    println!("Error in sending data thread channel {:?}", e);
-                }
+    thread::spawn(move || loop {
+        let msg_data = ch.recv();
+        match msg_data {
+            Ok(msg_data) => {
+                // println!("------------- wire {:?}", msg_data.len());
+                let mut locket_stream = stream_lock.lock().unwrap();
+                locket_stream.write(&msg_data);
+            }
+            Err(e) => {
+                println!("Error in sending data thread channel {:?}", e);
             }
         }
+    });
+}
+
+pub fn dispatch_ping_loop(ctrader: CTraderInst) {
+    thread::spawn(move || loop {
+        std::thread::sleep(std::time::Duration::new(30, 0));
+        ctrader.send_heartbeat_event();
     });
 }
 

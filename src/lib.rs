@@ -9,6 +9,7 @@ pub mod candle;
 pub mod ctrader;
 pub mod helper;
 pub mod offline;
+pub mod online;
 pub mod pb;
 pub mod run;
 pub mod ta;
