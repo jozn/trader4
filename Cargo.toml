@@ -23,7 +23,7 @@ rustls = "0.20.0-beta2"
 tcp-stream = "0.22.0"
 webpki-roots = "0.22.0"
 native-tls = "0.2.8"
-
+enum-iterator = "0.7.0"
 
 [build-dependencies]
 prost-build = { version ="0.8.0" }

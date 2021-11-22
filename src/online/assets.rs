@@ -1,4 +1,8 @@
+use enum_iterator::IntoEnumIterator;
+
+#[derive(Debug, Clone, IntoEnumIterator, PartialEq)]
 pub enum Pair {
+    NONE, // We have in here for some error in symbol_id convertion
     EURUSD,
     GBPUSD,
     USDJPY,
@@ -6,6 +10,32 @@ pub enum Pair {
     USDCHF,
     USDCAD,
     NZDUSD,
+}
+
+impl Pair {
+    pub fn to_symbol_id(&self) -> i64 {
+        use Pair::*;
+        match self {
+            EURUSD => 1,
+            GBPUSD => 2,
+            USDJPY => 4,
+            AUDUSD => 5,
+            USDCHF => 6,
+            USDCAD => 8,
+            NZDUSD => 12,
+
+            NONE => 0,
+        }
+    }
+
+    pub fn symbol_to_id(id: i64) -> Self {
+        use Pair::*;
+        let r = Pair::into_enum_iter().find(|p| p.to_symbol_id() == id);
+        match r {
+            None => NONE,
+            Some(p) => p,
+        }
+    }
 }
 
 pub struct PairConf {
@@ -37,42 +67,6 @@ pub fn get_paris() -> Vec<PairConf> {
 pub fn get_def_conf(pair: Pair, id: i64) -> PairConf {
     PairConf {
         pair: pair,
-        symbol_id: id,
-        active: true,
-        small_size: 3,
-        medium_size: 3,
-        big_size: 3,
-        trade_size_xlot: 10, // 10_000$
-        take_profit_xpip: 100,
-        stop_loose_xpip: 100,
-    }
-}
-
-//// Deprecated
-pub enum PairDep {
-    EURUSD(PairConf),
-    GBPUSD(PairConf),
-    USDJPY(PairConf),
-    AUDUSD(PairConf),
-    USDCHF(PairConf),
-    USDCAD(PairConf),
-    NZDUSD(PairConf),
-}
-pub fn get_paris_dep() -> Vec<PairDep> {
-    let arr = vec![
-        PairDep::AUDUSD(get_def_conf_dep(1)),
-        PairDep::GBPUSD(get_def_conf_dep(2)),
-        PairDep::USDJPY(get_def_conf_dep(4)),
-        PairDep::AUDUSD(get_def_conf_dep(5)),
-        PairDep::USDCHF(get_def_conf_dep(6)),
-        PairDep::USDCAD(get_def_conf_dep(8)),
-    ];
-    arr
-}
-
-pub fn get_def_conf_dep(id: i64) -> PairConf {
-    PairConf {
-        pair: Pair::EURUSD,
         symbol_id: id,
         active: true,
         small_size: 3,
