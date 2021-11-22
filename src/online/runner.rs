@@ -1,5 +1,5 @@
-use crate::base::SimpleCrossEvent;
 use super::*;
+use crate::base::SimpleCrossEvent;
 use crate::candle::{CandleSeriesTA, Tick};
 use crate::run::TRunner;
 
@@ -83,7 +83,6 @@ impl Bot1 {
                 }
             }
         }
-
     }
 
     // end of trading session (in Friday, closing market)

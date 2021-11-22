@@ -1,5 +1,5 @@
-
 pub mod actions;
+pub mod assets;
 pub mod decider;
 pub mod runner;
 pub mod start;
