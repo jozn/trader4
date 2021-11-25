@@ -25,7 +25,7 @@ impl PairMeta {
             last_tick: None,
             mini_tick: Default::default(),
             ticks_arr: Default::default(),
-            candles: Default::default()
+            candles: Default::default(),
         }
     }
 }
@@ -39,7 +39,7 @@ pub struct Bot {
 impl Bot {
     pub fn on_connect(&self) {
         let ids = assets::get_all_symbols_ids();
-        println!("ids {:?}",ids);
+        println!("ids {:?}", ids);
         self.con.subscribe_spots_req(assets::get_all_symbols_ids());
     }
 
@@ -65,7 +65,7 @@ impl Bot {
     pub(crate) fn listen_events(mut self, event_chans: std::sync::mpsc::Receiver<ResponseEvent>) {
         // event handling
         let mut actor = Actor {
-            con: self.con.clone()
+            con: self.con.clone(),
         };
         for e in event_chans {
             match e.clone() {
@@ -115,25 +115,3 @@ impl Bot {
         }
     }
 }
-
-#[derive(Debug)]
-pub struct Actor {
-    pub con: Arc<CTrader>,
-}
-
-impl Actor {
-/*    pub fn new(&mut self, symbol_id: i64) -> Self {
-        
-    }*/
-    pub fn go_long(&mut self, symbol_id: i64) {
-        println!("Open long postion");
-        self.con.open_postion_req(symbol_id);
-    }
-
-    pub fn go_short(&mut self,  symbol_id: i64) {
-        println!("Open short postion");
-        self.con.open_postion_short_req(symbol_id);
-    }
-}
-
-

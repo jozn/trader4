@@ -17,7 +17,7 @@ impl PairMeta {
     }
 
     // run when many ticks complete an small candle
-    fn on_completed_small_candle(&mut self, bot:  &mut Actor) {
+    fn on_completed_small_candle(&mut self, bot: &mut Actor) {
         println!("{:?} - on_completed_small_candle", self.pair);
 
         let t = &self.last_tick.clone().unwrap();

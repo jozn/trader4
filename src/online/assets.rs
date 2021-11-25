@@ -23,7 +23,6 @@ impl Pair {
             USDCHF => 6,
             USDCAD => 8,
             NZDUSD => 12,
-
             // NONE => 0,
         }
     }

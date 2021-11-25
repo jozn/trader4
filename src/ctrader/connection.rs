@@ -192,7 +192,7 @@ impl CTrader {
         self.send(req_pb, api_id)
     }
 
-    pub fn open_postion_req(&self,  symbol_id: i64) {
+    pub fn open_postion_req(&self, symbol_id: i64) {
         let api_id = pb::PayloadType::OaNewOrderReq as u32;
 
         let req_pb = pb::NewOrderReq {
@@ -224,7 +224,7 @@ impl CTrader {
         self.send(req_pb, api_id)
     }
 
-    pub fn open_postion_short_req(&self,  symbol_id: i64) {
+    pub fn open_postion_short_req(&self, symbol_id: i64) {
         let api_id = pb::PayloadType::OaNewOrderReq as u32;
 
         let req_pb = pb::NewOrderReq {
