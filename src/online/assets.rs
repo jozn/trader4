@@ -2,7 +2,7 @@ use enum_iterator::IntoEnumIterator;
 
 #[derive(Debug, Clone, IntoEnumIterator, PartialEq)]
 pub enum Pair {
-    NONE, // We have in here for some error in symbol_id convertion
+    // NONE, // We have in here for some error in symbol_id convertion
     EURUSD,
     GBPUSD,
     USDJPY,
@@ -24,7 +24,7 @@ impl Pair {
             USDCAD => 8,
             NZDUSD => 12,
 
-            NONE => 0,
+            // NONE => 0,
         }
     }
 
@@ -32,10 +32,16 @@ impl Pair {
         use Pair::*;
         let r = Pair::into_enum_iter().find(|p| p.to_symbol_id() == id);
         match r {
-            None => NONE,
+            None => panic!("Could not find symbol id {}", id),
             Some(p) => p,
         }
     }
+}
+
+pub fn get_all_symbols_ids() -> Vec<i64> {
+    let a = get_paris();
+    let ids: Vec<i64> = Pair::into_enum_iter().map(|p| p.to_symbol_id()).collect();
+    ids
 }
 
 pub struct PairConf {

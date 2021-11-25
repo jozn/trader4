@@ -1,14 +1,8 @@
-pub mod actions;
-pub mod assets;
-pub mod bot;
-pub mod decider;
-pub mod pair_handler;
-pub mod runner;
-pub mod start;
-
 use super::*;
 use crate::candle::{CandleSeriesTA, Tick, TimeSerVec};
 use crate::ctrader::*;
+use crate::online::assets;
+use crate::online::assets::*;
 use crate::pb;
 use crate::pb::TickData;
 use crate::run::{MiniTick, TRunner};
@@ -16,23 +10,63 @@ use std::fs;
 use std::sync::Arc;
 
 #[derive(Debug)]
-pub struct Bot1 {
-    con: Arc<CTrader>,
-    last_tick: Option<Tick>,
-    mini_tick: MiniTick,
+pub struct PairMeta {
+    pub pair: Pair,
+    pub last_tick: Option<Tick>,
+    pub mini_tick: MiniTick,
     pub ticks_arr: TimeSerVec<Tick>,
-    // event_chans: std::sync::mpsc::Receiver<ResponseEvent>,
-    candles: CandleSeriesTA,
+    pub candles: CandleSeriesTA,
 }
 
-impl Bot1 {
+impl PairMeta {
+    pub fn new(p: Pair) -> PairMeta {
+        Self {
+            pair: p,
+            last_tick: None,
+            mini_tick: Default::default(),
+            ticks_arr: Default::default(),
+            candles: Default::default()
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct Bot {
+    pub con: Arc<CTrader>,
+    pub db: Vec<PairMeta>,
+}
+
+impl Bot {
     pub fn on_connect(&self) {
-        self.con.subscribe_spots_req(vec![1]);
+        let ids = assets::get_all_symbols_ids();
+        println!("ids {:?}",ids);
+        self.con.subscribe_spots_req(assets::get_all_symbols_ids());
+    }
+
+    pub fn borrow_pair_meta(&mut self, si: i64) -> &mut PairMeta {
+        // let mut pm = self.db.iter().find_position(|d| d.pair.to_symbol_id() == si ).unwrap();
+        let mut idx = 0;
+        let mut found = false;
+        for pm in &self.db {
+            if pm.pair.to_symbol_id() == si {
+                found = true;
+                break;
+            }
+            idx += 1;
+        }
+        if !found {
+            self.db.push(PairMeta::new(Pair::symbol_to_id(si)));
+        }
+        let m = self.db.get_mut(idx).unwrap();
+        m
     }
 
     // This is blocks forever.
-    fn listen_events(mut self, event_chans: std::sync::mpsc::Receiver<ResponseEvent>) {
+    pub(crate) fn listen_events(mut self, event_chans: std::sync::mpsc::Receiver<ResponseEvent>) {
         // event handling
+        let mut actor = Actor {
+            con: self.con.clone()
+        };
         for e in event_chans {
             match e.clone() {
                 _ => {
@@ -55,6 +89,7 @@ impl Bot1 {
                 ResponseEvent::SubscribeSpotsRes(_) => {}
                 ResponseEvent::UnsubscribeSpotsReq(_) => {}
                 ResponseEvent::SpotEvent(r) => {
+                    let mut pm = self.borrow_pair_meta(r.symbol_id);
                     if r.bid.is_some() {
                         let price = r.bid.unwrap() as f64;
                         let t = Tick {
@@ -64,7 +99,7 @@ impl Bot1 {
                             price_multi: 100_000.,
                             qty: 0.0,
                         };
-                        self.on_price_tick(t);
+                        pm.on_price_tick(t, &mut actor);
                     }
                 }
                 ResponseEvent::DealListRes(_) => {}
@@ -80,3 +115,25 @@ impl Bot1 {
         }
     }
 }
+
+#[derive(Debug)]
+pub struct Actor {
+    pub con: Arc<CTrader>,
+}
+
+impl Actor {
+/*    pub fn new(&mut self, symbol_id: i64) -> Self {
+        
+    }*/
+    pub fn go_long(&mut self, symbol_id: i64) {
+        println!("Open long postion");
+        self.con.open_postion_req(symbol_id);
+    }
+
+    pub fn go_short(&mut self,  symbol_id: i64) {
+        println!("Open short postion");
+        self.con.open_postion_short_req(symbol_id);
+    }
+}
+
+

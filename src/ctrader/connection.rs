@@ -192,13 +192,13 @@ impl CTrader {
         self.send(req_pb, api_id)
     }
 
-    pub fn open_postion_req(&self) {
+    pub fn open_postion_req(&self,  symbol_id: i64) {
         let api_id = pb::PayloadType::OaNewOrderReq as u32;
 
         let req_pb = pb::NewOrderReq {
             payload_type: None,
             ctid_trader_account_id: self.cfg.ctid,
-            symbol_id: 1,
+            symbol_id: symbol_id,
             order_type: pb::OrderType::Market as i32,
             trade_side: pb::TradeSide::Buy as i32,
             volume: 10_000_00, // 1000$
@@ -224,13 +224,13 @@ impl CTrader {
         self.send(req_pb, api_id)
     }
 
-    pub fn open_postion_short_req(&self) {
+    pub fn open_postion_short_req(&self,  symbol_id: i64) {
         let api_id = pb::PayloadType::OaNewOrderReq as u32;
 
         let req_pb = pb::NewOrderReq {
             payload_type: None,
             ctid_trader_account_id: self.cfg.ctid,
-            symbol_id: 1,
+            symbol_id: symbol_id,
             order_type: pb::OrderType::Market as i32,
             trade_side: pb::TradeSide::Sell as i32,
             volume: 10_000_00, // 1000$
