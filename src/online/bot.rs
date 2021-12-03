@@ -104,13 +104,23 @@ impl Bot {
                 }
                 ResponseEvent::DealListRes(_) => {}
                 ResponseEvent::GetTrendbarsRes(_) => {}
-                ResponseEvent::ErrorRes(_) => {}
+                ResponseEvent::ErrorRes(e) => {
+                    println!("Error {:#?}", e);
+                }
                 ResponseEvent::GetTickDataRes(r) => {}
                 ResponseEvent::AssetClassListRes(_) => {}
                 ResponseEvent::SubscribeDepthQuotesRes(_) => {}
                 ResponseEvent::UnsubscribeDepthQuotesRes(_) => {}
                 ResponseEvent::SymbolCategoryListRes(_) => {}
-                _ => {}
+
+                ResponseEvent::TraderUpdatedEvent(_) => {}
+                ResponseEvent::ReconcileRes(_) => {}
+                ResponseEvent::ExecutionEvent(e) => {
+                    println!("ExecutionEvent {:#?}", e);
+                }
+                ResponseEvent::OrderErrorEvent(e) => {
+                    println!("OrderErrorEvent {:#?}", e);
+                }
             };
         }
     }

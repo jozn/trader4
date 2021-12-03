@@ -1,7 +1,8 @@
 use super::*;
 use crate::base::SimpleCrossEvent;
 use crate::candle::{CandleSeriesTA, Tick};
-use crate::online::bot::{Actor, Bot, PairMeta};
+use crate::online::bot::PairMeta;
+// use crate::online::bot::{Actor, Bot, PairMeta};
 use crate::run::TRunner;
 
 impl PairMeta {
@@ -45,19 +46,25 @@ impl PairMeta {
 
         let ta = &kt.ta1;
         let symbol_id = self.pair.to_symbol_id();
+
+        bot.go_long(symbol_id, t);
+
         match up {
             SimpleCrossEvent::Bull(_) => {
-                bot.go_long(symbol_id);
+                println!("Entering bull entery");
+
+                // bot.go_long(symbol_id);
                 // self.strategy1.buy(kid, t);
                 // if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 && price > big_ema {
                 // if  price > ma && ta.vel.count >= 3 && price > big_ema {
-                if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 {
+                // if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 {
+                if macd_out.macd < 0. && price > ma {
                     // if macd_out.macd < 0. && price > ma  {
                     //     if macd_out.macd < 0. && price > ma && ta.vel.count >= 3  {
                     // if macd_out.macd < 0. && price > ma {
                     // if macd_out.macd < 0. {
                     // self.strategy1.buy(kid, t, ta);
-                    bot.go_long(symbol_id);
+                    bot.go_long(symbol_id, t);
                     // println!("long {} - {} - {:#?}", price, kt.kline.bucket, &macd_out);
                 }
             }
@@ -69,18 +76,21 @@ impl PairMeta {
             SimpleCrossEvent::Bull(_) => {}
             SimpleCrossEvent::None => {}
             SimpleCrossEvent::Bear(_) => {
-                bot.go_short(symbol_id);
+                println!("Entering bear entery");
+                // bot.go_short(symbol_id);
                 // self.strategy1.sell(kid, t);
                 // if macd_out.macd > 0. && price < ma {
                 // if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 && price < big_ema {
                 // if  price < ma && ta.vel.count >= 3 && price < big_ema {
-                if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 {
+                // if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 {
+                if macd_out.macd > 0. && price < ma {
                     // if macd_out.macd > 0. && price < ma  {
                     //     if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 {
                     // if macd_out.macd > 0.  {
                     // self.strategy1.sell(kid, t, ta);
                     // self.port.sell_short(t.price as i64, 10, t.time_s);
-                    bot.go_short(symbol_id);
+                    // bot.go_short(symbol_id);
+                    bot.go_short(symbol_id, t);
                 }
             }
         }
@@ -88,18 +98,4 @@ impl PairMeta {
 
     // end of trading session (in Friday, closing market)
     fn finlise(&mut self) {}
-}
-
-// todo: it should be global
-// deprecated
-impl PairMeta {
-    pub fn go_long(&mut self) {
-        println!("Open long postion");
-        // self.con.open_postion_req();
-    }
-
-    pub fn go_short(&mut self) {
-        println!("Open short postion");
-        // self.con.open_postion_short_req();
-    }
 }

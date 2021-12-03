@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 use crate::pb;
 use byteorder::ByteOrder;
 
+use crate::online::actions::NewPos;
 use crate::pb::PayloadType;
 use bytes::BufMut;
 use native_tls::{TlsConnector, TlsStream};
@@ -16,6 +17,7 @@ use std::thread;
 use std::time::Duration;
 use tcp_stream::HandshakeError;
 
+use super::*;
 use super::*;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
@@ -187,6 +189,58 @@ impl CTrader {
             payload_type: None,
             ctid_trader_account_id: self.cfg.ctid,
             symbol_id: symbols,
+        };
+
+        self.send(req_pb, api_id)
+    }
+
+    pub fn open_postion_req_new(&self, np: &NewPos) {
+        let api_id = pb::PayloadType::OaNewOrderReq as u32;
+
+        let dir = if np.is_short {
+            pb::TradeSide::Sell
+        } else {
+            pb::TradeSide::Buy
+        };
+
+        let take_profit = if np.take_profit_price > 0. {
+            Some(np.take_profit_price)
+        } else {
+            None
+        };
+
+        let stop_loose = if np.stop_loose_price > 0. {
+            Some(np.stop_loose_price)
+        } else {
+            None
+        };
+
+        let req_pb = pb::NewOrderReq {
+            payload_type: None,
+            ctid_trader_account_id: self.cfg.ctid,
+            symbol_id: np.symbol_id,
+            order_type: pb::OrderType::Market as i32,
+            trade_side: dir as i32,
+            volume: np.size_usd * 100, // 1000$
+            limit_price: None,
+            stop_price: None,
+            time_in_force: None,
+            expiration_timestamp: None,
+            // stop_loss: stop_loose,
+            stop_loss: None,
+            // take_profit: take_profit,
+            take_profit: None,
+            comment: Some("long comment #2".to_string()),
+            base_slippage_price: None,
+            slippage_in_points: None,
+            label: Some("My long label #2".to_string()),
+            position_id: None,
+            client_order_id: None,
+            relative_stop_loss: Some(100),
+            relative_take_profit: Some(100),
+            guaranteed_stop_loss: None,
+            trailing_stop_loss: None,
+            stop_trigger_method: None,
         };
 
         self.send(req_pb, api_id)

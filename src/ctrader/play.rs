@@ -118,7 +118,7 @@ pub fn get_ticks() {
             ResponseEvent::UnsubscribeSpotsReq(_) => {}
             ResponseEvent::SpotEvent(_) => {}
             ResponseEvent::DealListRes(_) => {}
-            ResponseEvent::GetTrendbarsRes(_) => {}
+            ResponseEvent::GetTrendbarsRes(e) => {}
             ResponseEvent::ErrorRes(_) => {}
             ResponseEvent::GetTickDataRes(r) => {
                 let ts = trans_ticks(&r.tick_data);

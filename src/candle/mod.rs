@@ -39,8 +39,8 @@ impl TimeKey for Tick {
 }
 
 // Temportay for fast
-const SMALL_TICK: u64 = 3;
-const MEDIUM_TICK: u64 = 3; // 50
+const SMALL_TICK: u64 = 1;
+const MEDIUM_TICK: u64 = 2; // 50
 const BIG_TICK: u64 = 3; // 150
 
 // Backup

@@ -6,6 +6,7 @@
 
 pub mod base;
 pub mod candle;
+pub mod collector;
 pub mod ctrader;
 pub mod helper;
 pub mod offline;
