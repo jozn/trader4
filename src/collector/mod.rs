@@ -1,27 +1,34 @@
 use super::*;
 use crate::ctrader::*;
+use crate::online::assets::Pair;
 use crate::pb;
 use crate::pb::TickData;
 use std::fs;
 use std::sync::Arc;
 
-pub fn get_ticks() {
-    let cfg = Config {
-        host: "demo.ctraderapi.com".to_string(),
-        port: 5035,
-        client_id: "3042_mso8gOm4NPAzIYizUC0gp941QCGvnXcRPJzTrNjVZNG0EeRFYT".to_string(),
-        client_secret: "geDkrRiRyfbanU6OUwZMXKIjr4vKQyfs1Ete0unffXtS8Ah14o".to_string(),
-        client_token: "l4jT24BWu3etFSEVViQKu1NsGpBYf2nKN0DyUGgqjy0".to_string(),
-        ctid: 22851452,
-    };
+// pub fn get_ticks() {
+//     let cfg = Config {
+//         host: "demo.ctraderapi.com".to_string(),
+//         port: 5035,
+//         client_id: "3042_mso8gOm4NPAzIYizUC0gp941QCGvnXcRPJzTrNjVZNG0EeRFYT".to_string(),
+//         client_secret: "geDkrRiRyfbanU6OUwZMXKIjr4vKQyfs1Ete0unffXtS8Ah14o".to_string(),
+//         client_token: "l4jT24BWu3etFSEVViQKu1NsGpBYf2nKN0DyUGgqjy0".to_string(),
+//         ctid: 22851452,
+//     };
+//
+//     // let d = 1636317000_000;
+//     // let de = d + 7 * 86400_000;
+//
+//     // collect_data_from_api_csv(&cfg, 1, d, de);
+// }
 
-    let d = 1636317000_000;
-    let de = d + 7 * 86400_000;
-
-    collect_data_from_api(&cfg, 1, d, de);
-}
-
-fn collect_data_from_api(cfg: &Config, symbol_id: i64, time_ms: i64, to_time_ms: i64) {
+pub fn collect_data_from_api_csv(
+    cfg: &Config,
+    pari: &Pair,
+    time_ms: i64,
+    to_time_ms: i64,
+) -> String {
+    let symbol_id = pari.to_symbol_id();
     let start_time = time_ms;
     let mut time_ms = time_ms;
 
@@ -32,7 +39,10 @@ fn collect_data_from_api(cfg: &Config, symbol_id: i64, time_ms: i64, to_time_ms:
     let (mut ct, rc_event) = CTrader::connect(cfg);
     ct.application_auth_req(&cfg.client_id, &cfg.client_secret);
     std::thread::sleep(std::time::Duration::new(2, 0));
+    println!("{:?} > Got connected ", pari);
     ct.get_bid_tick_data_req(symbol_id, time_ms, to_time_ms);
+
+    let mut cnt = 0;
 
     for e in rc_event {
         match e.clone() {
@@ -48,7 +58,15 @@ fn collect_data_from_api(cfg: &Config, symbol_id: i64, time_ms: i64, to_time_ms:
             ResponseEvent::ErrorRes(_) => {}
             ResponseEvent::GetTickDataRes(r) => {
                 let ts = trans_ticks(&r.tick_data);
+                cnt += 1;
                 if in_bids {
+                    println!(
+                        "{:?} > Bid {} - Time: {} - Dur: {} ",
+                        pari,
+                        cnt,
+                        helper::to_time_string(time_ms / 1000),
+                        (to_time_ms - time_ms) / 3600_000
+                    );
                     // bids
                     ts.iter().for_each(|v| collector.bids.push(v.clone()));
                     if r.has_more {
@@ -60,6 +78,13 @@ fn collect_data_from_api(cfg: &Config, symbol_id: i64, time_ms: i64, to_time_ms:
                         ct.get_ask_tick_data_req(symbol_id, time_ms, to_time_ms);
                     }
                 } else {
+                    println!(
+                        "{:?} > Ask {} - Time: {} - Dur: {} ",
+                        pari,
+                        cnt,
+                        helper::to_time_string(time_ms / 1000),
+                        (to_time_ms - time_ms) / 3600_000
+                    );
                     ts.iter().for_each(|v| collector.asks.push(v.clone()));
                     if r.has_more {
                         time_ms = ts.last().unwrap().timestamp + 1;
@@ -75,7 +100,7 @@ fn collect_data_from_api(cfg: &Config, symbol_id: i64, time_ms: i64, to_time_ms:
 
     // let res = collector.final_result();
     let res = collector.to_csv();
-    println!("{:}", res);
+    format!("{:}", res)
 }
 
 fn trans_ticks(arr: &Vec<pb::TickData>) -> Vec<pb::TickData> {
@@ -106,11 +131,6 @@ fn trans_ticks(arr: &Vec<pb::TickData>) -> Vec<pb::TickData> {
             res
         }
     }
-}
-
-//dep
-fn trans_ticks2(arr: &Vec<pb::TickData>) -> Vec<BTickData> {
-    vec![]
 }
 
 #[derive(Debug)]
@@ -149,7 +169,7 @@ impl Collector {
 
     pub fn to_csv(&mut self) -> String {
         let arr = self.final_result();
-        let res_str = helper::to_csv_out(&arr);
+        let res_str = helper::to_csv_out(&arr, true);
         res_str
     }
 
@@ -218,7 +238,9 @@ impl Collector {
         for t in tdt_arr2.iter() {
             let bt = BTickData {
                 date_str: helper::to_time_string(t.timestamp / 1000),
-                timestamp: format!("{}_{:0<3}", t.timestamp / 1000, t.timestamp % 1000),
+                // timestamp: format!("{}_{:0<3}", t.timestamp / 1000, t.timestamp % 1000),
+                timestamp_sec: t.timestamp / 1000,
+                timestamp: t.timestamp,
                 bid_price: t.bid_price as f64 / 100_000.,
                 ask_price: t.ask_price as f64 / 100_000.,
             };
@@ -228,23 +250,6 @@ impl Collector {
 
         arr_res
     }
-    /*
-    pub fn to_finaliz_old(&self) {
-        let mut arr = vec![];
-        let first_ask = self.asks.first().unwrap();
-        // let first_bid = self.asks.iter().find_or_first(|v| v.timestamp >= first_ask.timestamp).;
-        let mut is_first_set = false;
-        for t in &self.asks {
-            if !is_first_set {
-                if t.timestamp >= first_ask.timestamp {
-                    let btd = BTickData::build(t.timestamp, first_ask.tick, t.tick);
-                    arr.push(btd);
-                    is_first_set = true;
-                }
-            } else {
-            }
-        }
-    }*/
 }
 
 #[derive(Debug)]
@@ -257,19 +262,8 @@ struct TransTickData {
 #[derive(Debug, serde::Serialize)]
 pub struct BTickData {
     pub date_str: String,
-    pub timestamp: String,
+    pub timestamp_sec: i64,
+    pub timestamp: i64,
     pub bid_price: f64,
     pub ask_price: f64,
 }
-
-/*impl BTickData {
-    fn build(timestamp: i64, bid: i64, ask: i64) -> Self {
-        Self {
-            date_str: "xx".to_string(),
-            timestamp,
-            bid_price: bid as f64 / 100_000.,
-            ask_price: ask as f64 / 100_000.,
-        }
-    }
-}
-*/

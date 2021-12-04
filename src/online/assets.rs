@@ -27,7 +27,7 @@ impl Pair {
         }
     }
 
-    pub fn symbol_to_id(id: i64) -> Self {
+    pub fn id_to_symbol(id: i64) -> Self {
         use Pair::*;
         let r = Pair::into_enum_iter().find(|p| p.to_symbol_id() == id);
         match r {

@@ -55,7 +55,7 @@ impl Bot {
             idx += 1;
         }
         if !found {
-            self.db.push(PairMeta::new(Pair::symbol_to_id(si)));
+            self.db.push(PairMeta::new(Pair::id_to_symbol(si)));
         }
         let m = self.db.get_mut(idx).unwrap();
         m

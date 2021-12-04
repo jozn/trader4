@@ -20,9 +20,18 @@ pub fn get_time_ms() -> u64 {
     since_the_epoch.as_secs() * 1000
 }
 
-pub fn to_csv_out<T: Serialize>(arr: &Vec<T>) -> String {
+pub fn to_csv_out<T: Serialize>(arr: &Vec<T>, tab: bool) -> String {
     let mut str_out = vec![];
-    let mut wtr = csv::Writer::from_writer(&mut str_out);
+
+    let mut wtr = if tab {
+        csv::WriterBuilder::new()
+            .delimiter(b'\t')
+            .quote_style(csv::QuoteStyle::NonNumeric)
+            .from_writer(&mut str_out)
+    } else {
+        csv::Writer::from_writer(&mut str_out)
+    };
+    // let mut wtr = csv::Writer::from_writer(&mut str_out);
 
     for v in arr {
         wtr.serialize(v);
