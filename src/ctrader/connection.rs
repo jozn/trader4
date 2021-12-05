@@ -38,7 +38,7 @@ pub struct CTrader {
     // req_counter2: std::sync::atomic::AtomicU64,
     // req_counter2: std::cell::RefCell<u64>,
     cfg: Config,
-    w_ch: std::sync::mpsc::SyncSender<Vec<u8>>,
+    writer_chan: std::sync::mpsc::SyncSender<Vec<u8>>,
     pub response_chan: std::sync::mpsc::SyncSender<ResponseEvent>,
     pub(crate) stream: Arc<Mutex<TlsStream<TcpStream>>>,
 }
@@ -63,7 +63,7 @@ impl CTrader {
             // req_counter: Box::new(0),
             // req_counter2: Default::default(),
             cfg: cfg.clone(),
-            w_ch: sender_ch,
+            writer_chan: sender_ch,
             response_chan: sender_event_ch,
             stream: Arc::new(Mutex::new(stream)),
         };
@@ -81,7 +81,7 @@ impl CTrader {
         let _msg_id = format!("t {:?}", std::time::SystemTime::now());
 
         let mut buff = to_pb_frame(msg, msg_type);
-        self.w_ch.send(buff);
+        self.writer_chan.send(buff);
     }
 }
 
@@ -358,6 +358,7 @@ impl CTrader {
         self.send(req_pb, api_id)
     }
 
+    // Data return seems to be limited to 100K Tick data per response
     pub fn get_bid_tick_data_req(&self, symbol_id: i64, time_ms: i64, to_time_ms: i64) {
         let api_id = pb::PayloadType::OaGetTickdataReq as u32;
 

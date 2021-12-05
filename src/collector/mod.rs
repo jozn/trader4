@@ -6,31 +6,15 @@ use crate::pb::TickData;
 use std::fs;
 use std::sync::Arc;
 
-// pub fn get_ticks() {
-//     let cfg = Config {
-//         host: "demo.ctraderapi.com".to_string(),
-//         port: 5035,
-//         client_id: "3042_mso8gOm4NPAzIYizUC0gp941QCGvnXcRPJzTrNjVZNG0EeRFYT".to_string(),
-//         client_secret: "geDkrRiRyfbanU6OUwZMXKIjr4vKQyfs1Ete0unffXtS8Ah14o".to_string(),
-//         client_token: "l4jT24BWu3etFSEVViQKu1NsGpBYf2nKN0DyUGgqjy0".to_string(),
-//         ctid: 22851452,
-//     };
-//
-//     // let d = 1636317000_000;
-//     // let de = d + 7 * 86400_000;
-//
-//     // collect_data_from_api_csv(&cfg, 1, d, de);
-// }
-
 pub fn collect_data_from_api_csv(
     cfg: &Config,
     pari: &Pair,
-    time_ms: i64,
+    from_time_ms: i64,
     to_time_ms: i64,
 ) -> String {
     let symbol_id = pari.to_symbol_id();
-    let start_time = time_ms;
-    let mut time_ms = time_ms;
+    let start_time = from_time_ms;
+    let mut time_ms = to_time_ms;
 
     let mut collector = Collector::new();
     let mut in_bids = true;
@@ -40,7 +24,7 @@ pub fn collect_data_from_api_csv(
     ct.application_auth_req(&cfg.client_id, &cfg.client_secret);
     std::thread::sleep(std::time::Duration::new(2, 0));
     println!("{:?} > Got connected ", pari);
-    ct.get_bid_tick_data_req(symbol_id, time_ms, to_time_ms);
+    ct.get_bid_tick_data_req(symbol_id, from_time_ms, to_time_ms);
 
     let mut cnt = 0;
 
@@ -58,37 +42,48 @@ pub fn collect_data_from_api_csv(
             ResponseEvent::ErrorRes(_) => {}
             ResponseEvent::GetTickDataRes(r) => {
                 let ts = trans_ticks(&r.tick_data);
+                // let first_tick = ts.first().unwrap();
                 cnt += 1;
                 if in_bids {
-                    println!(
-                        "{:?} > Bid {} - Time: {} - Dur: {} ",
-                        pari,
-                        cnt,
-                        helper::to_time_string(time_ms / 1000),
-                        (to_time_ms - time_ms) / 3600_000
-                    );
-                    // bids
-                    ts.iter().for_each(|v| collector.bids.push(v.clone()));
+                    if ts.len() > 0 {
+                        let first_tick = ts.first().unwrap();
+                        println!(
+                            "{:?} > Bid {} - Time: {} - Dur: {} - Tick Counts: {}",
+                            pari,
+                            cnt,
+                            helper::to_time_string(time_ms / 1000),
+                            ( time_ms - first_tick.timestamp) / 3600_000,
+                            ts.len()
+                        );
+                        // bids
+                        ts.iter().for_each(|v| collector.bids.push(v.clone()));
+                    }
+
                     if r.has_more {
-                        time_ms = ts.last().unwrap().timestamp + 1;
-                        ct.get_bid_tick_data_req(symbol_id, time_ms, to_time_ms);
+                        time_ms = ts.first().unwrap().timestamp;
+                        ct.get_bid_tick_data_req(symbol_id, from_time_ms, time_ms);
                     } else {
                         in_bids = false;
-                        time_ms = start_time;
-                        ct.get_ask_tick_data_req(symbol_id, time_ms, to_time_ms);
+                        time_ms = to_time_ms;
+                        ct.get_ask_tick_data_req(symbol_id,from_time_ms, time_ms);
                     }
                 } else {
+                    if ts.is_empty() {
+                        break;
+                    }
+                    let first_tick = ts.first().unwrap();
                     println!(
-                        "{:?} > Ask {} - Time: {} - Dur: {} ",
+                        "{:?} > Ask {} - Time: {} - Dur: {} - Tick Counts: {}",
                         pari,
                         cnt,
                         helper::to_time_string(time_ms / 1000),
-                        (to_time_ms - time_ms) / 3600_000
+                        (time_ms - first_tick.timestamp) / 3600_000,
+                        ts.len()
                     );
                     ts.iter().for_each(|v| collector.asks.push(v.clone()));
                     if r.has_more {
-                        time_ms = ts.last().unwrap().timestamp + 1;
-                        ct.get_ask_tick_data_req(symbol_id, time_ms, to_time_ms);
+                        time_ms = first_tick.timestamp ;
+                        ct.get_ask_tick_data_req(symbol_id, from_time_ms ,time_ms);
                     } else {
                         break;
                     }
@@ -103,6 +98,7 @@ pub fn collect_data_from_api_csv(
     format!("{:}", res)
 }
 
+// Notes: <pb::TickData> data is decending, means we have newer time in the first time
 fn trans_ticks(arr: &Vec<pb::TickData>) -> Vec<pb::TickData> {
     // let mut arr = arr.clone();
     let first = arr.first();
@@ -128,6 +124,8 @@ fn trans_ticks(arr: &Vec<pb::TickData>) -> Vec<pb::TickData> {
                 })
             }
 
+            // Reverse data so we have the oldest in the first of zero index
+            res.reverse();
             res
         }
     }

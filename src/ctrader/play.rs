@@ -89,11 +89,12 @@ pub fn get_ticks() {
     // ct.get_tick_data_req_old_bk();
 
     let d = 1636317000_000;
-    let de = d + 1 * 86400_000;
-    ct.get_bid_tick_data_req(1, d, de);
-    ct.get_ask_tick_data_req(1, d, de);
+    let de = d + 7 * 86400_000;
+    ct.get_bid_tick_data_req(12, d, de);
+    // ct.get_ask_tick_data_req(1, d, de);
     // ct.get_ask_tick_data_req(1,d,d+7*8640_000);
 
+    let mut cnt = 1;
     // event handling
     for e in rc_event {
         match e.clone() {
@@ -121,9 +122,14 @@ pub fn get_ticks() {
             ResponseEvent::GetTrendbarsRes(e) => {}
             ResponseEvent::ErrorRes(_) => {}
             ResponseEvent::GetTickDataRes(r) => {
+                cnt +=1;
                 let ts = trans_ticks(&r.tick_data);
-                println!("{:#?}", ts);
+                // println!("{:#?}", ts);
+                println!("size: {} - {:#?}", ts.len(), ts.first());
                 println!("more: {:#?}", r.has_more);
+                let last = ts.first().unwrap();
+                ct.get_bid_tick_data_req(12, d , last.timestamp );
+                std::fs::write(format!("z{}.txt", cnt), format!("{:#?}", ts) );
             }
             ResponseEvent::AssetClassListRes(_) => {}
             ResponseEvent::SubscribeDepthQuotesRes(_) => {}
@@ -162,6 +168,7 @@ fn trans_ticks(arr: &Vec<pb::TickData>) -> Vec<pb::TickData> {
                 })
             }
 
+            res.reverse();
             res
         }
     }

@@ -24,6 +24,7 @@ fn run() {
     };
 
     let pair_ids = assets::get_all_symbols_ids();
+    // let pair_ids = vec![12];// todo: remove
     for pair_id in pair_ids {
         let pair = assets::Pair::id_to_symbol(pair_id);
         let cfg = cfg.clone();
@@ -40,8 +41,8 @@ fn run() {
                     end_week_time,
                 );
 
-                let folder = get_folder_path(&pair, week_id);
-                let file_path = get_folder_path(&pair, week_id);
+                let folder = get_folder_path(&pair);
+                let file_path = get_file_path(&pair, week_id);
                 std::fs::create_dir_all(&folder);
                 std::fs::write(&file_path, &csv_res);
 
@@ -74,7 +75,7 @@ fn get_file_path(pair: &Pair, weeks_num: i64) -> String {
     s
 }
 
-fn get_folder_path(pair: &Pair, weeks_num: i64) -> String {
-    let s = format!("./data/{:?}/{}.csv", pair, weeks_num);
+fn get_folder_path(pair: &Pair) -> String {
+    let s = format!("./data/{:?}", pair);
     s
 }
