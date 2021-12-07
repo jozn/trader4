@@ -1,6 +1,7 @@
 use crate::pb;
 use crate::pb::*;
 
+// Deprecated
 pub trait OnResponse {
     fn onApplicationAuthRes(&mut self, res: pb::ApplicationAuthRes) {}
 

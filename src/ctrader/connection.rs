@@ -44,14 +44,9 @@ pub struct ConnectRes {
 
 #[derive(Debug)]
 pub struct CTrader {
-    // req_counter: Box<u64>,
-    // req_counter2: std::sync::atomic::AtomicU64,
-    // req_counter2: std::cell::RefCell<u64>,
     cfg: Config,
-    // end: RefCell<std::sync::atomic::AtomicBool>,
     writer_chan: std::sync::mpsc::SyncSender<Vec<u8>>,
     pub response_chan: std::sync::mpsc::SyncSender<ResponseEvent>,
-    // pub(crate) stream: Arc<Mutex<RefCell<TlsStream<TcpStream>>>>,
     pub(crate) inner: Arc<Mutex<RefCell<InnderData>>>,
 }
 
@@ -73,17 +68,12 @@ impl CTrader {
             end: false
         };
         let mut out = Self {
-            // req_counter: Box::new(0),
-            // req_counter2: Default::default(),
             cfg: cfg.clone(),
-            // end: RefCell::new(std::sync::atomic::AtomicBool::new(false)),
             writer_chan: sender_ch,
             response_chan: sender_event_ch,
-            // stream: Arc::new(Mutex::new(RefCell::new(stream))),
             inner: Arc::new(Mutex::new(RefCell::new(inner))),
         };
 
-        // let ro = Arc::new(Mutex::new(out));
         let ro = Arc::new(out);
         dispatch_write_thread(ro.clone(), reciver_ch);
         dispatch_ping_loop(ro.clone());
@@ -94,41 +84,6 @@ impl CTrader {
             response_chan:reciver_event_ch
         }
     }
-
-    /*pub fn connect(cfg: &Config) -> (Arc<CTrader>, std::sync::mpsc::Receiver<ResponseEvent>) {
-/*        let addr = format!("{}:{}", cfg.host, cfg.port);
-
-        let connector = TlsConnector::new().unwrap();
-        let stream = TcpStream::connect(&addr).unwrap();
-        stream.set_read_timeout(Some(Duration::new(4, 0)));
-        let mut stream = connector.connect(&cfg.host, stream).unwrap();
-
-        stream
-            .get_mut()
-            .set_read_timeout(Some(Duration::new(0, 500_000))); // 0.5 second*/
-
-        // Channel making
-        let (sender_ch, reciver_ch) = std::sync::mpsc::sync_channel(1000);
-        let (sender_event_ch, reciver_event_ch) = std::sync::mpsc::sync_channel(1000);
-
-        let stream = new_socket(&cfg);
-        let mut out = Self {
-            // req_counter: Box::new(0),
-            // req_counter2: Default::default(),
-            cfg: cfg.clone(),
-            writer_chan: sender_ch,
-            response_chan: sender_event_ch,
-            stream: Arc::new(Mutex::new(RefCell::new(stream))),
-        };
-
-        // let ro = Arc::new(Mutex::new(out));
-        let ro = Arc::new(out);
-        dispatch_write_thread(ro.clone(), reciver_ch);
-        dispatch_ping_loop(ro.clone());
-        dispatch_read_thread(ro.clone());
-
-        (ro, reciver_event_ch)
-    }*/
 
     pub fn auth(&self,ct: Arc<CTrader>)  {
         let cfg = &self.cfg;
@@ -147,14 +102,12 @@ impl CTrader {
     }
 
     pub fn disconnect(&self)  {
-        // self.end.replace(std::sync::atomic::AtomicBool::new(true));
         self.writer_chan.send(b"END".to_vec());
         self.inner.lock().unwrap().borrow_mut().stream.shutdown();
         println!(">>>> Total disconnection.");
     }
 
     pub fn is_disconnect(&self)  -> bool {
-        // let r = self.end.borrow();
         let mut x = self.inner.lock().unwrap();
         let re = x.get_mut();
         re.end
@@ -434,23 +387,6 @@ impl CTrader {
             to_timestamp: 1632500363306,
             period: pb::TrendbarPeriod::M1 as i32,
             symbol_id: 1,
-        };
-
-        self.send(req_pb, api_id)
-    }
-
-    // todo: add param
-    pub fn get_tick_data_req_old_bk(&self) {
-        let api_id = pb::PayloadType::OaGetTickdataReq as u32;
-
-        let d = 1630000000_000;
-        let req_pb = pb::GetTickDataReq {
-            payload_type: None,
-            ctid_trader_account_id: self.cfg.ctid,
-            symbol_id: 1,
-            r#type: 1,
-            from_timestamp: d - 100_000,
-            to_timestamp: d,
         };
 
         self.send(req_pb, api_id)

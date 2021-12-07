@@ -6,13 +6,6 @@ use crate::pb::TickData;
 use std::fs;
 use std::sync::Arc;
 
-/*fn after_connect(ct: Arc<CTrader>, cfg: &Config){
-    ct.application_auth_req(&cfg.client_id, &cfg.client_secret);
-    std::thread::sleep(std::time::Duration::new(2, 0));
-    println!("{:?} > Got connected in Recoonect ", pari);
-    ct.get_bid_tick_data_req(symbol_id, from_time_ms, to_time_ms);
-}*/
-
 pub fn collect_data_from_api_csv(
     // cfg: &Config,
     cr: ConnectRes,
@@ -32,18 +25,7 @@ pub fn collect_data_from_api_csv(
 
     ct.auth(ct.clone());
 
-    // Connect to cTrader server
-    // let (mut ct, rc_event) = CTrader::connect(cfg);
-   /* let after_con = || {
-        ct.application_auth_req(&cfg.client_id, &cfg.client_secret);
-        std::thread::sleep(std::time::Duration::new(2, 0));
-        println!("{:?} > Got connected ", pari);
-        ct.get_bid_tick_data_req(symbol_id, from_time_ms, to_time_ms);
-    };*/
-
     ct.get_bid_tick_data_req(symbol_id, from_time_ms, to_time_ms);
-
-    // after_con();
 
     let mut cnt = 0;
 
@@ -61,14 +43,6 @@ pub fn collect_data_from_api_csv(
             ResponseEvent::DisConnected => {
                 println!("{:?} > Disconnected ...", pari);
                 break;
-                /*println!("{:?} > Disconnected ... Connecting again ", pari);
-                ct.connect_socket();
-                ct.auth(ct.clone());
-                ct.get_bid_tick_data_req(symbol_id, from_time_ms, to_time_ms);
-                collector.bids.clear();
-                collector.asks.clear();
-                in_bids = true;*/
-                // after_con();
             }
             ResponseEvent::ErrorRes(_) => {}
             ResponseEvent::GetTickDataRes(r) => {
