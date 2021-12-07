@@ -50,3 +50,7 @@ pub fn to_time_string(time_sec: i64) -> String {
     let ots = open_time.format("%Y-%m-%d %H:%M:%S").to_string();
     ots
 }
+
+pub fn time__tag_string() -> String {
+    to_time_string(get_time_sec() as i64)
+}

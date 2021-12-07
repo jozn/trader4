@@ -73,9 +73,7 @@ pub fn get_ticks() {
     let (mut cti, rc_event) = CTrader::connect(&cfg);
     // let mut ct = cti.lock().unwrap();
     let mut ct = cti;
-    ct.application_auth_req(&cfg.client_id, &cfg.client_secret);
 
-    std::thread::sleep(std::time::Duration::new(2, 0));
 
     // ct.list_assets_req();
     // ct.version_req();
@@ -87,10 +85,16 @@ pub fn get_ticks() {
 
     // ct.get_trendbars_req();
     // ct.get_tick_data_req_old_bk();
-
     let d = 1636317000_000;
-    let de = d + 7 * 86400_000;
-    ct.get_bid_tick_data_req(12, d, de);
+    let de = d + 1 * 8640_000;
+
+    let after_con = || {
+        ct.application_auth_req(&cfg.client_id, &cfg.client_secret);
+
+        std::thread::sleep(std::time::Duration::new(2, 0));
+        ct.get_bid_tick_data_req(12, d, de);
+    };
+    after_con();
     // ct.get_ask_tick_data_req(1, d, de);
     // ct.get_ask_tick_data_req(1,d,d+7*8640_000);
 
@@ -106,6 +110,12 @@ pub fn get_ticks() {
         match e {
             ResponseEvent::Refresh => {
                 println!("EVENT");
+            }
+            ResponseEvent::DisConnected => {
+                println!("??> Disconnected ... Connecting again ");
+                ct.connect_socket();
+                ct.send_heartbeat_event();
+                after_con();
             }
             ResponseEvent::ApplicationAuthRes(_) => {}
             ResponseEvent::AccountAuthRes(_) => {}
@@ -127,9 +137,9 @@ pub fn get_ticks() {
                 // println!("{:#?}", ts);
                 println!("size: {} - {:#?}", ts.len(), ts.first());
                 println!("more: {:#?}", r.has_more);
-                let last = ts.first().unwrap();
-                ct.get_bid_tick_data_req(12, d , last.timestamp );
-                std::fs::write(format!("z{}.txt", cnt), format!("{:#?}", ts) );
+                // let last = ts.first().unwrap();
+                // ct.get_bid_tick_data_req(12, d , last.timestamp );
+                // std::fs::write(format!("z{}.txt", cnt), format!("{:#?}", ts) );
             }
             ResponseEvent::AssetClassListRes(_) => {}
             ResponseEvent::SubscribeDepthQuotesRes(_) => {}

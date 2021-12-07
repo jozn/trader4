@@ -1,3 +1,5 @@
+use std::borrow::Borrow;
+use std::cell::RefCell;
 use serde::{Deserialize, Serialize};
 
 use crate::pb;
@@ -10,9 +12,11 @@ use native_tls::{TlsConnector, TlsStream};
 use std::convert::{TryFrom, TryInto};
 use std::io::{Error, Read, Write};
 use std::net::TcpStream;
+use std::ops::Deref;
 use std::sync::mpsc;
 use std::sync::mpsc::RecvError;
 use std::sync::{Arc, Mutex};
+use std::sync::atomic::Ordering;
 use std::thread;
 use std::time::Duration;
 use tcp_stream::HandshakeError;
@@ -33,19 +37,66 @@ pub struct Config {
 pub type CTraderInst = Arc<CTrader>;
 
 #[derive(Debug)]
+pub struct ConnectRes {
+    pub conn: Arc<CTrader>,
+    pub response_chan: std::sync::mpsc::Receiver<ResponseEvent>,
+}
+
+#[derive(Debug)]
 pub struct CTrader {
     // req_counter: Box<u64>,
     // req_counter2: std::sync::atomic::AtomicU64,
     // req_counter2: std::cell::RefCell<u64>,
     cfg: Config,
+    // end: RefCell<std::sync::atomic::AtomicBool>,
     writer_chan: std::sync::mpsc::SyncSender<Vec<u8>>,
     pub response_chan: std::sync::mpsc::SyncSender<ResponseEvent>,
-    pub(crate) stream: Arc<Mutex<TlsStream<TcpStream>>>,
+    // pub(crate) stream: Arc<Mutex<RefCell<TlsStream<TcpStream>>>>,
+    pub(crate) inner: Arc<Mutex<RefCell<InnderData>>>,
+}
+
+#[derive(Debug)]
+pub struct InnderData {
+    pub stream: TlsStream<TcpStream>,
+    pub end: bool,
 }
 
 impl CTrader {
-    pub fn connect(cfg: &Config) -> (Arc<CTrader>, std::sync::mpsc::Receiver<ResponseEvent>) {
-        let addr = format!("{}:{}", cfg.host, cfg.port);
+    pub fn connect2(cfg: &Config) -> ConnectRes {
+        // Channel making
+        let (sender_ch, reciver_ch) = std::sync::mpsc::sync_channel(1000);
+        let (sender_event_ch, reciver_event_ch) = std::sync::mpsc::sync_channel(1000);
+
+        let stream = new_socket(&cfg);
+        let inner = InnderData {
+            stream,
+            end: false
+        };
+        let mut out = Self {
+            // req_counter: Box::new(0),
+            // req_counter2: Default::default(),
+            cfg: cfg.clone(),
+            // end: RefCell::new(std::sync::atomic::AtomicBool::new(false)),
+            writer_chan: sender_ch,
+            response_chan: sender_event_ch,
+            // stream: Arc::new(Mutex::new(RefCell::new(stream))),
+            inner: Arc::new(Mutex::new(RefCell::new(inner))),
+        };
+
+        // let ro = Arc::new(Mutex::new(out));
+        let ro = Arc::new(out);
+        dispatch_write_thread(ro.clone(), reciver_ch);
+        dispatch_ping_loop(ro.clone());
+        dispatch_read_thread(ro.clone());
+
+        ConnectRes{
+            conn: ro,
+            response_chan:reciver_event_ch
+        }
+    }
+
+    /*pub fn connect(cfg: &Config) -> (Arc<CTrader>, std::sync::mpsc::Receiver<ResponseEvent>) {
+/*        let addr = format!("{}:{}", cfg.host, cfg.port);
 
         let connector = TlsConnector::new().unwrap();
         let stream = TcpStream::connect(&addr).unwrap();
@@ -54,18 +105,20 @@ impl CTrader {
 
         stream
             .get_mut()
-            .set_read_timeout(Some(Duration::new(0, 500_000))); // 0.5 second
+            .set_read_timeout(Some(Duration::new(0, 500_000))); // 0.5 second*/
 
         // Channel making
         let (sender_ch, reciver_ch) = std::sync::mpsc::sync_channel(1000);
         let (sender_event_ch, reciver_event_ch) = std::sync::mpsc::sync_channel(1000);
+
+        let stream = new_socket(&cfg);
         let mut out = Self {
             // req_counter: Box::new(0),
             // req_counter2: Default::default(),
             cfg: cfg.clone(),
             writer_chan: sender_ch,
             response_chan: sender_event_ch,
-            stream: Arc::new(Mutex::new(stream)),
+            stream: Arc::new(Mutex::new(RefCell::new(stream))),
         };
 
         // let ro = Arc::new(Mutex::new(out));
@@ -75,6 +128,36 @@ impl CTrader {
         dispatch_read_thread(ro.clone());
 
         (ro, reciver_event_ch)
+    }*/
+
+    pub fn auth(&self,ct: Arc<CTrader>)  {
+        let cfg = &self.cfg;
+        ct.application_auth_req(&cfg.client_id, &cfg.client_secret);
+        std::thread::sleep(std::time::Duration::new(2, 0));
+        println!(">>>> Got connected ");
+    }
+
+    pub fn connect_socket(&self)  {
+        let stream = new_socket(&self.cfg);
+        let x = self.inner.lock().unwrap();
+        x.replace(InnderData{
+            stream,
+            end: false
+        });
+    }
+
+    pub fn disconnect(&self)  {
+        // self.end.replace(std::sync::atomic::AtomicBool::new(true));
+        self.writer_chan.send(b"END".to_vec());
+        self.inner.lock().unwrap().borrow_mut().stream.shutdown();
+        println!(">>>> Total disconnection.");
+    }
+
+    pub fn is_disconnect(&self)  -> bool {
+        // let r = self.end.borrow();
+        let mut x = self.inner.lock().unwrap();
+        let re = x.get_mut();
+        re.end
     }
 
     fn send(&self, msg: impl prost::Message, msg_type: u32) {
@@ -83,6 +166,21 @@ impl CTrader {
         let mut buff = to_pb_frame(msg, msg_type);
         self.writer_chan.send(buff);
     }
+}
+
+fn new_socket(cfg: &Config) -> TlsStream<TcpStream> {
+    let addr = format!("{}:{}", cfg.host, cfg.port);
+
+    let connector = TlsConnector::new().unwrap();
+    let stream = TcpStream::connect(&addr).unwrap();
+    stream.set_read_timeout(Some(Duration::new(4, 0)));// For establishing connection only
+    let mut stream = connector.connect(&cfg.host, stream).unwrap();
+
+    stream
+        .get_mut()
+        // This will let read thread to not block indifiantly
+        .set_read_timeout(Some(Duration::new(0, 500_000))); // 0.5 second
+    stream
 }
 
 // For Api only

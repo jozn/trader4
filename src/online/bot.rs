@@ -121,6 +121,9 @@ impl Bot {
                 ResponseEvent::OrderErrorEvent(e) => {
                     println!("OrderErrorEvent {:#?}", e);
                 }
+                ResponseEvent::DisConnected => {
+                    // todo
+                }
             };
         }
     }

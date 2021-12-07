@@ -10,9 +10,10 @@ pub fn run_bot() {
         client_token: "l4jT24BWu3etFSEVViQKu1NsGpBYf2nKN0DyUGgqjy0".to_string(),
         ctid: 22851452,
     };
-    let (mut cti, rc_event) = CTrader::connect(&cfg);
+    // let (mut cti, rc_event) = CTrader::connect(&cfg);
+    let con_res= CTrader::connect2(&cfg);
     // let mut ct = cti.lock().unwrap();
-    let mut ct = cti;
+    let mut ct = con_res.conn;
     ct.application_auth_req(&cfg.client_id, &cfg.client_secret);
 
     std::thread::sleep(std::time::Duration::new(2, 0));
@@ -23,5 +24,5 @@ pub fn run_bot() {
     };
 
     bot1.on_connect();
-    bot1.listen_events(rc_event);
+    bot1.listen_events(con_res.response_chan);
 }

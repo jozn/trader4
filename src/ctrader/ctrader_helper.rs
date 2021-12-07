@@ -15,11 +15,13 @@ use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
 use tcp_stream::HandshakeError;
+use crate::online::ResponseEvent::DisConnected;
 
 use super::*;
 
 pub fn dispatch_read_thread(ctrader: CTraderInst) {
-    let stream_lock = ctrader.stream.clone();
+    // let stream_lock = ctrader.stream.clone();
+    let stream_lock = ctrader.inner.clone();
     thread::spawn(move || {
         let mut total_buff = bytes::BytesMut::with_capacity(100_000_000); // ~100MB
 
@@ -29,11 +31,17 @@ pub fn dispatch_read_thread(ctrader: CTraderInst) {
             let mut read_vec = [0; 1024 * 1024].to_vec();
 
             let mut locket_stream = stream_lock.lock().unwrap();
-            let read_res = locket_stream.read(&mut read_vec);
+            let read_res = locket_stream.borrow_mut().stream.read(&mut read_vec);
             drop(locket_stream);
+            if ctrader.is_disconnect() {
+                println!("[ENDING] Existing read loop.");
+                break;
+            }
             match read_res {
                 Ok(0) => {
-                    println!("cTrader socket is closed, closing read loop.");
+                    println!("cTrader socket is closed. Needs to reconnect");
+                    ctrader.response_chan.send(ResponseEvent::DisConnected);
+                    total_buff.clear();
                     break;
                 }
                 Ok(v) => {
@@ -72,14 +80,19 @@ pub fn dispatch_read_thread(ctrader: CTraderInst) {
 }
 
 pub fn dispatch_write_thread(ctrader: CTraderInst, ch: mpsc::Receiver<Vec<u8>>) {
-    let stream_lock = ctrader.stream.clone();
+    // let stream_lock = ctrader.stream.clone();
+    let stream_lock = ctrader.inner.clone();
     thread::spawn(move || loop {
         let msg_data = ch.recv();
+        if ctrader.is_disconnect() {
+            println!("[ENDING] Existing ping loop.");
+            break;
+        }
         match msg_data {
             Ok(msg_data) => {
                 // println!("------------- wire {:?}", msg_data.len());
                 let mut locket_stream = stream_lock.lock().unwrap();
-                locket_stream.write(&msg_data);
+                locket_stream.borrow_mut().stream.write(&msg_data);
             }
             Err(e) => {
                 println!("Error in sending data thread channel {:?}", e);
@@ -91,6 +104,10 @@ pub fn dispatch_write_thread(ctrader: CTraderInst, ch: mpsc::Receiver<Vec<u8>>) 
 pub fn dispatch_ping_loop(ctrader: CTraderInst) {
     thread::spawn(move || loop {
         std::thread::sleep(std::time::Duration::new(30, 0));
+        if ctrader.is_disconnect() {
+            println!("[ENDING] Existing ping loop.");
+            break;
+        }
         ctrader.send_heartbeat_event();
     });
 }

@@ -1,7 +1,7 @@
 pub mod connection;
 pub mod ctrader_helper;
 pub mod event_listener;
-pub mod play;
+// pub mod play;
 pub mod proc;
 
 pub use connection::*;
@@ -9,7 +9,7 @@ pub use ctrader_helper::*;
 pub use event_listener::*;
 pub use proc::*;
 
-pub fn play() {
+/*pub fn play() {
     let cfg = Config {
         host: "demo.ctraderapi.com".to_string(),
         port: 5035,
@@ -37,5 +37,5 @@ pub fn play() {
 
     std::thread::sleep(std::time::Duration::new(100000, 0));
 }
-
+*/
 // Todo: clean imports
