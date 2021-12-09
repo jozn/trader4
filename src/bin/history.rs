@@ -1,9 +1,9 @@
 use std::thread;
-use trader2;
-use trader2::ctrader::{CTrader, Config};
-use trader2::online::assets;
-use trader2::online::assets::Pair;
-use trader2::{helper, online};
+use trader3;
+use trader3::ctrader::{CTrader, Config};
+use trader3::online::assets;
+use trader3::online::assets::Pair;
+use trader3::{helper, online};
 
 fn main() {
     run();
@@ -43,7 +43,7 @@ fn run() {
                 let con_res = CTrader::connect2(&cfg);
 
                 let end_week_time = current_week_start_ms + MS_IN_WEEK;
-                let csv_res = trader2::collector::collect_data_from_api_csv(
+                let csv_res = trader3::collector::collect_data_from_api_csv(
                     con_res,
                     &pair,
                     current_week_start_ms,

@@ -46,7 +46,7 @@ impl Report {
 
     pub fn write_to_folder(&self, port: &Portfolio, name: &str) {
         let time = get_time_sec();
-        let folder = format!("../trader2_out/{}_{}", time, name);
+        let folder = format!("../trader3_out/{}_{}", time, name);
         let folder_json = format!("{}/json", folder);
         std::fs::create_dir(&folder);
         std::fs::create_dir(&folder_json);

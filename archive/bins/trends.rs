@@ -1,5 +1,5 @@
-use trader2;
+use trader3;
 
 fn main() {
-    trader2::trend::trend_play1();
+    trader3::trend::trend_play1();
 }

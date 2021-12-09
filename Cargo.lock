@@ -851,7 +851,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "trader2"
+name = "trader3"
 version = "0.1.0"
 dependencies = [
  "bincode",
