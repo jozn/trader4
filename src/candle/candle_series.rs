@@ -19,11 +19,31 @@ pub struct KlineHolderFrame {
     pub klines: KlineSerVec<Kline>,
 }
 
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct CandleConfig {
+    pub small_tick: u64,
+    pub medium_tick: u64,
+    pub big_tick: u64,
+}
+
+
 pub type CandleSeriesDiff = CandleSeries; // Only trades is not set
 
 impl CandleSeries {
-    pub fn new() -> Self {
-        Self::default()
+    pub fn new(cfg: &CandleConfig) -> Self {
+        Self {
+            ticks: TickVec::new(),
+            small: Default::default(),
+            medium: KlineHolderFrame {
+                small_multi: cfg.medium_tick,
+                klines: Default::default(),
+            },
+            big: KlineHolderFrame {
+                small_multi: cfg.big_tick,
+                klines: Default::default(),
+            },
+            small_tick_count: cfg.small_tick,
+        }
     }
 
     pub fn add_ticks(&mut self, ticks: TimeSerVec<Tick>) -> TResult<CandleSeriesDiff> {
@@ -129,20 +149,12 @@ impl CandleSeries {
     }
 }
 
-impl Default for CandleSeries {
+impl Default for CandleConfig {
     fn default() -> Self {
         Self {
-            ticks: TickVec::new(),
-            small: Default::default(),
-            medium: KlineHolderFrame {
-                small_multi: MEDIUM_TICK,
-                klines: Default::default(),
-            },
-            big: KlineHolderFrame {
-                small_multi: BIG_TICK,
-                klines: Default::default(),
-            },
-            small_tick_count: SMALL_TICK,
+            small_tick: SMALL_TICK,
+            medium_tick: MEDIUM_TICK,
+            big_tick: BIG_TICK
         }
     }
 }

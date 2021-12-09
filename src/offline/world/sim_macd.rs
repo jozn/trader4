@@ -8,7 +8,7 @@ use crate::portfolio::*;
 use crate::run::*;
 use crate::*;
 
-#[derive(Debug, Default, Clone)]
+#[derive(Debug,  Clone)]
 pub struct SimMacdWorld {
     ticks: Vec<CSVForexRecord>,
     last_tick: Tick,
@@ -30,8 +30,11 @@ impl SimMacdWorld {
             // ticks: loader::_load(14000_000, "/media/hamid/K/forex1/EURJPY_tab.csv"),
             // ticks: loader::_load(14_000_000, "/media/hamid/K/forex1/USDJPY_tab.csv"),
             it_num: 0,
+            pos_id: 0,
             strategy1: Strategy1::new(),
-            ..Default::default()
+            last_tick: Default::default(),
+            name: "".to_string(),
+            tick_cnt: 0
         }
     }
 
@@ -54,9 +57,11 @@ impl SimMacdWorld {
             let r = Self {
                 ticks: loader::_load(1400_000, d),
                 it_num: 0,
+                pos_id: 0,
                 name,
                 strategy1: Strategy1::new(),
-                ..Default::default()
+                last_tick: Default::default(),
+                tick_cnt: 0
             };
 
             // println!(">>paht> {:?}", &d);

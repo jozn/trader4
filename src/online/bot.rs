@@ -1,5 +1,5 @@
 use super::*;
-use crate::candle::{CandleSeriesTA, Tick, TimeSerVec};
+use crate::candle::{CandleConfig, CandleSeriesTA, Tick, TimeSerVec};
 use crate::ctrader::*;
 use crate::online::assets;
 use crate::online::assets::*;
@@ -25,7 +25,7 @@ impl PairMeta {
             last_tick: None,
             mini_tick: Default::default(),
             ticks_arr: Default::default(),
-            candles: Default::default(),
+            candles: CandleSeriesTA::new_dep(&CandleConfig::default()),
         }
     }
 }

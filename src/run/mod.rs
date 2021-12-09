@@ -1,4 +1,4 @@
-use crate::candle::{CandleSeriesTA, Tick, TimeSerVec};
+use crate::candle::{CandleConfig, CandleSeriesTA, Tick, TimeSerVec};
 use std::borrow::BorrowMut;
 use std::fmt::Debug;
 use std::ops::{Deref, DerefMut};
@@ -21,7 +21,7 @@ impl WorldRunner {
     pub fn new(w: impl TRunner + 'static) -> Self {
         Self {
             run_id: 0,
-            candles: Default::default(),
+            candles: CandleSeriesTA::new_dep(&CandleConfig::default()),
             world: Box::new(w),
         }
     }

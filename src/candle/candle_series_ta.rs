@@ -2,7 +2,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 use std::borrow::BorrowMut;
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CandleSeriesTA {
     pub klines: CandleSeries,
     pub small: KlineHolderFrameTA,
@@ -24,8 +24,16 @@ pub struct KlineHolderFrameTA {
 }
 
 impl CandleSeriesTA {
-    pub fn new() -> Self {
-        Self::default()
+    pub fn new_dep(cfg: &CandleConfig) -> Self {
+        // Self::default()
+        Self{
+            klines: CandleSeries::new(cfg),
+            small: Default::default(),
+            medium: Default::default(),
+            big: Default::default(),
+            ticking_tip: Default::default(),
+            ticking: Default::default()
+        }
     }
 
     pub fn add_ticks(&mut self, trades: TimeSerVec<Tick>) {
