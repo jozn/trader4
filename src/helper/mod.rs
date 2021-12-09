@@ -51,6 +51,6 @@ pub fn to_time_string(time_sec: i64) -> String {
     ots
 }
 
-pub fn time__tag_string() -> String {
+pub fn time_tag_string() -> String {
     to_time_string(get_time_sec() as i64)
 }

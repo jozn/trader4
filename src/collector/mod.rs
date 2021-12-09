@@ -57,7 +57,7 @@ pub fn collect_data_from_api_csv(
                             pari,
                             cnt,
                             helper::to_time_string(time_ms / 1000),
-                            ( time_ms - first_tick.timestamp) / 3600_000,
+                            (time_ms - first_tick.timestamp) / 3600_000,
                             ts.len()
                         );
                         // bids
@@ -70,7 +70,7 @@ pub fn collect_data_from_api_csv(
                     } else {
                         in_bids = false;
                         time_ms = to_time_ms;
-                        ct.get_ask_tick_data_req(symbol_id,from_time_ms, time_ms);
+                        ct.get_ask_tick_data_req(symbol_id, from_time_ms, time_ms);
                     }
                 } else {
                     if ts.is_empty() {
@@ -87,8 +87,8 @@ pub fn collect_data_from_api_csv(
                     );
                     ts.iter().for_each(|v| collector.asks.push(v.clone()));
                     if r.has_more {
-                        time_ms = first_tick.timestamp ;
-                        ct.get_ask_tick_data_req(symbol_id, from_time_ms ,time_ms);
+                        time_ms = first_tick.timestamp;
+                        ct.get_ask_tick_data_req(symbol_id, from_time_ms, time_ms);
                     } else {
                         break;
                     }

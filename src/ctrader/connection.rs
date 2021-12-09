@@ -1,6 +1,6 @@
+use serde::{Deserialize, Serialize};
 use std::borrow::Borrow;
 use std::cell::RefCell;
-use serde::{Deserialize, Serialize};
 
 use crate::pb;
 use byteorder::ByteOrder;
@@ -13,10 +13,10 @@ use std::convert::{TryFrom, TryInto};
 use std::io::{Error, Read, Write};
 use std::net::TcpStream;
 use std::ops::Deref;
+use std::sync::atomic::Ordering;
 use std::sync::mpsc;
 use std::sync::mpsc::RecvError;
 use std::sync::{Arc, Mutex};
-use std::sync::atomic::Ordering;
 use std::thread;
 use std::time::Duration;
 use tcp_stream::HandshakeError;
@@ -63,10 +63,7 @@ impl CTrader {
         let (sender_event_ch, reciver_event_ch) = std::sync::mpsc::sync_channel(1000);
 
         let stream = new_socket(&cfg);
-        let inner = InnderData {
-            stream,
-            end: false
-        };
+        let inner = InnderData { stream, end: false };
         let mut out = Self {
             cfg: cfg.clone(),
             writer_chan: sender_ch,
@@ -79,35 +76,32 @@ impl CTrader {
         dispatch_ping_loop(ro.clone());
         dispatch_read_thread(ro.clone());
 
-        ConnectRes{
+        ConnectRes {
             conn: ro,
-            response_chan:reciver_event_ch
+            response_chan: reciver_event_ch,
         }
     }
 
-    pub fn auth(&self,ct: Arc<CTrader>)  {
+    pub fn auth(&self, ct: Arc<CTrader>) {
         let cfg = &self.cfg;
         ct.application_auth_req(&cfg.client_id, &cfg.client_secret);
         std::thread::sleep(std::time::Duration::new(2, 0));
         println!(">>>> Got connected ");
     }
 
-    pub fn connect_socket(&self)  {
+    pub fn reconnect_socket(&self) {
         let stream = new_socket(&self.cfg);
         let x = self.inner.lock().unwrap();
-        x.replace(InnderData{
-            stream,
-            end: false
-        });
+        x.replace(InnderData { stream, end: false });
     }
 
-    pub fn disconnect(&self)  {
+    pub fn disconnect(&self) {
         self.writer_chan.send(b"END".to_vec());
         self.inner.lock().unwrap().borrow_mut().stream.shutdown();
         println!(">>>> Total disconnection.");
     }
 
-    pub fn is_disconnect(&self)  -> bool {
+    pub fn is_disconnect(&self) -> bool {
         let mut x = self.inner.lock().unwrap();
         let re = x.get_mut();
         re.end
@@ -126,7 +120,7 @@ fn new_socket(cfg: &Config) -> TlsStream<TcpStream> {
 
     let connector = TlsConnector::new().unwrap();
     let stream = TcpStream::connect(&addr).unwrap();
-    stream.set_read_timeout(Some(Duration::new(4, 0)));// For establishing connection only
+    stream.set_read_timeout(Some(Duration::new(4, 0))); // For establishing connection only
     let mut stream = connector.connect(&cfg.host, stream).unwrap();
 
     stream
@@ -284,7 +278,7 @@ impl CTrader {
             comment: Some("long comment #2".to_string()),
             base_slippage_price: None,
             slippage_in_points: None,
-            label: Some("My long label #2".to_string()),
+            label: Some("FAST NO UNDERLINE STARGY 3".to_string()),
             position_id: None,
             client_order_id: None,
             relative_stop_loss: Some(100),
@@ -316,7 +310,7 @@ impl CTrader {
             comment: Some("long comment #2".to_string()),
             base_slippage_price: None,
             slippage_in_points: None,
-            label: Some("My long label #2".to_string()),
+            label: Some("FAST NO UNDERLINE STARGY 3".to_string()),
             position_id: None,
             client_order_id: None,
             relative_stop_loss: None,

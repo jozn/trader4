@@ -11,12 +11,12 @@ pub fn run_bot() {
         ctid: 22851452,
     };
     // let (mut cti, rc_event) = CTrader::connect(&cfg);
-    let con_res= CTrader::connect2(&cfg);
+    let con_res = CTrader::connect2(&cfg);
     // let mut ct = cti.lock().unwrap();
     let mut ct = con_res.conn;
-    ct.application_auth_req(&cfg.client_id, &cfg.client_secret);
+    // ct.application_auth_req(&cfg.client_id, &cfg.client_secret);
 
-    std::thread::sleep(std::time::Duration::new(2, 0));
+    // std::thread::sleep(std::time::Duration::new(2, 0));
 
     let bot1 = Bot {
         con: ct,

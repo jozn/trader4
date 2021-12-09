@@ -1,6 +1,6 @@
 use std::thread;
 use trader2;
-use trader2::ctrader::{Config, CTrader};
+use trader2::ctrader::{CTrader, Config};
 use trader2::online::assets;
 use trader2::online::assets::Pair;
 use trader2::{helper, online};
@@ -10,8 +10,8 @@ fn main() {
 }
 
 const YEAR_ZERO_WEEK: i64 = 1609632000_000; // Sunday, 3 January 2021 00:00:00
-// const START_WEEK: i64 = 1625356800_000; // 3 Jan 2021
-const START_WEEK: i64 = YEAR_ZERO_WEEK + 15* MS_IN_WEEK; // 3 Jan 2021
+                                            // const START_WEEK: i64 = 1625356800_000; // 3 Jan 2021
+const START_WEEK: i64 = YEAR_ZERO_WEEK + 15 * MS_IN_WEEK; // 3 Jan 2021
 const MS_IN_WEEK: i64 = 7 * 86400_000;
 
 fn run() {
@@ -35,7 +35,11 @@ fn run() {
             loop {
                 let week_id = get_weeks_num(current_week_start_ms);
 
-                println!("{:?} - {} ", pair, helper::to_time_string(helper::get_time_sec() as i64));
+                println!(
+                    "{:?} - {} ",
+                    pair,
+                    helper::to_time_string(helper::get_time_sec() as i64)
+                );
                 let con_res = CTrader::connect2(&cfg);
 
                 let end_week_time = current_week_start_ms + MS_IN_WEEK;

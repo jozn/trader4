@@ -39,14 +39,18 @@ impl TimeKey for Tick {
 }
 
 // Temportay for fast
-const SMALL_TICK: u64 = 1;
-const MEDIUM_TICK: u64 = 2; // 50
-const BIG_TICK: u64 = 3; // 150
+// const SMALL_TICK: u64 = 1;
+// const MEDIUM_TICK: u64 = 2; // 50
+// const BIG_TICK: u64 = 3; // 150
+
+pub const SMALL_TICK: u64 = 1;
+pub const MEDIUM_TICK: u64 = 6; // 50
+pub const BIG_TICK: u64 = 15; // 150
 
 // Backup
-// const SMALL_TICK: u64 = 15;
-// const MEDIUM_TICK: u64 = 10; // 50
-// const BIG_TICK: u64 = 30; // 150
+// pub const SMALL_TICK: u64 = 15;
+// pub const MEDIUM_TICK: u64 = 10; // 50
+// pub const BIG_TICK: u64 = 30; // 150
 
 // todo - migrate
 //  ticker + some namnign convention to not get confused

@@ -10,7 +10,7 @@ impl PairMeta {
         // println!("on_price_tick {:?}", &tick);
         self.last_tick = Some(tick.clone());
         self.ticks_arr.push(tick);
-        if self.ticks_arr.len() >= 3 {
+        if self.ticks_arr.len() >= candle::SMALL_TICK as usize {
             self.candles.add_ticks(self.ticks_arr.clone());
             self.ticks_arr.clear();
             self.on_completed_small_candle(bot);
@@ -19,7 +19,11 @@ impl PairMeta {
 
     // run when many ticks complete an small candle
     fn on_completed_small_candle(&mut self, bot: &mut Actor) {
-        println!("{:?} - on_completed_small_candle", self.pair);
+        println!(
+            "{} - {:?} - on_completed_small_candle",
+            helper::time_tag_string(),
+            self.pair
+        );
 
         let t = &self.last_tick.clone().unwrap();
         let price = t.price;
@@ -47,7 +51,7 @@ impl PairMeta {
         let ta = &kt.ta1;
         let symbol_id = self.pair.to_symbol_id();
 
-        bot.go_long(symbol_id, t);
+        // bot.go_long(symbol_id, t);
 
         match up {
             SimpleCrossEvent::Bull(_) => {
@@ -58,7 +62,8 @@ impl PairMeta {
                 // if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 && price > big_ema {
                 // if  price > ma && ta.vel.count >= 3 && price > big_ema {
                 // if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 {
-                if macd_out.macd < 0. && price > ma {
+                if price > ma && ta.vel.count >= 3 {
+                    // if macd_out.macd < 0. && price > ma {
                     // if macd_out.macd < 0. && price > ma  {
                     //     if macd_out.macd < 0. && price > ma && ta.vel.count >= 3  {
                     // if macd_out.macd < 0. && price > ma {
@@ -83,7 +88,8 @@ impl PairMeta {
                 // if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 && price < big_ema {
                 // if  price < ma && ta.vel.count >= 3 && price < big_ema {
                 // if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 {
-                if macd_out.macd > 0. && price < ma {
+                if price < ma && ta.vel.count >= 3 {
+                    // if macd_out.macd > 0. && price < ma {
                     // if macd_out.macd > 0. && price < ma  {
                     //     if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 {
                     // if macd_out.macd > 0.  {

@@ -12,7 +12,7 @@ pub type RE = ResponseEvent; // shortcut
 
 #[derive(Debug, Clone)]
 pub enum ResponseEvent {
-    Refresh, // Send by us to refresh the world and update things - every seconds
+    Refresh,      // Send by us to refresh the world and update things - every seconds
     DisConnected, // The socket is disconnected needs to reconnect again
     ApplicationAuthRes(pb::ApplicationAuthRes),
     AccountAuthRes(pb::AccountAuthRes),

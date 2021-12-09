@@ -38,6 +38,9 @@ pub struct Bot {
 
 impl Bot {
     pub fn on_connect(&self) {
+        // self.con.application_auth_req(&cfg.client_id, &cfg.client_secret);
+        self.con.auth(self.con.clone());
+        std::thread::sleep(std::time::Duration::new(2, 0));
         let ids = assets::get_all_symbols_ids();
         println!("ids {:?}", ids);
         self.con.subscribe_spots_req(assets::get_all_symbols_ids());
@@ -77,6 +80,11 @@ impl Bot {
             match e {
                 ResponseEvent::Refresh => {
                     println!("Refresh");
+                }
+                ResponseEvent::DisConnected => {
+                    std::thread::sleep(std::time::Duration::new(2, 0));
+                    self.con.reconnect_socket();
+                    self.on_connect();
                 }
                 ResponseEvent::ApplicationAuthRes(_) => {}
                 ResponseEvent::AccountAuthRes(_) => {}

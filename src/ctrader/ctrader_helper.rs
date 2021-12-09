@@ -1,8 +1,9 @@
 use serde::{Deserialize, Serialize};
 
-use crate::pb;
+use crate::{helper, pb};
 use byteorder::ByteOrder;
 
+use crate::online::ResponseEvent::DisConnected;
 use crate::pb::PayloadType;
 use bytes::BufMut;
 use native_tls::{TlsConnector, TlsStream};
@@ -15,7 +16,6 @@ use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
 use tcp_stream::HandshakeError;
-use crate::online::ResponseEvent::DisConnected;
 
 use super::*;
 
@@ -25,56 +25,71 @@ pub fn dispatch_read_thread(ctrader: CTraderInst) {
     thread::spawn(move || {
         let mut total_buff = bytes::BytesMut::with_capacity(100_000_000); // ~100MB
 
-        let mut refresh_cnt = 0;
+        let mut refresh_time = helper::get_time_sec();
+        let mut reconnect_time = helper::get_time_sec();
+        // we read socket for maximum of 200 times(or 100ms at max) and then block for 500ms read socket - so we can read 400 times per second.
         loop {
-            // Note: Each cTrader send frame seems to be maxed at 16KB.
-            let mut read_vec = [0; 1024 * 1024].to_vec();
+            let start_time = helper::get_time_ms();
+            for i in 0..200 {
+                // Note: Each cTrader send frame seems to be maxed at 16KB.
+                let mut read_vec = [0; 1024 * 1024].to_vec(); // Note: if we take this out of loop for performance it will produce a bug
 
-            let mut locket_stream = stream_lock.lock().unwrap();
-            let read_res = locket_stream.borrow_mut().stream.read(&mut read_vec);
-            drop(locket_stream);
-            if ctrader.is_disconnect() {
-                println!("[ENDING] Existing read loop.");
-                break;
-            }
-            match read_res {
-                Ok(0) => {
-                    println!("cTrader socket is closed. Needs to reconnect");
-                    ctrader.response_chan.send(ResponseEvent::DisConnected);
-                    total_buff.clear();
+                let mut locket_stream = stream_lock.lock().unwrap();
+                let read_res = locket_stream.borrow_mut().stream.read(&mut read_vec);
+                drop(locket_stream);
+                if ctrader.is_disconnect() {
+                    println!("[ENDING] Existing read loop.");
                     break;
                 }
-                Ok(v) => {
-                    // todo buffer
-                    let data = &read_vec[0..v];
-                    total_buff.put_slice(data);
-                    // let mut tb = total_buff.to_vec().as_slice();
-                    let mut tb = total_buff.to_vec();
-                    // println!("[IN]-> len {:?} --- {}", v, tb.len());
-                    if tb.len() > 3 {
-                        let frame_len = byteorder::BE::read_u32(&tb[0..4]);
-                        // Note: This is actully should be == but we do a bigger check if it sends
-                        //  more than multi per frame
-                        if tb.len() as u32 >= (frame_len + 4) {
-                            process_res_data(&tb, ctrader.clone());
-                            total_buff.clear();
-                        } else {
+                match read_res {
+                    Ok(0) => {
+                        // Every 10 seconds send reconnect event
+                        if helper::get_time_sec() - reconnect_time > 10 {
+                            println!("cTrader socket is closed. Needs to reconnect");
+                            ctrader.response_chan.send(ResponseEvent::DisConnected);
+                            reconnect_time = helper::get_time_sec();
+                        }
+                        total_buff.clear();
+                        // No break we only break if we are call disconented
+                        // break;
+                    }
+                    Ok(v) => {
+                        // todo buffer
+                        let data = &read_vec[0..v];
+                        total_buff.put_slice(data);
+                        // let mut tb = total_buff.to_vec().as_slice();
+                        let mut tb = total_buff.to_vec();
+                        // println!("[IN]-> len {:?} --- {}", v, tb.len());
+                        if tb.len() > 3 {
+                            let frame_len = byteorder::BE::read_u32(&tb[0..4]);
+                            // Note: This is actully should be == but we do a bigger check if it sends
+                            //  more than multi per frame
+                            if tb.len() as u32 >= (frame_len + 4) {
+                                process_res_data(&tb, ctrader.clone());
+                                total_buff.clear();
+                            } else {
+                            }
                         }
                     }
+                    Err(e) => {
+                        // we do not block, it will be error if there is nothing to read
+                        // println!(">>> read err  {:?}", e);
+                    }
                 }
-                Err(e) => {
-                    // we do not lock, it will be error if there is nothing to read
-                    //println!(">>> read err  {:?}", e);
+
+                // each loop 100ms budget at most
+                if helper::get_time_ms() - start_time > 100 {
+                    break;
                 }
             }
 
             // Tick(Refresh) the world
-            refresh_cnt += 1;
-            if refresh_cnt % 60 == 0 {
+            if helper::get_time_sec() - refresh_time > 60 {
                 ctrader.response_chan.clone().send(RE::Refresh);
+                refresh_time = helper::get_time_sec();
             }
 
-            std::thread::sleep(Duration::new(1, 0));
+            std::thread::sleep(Duration::from_millis(500)); // 0.5 seconds
         }
     });
 }

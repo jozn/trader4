@@ -13,7 +13,7 @@ impl Actor {
         let np = NewPos {
             symbol_id,
             is_short,
-            size_usd: 10000,
+            size_usd: 1000,
             take_profit_price: tick.price_raw * 1.001, // 10 pip
             stop_loose_price: tick.price_raw * 0.999,
         };
