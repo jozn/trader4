@@ -4,20 +4,18 @@
 #![allow(warnings)]
 #![allow(soft_unstable)]
 
-pub mod base;
-pub mod candle;
+pub mod brain;
 pub mod collector;
-pub mod ctrader;
-pub mod helper;
-pub mod offline;
+pub mod core;
+pub mod offline_old;
 pub mod online;
-pub mod pb;
-pub mod run;
-pub mod ta;
 
-// For merged in offline folder
-pub use offline::loader;
-pub use offline::portfolio;
-// pub use offline::sim;
-// pub use offline::trend;
-pub use offline::world;
+pub use crate::core::*;
+
+// todo: Remvoe
+// For merged in offline_old folder
+pub use offline_old::loader;
+pub use offline_old::portfolio;
+// pub use offline_old::sim;
+// pub use offline_old::trend;
+pub use offline_old::world;

@@ -1,9 +1,9 @@
 use serde::{Deserialize, Serialize};
 
-use crate::pb;
+use crate::online::pb;
 use byteorder::ByteOrder;
 
-use crate::pb::PayloadType;
+use crate::online::pb::PayloadType;
 use bytes::BufMut;
 use native_tls::{TlsConnector, TlsStream};
 use std::convert::{TryFrom, TryInto};

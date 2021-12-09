@@ -1,9 +1,9 @@
 use super::*;
 use crate::base::SimpleCrossEvent;
 use crate::candle::{CandleSeriesTA, Tick};
-use crate::online::bot::PairMeta;
+// use crate::online::bot::PairMeta;
 // use crate::online::bot::{Actor, Bot, PairMeta};
-use crate::run::TRunner;
+use crate::offline_old::run::TRunner;
 
 impl PairMeta {
     pub(crate) fn on_price_tick(&mut self, tick: Tick, bot: &mut Actor) {

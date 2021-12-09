@@ -10,7 +10,7 @@ pub struct CandleSeriesTA {
     pub big: KlineHolderFrameTA,
 
     // todo add flag is we should process ticking
-    // Ticking is just for offline data analyse not any for realtime
+    // Ticking is just for offline_old data analyse not any for realtime
     pub ticking_tip: TickingTipHolderTA,
     pub ticking: KlineSerVec<KlineTATick>,
 }
@@ -26,13 +26,13 @@ pub struct KlineHolderFrameTA {
 impl CandleSeriesTA {
     pub fn new_dep(cfg: &CandleConfig) -> Self {
         // Self::default()
-        Self{
+        Self {
             klines: CandleSeries::new(cfg),
             small: Default::default(),
             medium: Default::default(),
             big: Default::default(),
             ticking_tip: Default::default(),
-            ticking: Default::default()
+            ticking: Default::default(),
         }
     }
 

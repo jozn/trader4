@@ -1,8 +1,8 @@
 use super::*;
-use crate::ctrader::*;
 use crate::online::assets::Pair;
-use crate::pb;
-use crate::pb::TickData;
+use crate::online::ctrader::*;
+use crate::online::pb;
+use crate::online::pb::TickData;
 use std::fs;
 use std::sync::Arc;
 

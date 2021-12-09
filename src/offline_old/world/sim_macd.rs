@@ -2,13 +2,13 @@ use crate::base::SimpleCrossEvent;
 use crate::candle::{CandleSeriesTA, KlineTA, Tick};
 use crate::loader::CSVForexRecord;
 use crate::loader::*;
-use crate::offline::strategy1::Strategy1;
-use crate::offline::to_csv_out;
+use crate::offline_old::run::*;
+use crate::offline_old::strategy1::Strategy1;
+use crate::offline_old::to_csv_out;
 use crate::portfolio::*;
-use crate::run::*;
 use crate::*;
 
-#[derive(Debug,  Clone)]
+#[derive(Debug, Clone)]
 pub struct SimMacdWorld {
     ticks: Vec<CSVForexRecord>,
     last_tick: Tick,
@@ -34,7 +34,7 @@ impl SimMacdWorld {
             strategy1: Strategy1::new(),
             last_tick: Default::default(),
             name: "".to_string(),
-            tick_cnt: 0
+            tick_cnt: 0,
         }
     }
 
@@ -61,7 +61,7 @@ impl SimMacdWorld {
                 name,
                 strategy1: Strategy1::new(),
                 last_tick: Default::default(),
-                tick_cnt: 0
+                tick_cnt: 0,
             };
 
             // println!(">>paht> {:?}", &d);

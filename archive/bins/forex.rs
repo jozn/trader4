@@ -1,10 +1,10 @@
 use trader3;
 
 fn main() {
-    // trader3::offline.play::play1();
-    // trader3::offline.play::play2();
-    // trader3::offline.play::play3();
-    // trader3::offline.play::play5();
+    // trader3::offline_old.play::play1();
+    // trader3::offline_old.play::play2();
+    // trader3::offline_old.play::play3();
+    // trader3::offline_old.play::play5();
 
     run_sim();
 }

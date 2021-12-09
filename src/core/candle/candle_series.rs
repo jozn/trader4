@@ -26,7 +26,6 @@ pub struct CandleConfig {
     pub big_tick: u64,
 }
 
-
 pub type CandleSeriesDiff = CandleSeries; // Only trades is not set
 
 impl CandleSeries {
@@ -154,7 +153,7 @@ impl Default for CandleConfig {
         Self {
             small_tick: SMALL_TICK,
             medium_tick: MEDIUM_TICK,
-            big_tick: BIG_TICK
+            big_tick: BIG_TICK,
         }
     }
 }

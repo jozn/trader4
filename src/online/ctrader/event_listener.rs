@@ -1,5 +1,5 @@
-use crate::pb;
-use crate::pb::*;
+use crate::online::pb;
+use crate::online::pb::*;
 
 // Deprecated
 pub trait OnResponse {

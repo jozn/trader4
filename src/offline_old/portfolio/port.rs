@@ -1,6 +1,6 @@
 use super::*;
 use crate::candle::Tick;
-use crate::offline::report::Report;
+use crate::offline_old::report::Report;
 use chrono::*;
 use serde::{Deserialize, Serialize};
 

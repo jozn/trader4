@@ -41,10 +41,10 @@ pub struct ProtoMessage {
     pub payload_type: u32,
     /// Serialized protobuf message that corresponds to payloadType
     #[prost(bytes = "vec", optional, tag = "2")]
-    pub payload: ::core::option::Option<::prost::alloc::vec::Vec<u8>>,
+    pub payload: std::option::Option<std::prelude::rust_2015::Vec<u8>>,
     /// Request message id, assigned by the client that will be returned in the response
     #[prost(string, optional, tag = "3")]
-    pub client_msg_id: ::core::option::Option<::prost::alloc::string::String>,
+    pub client_msg_id: std::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ProtoErrorRes {
@@ -54,16 +54,16 @@ pub struct ProtoErrorRes {
         tag = "1",
         default = "ErrorRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Contains name of ProtoErrorCode or other custom ErrorCodes (e.g. ProtoCHErrorCode)
     #[prost(string, required, tag = "2")]
     pub error_code: ::prost::alloc::string::String,
     /// Error description
     #[prost(string, optional, tag = "3")]
-    pub description: ::core::option::Option<::prost::alloc::string::String>,
+    pub description: std::option::Option<::prost::alloc::string::String>,
     /// CS-10489 Epoch timestamp in second
     #[prost(uint64, optional, tag = "4")]
-    pub maintenance_end_timestamp: ::core::option::Option<u64>,
+    pub maintenance_end_timestamp: std::option::Option<u64>,
 }
 ///* Event that is sent from Open API proxy and can be used as criteria that connection is healthy when no other messages are sent by cTrader platform. Open API client can send this message when he needs to keep the connection open for a period without other messages longer than 30 seconds
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -74,7 +74,7 @@ pub struct ProtoHeartbeatEvent {
         tag = "1",
         default = "HeartbeatEvent"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
 }
 ///* Asset entity.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -87,10 +87,10 @@ pub struct Asset {
     pub name: ::prost::alloc::string::String,
     /// User friendly name.
     #[prost(string, optional, tag = "3")]
-    pub display_name: ::core::option::Option<::prost::alloc::string::String>,
+    pub display_name: std::option::Option<::prost::alloc::string::String>,
     /// Precision of the asset.
     #[prost(int32, optional, tag = "4")]
-    pub digits: ::core::option::Option<i32>,
+    pub digits: std::option::Option<i32>,
 }
 ///* Trading symbol entity.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -106,38 +106,38 @@ pub struct Symbol {
     pub pip_position: i32,
     /// If TRUE then the short selling with the symbol is enabled.
     #[prost(bool, optional, tag = "4")]
-    pub enable_short_selling: ::core::option::Option<bool>,
+    pub enable_short_selling: std::option::Option<bool>,
     /// If TRUE then setting of guaranteedStopLoss is available for limited risk accounts.
     #[prost(bool, optional, tag = "5")]
-    pub guaranteed_stop_loss: ::core::option::Option<bool>,
+    pub guaranteed_stop_loss: std::option::Option<bool>,
     /// Day of the week when SWAP charge amount will be tripled. Doesn't impact Rollover Commission.
     #[prost(enumeration = "DayOfWeek", optional, tag = "6", default = "Monday")]
-    pub swap_rollover3_days: ::core::option::Option<i32>,
+    pub swap_rollover3_days: std::option::Option<i32>,
     /// SWAP charge for long positions.
     #[prost(double, optional, tag = "7")]
-    pub swap_long: ::core::option::Option<f64>,
+    pub swap_long: std::option::Option<f64>,
     /// SWAP charge for short positions.
     #[prost(double, optional, tag = "8")]
-    pub swap_short: ::core::option::Option<f64>,
+    pub swap_short: std::option::Option<f64>,
     /// Maximum allowed volume in cents for an order with a symbol.
     #[prost(int64, optional, tag = "9")]
-    pub max_volume: ::core::option::Option<i64>,
+    pub max_volume: std::option::Option<i64>,
     /// Minimum allowed volume in cents for an order with a symbol.
     #[prost(int64, optional, tag = "10")]
-    pub min_volume: ::core::option::Option<i64>,
+    pub min_volume: std::option::Option<i64>,
     /// Step of the volume in cents for an order.
     #[prost(int64, optional, tag = "11")]
-    pub step_volume: ::core::option::Option<i64>,
+    pub step_volume: std::option::Option<i64>,
     /// Value of max exposure per symbol, per account. Blocks execution if breached.
     #[prost(uint64, optional, tag = "12")]
-    pub max_exposure: ::core::option::Option<u64>,
+    pub max_exposure: std::option::Option<u64>,
     /// Symbol trading interval, specified in seconds starting from SUNDAY 00:00 in specified time zone.
     #[prost(message, repeated, tag = "13")]
-    pub schedule: ::prost::alloc::vec::Vec<Interval>,
+    pub schedule: std::prelude::rust_2015::Vec<Interval>,
     /// Commission base amount. Total commission depends on commissionType. Use preciseTradingCommissionRate.
     #[deprecated]
     #[prost(int64, optional, tag = "14")]
-    pub commission: ::core::option::Option<i64>,
+    pub commission: std::option::Option<i64>,
     /// Commission type. See CommissionType for details.
     #[prost(
         enumeration = "CommissionType",
@@ -145,19 +145,19 @@ pub struct Symbol {
         tag = "15",
         default = "UsdPerMillionUsd"
     )]
-    pub commission_type: ::core::option::Option<i32>,
+    pub commission_type: std::option::Option<i32>,
     /// Minimum allowed distance between stop loss and current market price.
     #[prost(uint32, optional, tag = "16")]
-    pub sl_distance: ::core::option::Option<u32>,
+    pub sl_distance: std::option::Option<u32>,
     /// Minimum allowed distance between take profit and current market price.
     #[prost(uint32, optional, tag = "17")]
-    pub tp_distance: ::core::option::Option<u32>,
+    pub tp_distance: std::option::Option<u32>,
     /// Minimum allowed distance between guaranteed stop loss and current market price.
     #[prost(uint32, optional, tag = "18")]
-    pub gsl_distance: ::core::option::Option<u32>,
+    pub gsl_distance: std::option::Option<u32>,
     /// Guaranteed stop loss fee.
     #[prost(int64, optional, tag = "19")]
-    pub gsl_charge: ::core::option::Option<i64>,
+    pub gsl_charge: std::option::Option<i64>,
     /// Unit of distance measure for slDistance, tpDistance, gslDistance.
     #[prost(
         enumeration = "SymbolDistanceType",
@@ -165,11 +165,11 @@ pub struct Symbol {
         tag = "20",
         default = "SymbolDistanceInPoints"
     )]
-    pub distance_set_in: ::core::option::Option<i32>,
+    pub distance_set_in: std::option::Option<i32>,
     /// Minimum commission amount per trade. Use preciseMinCommission.
     #[deprecated]
     #[prost(int64, optional, tag = "21")]
-    pub min_commission: ::core::option::Option<i64>,
+    pub min_commission: std::option::Option<i64>,
     /// Minimum commission Type. See MinCommissionType for details.
     #[prost(
         enumeration = "MinCommissionType",
@@ -177,25 +177,25 @@ pub struct Symbol {
         tag = "22",
         default = "Currency"
     )]
-    pub min_commission_type: ::core::option::Option<i32>,
+    pub min_commission_type: std::option::Option<i32>,
     /// Currency for minimum commission. (USD or quote currency).
     #[prost(string, optional, tag = "23", default = "USD")]
-    pub min_commission_asset: ::core::option::Option<::prost::alloc::string::String>,
+    pub min_commission_asset: std::option::Option<::prost::alloc::string::String>,
     /// Amount of commission per trade for Shariah Compliant accounts in deposit currency (swapFree = TRUE).
     #[prost(int64, optional, tag = "24")]
-    pub rollover_commission: ::core::option::Option<i64>,
+    pub rollover_commission: std::option::Option<i64>,
     /// Initial period before the first rolloverCommission will be charged on the account.
     #[prost(int32, optional, tag = "25")]
-    pub skip_rollover_days: ::core::option::Option<i32>,
+    pub skip_rollover_days: std::option::Option<i32>,
     /// Time zone for the symbol trading intervals.
     #[prost(string, optional, tag = "26")]
-    pub schedule_time_zone: ::core::option::Option<::prost::alloc::string::String>,
+    pub schedule_time_zone: std::option::Option<::prost::alloc::string::String>,
     /// Rules for trading with the symbol. See TradingMode for details.
     #[prost(enumeration = "TradingMode", optional, tag = "27", default = "Enabled")]
-    pub trading_mode: ::core::option::Option<i32>,
+    pub trading_mode: std::option::Option<i32>,
     /// Day of the week (in UTC) when Administrative Fee charge amount will be tripled. Applied only if RolloverChargePeriod = 0 or 1
     #[prost(enumeration = "DayOfWeek", optional, tag = "28", default = "Monday")]
-    pub rollover_commission3_days: ::core::option::Option<i32>,
+    pub rollover_commission3_days: std::option::Option<i32>,
     /// Specifies type of SWAP computation as PIPS (0) or PERCENTAGE (1, annual, in percent)
     #[prost(
         enumeration = "SwapCalculationType",
@@ -203,19 +203,19 @@ pub struct Symbol {
         tag = "29",
         default = "Pips"
     )]
-    pub swap_calculation_type: ::core::option::Option<i32>,
+    pub swap_calculation_type: std::option::Option<i32>,
     /// Lot size of the Symbol (in cents)
     #[prost(int64, optional, tag = "30")]
-    pub lot_size: ::core::option::Option<i64>,
+    pub lot_size: std::option::Option<i64>,
     /// Commission base amount. Total commission depends on commissionType: for non-percentage types it is multiplied by 10^8.
     #[prost(int64, optional, tag = "31")]
-    pub precise_trading_commission_rate: ::core::option::Option<i64>,
+    pub precise_trading_commission_rate: std::option::Option<i64>,
     /// Minimum commission amount per trade multiplied by 10^8.
     #[prost(int64, optional, tag = "32")]
-    pub precise_min_commission: ::core::option::Option<i64>,
+    pub precise_min_commission: std::option::Option<i64>,
     /// List of holidays for this symbol specified by broker.
     #[prost(message, repeated, tag = "33")]
-    pub holiday: ::prost::alloc::vec::Vec<Holiday>,
+    pub holiday: std::prelude::rust_2015::Vec<Holiday>,
 }
 ///* Lightweight symbol entity.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -225,21 +225,21 @@ pub struct LightSymbol {
     pub symbol_id: i64,
     /// Name of the symbol (e.g. EUR/USD).
     #[prost(string, optional, tag = "2")]
-    pub symbol_name: ::core::option::Option<::prost::alloc::string::String>,
+    pub symbol_name: std::option::Option<::prost::alloc::string::String>,
     /// If TRUE then symbol is visible for traders.
     #[prost(bool, optional, tag = "3")]
-    pub enabled: ::core::option::Option<bool>,
+    pub enabled: std::option::Option<bool>,
     /// Base asset.
     #[prost(int64, optional, tag = "4")]
-    pub base_asset_id: ::core::option::Option<i64>,
+    pub base_asset_id: std::option::Option<i64>,
     /// Quote asset.
     #[prost(int64, optional, tag = "5")]
-    pub quote_asset_id: ::core::option::Option<i64>,
+    pub quote_asset_id: std::option::Option<i64>,
     /// Id of the symbol category used for symbols grouping.
     #[prost(int64, optional, tag = "6")]
-    pub symbol_category_id: ::core::option::Option<i64>,
+    pub symbol_category_id: std::option::Option<i64>,
     #[prost(string, optional, tag = "7")]
-    pub description: ::core::option::Option<::prost::alloc::string::String>,
+    pub description: std::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ArchivedSymbol {
@@ -250,7 +250,7 @@ pub struct ArchivedSymbol {
     #[prost(int64, required, tag = "3")]
     pub utc_last_update_timestamp: i64,
     #[prost(string, optional, tag = "4")]
-    pub description: ::core::option::Option<::prost::alloc::string::String>,
+    pub description: std::option::Option<::prost::alloc::string::String>,
 }
 ///* Symbol category entity.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -286,16 +286,16 @@ pub struct Trader {
     pub balance: i64,
     /// Balance version used to identify the final balance. Increments each time when the trader's account balance is changed.
     #[prost(int64, optional, tag = "3")]
-    pub balance_version: ::core::option::Option<i64>,
+    pub balance_version: std::option::Option<i64>,
     /// Amount of broker's bonus allocated to the account.
     #[prost(int64, optional, tag = "4")]
-    pub manager_bonus: ::core::option::Option<i64>,
+    pub manager_bonus: std::option::Option<i64>,
     /// Amount of introducing broker bonus allocated to the account.
     #[prost(int64, optional, tag = "5")]
-    pub ib_bonus: ::core::option::Option<i64>,
+    pub ib_bonus: std::option::Option<i64>,
     /// Broker's bonus that cannot be withdrew from the account as cash.
     #[prost(int64, optional, tag = "6")]
-    pub non_withdrawable_bonus: ::core::option::Option<i64>,
+    pub non_withdrawable_bonus: std::option::Option<i64>,
     /// Access rights that an owner has to the account in cTrader platform. See AccessRights for details.
     #[prost(
         enumeration = "AccessRights",
@@ -303,41 +303,41 @@ pub struct Trader {
         tag = "7",
         default = "FullAccess"
     )]
-    pub access_rights: ::core::option::Option<i32>,
+    pub access_rights: std::option::Option<i32>,
     /// Deposit currency of the account.
     #[prost(int64, required, tag = "8")]
     pub deposit_asset_id: i64,
     /// If TRUE then account is Shariah compliant.
     #[prost(bool, optional, tag = "9")]
-    pub swap_free: ::core::option::Option<bool>,
+    pub swap_free: std::option::Option<bool>,
     /// Account leverage (e.g. If leverage = 1:50 then value = 5000).
     #[prost(uint32, optional, tag = "10")]
-    pub leverage_in_cents: ::core::option::Option<u32>,
+    pub leverage_in_cents: std::option::Option<u32>,
     /// Margin computation type for the account (MAX, SUM, NET).
     #[prost(enumeration = "TotalMarginCalculationType", optional, tag = "11")]
-    pub total_margin_calculation_type: ::core::option::Option<i32>,
+    pub total_margin_calculation_type: std::option::Option<i32>,
     /// Maximum allowed leverage for the account. Used as validation when a Trader can change leverage value.
     #[prost(uint32, optional, tag = "12")]
-    pub max_leverage: ::core::option::Option<u32>,
+    pub max_leverage: std::option::Option<u32>,
     /// If TRUE then account is AMF compliant. Use isLimitedRisk and limitedRiskMarginCalculationStrategy.
     #[deprecated]
     #[prost(bool, optional, tag = "13")]
-    pub french_risk: ::core::option::Option<bool>,
+    pub french_risk: std::option::Option<bool>,
     /// ID of the account that is unique per server (Broker).
     #[prost(int64, optional, tag = "14")]
-    pub trader_login: ::core::option::Option<i64>,
+    pub trader_login: std::option::Option<i64>,
     /// Account type: HEDGED, NETTED, etc.
     #[prost(enumeration = "AccountType", optional, tag = "15", default = "Hedged")]
-    pub account_type: ::core::option::Option<i32>,
+    pub account_type: std::option::Option<i32>,
     /// Some whitelabel assigned to trader by broker at the moment of account creation.
     #[prost(string, optional, tag = "16")]
-    pub broker_name: ::core::option::Option<::prost::alloc::string::String>,
+    pub broker_name: std::option::Option<::prost::alloc::string::String>,
     /// Unix timestamp of the account registration. Should be used as minimal date in historical data requests.
     #[prost(int64, optional, tag = "17")]
-    pub registration_timestamp: ::core::option::Option<i64>,
+    pub registration_timestamp: std::option::Option<i64>,
     /// If TRUE then account is compliant to use specific margin calculation strategy.
     #[prost(bool, optional, tag = "18")]
-    pub is_limited_risk: ::core::option::Option<bool>,
+    pub is_limited_risk: std::option::Option<bool>,
     /// Special strategy used in margin calculations for this account (if account isLimitedRisk).
     #[prost(
         enumeration = "LimitedRiskMarginCalculationStrategy",
@@ -345,10 +345,10 @@ pub struct Trader {
         tag = "19",
         default = "AccordingToLeverage"
     )]
-    pub limited_risk_margin_calculation_strategy: ::core::option::Option<i32>,
+    pub limited_risk_margin_calculation_strategy: std::option::Option<i32>,
     /// Specifies the exponent of the monetary values. E.g. moneyDigits = 8 must be interpret as business value multiplied by 10^8, then real balance would be 10053099944 / 10^8 = 100.53099944. Affects balance, managerBonus, ibBonus, nonWithdrawableBonus.
     #[prost(uint32, optional, tag = "20")]
-    pub money_digits: ::core::option::Option<u32>,
+    pub money_digits: std::option::Option<u32>,
 }
 ///* Trade position entity.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -367,31 +367,31 @@ pub struct Position {
     pub swap: i64,
     /// VWAP price of the position based on all executions (orders) linked to the position.
     #[prost(double, optional, tag = "5")]
-    pub price: ::core::option::Option<f64>,
+    pub price: std::option::Option<f64>,
     /// Current stop loss price.
     #[prost(double, optional, tag = "6")]
-    pub stop_loss: ::core::option::Option<f64>,
+    pub stop_loss: std::option::Option<f64>,
     /// Current take profit price.
     #[prost(double, optional, tag = "7")]
-    pub take_profit: ::core::option::Option<f64>,
+    pub take_profit: std::option::Option<f64>,
     /// Time of the last change of the position, including amend SL/TP of the position, execution of related order, cancel or related order, etc.
     #[prost(int64, optional, tag = "8")]
-    pub utc_last_update_timestamp: ::core::option::Option<i64>,
+    pub utc_last_update_timestamp: std::option::Option<i64>,
     /// Current unrealized commission related to the position.
     #[prost(int64, optional, tag = "9")]
-    pub commission: ::core::option::Option<i64>,
+    pub commission: std::option::Option<i64>,
     /// Rate for used margin computation. Represented as Base/Deposit.
     #[prost(double, optional, tag = "10")]
-    pub margin_rate: ::core::option::Option<f64>,
+    pub margin_rate: std::option::Option<f64>,
     /// Amount of unrealized commission related to following of strategy provider.
     #[prost(int64, optional, tag = "11")]
-    pub mirroring_commission: ::core::option::Option<i64>,
+    pub mirroring_commission: std::option::Option<i64>,
     /// If TRUE then position's stop loss is guaranteedStopLoss.
     #[prost(bool, optional, tag = "12")]
-    pub guaranteed_stop_loss: ::core::option::Option<bool>,
+    pub guaranteed_stop_loss: std::option::Option<bool>,
     /// Amount of margin used for the position in deposit currency.
     #[prost(uint64, optional, tag = "13")]
-    pub used_margin: ::core::option::Option<u64>,
+    pub used_margin: std::option::Option<u64>,
     /// Stop trigger method for SL/TP of the position.
     #[prost(
         enumeration = "OrderTriggerMethod",
@@ -399,10 +399,10 @@ pub struct Position {
         tag = "14",
         default = "Trade"
     )]
-    pub stop_loss_trigger_method: ::core::option::Option<i32>,
+    pub stop_loss_trigger_method: std::option::Option<i32>,
     /// Specifies the exponent of the monetary values. E.g. moneyDigits = 8 must be interpret as business value multiplied by 10^8, then real balance would be 10053099944 / 10^8 = 100.53099944. Affects swap, commission, mirroringCommission, usedMargin.
     #[prost(uint32, optional, tag = "15")]
-    pub money_digits: ::core::option::Option<u32>,
+    pub money_digits: std::option::Option<u32>,
 }
 ///* Position/order trading details entity.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -418,16 +418,16 @@ pub struct TradeData {
     pub trade_side: i32,
     /// Time when position was opened or order was created.
     #[prost(int64, optional, tag = "4")]
-    pub open_timestamp: ::core::option::Option<i64>,
+    pub open_timestamp: std::option::Option<i64>,
     /// Text label specified during order request.
     #[prost(string, optional, tag = "5")]
-    pub label: ::core::option::Option<::prost::alloc::string::String>,
+    pub label: std::option::Option<::prost::alloc::string::String>,
     /// If TRUE then position/order stop loss is guaranteedStopLoss.
     #[prost(bool, optional, tag = "6")]
-    pub guaranteed_stop_loss: ::core::option::Option<bool>,
+    pub guaranteed_stop_loss: std::option::Option<bool>,
     /// User-specified comment.
     #[prost(string, optional, tag = "7")]
-    pub comment: ::core::option::Option<::prost::alloc::string::String>,
+    pub comment: std::option::Option<::prost::alloc::string::String>,
 }
 ///* Trade order entity.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -446,40 +446,40 @@ pub struct Order {
     pub order_status: i32,
     /// If the order has time in force GTD then expiration is specified.
     #[prost(int64, optional, tag = "6")]
-    pub expiration_timestamp: ::core::option::Option<i64>,
+    pub expiration_timestamp: std::option::Option<i64>,
     /// Price at which an order was executed. For order with FILLED status.
     #[prost(double, optional, tag = "7")]
-    pub execution_price: ::core::option::Option<f64>,
+    pub execution_price: std::option::Option<f64>,
     /// Part of the volume that was filled.
     #[prost(int64, optional, tag = "8")]
-    pub executed_volume: ::core::option::Option<i64>,
+    pub executed_volume: std::option::Option<i64>,
     /// Timestamp of the last update of the order.
     #[prost(int64, optional, tag = "9")]
-    pub utc_last_update_timestamp: ::core::option::Option<i64>,
+    pub utc_last_update_timestamp: std::option::Option<i64>,
     /// Used for Market Range order with combination of slippageInPoints to specify price range were order can be executed.
     #[prost(double, optional, tag = "10")]
-    pub base_slippage_price: ::core::option::Option<f64>,
+    pub base_slippage_price: std::option::Option<f64>,
     /// Used for Market Range and STOP_LIMIT orders to to specify price range were order can be executed.
     #[prost(int64, optional, tag = "11")]
-    pub slippage_in_points: ::core::option::Option<i64>,
+    pub slippage_in_points: std::option::Option<i64>,
     /// If TRUE then the order is closing part of whole position. Must have specified positionId.
     #[prost(bool, optional, tag = "12")]
-    pub closing_order: ::core::option::Option<bool>,
+    pub closing_order: std::option::Option<bool>,
     /// Valid only for LIMIT orders.
     #[prost(double, optional, tag = "13")]
-    pub limit_price: ::core::option::Option<f64>,
+    pub limit_price: std::option::Option<f64>,
     /// Valid only for STOP and STOP_LIMIT orders.
     #[prost(double, optional, tag = "14")]
-    pub stop_price: ::core::option::Option<f64>,
+    pub stop_price: std::option::Option<f64>,
     /// Absolute stopLoss price.
     #[prost(double, optional, tag = "15")]
-    pub stop_loss: ::core::option::Option<f64>,
+    pub stop_loss: std::option::Option<f64>,
     /// Absolute takeProfit price.
     #[prost(double, optional, tag = "16")]
-    pub take_profit: ::core::option::Option<f64>,
+    pub take_profit: std::option::Option<f64>,
     /// Optional ClientOrderId. Max Length = 50 chars.
     #[prost(string, optional, tag = "17")]
-    pub client_order_id: ::core::option::Option<::prost::alloc::string::String>,
+    pub client_order_id: std::option::Option<::prost::alloc::string::String>,
     /// Order's time in force. Depends on order type.
     #[prost(
         enumeration = "TimeInForce",
@@ -487,22 +487,22 @@ pub struct Order {
         tag = "18",
         default = "ImmediateOrCancel"
     )]
-    pub time_in_force: ::core::option::Option<i32>,
+    pub time_in_force: std::option::Option<i32>,
     /// ID of the position linked to the order (e.g. closing order, order that increase volume of a specific position, etc.).
     #[prost(int64, optional, tag = "19")]
-    pub position_id: ::core::option::Option<i64>,
+    pub position_id: std::option::Option<i64>,
     /// Relative stopLoss that can be specified instead of absolute as one. Specified in 1/100_000 of unit of a price. For BUY stopLoss = entryPrice - relativeStopLoss, for SELL stopLoss = entryPrice + relativeStopLoss.
     #[prost(int64, optional, tag = "20")]
-    pub relative_stop_loss: ::core::option::Option<i64>,
+    pub relative_stop_loss: std::option::Option<i64>,
     /// Relative takeProfit that can be specified instead of absolute one. Specified in 1/100_000 of unit of a price. ForBUY takeProfit = entryPrice + relativeTakeProfit, for SELL takeProfit = entryPrice - relativeTakeProfit.
     #[prost(int64, optional, tag = "21")]
-    pub relative_take_profit: ::core::option::Option<i64>,
+    pub relative_take_profit: std::option::Option<i64>,
     /// If TRUE then order was stopped out from server side.
     #[prost(bool, optional, tag = "22")]
-    pub is_stop_out: ::core::option::Option<bool>,
+    pub is_stop_out: std::option::Option<bool>,
     /// If TRUE then order is trailingStopLoss. Valid for STOP_LOSS_TAKE_PROFIT order.
     #[prost(bool, optional, tag = "23")]
-    pub trailing_stop_loss: ::core::option::Option<bool>,
+    pub trailing_stop_loss: std::option::Option<bool>,
     /// Trigger method for the order. Valid only for STOP and STOP_LIMIT orders.
     #[prost(
         enumeration = "OrderTriggerMethod",
@@ -510,7 +510,7 @@ pub struct Order {
         tag = "24",
         default = "Trade"
     )]
-    pub stop_trigger_method: ::core::option::Option<i32>,
+    pub stop_trigger_method: std::option::Option<i32>,
 }
 ///* Bonus deposit/withdrawal entity.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -538,13 +538,13 @@ pub struct BonusDepositWithdraw {
     pub change_bonus_timestamp: i64,
     /// Note added to operation. Visible to the trader.
     #[prost(string, optional, tag = "8")]
-    pub external_note: ::core::option::Option<::prost::alloc::string::String>,
+    pub external_note: std::option::Option<::prost::alloc::string::String>,
     /// ID of introducing broker who deposited/withdrew bonus.
     #[prost(int64, optional, tag = "9")]
-    pub introducing_broker_id: ::core::option::Option<i64>,
+    pub introducing_broker_id: std::option::Option<i64>,
     /// Specifies the exponent of the monetary values. E.g. moneyDigits = 8 must be interpret as business value multiplied by 10^8, then real balance would be 10053099944 / 10^8 = 100.53099944. Affects managerBonus, managerDelta, ibBonus, ibDelta.
     #[prost(uint32, optional, tag = "10")]
-    pub money_digits: ::core::option::Option<u32>,
+    pub money_digits: std::option::Option<u32>,
 }
 ///* Account deposit/withdrawal operation entity.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -566,16 +566,16 @@ pub struct DepositWithdraw {
     pub change_balance_timestamp: i64,
     /// Note added to operation. Visible to the trader.
     #[prost(string, optional, tag = "6")]
-    pub external_note: ::core::option::Option<::prost::alloc::string::String>,
+    pub external_note: std::option::Option<::prost::alloc::string::String>,
     /// Balance version used to identify the final balance. Increments each time when the trader's account balance is changed.
     #[prost(int64, optional, tag = "7")]
-    pub balance_version: ::core::option::Option<i64>,
+    pub balance_version: std::option::Option<i64>,
     /// Total account's equity after balance operation was executed.
     #[prost(int64, optional, tag = "8")]
-    pub equity: ::core::option::Option<i64>,
+    pub equity: std::option::Option<i64>,
     /// Specifies the exponent of the monetary values. E.g. moneyDigits = 8 must be interpret as business value multiplied by 10^8, then real balance would be 10053099944 / 10^8 = 100.53099944. Affects balance, delta, equity.
     #[prost(uint32, optional, tag = "9")]
-    pub money_digits: ::core::option::Option<u32>,
+    pub money_digits: std::option::Option<u32>,
 }
 ///* Execution entity.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -606,10 +606,10 @@ pub struct Deal {
     pub execution_timestamp: i64,
     /// Timestamp when the deal was created, executed or rejected.
     #[prost(int64, optional, tag = "9")]
-    pub utc_last_update_timestamp: ::core::option::Option<i64>,
+    pub utc_last_update_timestamp: std::option::Option<i64>,
     /// Execution price.
     #[prost(double, optional, tag = "10")]
-    pub execution_price: ::core::option::Option<f64>,
+    pub execution_price: std::option::Option<f64>,
     /// Buy/Sell.
     #[prost(enumeration = "TradeSide", required, tag = "11")]
     pub trade_side: i32,
@@ -618,19 +618,19 @@ pub struct Deal {
     pub deal_status: i32,
     /// Rate for used margin computation. Represented as Base/Deposit.
     #[prost(double, optional, tag = "13")]
-    pub margin_rate: ::core::option::Option<f64>,
+    pub margin_rate: std::option::Option<f64>,
     /// Amount of trading commission associated with the deal.
     #[prost(int64, optional, tag = "14")]
-    pub commission: ::core::option::Option<i64>,
+    pub commission: std::option::Option<i64>,
     /// Base to USD conversion rate on the time of deal execution.
     #[prost(double, optional, tag = "15")]
-    pub base_to_usd_conversion_rate: ::core::option::Option<f64>,
+    pub base_to_usd_conversion_rate: std::option::Option<f64>,
     /// Closing position detail. Valid only for closing deal.
     #[prost(message, optional, tag = "16")]
-    pub close_position_detail: ::core::option::Option<ClosePositionDetail>,
+    pub close_position_detail: std::option::Option<ClosePositionDetail>,
     /// Specifies the exponent of the monetary values. E.g. moneyDigits = 8 must be interpret as business value multiplied by 10^8, then real balance would be 10053099944 / 10^8 = 100.53099944. Affects commission.
     #[prost(uint32, optional, tag = "17")]
-    pub money_digits: ::core::option::Option<u32>,
+    pub money_digits: std::option::Option<u32>,
 }
 ///* Trading details for closing deal.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -652,16 +652,16 @@ pub struct ClosePositionDetail {
     pub balance: i64,
     /// Quote/Deposit currency conversion rate on the time of closing deal execution.
     #[prost(double, optional, tag = "6")]
-    pub quote_to_deposit_conversion_rate: ::core::option::Option<f64>,
+    pub quote_to_deposit_conversion_rate: std::option::Option<f64>,
     /// Closed volume in cents.
     #[prost(int64, optional, tag = "7")]
-    pub closed_volume: ::core::option::Option<i64>,
+    pub closed_volume: std::option::Option<i64>,
     /// Balance version of the account related to closing deal operation.
     #[prost(int64, optional, tag = "8")]
-    pub balance_version: ::core::option::Option<i64>,
+    pub balance_version: std::option::Option<i64>,
     /// Specifies the exponent of the monetary values. E.g. moneyDigits = 8 must be interpret as business value multiplied by 10^8, then real balance would be 10053099944 / 10^8 = 100.53099944. Affects grossProfit, swap, commission, balance.
     #[prost(uint32, optional, tag = "9")]
-    pub money_digits: ::core::option::Option<u32>,
+    pub money_digits: std::option::Option<u32>,
 }
 ///* Historical Trendbar entity.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -671,22 +671,22 @@ pub struct Trendbar {
     pub volume: i64,
     /// Bar period.
     #[prost(enumeration = "TrendbarPeriod", optional, tag = "4", default = "M1")]
-    pub period: ::core::option::Option<i32>,
+    pub period: std::option::Option<i32>,
     /// Low price of the bar.
     #[prost(int64, optional, tag = "5")]
-    pub low: ::core::option::Option<i64>,
+    pub low: std::option::Option<i64>,
     /// Delta between open and low price. open = low + deltaOpen.
     #[prost(uint64, optional, tag = "6")]
-    pub delta_open: ::core::option::Option<u64>,
+    pub delta_open: std::option::Option<u64>,
     /// Delta between close and low price. close = low + deltaClose.
     #[prost(uint64, optional, tag = "7")]
-    pub delta_close: ::core::option::Option<u64>,
+    pub delta_close: std::option::Option<u64>,
     /// Delta between high and low price. high = low + deltaHigh.
     #[prost(uint64, optional, tag = "8")]
-    pub delta_high: ::core::option::Option<u64>,
+    pub delta_high: std::option::Option<u64>,
     /// Timestamp of the bar. Equal to the timestamp of the open tick.
     #[prost(uint32, optional, tag = "9")]
-    pub utc_timestamp_in_minutes: ::core::option::Option<u32>,
+    pub utc_timestamp_in_minutes: std::option::Option<u32>,
 }
 ///* Expected margin computation entity.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -725,24 +725,24 @@ pub struct CtidTraderAccount {
     pub ctid_trader_account_id: u64,
     /// If TRUE then the account is belong to Live environment and live host must be used to authorize it
     #[prost(bool, optional, tag = "2")]
-    pub is_live: ::core::option::Option<bool>,
+    pub is_live: std::option::Option<bool>,
     /// TraderLogin for a specific account. Value is displayed on Client App UI
     #[prost(int64, optional, tag = "3")]
-    pub trader_login: ::core::option::Option<i64>,
+    pub trader_login: std::option::Option<i64>,
     #[prost(int64, optional, tag = "4")]
-    pub last_closing_deal_timestamp: ::core::option::Option<i64>,
+    pub last_closing_deal_timestamp: std::option::Option<i64>,
     #[prost(int64, optional, tag = "5")]
-    pub last_balance_update_timestamp: ::core::option::Option<i64>,
+    pub last_balance_update_timestamp: std::option::Option<i64>,
 }
 ///* Asset class entity.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AssetClass {
     /// Unique asset ID.
     #[prost(int64, optional, tag = "1")]
-    pub id: ::core::option::Option<i64>,
+    pub id: std::option::Option<i64>,
     /// Asset class name.
     #[prost(string, optional, tag = "2")]
-    pub name: ::core::option::Option<::prost::alloc::string::String>,
+    pub name: std::option::Option<::prost::alloc::string::String>,
 }
 ///* Depth of market entity.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -755,10 +755,10 @@ pub struct DepthQuote {
     pub size: u64,
     /// Bid price for bid quotes.
     #[prost(uint64, optional, tag = "4")]
-    pub bid: ::core::option::Option<u64>,
+    pub bid: std::option::Option<u64>,
     /// Ask price for ask quotes.
     #[prost(uint64, optional, tag = "5")]
-    pub ask: ::core::option::Option<u64>,
+    pub ask: std::option::Option<u64>,
 }
 ///* Margin call entity, specifies threshold for exact margin call type. Only 3 instances of margin calls are supported, identified by marginCallType. See NotificationType for details.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -768,7 +768,7 @@ pub struct MarginCall {
     #[prost(double, required, tag = "2")]
     pub margin_level_threshold: f64,
     #[prost(int64, optional, tag = "3")]
-    pub utc_last_update_timestamp: ::core::option::Option<i64>,
+    pub utc_last_update_timestamp: std::option::Option<i64>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Holiday {
@@ -780,7 +780,7 @@ pub struct Holiday {
     pub name: ::prost::alloc::string::String,
     /// Description of holiday.
     #[prost(string, optional, tag = "3")]
-    pub description: ::core::option::Option<::prost::alloc::string::String>,
+    pub description: std::option::Option<::prost::alloc::string::String>,
     /// Timezone used for holiday.
     #[prost(string, required, tag = "4")]
     pub schedule_time_zone: ::prost::alloc::string::String,
@@ -792,10 +792,10 @@ pub struct Holiday {
     pub is_recurring: bool,
     /// Amount of seconds from 00:00:00 of the holiday day when holiday actually starts.
     #[prost(int32, optional, tag = "7")]
-    pub start_second: ::core::option::Option<i32>,
+    pub start_second: std::option::Option<i32>,
     /// Amount of seconds from 00:00:00 of the holiday day when holiday actually finishes.
     #[prost(int32, optional, tag = "8")]
-    pub end_second: ::core::option::Option<i32>,
+    pub end_second: std::option::Option<i32>,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -1305,7 +1305,7 @@ pub struct ApplicationAuthReq {
         tag = "1",
         default = "OaApplicationAuthReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     ///The unique Client ID provided during the registration.
     #[prost(string, required, tag = "2")]
     pub client_id: ::prost::alloc::string::String,
@@ -1322,7 +1322,7 @@ pub struct ApplicationAuthRes {
         tag = "1",
         default = "OaApplicationAuthRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
 }
 ///* Request for the authorizing trading account session. Requires established authorized connection with the client application using ApplicationAuthReq.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1333,7 +1333,7 @@ pub struct AccountAuthReq {
         tag = "1",
         default = "OaAccountAuthReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// The unique identifier of the trader's account in cTrader platform.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -1350,7 +1350,7 @@ pub struct AccountAuthRes {
         tag = "1",
         default = "OaAccountAuthRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// The unique identifier of the trader's account in cTrader platform.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -1364,19 +1364,19 @@ pub struct ErrorRes {
         tag = "1",
         default = "OaErrorRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     ///The unique identifier of the trader's account in cTrader platform.
     #[prost(int64, optional, tag = "2")]
-    pub ctid_trader_account_id: ::core::option::Option<i64>,
+    pub ctid_trader_account_id: std::option::Option<i64>,
     /// The name of the ProtoErrorCode or the other custom ErrorCodes (e.g. ProtoCHErrorCode).
     #[prost(string, required, tag = "3")]
     pub error_code: ::prost::alloc::string::String,
     /// The error description.
     #[prost(string, optional, tag = "4")]
-    pub description: ::core::option::Option<::prost::alloc::string::String>,
+    pub description: std::option::Option<::prost::alloc::string::String>,
     /// The timestamp in seconds when the current maintenance session will be ended.
     #[prost(int64, optional, tag = "5")]
-    pub maintenance_end_timestamp: ::core::option::Option<i64>,
+    pub maintenance_end_timestamp: std::option::Option<i64>,
 }
 ///* Event that is sent when the connection with the client application is cancelled by the server. All the sessions for the traders' accounts will be terminated.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1387,10 +1387,10 @@ pub struct ClientDisconnectEvent {
         tag = "1",
         default = "OaClientDisconnectEvent"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// The disconnection reason explained. For example: The application access was blocked by cTrader Administrator.
     #[prost(string, optional, tag = "2")]
-    pub reason: ::core::option::Option<::prost::alloc::string::String>,
+    pub reason: std::option::Option<::prost::alloc::string::String>,
 }
 ///* Event that is sent when a session to a specific trader's account is terminated by the server but the existing connections with the other trader's accounts are maintained.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1401,13 +1401,13 @@ pub struct AccountsTokenInvalidatedEvent {
         tag = "1",
         default = "OaAccountsTokenInvalidatedEvent"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// The unique identifier of the trader's account in cTrader platform.
     #[prost(int64, repeated, packed = "false", tag = "2")]
-    pub ctid_trader_account_ids: ::prost::alloc::vec::Vec<i64>,
+    pub ctid_trader_account_ids: std::prelude::rust_2015::Vec<i64>,
     /// The disconnection reason explained. For example: Access Token is expired or recalled.
     #[prost(string, optional, tag = "3")]
-    pub reason: ::core::option::Option<::prost::alloc::string::String>,
+    pub reason: std::option::Option<::prost::alloc::string::String>,
 }
 ///* Request for getting the proxy version. Can be used to check the current version of the Open API scheme.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1418,7 +1418,7 @@ pub struct VersionReq {
         tag = "1",
         default = "OaVersionReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
 }
 ///* Response to the VersionReq request.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1429,7 +1429,7 @@ pub struct VersionRes {
         tag = "1",
         default = "OaVersionRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// The current version of the server application.
     #[prost(string, required, tag = "2")]
     pub version: ::prost::alloc::string::String,
@@ -1443,7 +1443,7 @@ pub struct NewOrderReq {
         tag = "1",
         default = "OaNewOrderReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// The unique identifier of the trader's account in cTrader platform.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -1461,10 +1461,10 @@ pub struct NewOrderReq {
     pub volume: i64,
     /// The limit price, can be specified for the LIMIT order only.
     #[prost(double, optional, tag = "7")]
-    pub limit_price: ::core::option::Option<f64>,
+    pub limit_price: std::option::Option<f64>,
     /// Stop Price, can be specified for the STOP and the STOP_LIMIT orders only.
     #[prost(double, optional, tag = "8")]
-    pub stop_price: ::core::option::Option<f64>,
+    pub stop_price: std::option::Option<f64>,
     /// The specific order execution or expiration instruction - GOOD_TILL_DATE, GOOD_TILL_CANCEL, IMMEDIATE_OR_CANCEL, FILL_OR_KILL, MARKET_ON_OPEN.
     #[prost(
         enumeration = "TimeInForce",
@@ -1472,46 +1472,46 @@ pub struct NewOrderReq {
         tag = "9",
         default = "GoodTillCancel"
     )]
-    pub time_in_force: ::core::option::Option<i32>,
+    pub time_in_force: std::option::Option<i32>,
     /// The exact Order expiration time. Should be set for the Good Till Date orders.
     #[prost(int64, optional, tag = "10")]
-    pub expiration_timestamp: ::core::option::Option<i64>,
+    pub expiration_timestamp: std::option::Option<i64>,
     /// The absolute Stop Loss price (1.23456 for example). Not supported for the MARKER orders.
     #[prost(double, optional, tag = "11")]
-    pub stop_loss: ::core::option::Option<f64>,
+    pub stop_loss: std::option::Option<f64>,
     /// The absolute Take Profit price (1.23456 for example). Unsupported for the MARKER orders.
     #[prost(double, optional, tag = "12")]
-    pub take_profit: ::core::option::Option<f64>,
+    pub take_profit: std::option::Option<f64>,
     /// User-specified comment. MaxLength = 512.
     #[prost(string, optional, tag = "13")]
-    pub comment: ::core::option::Option<::prost::alloc::string::String>,
+    pub comment: std::option::Option<::prost::alloc::string::String>,
     /// Base price to calculate relative slippage price for MARKET_RANGE order.
     #[prost(double, optional, tag = "14")]
-    pub base_slippage_price: ::core::option::Option<f64>,
+    pub base_slippage_price: std::option::Option<f64>,
     /// Slippage distance for MARKET_RANGE and STOP_LIMIT order.
     #[prost(int32, optional, tag = "15")]
-    pub slippage_in_points: ::core::option::Option<i32>,
+    pub slippage_in_points: std::option::Option<i32>,
     /// User-specified label. MaxLength = 100.
     #[prost(string, optional, tag = "16")]
-    pub label: ::core::option::Option<::prost::alloc::string::String>,
+    pub label: std::option::Option<::prost::alloc::string::String>,
     /// Reference to the existing position if the Order is intended to modify it.
     #[prost(int64, optional, tag = "17")]
-    pub position_id: ::core::option::Option<i64>,
+    pub position_id: std::option::Option<i64>,
     /// Optional user-specific clientOrderId (similar to FIX ClOrderID). MaxLength = 50.
     #[prost(string, optional, tag = "18")]
-    pub client_order_id: ::core::option::Option<::prost::alloc::string::String>,
+    pub client_order_id: std::option::Option<::prost::alloc::string::String>,
     /// Relative Stop Loss that can be specified instead of the absolute as one. Specified in 1/100000 of unit of a price. For BUY stopLoss = entryPrice - relativeStopLoss, for SELL stopLoss = entryPrice + relativeStopLoss.
     #[prost(int64, optional, tag = "19")]
-    pub relative_stop_loss: ::core::option::Option<i64>,
+    pub relative_stop_loss: std::option::Option<i64>,
     /// Relative Take Profit that can be specified instead of the absolute one. Specified in 1/100000 of unit of a price. For BUY takeProfit = entryPrice + relativeTakeProfit, for SELL takeProfit = entryPrice - relativeTakeProfit.
     #[prost(int64, optional, tag = "20")]
-    pub relative_take_profit: ::core::option::Option<i64>,
+    pub relative_take_profit: std::option::Option<i64>,
     /// If TRUE then stopLoss is guaranteed. Available for the French Risk or the Guaranteed Stop Loss Accounts.
     #[prost(bool, optional, tag = "21")]
-    pub guaranteed_stop_loss: ::core::option::Option<bool>,
+    pub guaranteed_stop_loss: std::option::Option<bool>,
     /// If TRUE then the Stop Loss is Trailing.
     #[prost(bool, optional, tag = "22")]
-    pub trailing_stop_loss: ::core::option::Option<bool>,
+    pub trailing_stop_loss: std::option::Option<bool>,
     /// Trigger method for the STOP or the STOP_LIMIT pending order.
     #[prost(
         enumeration = "OrderTriggerMethod",
@@ -1519,7 +1519,7 @@ pub struct NewOrderReq {
         tag = "23",
         default = "Trade"
     )]
-    pub stop_trigger_method: ::core::option::Option<i32>,
+    pub stop_trigger_method: std::option::Option<i32>,
 }
 ///* Event that is sent following the successful order acceptance or execution by the server. Acts as response to the NewOrderReq, CancelOrderReq, AmendOrderReq, AmendPositionSLTPReq, ClosePositionReq requests. Also, the event is sent when a Deposit/Withdrawal took place.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1530,7 +1530,7 @@ pub struct ExecutionEvent {
         tag = "1",
         default = "OaExecutionEvent"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -1539,25 +1539,25 @@ pub struct ExecutionEvent {
     pub execution_type: i32,
     /// Reference to the position linked with the execution
     #[prost(message, optional, tag = "4")]
-    pub position: ::core::option::Option<Position>,
+    pub position: std::option::Option<Position>,
     /// Reference to the initial order.
     #[prost(message, optional, tag = "5")]
-    pub order: ::core::option::Option<Order>,
+    pub order: std::option::Option<Order>,
     /// Reference to the deal (execution).
     #[prost(message, optional, tag = "6")]
-    pub deal: ::core::option::Option<Deal>,
+    pub deal: std::option::Option<Deal>,
     /// Reference to the Bonus Deposit or Withdrawal operation.
     #[prost(message, optional, tag = "7")]
-    pub bonus_deposit_withdraw: ::core::option::Option<BonusDepositWithdraw>,
+    pub bonus_deposit_withdraw: std::option::Option<BonusDepositWithdraw>,
     /// Reference to the Deposit or Withdrawal operation.
     #[prost(message, optional, tag = "8")]
-    pub deposit_withdraw: ::core::option::Option<DepositWithdraw>,
+    pub deposit_withdraw: std::option::Option<DepositWithdraw>,
     ///The name of the ProtoErrorCode or the other custom ErrorCodes (e.g. ProtoCHErrorCode).
     #[prost(string, optional, tag = "9")]
-    pub error_code: ::core::option::Option<::prost::alloc::string::String>,
+    pub error_code: std::option::Option<::prost::alloc::string::String>,
     /// If TRUE then the event generated by the server logic instead of the trader's request. (e.g. stop-out).
     #[prost(bool, optional, tag = "10")]
-    pub is_server_event: ::core::option::Option<bool>,
+    pub is_server_event: std::option::Option<bool>,
 }
 ///* Request for cancelling existing pending order. Allowed only if the accessToken has "trade" permissions for the trading account.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1568,7 +1568,7 @@ pub struct CancelOrderReq {
         tag = "1",
         default = "OaCancelOrderReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -1585,7 +1585,7 @@ pub struct AmendOrderReq {
         tag = "1",
         default = "OaAmendOrderReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -1594,37 +1594,37 @@ pub struct AmendOrderReq {
     pub order_id: i64,
     /// Volume, represented in 0.01 of a unit (e.g. cents).
     #[prost(int64, optional, tag = "4")]
-    pub volume: ::core::option::Option<i64>,
+    pub volume: std::option::Option<i64>,
     /// The Limit Price, can be specified for the LIMIT order only.
     #[prost(double, optional, tag = "5")]
-    pub limit_price: ::core::option::Option<f64>,
+    pub limit_price: std::option::Option<f64>,
     /// The Stop Price, can be specified for the STOP and the STOP_LIMIT orders.
     #[prost(double, optional, tag = "6")]
-    pub stop_price: ::core::option::Option<f64>,
+    pub stop_price: std::option::Option<f64>,
     /// The exact Order expiration time. Should be set for the Good Till Date orders.
     #[prost(int64, optional, tag = "7")]
-    pub expiration_timestamp: ::core::option::Option<i64>,
+    pub expiration_timestamp: std::option::Option<i64>,
     /// The absolute Stop Loss price (e.g. 1.23456). Not supported for the MARKER orders.
     #[prost(double, optional, tag = "8")]
-    pub stop_loss: ::core::option::Option<f64>,
+    pub stop_loss: std::option::Option<f64>,
     /// The absolute Take Profit price (e.g. 1.23456). Not supported for the MARKER orders.
     #[prost(double, optional, tag = "9")]
-    pub take_profit: ::core::option::Option<f64>,
+    pub take_profit: std::option::Option<f64>,
     /// Slippage distance for the MARKET_RANGE and the STOP_LIMIT orders.
     #[prost(int32, optional, tag = "10")]
-    pub slippage_in_points: ::core::option::Option<i32>,
+    pub slippage_in_points: std::option::Option<i32>,
     /// The relative Stop Loss can be specified instead of the absolute one. Specified in 1/100000 of a unit of price. For BUY stopLoss = entryPrice - relativeStopLoss, for SELL stopLoss = entryPrice + relativeStopLoss.
     #[prost(int64, optional, tag = "11")]
-    pub relative_stop_loss: ::core::option::Option<i64>,
+    pub relative_stop_loss: std::option::Option<i64>,
     /// The relative Take Profit can be specified instead of the absolute one. Specified in 1/100000 of a unit of price. For BUY takeProfit = entryPrice + relativeTakeProfit, for SELL takeProfit = entryPrice - relativeTakeProfit.
     #[prost(int64, optional, tag = "12")]
-    pub relative_take_profit: ::core::option::Option<i64>,
+    pub relative_take_profit: std::option::Option<i64>,
     /// If TRUE then the Stop Loss is guaranteed. Available for the French Risk or the Guaranteed Stop Loss Accounts.
     #[prost(bool, optional, tag = "13")]
-    pub guaranteed_stop_loss: ::core::option::Option<bool>,
+    pub guaranteed_stop_loss: std::option::Option<bool>,
     /// If TRUE then the Trailing Stop Loss is applied.
     #[prost(bool, optional, tag = "14")]
-    pub trailing_stop_loss: ::core::option::Option<bool>,
+    pub trailing_stop_loss: std::option::Option<bool>,
     /// Trigger method for the STOP or the STOP_LIMIT pending order.
     #[prost(
         enumeration = "OrderTriggerMethod",
@@ -1632,7 +1632,7 @@ pub struct AmendOrderReq {
         tag = "15",
         default = "Trade"
     )]
-    pub stop_trigger_method: ::core::option::Option<i32>,
+    pub stop_trigger_method: std::option::Option<i32>,
 }
 ///* Request for amending StopLoss and TakeProfit of existing position. Allowed only if the accessToken has "trade" permissions for the trading account.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1643,7 +1643,7 @@ pub struct AmendPositionSltpReq {
         tag = "1",
         default = "OaAmendPositionSltpReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -1652,16 +1652,16 @@ pub struct AmendPositionSltpReq {
     pub position_id: i64,
     /// Absolute Stop Loss price (1.23456 for example).
     #[prost(double, optional, tag = "4")]
-    pub stop_loss: ::core::option::Option<f64>,
+    pub stop_loss: std::option::Option<f64>,
     /// Absolute Take Profit price (1.26543 for example).
     #[prost(double, optional, tag = "5")]
-    pub take_profit: ::core::option::Option<f64>,
+    pub take_profit: std::option::Option<f64>,
     ///If TRUE then the Stop Loss is guaranteed. Available for the French Risk or the Guaranteed Stop Loss Accounts.
     #[prost(bool, optional, tag = "7")]
-    pub guaranteed_stop_loss: ::core::option::Option<bool>,
+    pub guaranteed_stop_loss: std::option::Option<bool>,
     ///If TRUE then the Trailing Stop Loss is applied.
     #[prost(bool, optional, tag = "8")]
-    pub trailing_stop_loss: ::core::option::Option<bool>,
+    pub trailing_stop_loss: std::option::Option<bool>,
     /// The Stop trigger method for the Stop Loss/Take Profit order.
     #[prost(
         enumeration = "OrderTriggerMethod",
@@ -1669,7 +1669,7 @@ pub struct AmendPositionSltpReq {
         tag = "9",
         default = "Trade"
     )]
-    pub stop_loss_trigger_method: ::core::option::Option<i32>,
+    pub stop_loss_trigger_method: std::option::Option<i32>,
 }
 ///* Request for closing or partially closing of an existing position. Allowed only if the accessToken has "trade" permissions for the trading account.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1680,7 +1680,7 @@ pub struct ClosePositionReq {
         tag = "1",
         default = "OaClosePositionReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -1700,7 +1700,7 @@ pub struct TrailingSlChangedEvent {
         tag = "1",
         default = "OaTrailingSlChangedEvent"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -1726,7 +1726,7 @@ pub struct AssetListReq {
         tag = "1",
         default = "OaAssetListReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -1740,13 +1740,13 @@ pub struct AssetListRes {
         tag = "1",
         default = "OaAssetListRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
     /// The list of assets.
     #[prost(message, repeated, tag = "3")]
-    pub asset: ::prost::alloc::vec::Vec<Asset>,
+    pub asset: std::prelude::rust_2015::Vec<Asset>,
 }
 ///* Request for a list of symbols available for a trading account. Symbol entries are returned with the limited set of fields.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1757,12 +1757,12 @@ pub struct SymbolsListReq {
         tag = "1",
         default = "OaSymbolsListReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
     #[prost(bool, optional, tag = "3", default = "false")]
-    pub include_archived_symbols: ::core::option::Option<bool>,
+    pub include_archived_symbols: std::option::Option<bool>,
 }
 ///* Response to the SymbolsListReq request.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1773,16 +1773,16 @@ pub struct SymbolsListRes {
         tag = "1",
         default = "OaSymbolsListRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
     /// The list of symbols.
     #[prost(message, repeated, tag = "3")]
-    pub symbol: ::prost::alloc::vec::Vec<LightSymbol>,
+    pub symbol: std::prelude::rust_2015::Vec<LightSymbol>,
     /// The list of archived symbols.
     #[prost(message, repeated, tag = "4")]
-    pub archived_symbol: ::prost::alloc::vec::Vec<ArchivedSymbol>,
+    pub archived_symbol: std::prelude::rust_2015::Vec<ArchivedSymbol>,
 }
 ///* Request for getting a full symbol entity.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1793,13 +1793,13 @@ pub struct SymbolByIdReq {
         tag = "1",
         default = "OaSymbolByIdReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
     /// Unique identifier of the symbol in cTrader platform.
     #[prost(int64, repeated, packed = "false", tag = "3")]
-    pub symbol_id: ::prost::alloc::vec::Vec<i64>,
+    pub symbol_id: std::prelude::rust_2015::Vec<i64>,
 }
 ///* Response to the SymbolByIdReq request.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1810,16 +1810,16 @@ pub struct SymbolByIdRes {
         tag = "1",
         default = "OaSymbolByIdRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
     /// Symbol entity with the full set of fields.
     #[prost(message, repeated, tag = "3")]
-    pub symbol: ::prost::alloc::vec::Vec<Symbol>,
+    pub symbol: std::prelude::rust_2015::Vec<Symbol>,
     /// Archived symbols.
     #[prost(message, repeated, tag = "4")]
-    pub archived_symbol: ::prost::alloc::vec::Vec<ArchivedSymbol>,
+    pub archived_symbol: std::prelude::rust_2015::Vec<ArchivedSymbol>,
 }
 ///* Request for getting a conversion chain between two assets that consists of several symbols. Use when no direct quote is available
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1830,7 +1830,7 @@ pub struct SymbolsForConversionReq {
         tag = "1",
         default = "OaSymbolsForConversionReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -1850,13 +1850,13 @@ pub struct SymbolsForConversionRes {
         tag = "1",
         default = "OaSymbolsForConversionRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
     /// Conversion chain of the symbols (e.g. EUR/USD, USD/JPY, GBP/JPY -> EUR/GBP).
     #[prost(message, repeated, tag = "3")]
-    pub symbol: ::prost::alloc::vec::Vec<LightSymbol>,
+    pub symbol: std::prelude::rust_2015::Vec<LightSymbol>,
 }
 ///* Event that is sent when the symbol is changed on the Server side.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1867,13 +1867,13 @@ pub struct SymbolChangedEvent {
         tag = "1",
         default = "OaSymbolChangedEvent"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
     /// Unique identifier of the Symbol in cTrader platform.
     #[prost(int64, repeated, packed = "false", tag = "3")]
-    pub symbol_id: ::prost::alloc::vec::Vec<i64>,
+    pub symbol_id: std::prelude::rust_2015::Vec<i64>,
 }
 ///* Request for a list of asset classes available for the trader's account.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1884,7 +1884,7 @@ pub struct AssetClassListReq {
         tag = "1",
         default = "OaAssetClassListReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -1898,13 +1898,13 @@ pub struct AssetClassListRes {
         tag = "1",
         default = "OaAssetClassListRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
     /// List of the asset classes.
     #[prost(message, repeated, tag = "3")]
-    pub asset_class: ::prost::alloc::vec::Vec<AssetClass>,
+    pub asset_class: std::prelude::rust_2015::Vec<AssetClass>,
 }
 ///* Request for getting data of Trader's Account.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1915,7 +1915,7 @@ pub struct TraderReq {
         tag = "1",
         default = "OaTraderReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -1929,7 +1929,7 @@ pub struct TraderRes {
         tag = "1",
         default = "OaTraderRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -1946,7 +1946,7 @@ pub struct TraderUpdatedEvent {
         tag = "1",
         default = "OaTraderUpdateEvent"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -1963,7 +1963,7 @@ pub struct ReconcileReq {
         tag = "1",
         default = "OaReconcileReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -1977,16 +1977,16 @@ pub struct ReconcileRes {
         tag = "1",
         default = "OaReconcileRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
     /// The list of trader's account open positions.
     #[prost(message, repeated, tag = "3")]
-    pub position: ::prost::alloc::vec::Vec<Position>,
+    pub position: std::prelude::rust_2015::Vec<Position>,
     /// The list of trader's account pending orders.
     #[prost(message, repeated, tag = "4")]
-    pub order: ::prost::alloc::vec::Vec<Order>,
+    pub order: std::prelude::rust_2015::Vec<Order>,
 }
 ///* Event that is sent when errors occur during the order requests.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1997,7 +1997,7 @@ pub struct OrderErrorEvent {
         tag = "1",
         default = "OaOrderErrorEvent"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     ///Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "5")]
     pub ctid_trader_account_id: i64,
@@ -2006,13 +2006,13 @@ pub struct OrderErrorEvent {
     pub error_code: ::prost::alloc::string::String,
     /// The unique ID of the order.
     #[prost(int64, optional, tag = "3")]
-    pub order_id: ::core::option::Option<i64>,
+    pub order_id: std::option::Option<i64>,
     /// The unique ID of the position.
     #[prost(int64, optional, tag = "6")]
-    pub position_id: ::core::option::Option<i64>,
+    pub position_id: std::option::Option<i64>,
     /// The error description.
     #[prost(string, optional, tag = "7")]
-    pub description: ::core::option::Option<::prost::alloc::string::String>,
+    pub description: std::option::Option<::prost::alloc::string::String>,
 }
 ///* Request for getting Trader's deals historical data (execution details).
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2023,7 +2023,7 @@ pub struct DealListReq {
         tag = "1",
         default = "OaDealListReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -2035,7 +2035,7 @@ pub struct DealListReq {
     pub to_timestamp: i64,
     /// The maximum number of the deals to return.
     #[prost(int32, optional, tag = "5")]
-    pub max_rows: ::core::option::Option<i32>,
+    pub max_rows: std::option::Option<i32>,
 }
 ///* The response to the DealListRes request.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2046,13 +2046,13 @@ pub struct DealListRes {
         tag = "1",
         default = "OaDealListRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
     /// The list of the deals.
     #[prost(message, repeated, tag = "3")]
-    pub deal: ::prost::alloc::vec::Vec<Deal>,
+    pub deal: std::prelude::rust_2015::Vec<Deal>,
     /// If TRUE then the response will provide more than 10000 deals.
     #[prost(bool, required, tag = "4")]
     pub has_more: bool,
@@ -2066,7 +2066,7 @@ pub struct ExpectedMarginReq {
         tag = "1",
         default = "OaExpectedMarginReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -2075,7 +2075,7 @@ pub struct ExpectedMarginReq {
     pub symbol_id: i64,
     /// Volume represented in 0.01 of a unit (e.g. cents).
     #[prost(int64, repeated, packed = "false", tag = "4")]
-    pub volume: ::prost::alloc::vec::Vec<i64>,
+    pub volume: std::prelude::rust_2015::Vec<i64>,
 }
 ///*The response to the ExpectedMarginReq request.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2086,16 +2086,16 @@ pub struct ExpectedMarginRes {
         tag = "1",
         default = "OaExpectedMarginRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
     /// The buy and sell margin estimate.
     #[prost(message, repeated, tag = "3")]
-    pub margin: ::prost::alloc::vec::Vec<ExpectedMargin>,
+    pub margin: std::prelude::rust_2015::Vec<ExpectedMargin>,
     /// Specifies the exponent of the monetary values. E.g. moneyDigits = 8 must be interpret as business value multiplied by 10^8, then real balance would be 10053099944 / 10^8 = 100.53099944. Affects margin.buyMargin, margin.sellMargin.
     #[prost(uint32, optional, tag = "4")]
-    pub money_digits: ::core::option::Option<u32>,
+    pub money_digits: std::option::Option<u32>,
 }
 ///* Event that is sent when the margin allocated to a specific position is changed.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2106,7 +2106,7 @@ pub struct MarginChangedEvent {
         tag = "1",
         default = "OaMarginChangedEvent"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -2118,7 +2118,7 @@ pub struct MarginChangedEvent {
     pub used_margin: u64,
     /// Specifies the exponent of the monetary values. E.g. moneyDigits = 8 must be interpret as business value multiplied by 10^8, then real balance would be 10053099944 / 10^8 = 100.53099944. Affects usedMargin.
     #[prost(uint32, optional, tag = "5")]
-    pub money_digits: ::core::option::Option<u32>,
+    pub money_digits: std::option::Option<u32>,
 }
 ///* Request for getting Trader's historical data of deposits and withdrawals.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2129,7 +2129,7 @@ pub struct CashFlowHistoryListReq {
         tag = "1",
         default = "OaCashFlowHistoryListReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -2149,13 +2149,13 @@ pub struct CashFlowHistoryListRes {
         tag = "1",
         default = "OaCashFlowHistoryListRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
     /// The list of deposit and withdrawal operations.
     #[prost(message, repeated, tag = "3")]
-    pub deposit_withdraw: ::prost::alloc::vec::Vec<DepositWithdraw>,
+    pub deposit_withdraw: std::prelude::rust_2015::Vec<DepositWithdraw>,
 }
 ///* Request for getting the list of granted trader's account for the access token.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2166,7 +2166,7 @@ pub struct GetAccountListByAccessTokenReq {
         tag = "1",
         default = "OaGetAccountsByAccessTokenReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// The Access Token issued for providing access to the Trader's Account.
     #[prost(string, required, tag = "2")]
     pub access_token: ::prost::alloc::string::String,
@@ -2180,16 +2180,16 @@ pub struct GetAccountListByAccessTokenRes {
         tag = "1",
         default = "OaGetAccountsByAccessTokenRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// The Access Token issued for providing access to the Trader's Account.
     #[prost(string, required, tag = "2")]
     pub access_token: ::prost::alloc::string::String,
     /// SCOPE_VIEW, SCOPE_TRADE.
     #[prost(enumeration = "ClientPermissionScope", optional, tag = "3")]
-    pub permission_scope: ::core::option::Option<i32>,
+    pub permission_scope: std::option::Option<i32>,
     /// The list of the accounts.
     #[prost(message, repeated, tag = "4")]
-    pub ctid_trader_account: ::prost::alloc::vec::Vec<CtidTraderAccount>,
+    pub ctid_trader_account: std::prelude::rust_2015::Vec<CtidTraderAccount>,
 }
 ///* Request to refresh the access token using refresh token of granted trader's account.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2200,7 +2200,7 @@ pub struct RefreshTokenReq {
         tag = "1",
         default = "OaRefreshTokenReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// The Refresh Token issued for updating Access Token.
     #[prost(string, required, tag = "2")]
     pub refresh_token: ::prost::alloc::string::String,
@@ -2214,7 +2214,7 @@ pub struct RefreshTokenRes {
         tag = "1",
         default = "OaRefreshTokenRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// The Access Token issued for providing access to the Trader's Account.
     #[prost(string, required, tag = "2")]
     pub access_token: ::prost::alloc::string::String,
@@ -2240,13 +2240,13 @@ pub struct SubscribeSpotsReq {
         tag = "1",
         default = "OaSubscribeSpotsReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
     /// Unique identifier of the Symbol in cTrader platform.
     #[prost(int64, repeated, packed = "false", tag = "3")]
-    pub symbol_id: ::prost::alloc::vec::Vec<i64>,
+    pub symbol_id: std::prelude::rust_2015::Vec<i64>,
 }
 ///* Response to the SubscribeSpotsReq request.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2257,7 +2257,7 @@ pub struct SubscribeSpotsRes {
         tag = "1",
         default = "OaSubscribeSpotsRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -2271,13 +2271,13 @@ pub struct UnsubscribeSpotsReq {
         tag = "1",
         default = "OaUnsubscribeSpotsReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
     /// Unique identifier of the Symbol in cTrader platform.
     #[prost(int64, repeated, packed = "false", tag = "3")]
-    pub symbol_id: ::prost::alloc::vec::Vec<i64>,
+    pub symbol_id: std::prelude::rust_2015::Vec<i64>,
 }
 ///* Response to the SubscribeSpotsRes request.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2288,7 +2288,7 @@ pub struct UnsubscribeSpotsRes {
         tag = "1",
         default = "OaUnsubscribeSpotsRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -2302,7 +2302,7 @@ pub struct SpotEvent {
         tag = "1",
         default = "OaSpotEvent"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -2311,16 +2311,16 @@ pub struct SpotEvent {
     pub symbol_id: i64,
     /// Bid price. Specified in 1/100_000 of unit of a price. (e.g. 1.23 -> 123_000)
     #[prost(uint64, optional, tag = "4")]
-    pub bid: ::core::option::Option<u64>,
+    pub bid: std::option::Option<u64>,
     /// Ask price. Specified in 1/100_000 of unit of a price.
     #[prost(uint64, optional, tag = "5")]
-    pub ask: ::core::option::Option<u64>,
+    pub ask: std::option::Option<u64>,
     /// Returns live trend bar. Requires subscription on the trend bars.
     #[prost(message, repeated, tag = "6")]
-    pub trendbar: ::prost::alloc::vec::Vec<Trendbar>,
+    pub trendbar: std::prelude::rust_2015::Vec<Trendbar>,
     ///Last session close. Specified in 1/100_000 of unit of a price.
     #[prost(uint64, optional, tag = "7")]
-    pub session_close: ::core::option::Option<u64>,
+    pub session_close: std::option::Option<u64>,
 }
 ///* Request for subscribing for live trend bars. Requires subscription on the spot events, see SubscribeSpotsReq.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2331,7 +2331,7 @@ pub struct SubscribeLiveTrendbarReq {
         tag = "1",
         default = "OaSubscribeLiveTrendbarReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -2351,7 +2351,7 @@ pub struct SubscribeLiveTrendbarRes {
         tag = "1",
         default = "OaSubscribeLiveTrendbarRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -2365,7 +2365,7 @@ pub struct UnsubscribeLiveTrendbarReq {
         tag = "1",
         default = "OaUnsubscribeLiveTrendbarReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -2385,7 +2385,7 @@ pub struct UnsubscribeLiveTrendbarRes {
         tag = "1",
         default = "OaUnsubscribeLiveTrendbarRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -2399,7 +2399,7 @@ pub struct GetTrendbarsReq {
         tag = "1",
         default = "OaGetTrendbarsReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -2425,7 +2425,7 @@ pub struct GetTrendbarsRes {
         tag = "1",
         default = "OaGetTrendbarsRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -2437,10 +2437,10 @@ pub struct GetTrendbarsRes {
     pub timestamp: i64,
     /// The list of trend bars.
     #[prost(message, repeated, tag = "5")]
-    pub trendbar: ::prost::alloc::vec::Vec<Trendbar>,
+    pub trendbar: std::prelude::rust_2015::Vec<Trendbar>,
     /// Unique identifier of the Symbol in cTrader platform.
     #[prost(int64, optional, tag = "6")]
-    pub symbol_id: ::core::option::Option<i64>,
+    pub symbol_id: std::option::Option<i64>,
 }
 ///* Request for getting historical tick data for the symbol.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2451,7 +2451,7 @@ pub struct GetTickDataReq {
         tag = "1",
         default = "OaGetTickdataReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -2477,13 +2477,13 @@ pub struct GetTickDataRes {
         tag = "1",
         default = "OaGetTickdataRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
     /// The list of ticks.
     #[prost(message, repeated, tag = "3")]
-    pub tick_data: ::prost::alloc::vec::Vec<TickData>,
+    pub tick_data: std::prelude::rust_2015::Vec<TickData>,
     /// If TRUE then the number of records by filter is larger than chunkSize, the response contains the number of records that is equal to chunkSize.
     #[prost(bool, required, tag = "4")]
     pub has_more: bool,
@@ -2501,7 +2501,7 @@ pub struct GetCtidProfileByTokenReq {
         tag = "1",
         default = "OaGetCtidProfileByTokenReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// The Access Token issued for providing access to the Trader's Account.
     #[prost(string, required, tag = "2")]
     pub access_token: ::prost::alloc::string::String,
@@ -2515,7 +2515,7 @@ pub struct GetCtidProfileByTokenRes {
         tag = "1",
         default = "OaGetCtidProfileByTokenRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Trader's profile.
     #[prost(message, required, tag = "2")]
     pub profile: CtidProfile,
@@ -2529,7 +2529,7 @@ pub struct DepthEvent {
         tag = "1",
         default = "OaDepthEvent"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -2538,10 +2538,10 @@ pub struct DepthEvent {
     pub symbol_id: u64,
     /// The list of changes in the depth of market quotes.
     #[prost(message, repeated, tag = "4")]
-    pub new_quotes: ::prost::alloc::vec::Vec<DepthQuote>,
+    pub new_quotes: std::prelude::rust_2015::Vec<DepthQuote>,
     /// The list of quotes to delete.
     #[prost(uint64, repeated, tag = "5")]
-    pub deleted_quotes: ::prost::alloc::vec::Vec<u64>,
+    pub deleted_quotes: std::prelude::rust_2015::Vec<u64>,
 }
 ///* Request for subscribing on depth of market of the specified symbol.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2552,13 +2552,13 @@ pub struct SubscribeDepthQuotesReq {
         tag = "1",
         default = "OaSubscribeDepthQuotesReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
     /// Unique identifier of the Symbol in cTrader platform.
     #[prost(int64, repeated, packed = "false", tag = "3")]
-    pub symbol_id: ::prost::alloc::vec::Vec<i64>,
+    pub symbol_id: std::prelude::rust_2015::Vec<i64>,
 }
 ///* Response to the SubscribeDepthQuotesReq request.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2569,7 +2569,7 @@ pub struct SubscribeDepthQuotesRes {
         tag = "1",
         default = "OaSubscribeDepthQuotesRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -2583,13 +2583,13 @@ pub struct UnsubscribeDepthQuotesReq {
         tag = "1",
         default = "OaUnsubscribeDepthQuotesReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
     /// Unique identifier of the Symbol in cTrader platform.
     #[prost(int64, repeated, packed = "false", tag = "3")]
-    pub symbol_id: ::prost::alloc::vec::Vec<i64>,
+    pub symbol_id: std::prelude::rust_2015::Vec<i64>,
 }
 ///* Response to the UnsubscribeDepthQuotesReq request.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2600,7 +2600,7 @@ pub struct UnsubscribeDepthQuotesRes {
         tag = "1",
         default = "OaUnsubscribeDepthQuotesRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -2614,7 +2614,7 @@ pub struct SymbolCategoryListReq {
         tag = "1",
         default = "OaSymbolCategoryReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -2628,13 +2628,13 @@ pub struct SymbolCategoryListRes {
         tag = "1",
         default = "OaSymbolCategoryRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
     /// The list of symbol categories.
     #[prost(message, repeated, tag = "3")]
-    pub symbol_category: ::prost::alloc::vec::Vec<SymbolCategory>,
+    pub symbol_category: std::prelude::rust_2015::Vec<SymbolCategory>,
 }
 ///* Request for logout of  trading account session.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2645,7 +2645,7 @@ pub struct AccountLogoutReq {
         tag = "1",
         default = "OaAccountLogoutReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// The unique identifier of the trader's account in cTrader platform.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -2659,7 +2659,7 @@ pub struct AccountLogoutRes {
         tag = "1",
         default = "OaAccountLogoutRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// The unique identifier of the trader's account in cTrader platform.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -2674,7 +2674,7 @@ pub struct AccountDisconnectEvent {
         tag = "1",
         default = "OaAccountDisconnectEvent"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     /// The unique identifier of the trader's account in cTrader platform.
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
@@ -2688,7 +2688,7 @@ pub struct MarginCallListReq {
         tag = "1",
         default = "OaMarginCallListReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
 }
@@ -2701,9 +2701,9 @@ pub struct MarginCallListRes {
         tag = "1",
         default = "OaMarginCallListRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     #[prost(message, repeated, tag = "2")]
-    pub margin_call: ::prost::alloc::vec::Vec<MarginCall>,
+    pub margin_call: std::prelude::rust_2015::Vec<MarginCall>,
 }
 ///* Request to modify marginLevelThreshold of specified marginCallType for ctidTraderAccountId.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2714,7 +2714,7 @@ pub struct MarginCallUpdateReq {
         tag = "1",
         default = "OaMarginCallUpdateReq"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
     #[prost(message, required, tag = "3")]
@@ -2729,7 +2729,7 @@ pub struct MarginCallUpdateRes {
         tag = "1",
         default = "OaMarginCallUpdateRes"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
 }
 ///* Event that is sent when a Margin Call threshold configuration is updated.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2740,7 +2740,7 @@ pub struct MarginCallUpdateEvent {
         tag = "1",
         default = "OaMarginCallUpdateEvent"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
     #[prost(message, required, tag = "3")]
@@ -2755,7 +2755,7 @@ pub struct MarginCallTriggerEvent {
         tag = "1",
         default = "OaMarginCallTriggerEvent"
     )]
-    pub payload_type: ::core::option::Option<i32>,
+    pub payload_type: std::option::Option<i32>,
     #[prost(int64, required, tag = "2")]
     pub ctid_trader_account_id: i64,
     #[prost(message, required, tag = "3")]

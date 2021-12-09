@@ -1,5 +1,5 @@
 use super::*;
-use crate::online::bot::Bot;
+use crate::online::bot::bot::Bot;
 
 pub fn run_bot() {
     let cfg = Config {

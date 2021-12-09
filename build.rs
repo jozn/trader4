@@ -20,7 +20,7 @@ fn build_pb() {
 
     let mut config = prost_build::Config::default();
 
-    config.out_dir("src/");
+    config.out_dir("src/online/");
 
     // config.type_attribute(".","#[derive(Smg)]");
     // config.message_attribute(".", "#[derive(Default)]");

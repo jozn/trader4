@@ -2,17 +2,17 @@ use std::rc::Rc;
 
 use serde::{Deserialize, Serialize};
 
-pub use candle_series::*;
-pub use candle_series_ta::*;
-pub use kline::*;
-pub use kline_ta::*;
-pub use util::*;
-
 pub mod candle_series;
 pub mod candle_series_ta;
 pub mod kline;
 pub mod kline_ta;
 pub mod util;
+
+pub use candle_series::*;
+pub use candle_series_ta::*;
+pub use kline::*;
+pub use kline_ta::*;
+pub use util::*;
 
 pub type TResult<T> = std::result::Result<T, TErr>;
 

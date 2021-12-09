@@ -1,9 +1,10 @@
 use std::thread;
 use trader3;
-use trader3::ctrader::{CTrader, Config};
+use trader3::core::helper;
+use trader3::online;
 use trader3::online::assets;
 use trader3::online::assets::Pair;
-use trader3::{helper, online};
+use trader3::online::ctrader::{CTrader, Config};
 
 fn main() {
     run();

@@ -1,4 +1,5 @@
 use super::*;
+use crate::candle::*;
 use std::sync::Arc;
 
 #[derive(Debug)]
