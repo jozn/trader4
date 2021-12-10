@@ -8,7 +8,7 @@ use std::sync::Arc;
 
 #[derive(Debug)]
 pub struct Brain {
-    pub con: Box<dyn GateWay>,
+    pub con: Box<Arc<dyn GateWay>>,
     pub db: Vec<PairMeta>,
 }
 

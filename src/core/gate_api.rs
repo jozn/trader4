@@ -1,5 +1,5 @@
-use crate::candle::Tick;
-use crate::online::Actor;
+// use crate::candle::Tick;
+// use crate::online::Actor;
 use std::fmt::Debug;
 
 pub trait GateWay: Debug {
@@ -15,8 +15,8 @@ pub trait GateWay: Debug {
     // fn update_postion(&mut self);
 
     // From data source to Brain
-    fn on_price_tick(&self, symbol_id: i64, tick: Tick, bot: &mut Actor);
-    fn on_postion_event(&self, symbol_id: i64, tick: Tick, bot: &mut Actor);
+    // fn on_price_tick(&self, symbol_id: i64, tick: Tick, bot: &mut Actor);
+    // fn on_postion_event(&self, symbol_id: i64, tick: Tick, bot: &mut Actor);
 
     // Others
     fn get_time_ms(&self) -> u64;

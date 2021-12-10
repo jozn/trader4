@@ -5,7 +5,7 @@ use std::cell::RefCell;
 use crate::online::pb;
 use byteorder::ByteOrder;
 
-use crate::online::actions::NewPos;
+use crate::core::gate_api::*;
 use crate::online::pb::PayloadType;
 use bytes::BufMut;
 use native_tls::{TlsConnector, TlsStream};

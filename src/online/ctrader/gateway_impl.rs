@@ -1,8 +1,7 @@
-use crate::candle::Tick;
 use crate::core::gate_api::NewPos;
 use crate::gate_api::GateWay;
 use crate::helper;
-use crate::online::{Actor, CTrader};
+use crate::online::CTrader;
 
 impl GateWay for CTrader {
     fn subscribe_pairs_req(&self, symbols: Vec<i64>) {
@@ -14,14 +13,6 @@ impl GateWay for CTrader {
     }
 
     fn update_postion(&self) {
-        todo!()
-    }
-
-    fn on_price_tick(&self, symbol_id: i64, tick: Tick, bot: &mut Actor) {
-        todo!()
-    }
-
-    fn on_postion_event(&self, symbol_id: i64, tick: Tick, bot: &mut Actor) {
         todo!()
     }
 
