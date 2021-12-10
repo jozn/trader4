@@ -1,5 +1,5 @@
 use super::*;
-use crate::online::assets::Pair;
+use crate::configs::assets::Pair;
 use crate::online::ctrader::*;
 use crate::online::pb;
 use crate::online::pb::TickData;

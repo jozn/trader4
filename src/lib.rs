@@ -6,6 +6,7 @@
 
 pub mod brain;
 pub mod collector;
+pub mod configs;
 pub mod core;
 pub mod offline_old;
 pub mod online;

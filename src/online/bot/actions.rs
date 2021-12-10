@@ -1,5 +1,6 @@
 use super::*;
 use crate::candle::*;
+pub use crate::gate_api::NewPos;
 use std::sync::Arc;
 
 #[derive(Debug)]
@@ -46,14 +47,14 @@ impl Actor {
     }
 }
 
-#[derive(Debug)]
+/*#[derive(Debug)]
 pub struct NewPos {
     pub symbol_id: i64,
     pub is_short: bool,
     pub size_usd: i64,
     pub take_profit_price: f64,
     pub stop_loose_price: f64,
-}
+}*/
 fn rond5(num: f64) -> f64 {
     ((num * 100_000.0) as u64) as f64 / 100_000.0
 }

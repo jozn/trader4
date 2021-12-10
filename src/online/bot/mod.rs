@@ -1,17 +1,16 @@
 pub mod actions;
-pub mod assets;
 pub mod bot;
-pub mod decider;
+// pub mod decider;
 pub mod pair_handler;
-pub mod runner;
+// pub mod runner;
 pub mod start;
 
+pub use crate::configs::assets::*;
 pub use actions::*;
-pub use assets::*;
 pub use bot::*;
-pub use decider::*;
+// pub use decider::*;
 pub use pair_handler::*;
-pub use runner::*;
+// pub use runner::*;
 pub use start::*;
 
 // pub use actions::*;

@@ -1,10 +1,32 @@
 use super::*;
 use crate::base::SimpleCrossEvent;
-use crate::candle::{CandleSeriesTA, Tick};
+use crate::candle::{CandleConfig, CandleSeriesTA, Tick};
 // use crate::online::bot::PairMeta;
 // use crate::online::bot::{Actor, Bot, PairMeta};
 use crate::offline_old::run::TRunner;
 
+#[derive(Debug)]
+pub struct PairMeta {
+    pub pair: Pair,
+    pub last_tick: Option<Tick>,
+    pub mini_tick: MiniTick,
+    pub ticks_arr: TimeSerVec<Tick>,
+    pub candles: CandleSeriesTA,
+}
+
+impl PairMeta {
+    pub fn new(p: Pair) -> PairMeta {
+        Self {
+            pair: p,
+            last_tick: None,
+            mini_tick: Default::default(),
+            ticks_arr: Default::default(),
+            candles: CandleSeriesTA::new_dep(&CandleConfig::default()),
+        }
+    }
+}
+
+// todo move to brain
 impl PairMeta {
     pub(crate) fn on_price_tick(&mut self, tick: Tick, bot: &mut Actor) {
         // println!("on_price_tick {:?}", &tick);

@@ -2,6 +2,7 @@ pub mod connection;
 pub mod ctrader_helper;
 pub mod event_listener;
 // pub mod play;
+pub mod gateway_impl;
 pub mod proc;
 
 pub use connection::*;
