@@ -99,7 +99,7 @@ impl Brain {
                     // if macd_out.macd < 0. && price > ma {
                     // if macd_out.macd < 0. {
                     // self.strategy1.buy(kid, t, ta);
-                    self.go_long(symbol_id, t);
+                    self.go_long(symbol_id, kid, t);
                     // println!("long {} - {} - {:#?}", price, kt.kline.bucket, &macd_out);
                 }
             }
@@ -126,7 +126,7 @@ impl Brain {
                     // self.strategy1.sell(kid, t, ta);
                     // self.port.sell_short(t.price as i64, 10, t.time_s);
                     // bot.go_short(symbol_id);
-                    self.go_short(symbol_id, t);
+                    self.go_short(symbol_id, kid, t);
                 }
             }
         }

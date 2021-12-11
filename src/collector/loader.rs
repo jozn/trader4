@@ -1,8 +1,7 @@
-
-use csv::{Error, StringRecord};
-use std::io::{BufRead, BufReader, Read, Write};
 use crate::candle::Tick;
 use crate::collector::row_data::BTickData;
+use csv::{Error, StringRecord};
+use std::io::{BufRead, BufReader, Read, Write};
 
 impl BTickData {
     pub fn get_price(&self) -> f64 {
@@ -31,12 +30,12 @@ impl BTickData {
             timestamp_sec: i.next().unwrap().parse().unwrap(),
             timestamp: i.next().unwrap().parse().unwrap(),
             bid_price: i.next().unwrap().parse().unwrap(),
-            ask_price: i.next().unwrap().parse().unwrap()
+            ask_price: i.next().unwrap().parse().unwrap(),
         }
     }
 }
 
-pub fn load(num: u32, file_path: &str) -> Vec<BTickData> {
+pub fn load_rows(file_path: &str) -> Vec<BTickData> {
     let mut arr = Vec::new();
     let file = std::fs::File::open(file_path).unwrap();
     let mut reader = BufReader::with_capacity(8 * 1024 * 1000, file);
@@ -45,7 +44,7 @@ pub fn load(num: u32, file_path: &str) -> Vec<BTickData> {
         .from_reader(reader);
     // let mut rdr = csv::Reader::from_reader(reader);
     let mut i = 0;
-    for result in rdr.records().take(num as usize) {
+    for result in rdr.records() {
         match result {
             Ok(csv_row) => {
                 // println!("csv: {:?}", &csv_row );
@@ -63,4 +62,10 @@ pub fn load(num: u32, file_path: &str) -> Vec<BTickData> {
     // println!("num :{}", i);
 
     arr
+}
+
+pub fn load_ticks(file_path: &str) -> Vec<Tick> {
+    let arr = load_rows(file_path);
+    let res = arr.iter().map(|v| v.to_tick()).collect();
+    res
 }

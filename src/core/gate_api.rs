@@ -1,14 +1,15 @@
 // use crate::candle::Tick;
 // use crate::online::Actor;
+use crate::configs::assets::Pair;
 use std::fmt::Debug;
 
 pub trait GateWay: Debug {
     // Calls from brain
-    fn subscribe_pairs_req(&self, symbols: Vec<i64>);
+    fn subscribe_pairs_req(&self, symbols: Vec<Pair>);
     // fn go_long(&self, symbol_id: i64, tick: &Tick);
     // fn go_short(&self, symbol_id: i64, tick: &Tick);
-    fn open_postion_req_new(&self, new_pos: &NewPos);
-    fn update_postion(&self);
+    fn open_position_req_new(&self, new_pos: &NewPos);
+    fn update_position(&self);
 
     // fn go_long(&mut self, symbol_id: i64, tick: &Tick);
     // fn go_short(&mut self, symbol_id: i64, tick: &Tick);
@@ -22,7 +23,7 @@ pub trait GateWay: Debug {
     fn get_time_ms(&self) -> u64;
 
     // Remove?
-    fn on_connected(&self); // Can be called repeadly during connection distruption
+    //fn on_connected(&self); // Can be called repeadly during connection distruption
 }
 
 #[derive(Debug)]

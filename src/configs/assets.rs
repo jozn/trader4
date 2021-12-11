@@ -43,6 +43,12 @@ pub fn get_all_symbols_ids() -> Vec<i64> {
     ids
 }
 
+pub fn get_all_symbols() -> Vec<Pair> {
+    let a = get_paris();
+    let pairs: Vec<Pair> = Pair::into_enum_iter().map(|p| p).collect();
+    pairs
+}
+
 pub struct PairConf {
     pub pair: Pair,
     pub symbol_id: i64,
