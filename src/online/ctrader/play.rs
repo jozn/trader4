@@ -2,7 +2,7 @@ use super::*;
 use crate::pb;
 use crate::pb::TickData;
 use std::fs;
-
+/*
 pub fn open_trade() {
     let cfg = Config {
         host: "demo.ctraderapi.com".to_string(),
@@ -60,6 +60,8 @@ pub fn open_trade() {
     std::thread::sleep(std::time::Duration::new(100000, 0));
     /* */
 }
+*/
+
 
 pub fn get_ticks() {
     let cfg = Config {
@@ -70,9 +72,9 @@ pub fn get_ticks() {
         client_token: "l4jT24BWu3etFSEVViQKu1NsGpBYf2nKN0DyUGgqjy0".to_string(),
         ctid: 22851452,
     };
-    let (mut cti, rc_event) = CTrader::connect(&cfg);
+    let con_res = CTrader::connect2(&cfg);
     // let mut ct = cti.lock().unwrap();
-    let mut ct = cti;
+    let mut ct = con_res.conn;
 
 
     // ct.list_assets_req();
@@ -100,7 +102,7 @@ pub fn get_ticks() {
 
     let mut cnt = 1;
     // event handling
-    for e in rc_event {
+    for e in con_res.response_chan {
         match e.clone() {
             _ => {
                 // println!("EVENT: {:#?}", e);
@@ -153,6 +155,7 @@ pub fn get_ticks() {
     /* */
 }
 
+/*
 fn trans_ticks(arr: &Vec<pb::TickData>) -> Vec<pb::TickData> {
     // let mut arr = arr.clone();
     let first = arr.first();
@@ -183,6 +186,7 @@ fn trans_ticks(arr: &Vec<pb::TickData>) -> Vec<pb::TickData> {
         }
     }
 }
+*/
 
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TickDataNormal {
@@ -193,7 +197,7 @@ pub struct TickDataNormal {
     #[prost(int64, required, tag = "2")]
     pub tick: i64,
 }
-
+/*
 pub fn response_collector() {
     let cfg = Config {
         host: "demo.ctraderapi.com".to_string(),
@@ -288,8 +292,9 @@ pub fn response_collector() {
     std::thread::sleep(std::time::Duration::new(100000, 0));
     /* */
 }
+*/
 
-pub fn play2() {
+/*pub fn play2() {
     let cfg = Config {
         host: "demo.ctraderapi.com".to_string(),
         port: 5035,
@@ -325,4 +330,4 @@ pub fn play2() {
 
     std::thread::sleep(std::time::Duration::new(100000, 0));
     /* */
-}
+}*/

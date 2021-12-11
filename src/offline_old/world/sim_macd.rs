@@ -121,7 +121,7 @@ impl TRunner for SimMacdWorld {
                 // if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 && price > big_ema {
                 // if  price > ma && ta.vel.count >= 3 && price > big_ema {
 
-                if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 && big_ema > ma{
+                if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 && big_ema > ma {
                     // if macd_out.macd < 0. && price > ma  {
                     //     if macd_out.macd < 0. && price > ma && ta.vel.count >= 3  {
                     // if macd_out.macd < 0. && price > ma {

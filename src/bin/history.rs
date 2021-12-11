@@ -37,35 +37,47 @@ fn run() {
 
                 let folder = get_folder_path(&pair);
                 let file_path = get_file_path(&pair, week_id);
-                std::fs::create_dir_all(&folder);
+                std::fs::create_dir_all(&folder).unwrap();
+
+                // Old legacy .csv to .tsv file rename
+                let old_csv_file = file_path.replace(".tsv", ".csv");
+                if std::path::Path::new(&old_csv_file).exists() {
+                    std::fs::rename(&old_csv_file, &file_path);
+                }
 
                 // If we already downloaded the week pair data?
                 if std::path::Path::new(&file_path).exists() {
-                    println!("{:?} - {} - Week {} Ignored (downloaded already)", pair, helper::time_tag_string(),week_id);
+                    println!(
+                        "{:?} - {} - Week {} Ignored (downloaded already)",
+                        pair,
+                        helper::time_tag_string(),
+                        week_id
+                    );
                     current_week_start_ms += MS_IN_WEEK;
                     if current_week_start_ms >= helper::get_time_ms() as i64 {
                         println!("{:?} > Finished!", pair);
                         break; // End the pair dls
                     } else {
-                        continue // Go next week
+                        continue; // Go next week
                     }
                 }
 
                 println!(
-                    "{:?} - {} ",
+                    "{:?} - {} - Week {} starting",
                     pair,
-                    helper::to_time_string(helper::get_time_sec() as i64)
+                    helper::time_tag_string(),
+                    week_id
                 );
+
                 let con_res = CTrader::connect2(&cfg);
 
                 let end_week_time = current_week_start_ms + MS_IN_WEEK;
-                let csv_res = trader3::collector::collect_data_from_api_csv(
+                let csv_res = trader3::collector::downloader::collect_data_from_api_csv(
                     con_res,
                     &pair,
                     current_week_start_ms,
                     end_week_time,
                 );
-
 
                 std::fs::write(&file_path, &csv_res);
 
@@ -94,7 +106,7 @@ fn get_weeks_num(seconds: i64) -> i64 {
 }
 
 fn get_file_path(pair: &Pair, weeks_num: i64) -> String {
-    let s = format!("./data/{:?}/{}.csv", pair, weeks_num);
+    let s = format!("./data/{:?}/{}.tsv", pair, weeks_num);
     s
 }
 
