@@ -22,7 +22,8 @@ pub struct SimMacdWorld {
 impl SimMacdWorld {
     pub fn new() -> Self {
         Self {
-            ticks: loader::_load(1400_000, "/media/hamid/K/forex1/EURUSD_tab3.csv"),
+            // ticks: loader::_load(1400_000, "/media/hamid/K/forex1/EURUSD_tab3.csv"),
+            ticks: loader::_load(1400_000, "../forex1/EURUSD_tab3.csv"),
             // ticks: loader::_load(2400_000, "/media/hamid/K/forex1/EURUSD_tab4.csv"),
             // ticks: loader::_load(2400_000, "/media/hamid/K/forex1/EURUSD_tab5.csv"),
             // ticks: loader::_load(14000_000, "/media/hamid/K/forex1/GBPUSD_tab1.csv"),
@@ -33,7 +34,7 @@ impl SimMacdWorld {
             pos_id: 0,
             strategy1: Strategy1::new(),
             last_tick: Default::default(),
-            name: "".to_string(),
+            name: "xxxEuro".to_string(),
             tick_cnt: 0,
         }
     }
@@ -45,7 +46,9 @@ impl SimMacdWorld {
     }
 
     pub fn run_all() {
-        let ds = std::fs::read_dir("/media/hamid/K/forex1/month/").unwrap();
+        // let ds = std::fs::read_dir("/media/hamid/K/forex1/month/").unwrap();
+        let ds = std::fs::read_dir("../forex1/month/").unwrap();
+        // let ds = std::fs::read_dir("../forex1/5/").unwrap();
         for d in ds {
             let d = d.unwrap().path();
             if d.is_dir() {
@@ -117,7 +120,8 @@ impl TRunner for SimMacdWorld {
                 // self.strategy1.buy(kid, t);
                 // if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 && price > big_ema {
                 // if  price > ma && ta.vel.count >= 3 && price > big_ema {
-                if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 {
+
+                if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 && big_ema > ma{
                     // if macd_out.macd < 0. && price > ma  {
                     //     if macd_out.macd < 0. && price > ma && ta.vel.count >= 3  {
                     // if macd_out.macd < 0. && price > ma {
@@ -138,7 +142,7 @@ impl TRunner for SimMacdWorld {
                 // if macd_out.macd > 0. && price < ma {
                 // if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 && price < big_ema {
                 // if  price < ma && ta.vel.count >= 3 && price < big_ema {
-                if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 {
+                if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 && big_ema < ma {
                     // if macd_out.macd > 0. && price < ma  {
                     //     if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 {
                     // if macd_out.macd > 0.  {

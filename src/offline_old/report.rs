@@ -48,8 +48,8 @@ impl Report {
         let time = get_time_sec();
         let folder = format!("../trader3_out/{}_{}", time, name);
         let folder_json = format!("{}/json", folder);
-        std::fs::create_dir(&folder);
-        std::fs::create_dir(&folder_json);
+        std::fs::create_dir_all(&folder);
+        std::fs::create_dir_all(&folder_json).unwrap();
         let dir = std::env::current_dir().unwrap();
         std::env::set_current_dir(&folder);
 

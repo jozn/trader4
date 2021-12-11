@@ -11,8 +11,7 @@ fn main() {
 }
 
 const YEAR_ZERO_WEEK: i64 = 1609632000_000; // Sunday, 3 January 2021 00:00:00
-                                            // const START_WEEK: i64 = 1625356800_000; // 3 Jan 2021
-const START_WEEK: i64 = YEAR_ZERO_WEEK + 15 * MS_IN_WEEK; // 3 Jan 2021
+const START_WEEK: i64 = YEAR_ZERO_WEEK; // 3 Jan 2021
 const MS_IN_WEEK: i64 = 7 * 86400_000;
 
 fn run() {
@@ -36,6 +35,22 @@ fn run() {
             loop {
                 let week_id = get_weeks_num(current_week_start_ms);
 
+                let folder = get_folder_path(&pair);
+                let file_path = get_file_path(&pair, week_id);
+                std::fs::create_dir_all(&folder);
+
+                // If we already downloaded the week pair data?
+                if std::path::Path::new(&file_path).exists() {
+                    println!("{:?} - {} - Week {} Ignored (downloaded already)", pair, helper::time_tag_string(),week_id);
+                    current_week_start_ms += MS_IN_WEEK;
+                    if current_week_start_ms >= helper::get_time_ms() as i64 {
+                        println!("{:?} > Finished!", pair);
+                        break; // End the pair dls
+                    } else {
+                        continue // Go next week
+                    }
+                }
+
                 println!(
                     "{:?} - {} ",
                     pair,
@@ -51,9 +66,7 @@ fn run() {
                     end_week_time,
                 );
 
-                let folder = get_folder_path(&pair);
-                let file_path = get_file_path(&pair, week_id);
-                std::fs::create_dir_all(&folder);
+
                 std::fs::write(&file_path, &csv_res);
 
                 println!(
@@ -73,7 +86,7 @@ fn run() {
         });
     }
 
-    std::thread::sleep(std::time::Duration::new(2000000, 0));
+    std::thread::sleep(std::time::Duration::new(2_000_000, 0));
 }
 
 fn get_weeks_num(seconds: i64) -> i64 {
