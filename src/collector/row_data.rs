@@ -1,3 +1,5 @@
+// use super::loader::*;
+
 #[derive(Debug)]
 pub struct TransTickData {
     pub timestamp: i64,
