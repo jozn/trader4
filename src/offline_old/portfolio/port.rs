@@ -41,7 +41,7 @@ impl Portfolio {
         self.opens.push(pos);
     }
 
-    pub fn sell_long(&mut self, param: &PosParam) {
+    pub fn close_long(&mut self, param: &PosParam) {
         let pos = self.opens.iter().find(|p| p.pos_id == param.pos_id);
         match pos {
             None => {}
@@ -77,7 +77,7 @@ impl Portfolio {
         self.opens.push(pos);
     }
 
-    pub fn buy_short(&mut self, param: &PosParam) {
+    pub fn close_short(&mut self, param: &PosParam) {
         let pos = self.opens.iter().find(|p| p.pos_id == param.pos_id);
         match pos {
             None => {}
@@ -113,11 +113,11 @@ impl Portfolio {
                 match p.direction {
                     PosDir::Long => {
                         done = true;
-                        self.sell_long(&param2);
+                        self.close_long(&param2);
                     }
                     PosDir::Short => {
                         done = true;
-                        self.buy_short(&param2);
+                        self.close_short(&param2);
                     }
                 }
             }
@@ -132,10 +132,10 @@ impl Portfolio {
             param2.pos_id = p.pos_id;
             match p.direction {
                 PosDir::Long => {
-                    self.sell_long(&param2);
+                    self.close_long(&param2);
                 }
                 PosDir::Short => {
-                    self.buy_short(&param2);
+                    self.close_short(&param2);
                 }
             }
         }

@@ -1,24 +1,9 @@
 use super::*;
 use crate::candle::{Tick, TA1};
+use crate::gate_api::NewPos;
 use chrono::*;
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
-
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct PosParam {
-    pub price: XPrice,
-    pub price_multi: f64,
-    pub pos_size: XLot,
-    pub pos_id: u64,
-    pub time: u64,
-    pub ta: TA1,
-}
-
-impl PosParam {
-    pub fn get_usd(&self) -> f64 {
-        self.pos_size as f64 * 1000.
-    }
-}
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Position {
@@ -74,7 +59,7 @@ impl Default for PosDir {
 }
 
 impl Position {
-    pub fn new_long(p: &PosParam) -> Self {
+    pub fn new_long(p: &NewPos) -> Self {
         assert!(p.pos_size > 0);
 
         let mut res = Self {
@@ -107,7 +92,7 @@ impl Position {
         res
     }
 
-    pub fn new_short(p: &PosParam) -> Self {
+    pub fn new_short(p: &NewPos) -> Self {
         assert!(p.pos_size > 0);
 
         let mut res = Self {
@@ -140,7 +125,7 @@ impl Position {
         res
     }
 
-    pub fn close_pos(&mut self, param: &PosParam) {
+    pub fn close_pos(&mut self, param: &NewPos) {
         self.close_time_str = to_date(param.time);
         self.duration = to_duration(self.open_time as i64 - param.time as i64);
 
@@ -150,7 +135,7 @@ impl Position {
         };
     }
 
-    fn close_long(&mut self, param: &PosParam) {
+    fn close_long(&mut self, param: &NewPos) {
         let pl_xpip = param.price - self.open_xprice;
         let pure_pl_xpip = pl_xpip - self.spread;
 
@@ -165,7 +150,7 @@ impl Position {
         self.final_balance = self.pos_size_usd + pure_pl;
     }
 
-    fn close_short(&mut self, param: &PosParam) {
+    fn close_short(&mut self, param: &NewPos) {
         let pl_xpip = self.open_xprice - param.price;
         let pure_pl_xpip = pl_xpip - self.spread;
 
@@ -245,7 +230,7 @@ impl Position {
         trig
     }
 
-    pub fn set_techichal_anylse(&mut self, p: &PosParam) {
+    pub fn set_techichal_anylse(&mut self, p: &NewPos) {
         let t = &p.ta;
 
         self.s_ema = t.ema200;
@@ -264,17 +249,3 @@ impl Position {
         self.s_end_vel = vel.end_vel;
     }
 }
-
-/*
-impl Ord for Position {
-    fn cmp(&self, other: &Self) -> Ordering {
-        self.pos_id.cmp(&other.pos_id)
-    }
-}
-
-impl PartialOrd for Position {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        self.pos_id.partial_cmp(&other.pos_id)
-    }
-}
-*/

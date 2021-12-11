@@ -51,6 +51,7 @@ impl Brain {
             size_usd: 10000,
             take_profit_price: rond5(tick.price_raw * 1.001), // 10 pip
             stop_loose_price: rond5(tick.price_raw * 0.999),
+            ..Default::default()
         };
 
         if self.already_acted(symbol_id, kline_id) {
@@ -68,6 +69,7 @@ impl Brain {
             size_usd: 10000,
             take_profit_price: rond5(tick.price_raw * 0.999), // 10 pip
             stop_loose_price: rond5(tick.price_raw * 1.001),
+            ..Default::default()
         };
 
         if self.already_acted(symbol_id, kline_id) {
@@ -90,8 +92,4 @@ impl Brain {
 
 fn rond5(num: f64) -> f64 {
     ((num * 100_000.0) as u64) as f64 / 100_000.0
-}
-
-fn _kline_str_id(symbol_id: i64, kline_id: u64) -> String {
-    format!("{}_{}", symbol_id, kline_id)
 }

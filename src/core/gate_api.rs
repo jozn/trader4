@@ -1,6 +1,8 @@
 // use crate::candle::Tick;
 // use crate::online::Actor;
+use crate::candle::TA1;
 use crate::configs::assets::Pair;
+use crate::offline::{XLot, XPrice};
 use std::fmt::Debug;
 
 pub trait GateWay: Debug {
@@ -26,11 +28,25 @@ pub trait GateWay: Debug {
     //fn on_connected(&self); // Can be called repeadly during connection distruption
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Default)]
 pub struct NewPos {
     pub symbol_id: i64,
     pub is_short: bool,
     pub size_usd: i64,
     pub take_profit_price: f64,
     pub stop_loose_price: f64,
+
+    // From old offline - feel free to delete unneeded
+    pub price: XPrice,    // todo change to at_price
+    pub price_multi: f64, // delete
+    pub pos_size: XLot,
+    pub pos_id: u64, // from Brain internal
+    pub time: u64,   // Brain time
+    pub ta: TA1,
+}
+
+impl NewPos {
+    pub fn get_usd(&self) -> f64 {
+        self.pos_size as f64 * 1000.
+    }
 }
