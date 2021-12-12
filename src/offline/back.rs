@@ -5,6 +5,7 @@ use crate::configs::assets::Pair;
 use crate::core::gate_api::NewPos;
 use crate::gate_api::GateWay;
 use std::borrow::BorrowMut;
+use std::cell::RefCell;
 use std::sync::{Arc, Mutex};
 
 type PricePair = (Pair, BTickData);
@@ -222,10 +223,63 @@ impl BackendEngine {
 
 #[derive(Debug)]
 pub struct BackendEngineOuter {
-    pub engine: Mutex<BackendEngine>,
+    pub engine: RefCell<BackendEngine>, // Could be Mutex too
 }
 
 impl BackendEngineOuter {
+    pub fn new(fund: i64) -> Self {
+        Self {
+            engine: RefCell::new(BackendEngine {
+                balance: fund,
+                symbols: vec![],
+                price: vec![],
+                las_time_ms: 0,
+                pos_id: 0,
+                free_usd: fund as f64,
+                opens: vec![],
+                closed: vec![],
+            }),
+        }
+    }
+
+    pub fn next_tick(&self, symbol_id: u64, btick: BTickData) {
+        // let mut locked_eng = self.engine.lock().unwrap();
+        // locked_eng.next_tick(symbol_id, btick);
+        let mut eng = self.engine.borrow_mut();
+        eng.next_tick(symbol_id, btick);
+    }
+}
+impl GateWay for BackendEngineOuter {
+    fn subscribe_pairs_req(&self, symbols: Vec<Pair>) {
+        let mut x = self.engine.borrow_mut();
+        x.subscribe_pairs_req(symbols);
+        // let mut locked_eng = self.engine.lock().unwrap();
+        // // symbols.iter().for_each(|p| locked_eng.borrow_mut().symbols.push(p.clone()));
+        // locked_eng.symbols = symbols;
+    }
+
+    fn open_position_req_new(&self, new_pos: &NewPos) {
+        todo!()
+    }
+
+    fn update_position(&self) {
+        todo!()
+    }
+
+    fn get_time_ms(&self) -> u64 {
+        let mut x = self.engine.borrow_mut();
+        x.las_time_ms
+        // let mut locked_eng = self.engine.lock().unwrap();
+        // locked_eng.las_time_ms
+    }
+}
+
+#[derive(Debug)]
+pub struct BackendEngineOuterMutex {
+    pub engine: Mutex<BackendEngine>,
+}
+
+impl BackendEngineOuterMutex {
     pub fn new(fund: i64) -> Self {
         Self {
             engine: Mutex::new(BackendEngine {
@@ -246,7 +300,8 @@ impl BackendEngineOuter {
         locked_eng.next_tick(symbol_id, btick);
     }
 }
-impl GateWay for BackendEngineOuter {
+
+impl GateWay for BackendEngineOuterMutex {
     fn subscribe_pairs_req(&self, symbols: Vec<Pair>) {
         let mut locked_eng = self.engine.lock().unwrap();
         // symbols.iter().for_each(|p| locked_eng.borrow_mut().symbols.push(p.clone()));

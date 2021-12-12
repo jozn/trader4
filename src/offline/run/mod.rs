@@ -13,15 +13,17 @@ pub fn run1() {
         acted: Default::default(),
     };
 
-    for i in 1..50 {
-        let path = format!("/mnt/c/me/data/EURUSD/{}.tsv", i);
-        let ticks = collector::loader::load_rows(&path);
-        println!("{} - {}", i, ticks.len())
-    }
-
     let ticks = collector::loader::load_rows("/mnt/c/me/data/EURUSD/16.tsv");
 
-    for t in ticks {
-        back_arc.next_tick(1, t);
+    for m in 1..100_000 {
+        if m % 100 == 0 {
+            println!("{}", m);
+        }
+        for (i, t) in ticks.iter().enumerate() {
+            if i % 10000 == 0 {
+                // println!("{}", i);
+            }
+            back_arc.next_tick(1, t.clone());
+        }
     }
 }
