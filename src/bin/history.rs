@@ -1,4 +1,5 @@
 use std::thread;
+use std::time::Duration;
 use trader3;
 use trader3::configs::assets;
 use trader3::configs::assets::Pair;
@@ -20,7 +21,7 @@ fn run() {
         port: 5035,
         client_id: "3042_mso8gOm4NPAzIYizUC0gp941QCGvnXcRPJzTrNjVZNG0EeRFYT".to_string(),
         client_secret: "geDkrRiRyfbanU6OUwZMXKIjr4vKQyfs1Ete0unffXtS8Ah14o".to_string(),
-        client_token: "l4jT24BWu3etFSEVViQKu1NsGpBYf2nKN0DyUGgqjy0".to_string(),
+        client_token: "mRqipe6dLQgxNqdJirAB5kCMJbl03CISOSRx755JkgE".to_string(),
         ctid: 22851452,
     };
 
@@ -44,6 +45,7 @@ fn run() {
                 if std::path::Path::new(&old_csv_file).exists() {
                     std::fs::rename(&old_csv_file, &file_path);
                 }
+                // todo add a time checker
 
                 // If we already downloaded the week pair data?
                 if std::path::Path::new(&file_path).exists() {
@@ -55,7 +57,7 @@ fn run() {
                     );
                     current_week_start_ms += MS_IN_WEEK;
                     if current_week_start_ms >= helper::get_time_ms() as i64 {
-                        println!("{:?} > Finished!", pair);
+                        println!("{:?} > Finished! #1", pair);
                         break; // End the pair dls
                     } else {
                         continue; // Go next week
@@ -72,14 +74,21 @@ fn run() {
                 let con_res = CTrader::connect2(&cfg);
 
                 let end_week_time = current_week_start_ms + MS_IN_WEEK;
-                let csv_res = trader3::collector::downloader::collect_data_from_api_csv(
+                let (csv_res, is_err) = trader3::collector::downloader::collect_data_from_api_csv(
                     con_res,
                     &pair,
                     current_week_start_ms,
                     end_week_time,
                 );
+                if is_err {
+                    println!("{:?} > Pre-mature end retrying.", pair);
+                    std::thread::sleep(Duration::from_millis(10000));
+                    continue;
+                }
 
-                std::fs::write(&file_path, &csv_res);
+                if csv_res.len() > 0 {
+                    std::fs::write(&file_path, &csv_res);
+                }
 
                 println!(
                     "{:?} > Completed Week {} - Size: {} -  Path: {} ",
@@ -91,9 +100,10 @@ fn run() {
 
                 current_week_start_ms += MS_IN_WEEK;
                 if current_week_start_ms >= helper::get_time_ms() as i64 {
-                    println!("{:?} > Finished!", pair);
+                    println!("{:?} > Finished! #2", pair);
                     break;
                 }
+                std::thread::sleep(Duration::from_millis(5000));
             }
         });
     }

@@ -1,5 +1,6 @@
 use super::*;
 use crate::collector::row_data::BTickData;
+use crate::configs::assets;
 use crate::configs::assets::Pair;
 use crate::core::gate_api::NewPos;
 use crate::gate_api::GateWay;
@@ -40,6 +41,12 @@ impl BackendEngine {
 
     fn get_time_ms(&self) -> u64 {
         self.las_time_ms
+    }
+
+    // From script/bot calls
+    // todo: optimize with multi bticks per call
+    pub fn next_tick(&self, symbol_id: u64, btick: BTickData) {
+        // set last time, symobl price, close postions
     }
 
     // Privates
@@ -215,9 +222,30 @@ impl BackendEngine {
 
 #[derive(Debug)]
 pub struct BackendEngineOuter {
-    engine: Mutex<BackendEngine>,
+    pub engine: Mutex<BackendEngine>,
 }
 
+impl BackendEngineOuter {
+    pub fn new(fund: i64) -> Self {
+        Self {
+            engine: Mutex::new(BackendEngine {
+                balance: fund,
+                symbols: vec![],
+                price: vec![],
+                las_time_ms: 0,
+                pos_id: 0,
+                free_usd: fund as f64,
+                opens: vec![],
+                closed: vec![],
+            }),
+        }
+    }
+
+    pub fn next_tick(&self, symbol_id: u64, btick: BTickData) {
+        let mut locked_eng = self.engine.lock().unwrap();
+        locked_eng.next_tick(symbol_id, btick);
+    }
+}
 impl GateWay for BackendEngineOuter {
     fn subscribe_pairs_req(&self, symbols: Vec<Pair>) {
         let mut locked_eng = self.engine.lock().unwrap();

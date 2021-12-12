@@ -29,7 +29,7 @@ pub fn dispatch_read_thread(ctrader: CTraderInst) {
         let mut refresh_time = helper::get_time_sec();
         let mut reconnect_time = helper::get_time_sec();
         // we read socket for maximum of 200 times(or 100ms at max) and then block for 500ms read socket - so we can read 400 times per second.
-        loop {
+        'outer: loop {
             let start_time = helper::get_time_ms();
             for i in 0..200 {
                 // Note: Each cTrader send frame seems to be maxed at 16KB.
@@ -40,7 +40,7 @@ pub fn dispatch_read_thread(ctrader: CTraderInst) {
                 drop(locket_stream);
                 if ctrader.is_disconnect() {
                     println!("[ENDING] Existing read loop.");
-                    break;
+                    break 'outer;
                 }
                 match read_res {
                     Ok(0) => {

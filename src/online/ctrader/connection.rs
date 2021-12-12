@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::borrow::Borrow;
+use std::borrow::{Borrow, BorrowMut};
 use std::cell::RefCell;
 
 use crate::online::pb;
@@ -97,7 +97,16 @@ impl CTrader {
 
     pub fn disconnect(&self) {
         self.writer_chan.send(b"END".to_vec());
-        self.inner.lock().unwrap().borrow_mut().stream.shutdown();
+        let mut x = self.inner.lock().unwrap();
+        let re = x.get_mut();
+        re.end = true;
+        re.stream.shutdown();
+        // self.inner.lock().unwrap().borrow_mut().stream.shutdown();
+        // let mut inn = self.inner.lock().unwrap().borrow_mut();
+        // inn.end = true;
+        // inn.stream.shutdown();
+        // inn.borrow_mut().end;
+        // inn.borrow_mut().stream.shutdown();
         println!(">>>> Total disconnection.");
     }
 

@@ -10,7 +10,7 @@ pub fn collect_data_from_api_csv(
     pari: &Pair,
     from_time_ms: i64,
     to_time_ms: i64,
-) -> String {
+) -> (String, bool) {
     let symbol_id = pari.to_symbol_id();
     let start_time = from_time_ms;
     let mut time_ms = to_time_ms;
@@ -26,6 +26,7 @@ pub fn collect_data_from_api_csv(
     ct.get_bid_tick_data_req(symbol_id, from_time_ms, to_time_ms);
 
     let mut cnt = 0;
+    let mut pre_mature_end = false;
 
     for e in rc_event {
         match e.clone() {
@@ -40,6 +41,7 @@ pub fn collect_data_from_api_csv(
             }
             ResponseEvent::DisConnected => {
                 println!("{:?} > Disconnected ...", pari);
+                pre_mature_end = true;
                 break;
             }
             ResponseEvent::ErrorRes(_) => {}
@@ -100,5 +102,6 @@ pub fn collect_data_from_api_csv(
 
     // let res = collector.final_result();
     let res = collector.to_csv();
-    format!("{:}", res)
+    let tsv = format!("{:}", res);
+    (tsv, pre_mature_end)
 }

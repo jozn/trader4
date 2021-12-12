@@ -7,7 +7,7 @@ pub fn run_bot() {
         port: 5035,
         client_id: "3042_mso8gOm4NPAzIYizUC0gp941QCGvnXcRPJzTrNjVZNG0EeRFYT".to_string(),
         client_secret: "geDkrRiRyfbanU6OUwZMXKIjr4vKQyfs1Ete0unffXtS8Ah14o".to_string(),
-        client_token: "l4jT24BWu3etFSEVViQKu1NsGpBYf2nKN0DyUGgqjy0".to_string(),
+        client_token: "mRqipe6dLQgxNqdJirAB5kCMJbl03CISOSRx755JkgE".to_string(),
         ctid: 22851452,
     };
     // let (mut cti, rc_event) = CTrader::connect(&cfg);
