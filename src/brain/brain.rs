@@ -52,7 +52,7 @@ impl Brain {
             take_profit_price: rond5(tick.price_raw * 1.002), // 10 pip
             stop_loose_price: rond5(tick.price_raw * 0.999),
             at_price: tick.price_raw,
-            time: tick.time_s,
+            time_s: tick.time_s,
             ..Default::default()
         };
 
@@ -72,7 +72,7 @@ impl Brain {
             take_profit_price: rond5(tick.price_raw * 0.998), // 10 pip
             stop_loose_price: rond5(tick.price_raw * 1.001),
             at_price: tick.price_raw,
-            time: tick.time_s,
+            time_s: tick.time_s,
 
             ..Default::default()
         };

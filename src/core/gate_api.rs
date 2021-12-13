@@ -56,7 +56,7 @@ pub struct NewPos {
 
     // Informative
     pub at_price: f64,
-    pub time: u64, // Brain time
+    pub time_s: u64, // Brain time
     pub ta: TA1,
     // add comment, label too
 }

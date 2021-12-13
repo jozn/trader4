@@ -26,6 +26,8 @@ pub fn run1() {
     let x = back_arc.engine.borrow();
     println!("{:#?}", x);
     println!("{:#?}", x.free_usd);
+
+    x.report("vdsd");
 }
 
 pub fn run2() {

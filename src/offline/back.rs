@@ -4,6 +4,7 @@ use crate::configs::assets;
 use crate::configs::assets::Pair;
 use crate::core::gate_api::NewPos;
 use crate::gate_api::GateWay;
+use crate::offline::report::Report;
 use std::borrow::BorrowMut;
 use std::cell::RefCell;
 use std::sync::{Arc, Mutex};
@@ -20,6 +21,7 @@ pub struct BackendEngine {
     pub free_usd: f64,
     pub opens: Vec<Position>,
     pub closed: Vec<Position>,
+    pub report: Report,
 }
 
 impl BackendEngine {
@@ -29,6 +31,9 @@ impl BackendEngine {
     }
 
     fn open_position_req_new(&mut self, new_pos: &NewPos) {
+        self.report_balance();
+        self.report.on_new_trade(new_pos, self.get_free_balance());
+
         if new_pos.is_short {
             self.sell_short(new_pos)
         } else {
@@ -79,6 +84,7 @@ impl BackendEngine {
         }
         let btick = btick.unwrap();
         let mut remove = vec![];
+        let mut closed_some = false;
 
         for mut pos in self.opens.iter_mut() {
             if pos.symbol_id != symob_id {
@@ -94,6 +100,7 @@ impl BackendEngine {
                     ta: Default::default(),
                 };
                 pos.close_pos(&p);
+                closed_some = true;
 
                 // println!("+++++++++++++++++++ closding pos : {:#?}", pos);
 
@@ -106,9 +113,15 @@ impl BackendEngine {
                     self.free_usd += pos.profit;
                 }
 
+                // self.report.on_close_trade(&pos,self.get_free_balance());
+
                 // self._remove_pos(pos.pos_id);
                 self.closed.push(pos.clone());
             }
+        }
+
+        if closed_some {
+            self.report_balance();
         }
 
         for pid in remove {
@@ -150,6 +163,7 @@ impl BackendEngine {
     // Close
     pub fn close_all_positions(&mut self) {
         //todo
+        self.report_balance();
         let ids = assets::get_all_symbols_ids();
         for id in ids {
             self.close_stasfied_poss(id, true);
@@ -221,6 +235,15 @@ impl BackendEngine {
             self.closed.remove(idx as usize);
         }
     }
+
+    // Reports
+    fn report_balance(&mut self) {
+        self.report.collect_balance(self.get_free_balance());
+    }
+
+    pub fn report(&self, name: &str) {
+        self.report.write_to_folder(&self, name);
+    }
 }
 
 #[derive(Debug)]
@@ -240,6 +263,7 @@ impl BackendEngineOuter {
                 free_usd: fund as f64,
                 opens: vec![],
                 closed: vec![],
+                report: Default::default(),
             }),
         }
     }
