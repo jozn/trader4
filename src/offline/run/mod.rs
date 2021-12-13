@@ -14,7 +14,7 @@ pub fn run1() {
         acted: Default::default(),
     };
 
-    let ticks = collector::loader::load_rows("/mnt/c/me/data/EURUSD/37.tsv");
+    let ticks = collector::loader::load_rows("/mnt/c/me/data/EURUSD/45.tsv");
 
     for (i, t) in ticks.iter().enumerate() {
         if i % 10000 == 0 {
@@ -27,7 +27,7 @@ pub fn run1() {
     println!("{:#?}", x);
     println!("{:#?}", x.free_usd);
 
-    x.report("vdsd");
+    x.report_to_folder("vdsd");
 }
 
 pub fn run2() {

@@ -10,12 +10,11 @@ use std::cell::RefCell;
 use std::sync::{Arc, Mutex};
 
 type PricePair = (Pair, BTickData);
-// need: loader, report from offline as it is
 #[derive(Debug)]
 pub struct BackendEngine {
     pub balance: i64,
     pub symbols: Vec<Pair>,
-    pub price: Vec<PricePair>,
+    pub price: Vec<PricePair>, // todo replace with a Set/Map
     pub las_time_ms: u64,
     pub pos_id: u64,
     pub free_usd: f64,
@@ -32,7 +31,8 @@ impl BackendEngine {
 
     fn open_position_req_new(&mut self, new_pos: &NewPos) {
         self.report_balance();
-        self.report.on_new_trade(new_pos, self.get_free_balance());
+        self.report
+            .on_new_trade(new_pos, self.get_total_balance(), self.get_locked_money());
 
         if new_pos.is_short {
             self.sell_short(new_pos)
@@ -53,9 +53,12 @@ impl BackendEngine {
     // todo: optimize with multi bticks per call
     pub fn next_tick(&mut self, symbol_id: i64, btick: BTickData) {
         // set last time, symobl price, close postions
-        self.las_time_ms = btick.timestamp as u64;
+        if self.las_time_ms > btick.timestamp as u64 {
+            self.las_time_ms = btick.timestamp as u64;
+        }
         let mut idx = -1;
 
+        // Update symbol ticks data
         for mut r in self.price.iter().enumerate() {
             if r.1 .0.to_symbol_id() == symbol_id {
                 idx = r.0 as i64;
@@ -83,7 +86,7 @@ impl BackendEngine {
             return;
         }
         let btick = btick.unwrap();
-        let mut remove = vec![];
+        let mut remove_pos_ids = vec![];
         let mut closed_some = false;
 
         for mut pos in self.opens.iter_mut() {
@@ -104,7 +107,7 @@ impl BackendEngine {
 
                 // println!("+++++++++++++++++++ closding pos : {:#?}", pos);
 
-                remove.push(pos.pos_id);
+                remove_pos_ids.push(pos.pos_id);
 
                 if pos.is_short() {
                     self.free_usd += pos.profit;
@@ -124,7 +127,7 @@ impl BackendEngine {
             self.report_balance();
         }
 
-        for pid in remove {
+        for pid in remove_pos_ids {
             self._remove_open_pos(pid);
         }
     }
@@ -135,15 +138,9 @@ impl BackendEngine {
             return;
         }
         // println!("buy long long");
-
         let mut pos = Position::new(param);
-
-        // self.report.on_new_trade(&pos, self.get_total_balance(param.price));
-
-        // self.free_usd -= usd as f64 * 1000.;
         self.free_usd -= param.size_usd as f64;
-
-        pos.pos_id = self.next_pos_id();
+        pos.pos_id = self._next_pos_id();
         self.opens.push(pos);
     }
 
@@ -151,24 +148,19 @@ impl BackendEngine {
         if !self.has_enough_balance(param.size_usd) {
             return;
         }
-
         let mut pos = Position::new(param);
-
-        // self.report.on_new_trade(&pos, self.get_total_balance(param.price));
-
-        pos.pos_id = self.next_pos_id();
+        pos.pos_id = self._next_pos_id();
         self.opens.push(pos);
     }
 
-    // Close
     pub fn close_all_positions(&mut self) {
-        //todo
         self.report_balance();
         let ids = assets::get_all_symbols_ids();
         for id in ids {
             self.close_stasfied_poss(id, true);
         }
     }
+
     // Utils
     fn has_enough_balance(&self, usd_vol: i64) -> bool {
         let b = self.get_free_balance() as i64;
@@ -176,32 +168,53 @@ impl BackendEngine {
         res
     }
 
+    fn get_total_balance(&self) -> f64 {
+        let mut locked_usd = 0.;
+        for pos in self.opens.iter() {
+            let btick = self.get_symbol_tick(pos.symbol_id).unwrap();
+            let mut pos_cp = pos.clone();
+            let p = CloseParm {
+                at_price: btick.bid_price,
+                time: btick.timestamp_sec as u64,
+                ta: Default::default(),
+            };
+            pos_cp.close_pos(&p);
+
+            if pos_cp.is_short() {
+                locked_usd += pos_cp.profit;
+            } else {
+                locked_usd += pos_cp.pos_size_usd;
+                locked_usd += pos_cp.profit;
+            }
+        }
+
+        self.free_usd + locked_usd
+    }
+
     fn get_free_balance(&self) -> f64 {
         let mut short_debt = 0.0;
-        for (i, p) in self.opens.iter().enumerate() {
-            if p.direction == PosDir::Short {
+        for p in self.opens.iter() {
+            if p.is_short() {
                 short_debt += p.pos_size_usd;
             }
         }
         self.free_usd - short_debt
     }
 
-    pub fn update_pos(&mut self, pos: &mut Position) {
-        self._remove_pos(pos.pos_id);
-        self.opens.push(pos.clone());
+    fn get_locked_money(&self) -> f64 {
+        let mut locked_money = 0.0;
+        for p in self.opens.iter() {
+            locked_money += p.pos_size_usd as f64
+        }
+        locked_money
     }
 
-    fn _close_pos(&mut self, pos: &mut Position) {
-        self._remove_pos(pos.pos_id);
-        self.closed.push(pos.clone());
-    }
-
-    fn next_pos_id(&mut self) -> u64 {
+    fn _next_pos_id(&mut self) -> u64 {
         self.pos_id += 1;
         self.pos_id
     }
 
-    // Remove from both open and closed position vector.
+    // Remove from open position vector.
     fn _remove_open_pos(&mut self, pos_id: u64) {
         let mut idx = -1_i32;
         for (i, p) in self.opens.iter().enumerate() {
@@ -214,7 +227,7 @@ impl BackendEngine {
         }
     }
     // Remove from both open and closed position vector.
-    fn _remove_pos(&mut self, pos_id: u64) {
+    fn _remove_all_pos(&mut self, pos_id: u64) {
         let mut idx = -1_i32;
         for (i, p) in self.opens.iter().enumerate() {
             if p.pos_id == pos_id {
@@ -238,11 +251,11 @@ impl BackendEngine {
 
     // Reports
     fn report_balance(&mut self) {
-        self.report.collect_balance(self.get_free_balance());
+        self.report.collect_balance(self.get_total_balance());
     }
 
-    pub fn report(&self, name: &str) {
-        self.report.write_to_folder(&self, name);
+    pub fn report_to_folder(&self, suffix: &str) {
+        self.report.write_to_folder(&self, suffix);
     }
 }
 
@@ -269,28 +282,20 @@ impl BackendEngineOuter {
     }
 
     pub fn next_tick(&self, symbol_id: i64, btick: BTickData) {
-        // let mut locked_eng = self.engine.lock().unwrap();
-        // locked_eng.next_tick(symbol_id, btick);
         let mut eng = self.engine.borrow_mut();
-        // println!("{:?}", btick.ask_price);
         eng.next_tick(symbol_id, btick);
     }
 }
+
 impl GateWay for BackendEngineOuter {
     fn subscribe_pairs_req(&self, symbols: Vec<Pair>) {
         let mut x = self.engine.borrow_mut();
         x.subscribe_pairs_req(symbols);
-        // let mut locked_eng = self.engine.lock().unwrap();
-        // // symbols.iter().for_each(|p| locked_eng.borrow_mut().symbols.push(p.clone()));
-        // locked_eng.symbols = symbols;
     }
 
     fn open_position_req_new(&self, new_pos: &NewPos) {
-        // todo!()
         let mut x = self.engine.borrow_mut();
-        // x.pos_id += 1;
         x.open_position_req_new(new_pos);
-        // println!(">>>>>>>>>>>>>>>>>>>>>>> {}", x.pos_id)
     }
 
     fn update_position(&self) {
@@ -299,8 +304,6 @@ impl GateWay for BackendEngineOuter {
 
     fn get_time_ms(&self) -> u64 {
         let mut x = self.engine.borrow_mut();
-        x.las_time_ms
-        // let mut locked_eng = self.engine.lock().unwrap();
-        // locked_eng.las_time_ms
+        x.get_time_ms()
     }
 }

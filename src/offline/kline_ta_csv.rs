@@ -4,6 +4,8 @@ use chrono::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
+// Note: many functions in this file is not used.
+
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct CsvOut {
     pub time: String,

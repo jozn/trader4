@@ -70,8 +70,7 @@ impl Position {
         };
 
         let (high, low) = if p.is_short {
-            // (p.take_profit_price,p.stop_loose_price)
-            (p.stop_loose_price, p.take_profit_price) // todo fix other codes
+            (p.stop_loose_price, p.take_profit_price)
         } else {
             (p.take_profit_price, p.stop_loose_price)
         };

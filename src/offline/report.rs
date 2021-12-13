@@ -26,11 +26,11 @@ impl Report {
         self.balance.push(balance);
     }
 
-    pub fn on_new_trade(&mut self, t: &NewPos, balance: f64) {
+    pub fn on_new_trade(&mut self, t: &NewPos, balance: f64, locked_money: f64) {
         let ms = MiddleStatic {
             time_str: to_date(t.time_s),
             balance: balance,
-            locked: 0,
+            locked: locked_money as u64,
             profit: 0.,
         };
         self.middles.push(ms);

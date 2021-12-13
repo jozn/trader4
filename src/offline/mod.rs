@@ -39,3 +39,5 @@ fn num5(v: f64) -> f64 {
 
     ((v * dig_per) as i64) as f64 / dig_per
 }
+
+// todo: we are currently do not account spreads: asks and bids prices > impl this

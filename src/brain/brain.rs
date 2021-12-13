@@ -49,7 +49,7 @@ impl Brain {
             symbol_id,
             is_short: false,
             size_usd: 10000,
-            take_profit_price: rond5(tick.price_raw * 1.002), // 10 pip
+            take_profit_price: rond5(tick.price_raw * 1.001), // 10 pip
             stop_loose_price: rond5(tick.price_raw * 0.999),
             at_price: tick.price_raw,
             time_s: tick.time_s,
@@ -60,7 +60,7 @@ impl Brain {
             return;
         }
 
-        println!("Open long {:?}", np);
+        println!("Open long {:#?}", np);
         self.con.open_position_req_new(&np);
     }
 
@@ -69,7 +69,7 @@ impl Brain {
             symbol_id,
             is_short: true,
             size_usd: 10000,
-            take_profit_price: rond5(tick.price_raw * 0.998), // 10 pip
+            take_profit_price: rond5(tick.price_raw * 0.999), // 10 pip
             stop_loose_price: rond5(tick.price_raw * 1.001),
             at_price: tick.price_raw,
             time_s: tick.time_s,
@@ -81,7 +81,7 @@ impl Brain {
             return;
         }
 
-        println!("Open short {:?}", np);
+        println!("Open short {:#?}", np);
         self.con.open_position_req_new(&np);
     }
 
