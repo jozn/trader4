@@ -55,10 +55,10 @@ impl Report {
         let dir = std::env::current_dir().unwrap();
         std::env::set_current_dir(&folder);
 
-        std::fs::write("result.txt", format!("{:#?}", self.report_success(port)));
+        std::fs::write("result.txt", format!("{:#?}", self.report_summery(port)));
 
         self.report_balance();
-        self.report_success(port);
+        self.report_summery(port);
         self.report_seq_profit(port);
         self.report_wins(port);
         self.report_loose(port);
@@ -78,7 +78,7 @@ impl Report {
         std::fs::write("./json/balance.json", format!("{}", js));
     }
 
-    fn report_success(&self, port: &BackendEngine) -> ReportResult {
+    pub fn report_summery(&self, port: &BackendEngine) -> ReportSummery {
         let mut total_time = 0;
         let mut win_cnt = 0;
         let mut win_amount = 0.;
@@ -144,7 +144,7 @@ impl Report {
         let long_net_profit = long_win_amount - long_lose_amount.abs();
         let short_net_profit = short_win_amount - short_lose_amount.abs();
 
-        let report_res = ReportResult {
+        let report_res = ReportSummery {
             win_cnt,
             lose_cnt,
             win_amount,
@@ -228,7 +228,7 @@ impl Report {
 }
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
-pub struct ReportResult {
+pub struct ReportSummery {
     pub win_cnt: u32,
     pub lose_cnt: u32,
     pub win_amount: f64,

@@ -1,7 +1,7 @@
 use super::*;
 use crate::base::SignalsRes;
 use crate::candle;
-use crate::candle::Tick;
+use crate::candle::{TA1, Tick};
 use crate::configs::assets;
 use crate::configs::assets::*;
 use crate::gate_api::{GateWay, NewPos};
@@ -44,7 +44,7 @@ impl Brain {
 }
 
 impl Brain {
-    pub fn go_long(&mut self, symbol_id: i64, kline_id: u64, tick: &Tick) {
+    pub fn go_long(&mut self, symbol_id: i64, kline_id: u64, tick: &Tick, ta_main: &TA1) {
         let np = NewPos {
             symbol_id,
             is_short: false,
@@ -53,6 +53,7 @@ impl Brain {
             stop_loose_price: rond5(tick.price_raw * 0.999),
             at_price: tick.price_raw,
             time_s: tick.time_s,
+            ta: ta_main.clone(),
             ..Default::default()
         };
 
@@ -64,7 +65,8 @@ impl Brain {
         self.con.open_position_req_new(&np);
     }
 
-    pub fn go_short(&mut self, symbol_id: i64, kline_id: u64, tick: &Tick) {
+    // ta_main: Medium
+    pub fn go_short(&mut self, symbol_id: i64, kline_id: u64, tick: &Tick, ta_main: &TA1) {
         let np = NewPos {
             symbol_id,
             is_short: true,
@@ -73,6 +75,7 @@ impl Brain {
             stop_loose_price: rond5(tick.price_raw * 1.001),
             at_price: tick.price_raw,
             time_s: tick.time_s,
+            ta: ta_main.clone(),
 
             ..Default::default()
         };

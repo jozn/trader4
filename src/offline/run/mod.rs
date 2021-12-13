@@ -23,7 +23,8 @@ pub fn run1() {
         back_arc.next_tick(1, t.clone());
         brain.on_price_tick_dep(1, t.to_tick())
     }
-    let x = back_arc.engine.borrow();
+    let mut x = back_arc.engine.borrow_mut();
+    x.close_all_positions();
     println!("{:#?}", x);
     println!("{:#?}", x.free_usd);
 

@@ -1,3 +1,4 @@
+use std::fmt::format;
 use enum_iterator::IntoEnumIterator;
 use serde::{Deserialize, Serialize};
 
@@ -26,6 +27,10 @@ impl Pair {
             NZDUSD => 12,
             // NONE => 0,
         }
+    }
+
+    pub fn to_string(&self) -> String {
+        format!("{:?}", self)
     }
 
     pub fn id_to_symbol(id: i64) -> Self {

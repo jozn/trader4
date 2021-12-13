@@ -4,7 +4,7 @@ use crate::configs::assets;
 use crate::configs::assets::Pair;
 use crate::core::gate_api::NewPos;
 use crate::gate_api::GateWay;
-use crate::offline::report::Report;
+use crate::offline::report::{Report, ReportSummery};
 use std::borrow::BorrowMut;
 use std::cell::RefCell;
 use std::sync::{Arc, Mutex};
@@ -123,12 +123,12 @@ impl BackendEngine {
             }
         }
 
-        if closed_some {
-            self.report_balance();
-        }
-
         for pid in remove_pos_ids {
             self._remove_open_pos(pid);
+        }
+
+        if closed_some {
+            self.report_balance();
         }
     }
 
@@ -159,6 +159,7 @@ impl BackendEngine {
         for id in ids {
             self.close_stasfied_poss(id, true);
         }
+        self.report_balance();
     }
 
     // Utils
@@ -252,6 +253,10 @@ impl BackendEngine {
     // Reports
     fn report_balance(&mut self) {
         self.report.collect_balance(self.get_total_balance());
+    }
+
+    pub fn get_report_summery(&self, suffix: &str) -> ReportSummery {
+        self.report.report_summery(&self)
     }
 
     pub fn report_to_folder(&self, suffix: &str) {
