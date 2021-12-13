@@ -58,13 +58,17 @@ pub fn run_bot() {
                 if r.bid.is_some() {
                     let price = r.bid.unwrap() as f64;
                     let t = Tick {
-                        time_s: helper::get_time_ms(),
+                        time_s: helper::get_time_sec(),
                         price,
                         price_raw: price / 100_000.,
                         price_multi: 100_000.,
                         qty: 0.0,
+                        timestamp: helper::get_time_ms() as i64,
+                        // below ???
+                        bid_price: 0.0,
+                        ask_price: 0.0,
                     };
-                    brain.on_price_tick(r.symbol_id, t);
+                    brain.on_price_tick_dep(r.symbol_id, t);
                 }
             }
             ResponseEvent::OrderErrorEvent(_) => {}

@@ -1,6 +1,7 @@
 use enum_iterator::IntoEnumIterator;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, IntoEnumIterator, PartialEq)]
+#[derive(Debug, Serialize, Deserialize, Clone, IntoEnumIterator, PartialEq)]
 pub enum Pair {
     // NONE, // We have in here for some error in symbol_id convertion
     EURUSD,

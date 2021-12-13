@@ -29,6 +29,7 @@ impl CSVForexRecord {
             price_raw: self.bid_price,
             price_multi: multi,
             qty: 0.0,
+            ..Default::default()
         }
     }
 

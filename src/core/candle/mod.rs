@@ -30,6 +30,10 @@ pub struct Tick {
     pub price_raw: f64,
     pub price_multi: f64,
     pub qty: f64, // todo
+    // New ones from BTickData
+    pub timestamp: i64, // ms
+    pub bid_price: f64,
+    pub ask_price: f64,
 }
 
 impl TimeKey for Tick {
@@ -47,14 +51,14 @@ impl TimeKey for Tick {
 // pub const MEDIUM_TICK: u64 = 6; // 50
 // pub const BIG_TICK: u64 = 15; // 150
 
-pub const SMALL_TICK: u64 = 5;
-pub const MEDIUM_TICK: u64 = 7; // 50
-pub const BIG_TICK: u64 = 20; // 150
+// pub const SMALL_TICK: u64 = 5;
+// pub const MEDIUM_TICK: u64 = 7; // 50
+// pub const BIG_TICK: u64 = 20; // 150
 
 // Backup
-// pub const SMALL_TICK: u64 = 15;
-// pub const MEDIUM_TICK: u64 = 10; // 50
-// pub const BIG_TICK: u64 = 30; // 150
+pub const SMALL_TICK: u64 = 15;
+pub const MEDIUM_TICK: u64 = 10; // 50
+pub const BIG_TICK: u64 = 30; // 150
 
 // todo - migrate
 //  ticker + some namnign convention to not get confused

@@ -49,8 +49,10 @@ impl Brain {
             symbol_id,
             is_short: false,
             size_usd: 10000,
-            take_profit_price: rond5(tick.price_raw * 1.001), // 10 pip
+            take_profit_price: rond5(tick.price_raw * 1.002), // 10 pip
             stop_loose_price: rond5(tick.price_raw * 0.999),
+            at_price: tick.price_raw,
+            time: tick.time_s,
             ..Default::default()
         };
 
@@ -67,8 +69,11 @@ impl Brain {
             symbol_id,
             is_short: true,
             size_usd: 10000,
-            take_profit_price: rond5(tick.price_raw * 0.999), // 10 pip
+            take_profit_price: rond5(tick.price_raw * 0.998), // 10 pip
             stop_loose_price: rond5(tick.price_raw * 1.001),
+            at_price: tick.price_raw,
+            time: tick.time_s,
+
             ..Default::default()
         };
 

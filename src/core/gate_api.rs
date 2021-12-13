@@ -29,7 +29,7 @@ pub trait GateWay: Debug {
 }
 
 #[derive(Debug, Clone, Default)]
-pub struct NewPos {
+pub struct NewPos3 {
     pub symbol_id: i64,
     pub is_short: bool,
     pub size_usd: i64,
@@ -43,10 +43,26 @@ pub struct NewPos {
     pub pos_id: u64, // from Brain internal
     pub time: u64,   // Brain time
     pub ta: TA1,
+    // pub pair: Pair,
 }
 
-impl NewPos {
-    pub fn get_usd(&self) -> f64 {
-        self.pos_size as f64 * 1000.
-    }
+#[derive(Debug, Clone, Default)]
+pub struct NewPos {
+    pub symbol_id: i64,
+    pub is_short: bool,
+    pub size_usd: i64, // Could be other currency -- as the cTrader works this way we do not use XLot
+    pub take_profit_price: f64,
+    pub stop_loose_price: f64,
+
+    // Informative
+    pub at_price: f64,
+    pub time: u64, // Brain time
+    pub ta: TA1,
+    // add comment, label too
 }
+
+// impl NewPos {
+//     pub fn get_usd(&self) -> f64 {
+//         self.pos_size as f64 * 1000.
+//     }
+// }

@@ -15,3 +15,9 @@ pub struct BTickData {
     pub bid_price: f64,
     pub ask_price: f64,
 }
+
+impl BTickData {
+    pub fn get_price(&self) -> f64 {
+        self.bid_price
+    }
+}

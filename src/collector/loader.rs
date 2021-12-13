@@ -4,10 +4,6 @@ use csv::{Error, StringRecord};
 use std::io::{BufRead, BufReader, Read, Write};
 
 impl BTickData {
-    pub fn get_price(&self) -> f64 {
-        self.bid_price
-    }
-
     pub fn to_tick(&self) -> Tick {
         let multi = 100_000.;
         Tick {
@@ -16,6 +12,9 @@ impl BTickData {
             price_raw: self.bid_price,
             price_multi: multi,
             qty: 0.0,
+            timestamp: self.timestamp,
+            bid_price: self.bid_price,
+            ask_price: self.ask_price,
         }
     }
 

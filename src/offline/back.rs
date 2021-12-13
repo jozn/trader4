@@ -46,56 +46,100 @@ impl BackendEngine {
 
     // From script/bot calls
     // todo: optimize with multi bticks per call
-    pub fn next_tick(&self, symbol_id: u64, btick: BTickData) {
+    pub fn next_tick(&mut self, symbol_id: i64, btick: BTickData) {
         // set last time, symobl price, close postions
+        self.las_time_ms = btick.timestamp as u64;
+        let mut idx = -1;
+
+        for mut r in self.price.iter().enumerate() {
+            if r.1 .0.to_symbol_id() == symbol_id {
+                idx = r.0 as i64;
+            }
+        }
+        if idx >= 0 && self.price.len() > 0 {
+            self.price.remove(idx as usize);
+        }
+        self.price.push((Pair::id_to_symbol(symbol_id), btick));
+        self.close_stasfied_poss(symbol_id, false);
+    }
+
+    fn get_symbol_tick(&self, symbol_id: i64) -> Option<BTickData> {
+        for r in self.price.iter() {
+            if r.0.to_symbol_id() == symbol_id {
+                return Some(r.1.clone());
+            }
+        }
+        None
+    }
+
+    fn close_stasfied_poss(&mut self, symob_id: i64, force: bool) {
+        let btick = self.get_symbol_tick(symob_id);
+        if btick.is_none() {
+            return;
+        }
+        let btick = btick.unwrap();
+        let mut remove = vec![];
+
+        for mut pos in self.opens.iter_mut() {
+            if pos.symbol_id != symob_id {
+                continue;
+            }
+
+            let price = btick.ask_price;
+            // println!("+++++++++++++++++++ >> : {:#?}, {:?}", pos, btick);
+            if price > pos.high_exit_price || price < pos.low_exit_price || force {
+                let p = CloseParm {
+                    at_price: price,
+                    time: btick.timestamp_sec as u64,
+                    ta: Default::default(),
+                };
+                pos.close_pos(&p);
+
+                // println!("+++++++++++++++++++ closding pos : {:#?}", pos);
+
+                remove.push(pos.pos_id);
+
+                if pos.is_short() {
+                    self.free_usd += pos.profit;
+                } else {
+                    self.free_usd += pos.pos_size_usd;
+                    self.free_usd += pos.profit;
+                }
+
+                // self._remove_pos(pos.pos_id);
+                self.closed.push(pos.clone());
+            }
+        }
+
+        for pid in remove {
+            self._remove_open_pos(pid);
+        }
     }
 
     // Privates
     fn buy_long(&mut self, param: &NewPos) {
-        let usd_vol = param.get_usd();
-        if !self.has_enough_balance(usd_vol) {
+        if !self.has_enough_balance(param.size_usd) {
             return;
         }
         // println!("buy long long");
 
-        let mut pos = Position::new_long(param);
+        let mut pos = Position::new(param);
 
         // self.report.on_new_trade(&pos, self.get_total_balance(param.price));
 
         // self.free_usd -= usd as f64 * 1000.;
-        self.free_usd -= param.get_usd();
+        self.free_usd -= param.size_usd as f64;
 
         pos.pos_id = self.next_pos_id();
         self.opens.push(pos);
     }
 
-    fn close_long(&mut self, param: &NewPos) {
-        let pos = self.opens.iter().find(|p| p.pos_id == param.pos_id);
-        match pos {
-            None => {}
-            Some(p) => {
-                let mut p = p.clone();
-                // p.close_pos(param.price, param.time);
-                p.close_pos(param);
-
-                // self.report.on_close_trade(&p, self.get_total_balance(param.price));
-
-                let got_usd = p.final_balance;
-                self.free_usd += got_usd;
-
-                self._remove_pos(p.pos_id);
-                self.closed.push(p);
-            }
-        }
-    }
-
     fn sell_short(&mut self, param: &NewPos) {
-        let usd_vol = param.get_usd();
-        if !self.has_enough_balance(usd_vol) {
+        if !self.has_enough_balance(param.size_usd) {
             return;
         }
 
-        let mut pos = Position::new_short(param);
+        let mut pos = Position::new(param);
 
         // self.report.on_new_trade(&pos, self.get_total_balance(param.price));
 
@@ -103,71 +147,17 @@ impl BackendEngine {
         self.opens.push(pos);
     }
 
-    fn close_short(&mut self, param: &NewPos) {
-        let pos = self.opens.iter().find(|p| p.pos_id == param.pos_id);
-        match pos {
-            None => {}
-            Some(p) => {
-                let mut p = p.clone();
-                // p.close_pos(param.price, param.time);
-                p.close_pos(param);
-
-                // self.report.on_close_trade(&p, self.get_total_balance(param.price));
-
-                let got_coin = p.final_balance;
-                self.free_usd += p.profit;
-
-                // self.free_asset += got_coin;
-
-                self._remove_pos(p.pos_id);
-                self.closed.push(p);
-            }
-        }
-    }
-
     // Close
-    pub fn try_close_satasfied_postions(&mut self, param: &NewPos) -> bool {
-        let mut done = false;
-        for p in self.opens.clone().iter_mut() {
-            let mut param2 = param.clone();
-            param2.pos_id = p.pos_id;
-
-            p.update_ailing(param.price);
-
-            if p.should_close_bk_simple(param.price) {
-                match p.direction {
-                    PosDir::Long => {
-                        done = true;
-                        self.close_long(&param2);
-                    }
-                    PosDir::Short => {
-                        done = true;
-                        self.close_short(&param2);
-                    }
-                }
-            }
-        }
-        done
-    }
-
-    // Close
-    pub fn close_all_positions(&mut self, param: &NewPos) {
-        for p in self.opens.clone().iter() {
-            let mut param2 = param.clone();
-            param2.pos_id = p.pos_id;
-            match p.direction {
-                PosDir::Long => {
-                    self.close_long(&param2);
-                }
-                PosDir::Short => {
-                    self.close_short(&param2);
-                }
-            }
+    pub fn close_all_positions(&mut self) {
+        //todo
+        let ids = assets::get_all_symbols_ids();
+        for id in ids {
+            self.close_stasfied_poss(id, true);
         }
     }
     // Utils
-    fn has_enough_balance(&self, usd_vol: f64) -> bool {
-        let b = self.get_free_balance();
+    fn has_enough_balance(&self, usd_vol: i64) -> bool {
+        let b = self.get_free_balance() as i64;
         let res = if b > usd_vol { true } else { false };
         res
     }
@@ -198,6 +188,18 @@ impl BackendEngine {
     }
 
     // Remove from both open and closed position vector.
+    fn _remove_open_pos(&mut self, pos_id: u64) {
+        let mut idx = -1_i32;
+        for (i, p) in self.opens.iter().enumerate() {
+            if p.pos_id == pos_id {
+                idx = i as i32;
+            }
+        }
+        if idx >= 0 {
+            self.opens.remove(idx as usize);
+        }
+    }
+    // Remove from both open and closed position vector.
     fn _remove_pos(&mut self, pos_id: u64) {
         let mut idx = -1_i32;
         for (i, p) in self.opens.iter().enumerate() {
@@ -216,7 +218,7 @@ impl BackendEngine {
             }
         }
         if idx >= 0 {
-            self.opens.remove(idx as usize);
+            self.closed.remove(idx as usize);
         }
     }
 }
@@ -242,10 +244,11 @@ impl BackendEngineOuter {
         }
     }
 
-    pub fn next_tick(&self, symbol_id: u64, btick: BTickData) {
+    pub fn next_tick(&self, symbol_id: i64, btick: BTickData) {
         // let mut locked_eng = self.engine.lock().unwrap();
         // locked_eng.next_tick(symbol_id, btick);
         let mut eng = self.engine.borrow_mut();
+        // println!("{:?}", btick.ask_price);
         eng.next_tick(symbol_id, btick);
     }
 }
@@ -259,7 +262,11 @@ impl GateWay for BackendEngineOuter {
     }
 
     fn open_position_req_new(&self, new_pos: &NewPos) {
-        todo!()
+        // todo!()
+        let mut x = self.engine.borrow_mut();
+        // x.pos_id += 1;
+        x.open_position_req_new(new_pos);
+        // println!(">>>>>>>>>>>>>>>>>>>>>>> {}", x.pos_id)
     }
 
     fn update_position(&self) {
