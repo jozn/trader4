@@ -1,3 +1,4 @@
+use crate::candle::CandleConfig;
 use enum_iterator::IntoEnumIterator;
 use serde::{Deserialize, Serialize};
 use std::fmt::format;

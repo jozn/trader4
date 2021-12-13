@@ -255,7 +255,7 @@ impl BackendEngine {
         self.report.collect_balance(self.get_total_balance());
     }
 
-    pub fn get_report_summery(&self, suffix: &str) -> ReportSummery {
+    pub fn get_report_summery(&self) -> ReportSummery {
         self.report.report_summery(&self)
     }
 

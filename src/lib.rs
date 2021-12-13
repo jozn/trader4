@@ -10,5 +10,6 @@ pub mod configs;
 pub mod core;
 pub mod offline;
 pub mod online;
+pub mod optimizer;
 
 pub use crate::core::*;

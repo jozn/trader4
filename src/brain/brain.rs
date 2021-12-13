@@ -1,13 +1,15 @@
 use super::*;
 use crate::base::SignalsRes;
 use crate::candle;
-use crate::candle::{Tick, TA1};
+use crate::candle::{CandleConfig, Tick, TA1};
 use crate::configs::assets;
 use crate::configs::assets::*;
 use crate::gate_api::{GateWay, NewPos};
 use std::borrow::BorrowMut;
 use std::collections::HashSet;
 use std::sync::Arc;
+
+pub type PairCandleCfg = (Pair, CandleConfig);
 
 #[derive(Debug)]
 pub struct Brain {
@@ -17,6 +19,23 @@ pub struct Brain {
 }
 
 impl Brain {
+    pub fn new(
+        backend: Arc<impl GateWay + 'static>,
+        pairs_conf: Vec<(Pair, CandleConfig)>,
+    ) -> Self {
+        let mut brain = Self {
+            con: Box::new(backend),
+            db: vec![],
+            acted: Default::default(),
+        };
+
+        for pc in pairs_conf {
+            brain.db.push(PairMeta::new(pc.0, &pc.1))
+        }
+
+        brain
+    }
+
     // Called from Simulation or Bot codes when connected
     pub fn on_connect(&self) {
         let ids = assets::get_all_symbols_ids();
@@ -25,7 +44,6 @@ impl Brain {
     }
 
     pub fn borrow_pair_meta(&mut self, si: i64) -> &mut PairMeta {
-        // let mut pm = self.db.iter().find_position(|d| d.pair.to_symbol_id() == si ).unwrap();
         let mut idx = 0;
         let mut found = false;
         for pm in &self.db {
@@ -36,7 +54,10 @@ impl Brain {
             idx += 1;
         }
         if !found {
-            self.db.push(PairMeta::new(Pair::id_to_symbol(si)));
+            self.db.push(PairMeta::new(
+                Pair::id_to_symbol(si),
+                &CandleConfig::default(),
+            ));
         }
         let m = self.db.get_mut(idx).unwrap();
         m
@@ -61,7 +82,7 @@ impl Brain {
             return;
         }
 
-        println!("Open long {:#?}", np);
+        // println!("Open long {:#?}", np);
         self.con.open_position_req_new(&np);
     }
 
@@ -84,7 +105,7 @@ impl Brain {
             return;
         }
 
-        println!("Open short {:#?}", np);
+        // println!("Open short {:#?}", np);
         self.con.open_position_req_new(&np);
     }
 

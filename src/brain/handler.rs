@@ -16,18 +16,18 @@ pub struct PairMeta {
 }
 
 impl PairMeta {
-    pub fn new(p: Pair) -> PairMeta {
+    pub fn new(p: Pair, conf: &CandleConfig) -> PairMeta {
         Self {
             pair: p,
             last_tick: None,
             ticks_arr: Default::default(),
-            candles: CandleSeriesTA::new_dep(&CandleConfig::default()),
+            candles: CandleSeriesTA::new_dep(conf),
         }
     }
 }
 
 impl Brain {
-    pub fn on_price_tick_dep(&mut self, symbol_id: i64, tick: Tick) {
+    pub fn on_price_tick(&mut self, symbol_id: i64, tick: Tick) {
         let mut pm = self.borrow_pair_meta(symbol_id);
         // pm.on_price_tick(tick, &self);
         pm.last_tick = Some(tick.clone());
@@ -73,7 +73,8 @@ impl Brain {
         match up {
             SimpleCrossEvent::Bull(_) => {
                 // println!("Entering bull entery");
-                if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 && big_ema > ma {
+                // if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 && big_ema > ma {
+                if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 {
                     self.go_long(symbol_id, kid, t, &ta);
                 }
             }
@@ -86,7 +87,8 @@ impl Brain {
             SimpleCrossEvent::None => {}
             SimpleCrossEvent::Bear(_) => {
                 // println!("Entering bear entery");
-                if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 && big_ema > ma {
+                // if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 && big_ema > ma {
+                if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 {
                     self.go_short(symbol_id, kid, t, &ta);
                 }
             }

@@ -68,7 +68,7 @@ pub fn run_bot() {
                         bid_price: 0.0,
                         ask_price: 0.0,
                     };
-                    brain.on_price_tick_dep(r.symbol_id, t);
+                    brain.on_price_tick(r.symbol_id, t);
                 }
             }
             ResponseEvent::OrderErrorEvent(_) => {}
