@@ -1,6 +1,6 @@
-use std::fmt::format;
 use enum_iterator::IntoEnumIterator;
 use serde::{Deserialize, Serialize};
+use std::fmt::format;
 
 #[derive(Debug, Serialize, Deserialize, Clone, IntoEnumIterator, PartialEq)]
 pub enum Pair {

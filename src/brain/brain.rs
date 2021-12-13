@@ -1,7 +1,7 @@
 use super::*;
 use crate::base::SignalsRes;
 use crate::candle;
-use crate::candle::{TA1, Tick};
+use crate::candle::{Tick, TA1};
 use crate::configs::assets;
 use crate::configs::assets::*;
 use crate::gate_api::{GateWay, NewPos};

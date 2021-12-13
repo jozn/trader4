@@ -74,7 +74,7 @@ impl Brain {
             SimpleCrossEvent::Bull(_) => {
                 // println!("Entering bull entery");
                 if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 && big_ema > ma {
-                    self.go_long(symbol_id, kid, t,&ta );
+                    self.go_long(symbol_id, kid, t, &ta);
                 }
             }
             SimpleCrossEvent::None => {}
