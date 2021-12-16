@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use super::*;
 use crate::base::*;
 
-type ATR = AverageTrueRange;
+pub type ATR = AverageTrueRange;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AverageTrueRange {
     true_range: TrueRange,

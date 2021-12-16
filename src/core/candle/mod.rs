@@ -26,9 +26,9 @@ pub enum TErr {
 #[derive(Debug, Default, Serialize, Deserialize, Clone)]
 pub struct Tick {
     pub time_s: u64,
-    pub price: f64, // multi
+    // pub price_raw: f64, // multi
     pub price_raw: f64,
-    pub price_multi: f64,
+    pub multi: f64,
     pub qty: f64, // todo
     // New ones from BTickData
     pub timestamp: i64, // ms

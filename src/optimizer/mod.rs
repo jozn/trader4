@@ -17,8 +17,8 @@ pub struct CfgSummery {
 pub fn run1() {
     let mut all_summery_cfg = vec![];
 
-    let weeks = vec![40, 41, 42, 43];
-    // let weeks = vec![40];
+    // let weeks = vec![40, 41, 42, 43];
+    let weeks = vec![48];
     let mut all_ticks = vec![];
     for w in weeks {
         let p = format!("/mnt/c/me/data/EURUSD/{}.tsv", w);

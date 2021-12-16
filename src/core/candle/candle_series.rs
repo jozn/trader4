@@ -171,12 +171,12 @@ fn aggregate_tickss_to_kline(ticks: &Vec<Tick>) -> Kline {
     let mut volume = 0.;
 
     for trade in ticks.iter() {
-        if trade.price > high {
-            high = trade.price;
+        if trade.price_raw > high {
+            high = trade.price_raw;
         }
 
-        if trade.price < low {
-            low = trade.price;
+        if trade.price_raw < low {
+            low = trade.price_raw;
         }
 
         volume += trade.qty;
@@ -188,10 +188,10 @@ fn aggregate_tickss_to_kline(ticks: &Vec<Tick>) -> Kline {
         bucket: bucket_id, // this should be override in codes who calls this
         tick_count: num,
         kline_num: -1, // -1 shows kline is build from ticks - just in samll
-        open: first.price,
+        open: first.price_raw,
         high: high,
         low: low,
-        close: last.price,
+        close: last.price_raw,
         volume: volume,
     };
     kline

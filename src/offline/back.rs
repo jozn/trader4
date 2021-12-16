@@ -24,6 +24,19 @@ pub struct BackendEngine {
 }
 
 impl BackendEngine {
+    pub fn new(fund: i64) -> Self {
+        Self {
+            balance: fund,
+            symbols: vec![],
+            price: vec![],
+            las_time_ms: 0,
+            pos_id: 0,
+            free_usd: fund as f64,
+            opens: vec![],
+            closed: vec![],
+            report: Report::new(),
+        }
+    }
     // Direct GateWay api calls
     fn subscribe_pairs_req(&mut self, symbols: Vec<Pair>) {
         self.symbols = symbols;
@@ -272,17 +285,7 @@ pub struct BackendEngineOuter {
 impl BackendEngineOuter {
     pub fn new(fund: i64) -> Self {
         Self {
-            engine: RefCell::new(BackendEngine {
-                balance: fund,
-                symbols: vec![],
-                price: vec![],
-                las_time_ms: 0,
-                pos_id: 0,
-                free_usd: fund as f64,
-                opens: vec![],
-                closed: vec![],
-                report: Default::default(),
-            }),
+            engine: RefCell::new(BackendEngine::new(fund)),
         }
     }
 

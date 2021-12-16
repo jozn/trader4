@@ -45,7 +45,7 @@ impl Brain {
         let mut pm = self.borrow_pair_meta(symbol_id);
 
         let t = &pm.last_tick.clone().unwrap();
-        let price = t.price;
+        let price = t.price_raw;
 
         let s = &pm.candles.medium;
 
@@ -74,7 +74,7 @@ impl Brain {
             SimpleCrossEvent::Bull(_) => {
                 // println!("Entering bull entery");
                 // if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 && big_ema > ma {
-                if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 {
+                if macd_out.macd < 0. && price > ma && ta.vel.count >= 1 && ta.vel.avg_vel > 0. {
                     self.go_long(symbol_id, kid, t, &ta);
                 }
             }
@@ -88,7 +88,7 @@ impl Brain {
             SimpleCrossEvent::Bear(_) => {
                 // println!("Entering bear entery");
                 // if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 && big_ema > ma {
-                if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 {
+                if macd_out.macd > 0. && price < ma && ta.vel.count >= 1 && ta.vel.avg_vel < 0. {
                     self.go_short(symbol_id, kid, t, &ta);
                 }
             }

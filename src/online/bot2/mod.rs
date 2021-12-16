@@ -59,9 +59,9 @@ pub fn run_bot() {
                     let price = r.bid.unwrap() as f64;
                     let t = Tick {
                         time_s: helper::get_time_sec(),
-                        price,
+                        // price_raw: price,
                         price_raw: price / 100_000.,
-                        price_multi: 100_000.,
+                        multi: 1.,
                         qty: 0.0,
                         timestamp: helper::get_time_ms() as i64,
                         // below ???

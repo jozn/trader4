@@ -26,14 +26,18 @@ pub fn run1() {
             // small_tick: 44,
             // medium_tick: 4,
             // big_tick: 20,
-            small_tick: 19,
-            medium_tick: 23,
-            big_tick: 85,
+            // small_tick: 19,
+            // medium_tick: 23,
+            // big_tick: 85,
+            small_tick: 10,
+            medium_tick: 24,
+            big_tick: 80,
         },
     );
     let mut brain = Brain::new(back_arc.clone(), vec![pair_cfg]);
 
-    let ticks = collector::loader::load_rows("/mnt/c/me/data/EURUSD/40.tsv");
+    let ticks = collector::loader::load_rows("/mnt/c/me/data/EURUSD/48.tsv");
+    // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 42..43);
 
     for (i, t) in ticks.iter().enumerate() {
         if i % 10000 == 0 {
@@ -98,44 +102,13 @@ pub fn run_optimized() {
             let pair_cfg = (
                 Pair::EURUSD,
                 CandleConfig {
-                    // small_tick: 49,
-                    // medium_tick: 9,
-                    // big_tick: 25,
-                    // small_tick: 31,
-                    // medium_tick: 7,
-                    // big_tick: 17,
-                    // small_tick: 46,
-                    // medium_tick: 9,
-                    // big_tick: 65,
-                    // small_tick: 16,
-                    // medium_tick: 11,
-                    // big_tick: 37,
-                    // small_tick: 49,
-                    // medium_tick: 9,
-                    // big_tick: 65,
-                    // small_tick: 10,
-                    // medium_tick: 13,
-                    // big_tick: 49,
-                    // small_tick: 16,
-                    // medium_tick: 30,
-                    // big_tick: 60,
-                    // small_tick: 20,
-                    // medium_tick: 22,
-                    // big_tick: 30,
-                    // good
-                    // small_tick: 8,
-                    // medium_tick: 16,
-                    // big_tick: 80,
-                    // small_tick: 16,
-                    // medium_tick: 8,
-                    // big_tick: 35,
                     // good
                     // small_tick: 24,
                     // medium_tick: 6,
                     // big_tick: 30,
-                    small_tick: 44,
-                    medium_tick: 4,
-                    big_tick: 20,
+                    small_tick: 10,
+                    medium_tick: 24,
+                    big_tick: 80,
                 },
             );
             let mut brain = Brain::new(back_arc.clone(), vec![pair_cfg]);

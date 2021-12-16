@@ -4,16 +4,14 @@ use super::*;
 use crate::base::*;
 use std::collections::VecDeque;
 
+const MULTIPLIER: f64 = 1_000_000.0;
+
 // Velocity
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Vel {
-    period: usize,
     ema: EMA,
     last_ema: f64,
-    diff: Momentum, // diferece to prev
-    store: VecDeque<f64>,
     store_ema: VecDeque<f64>,
-    window_1: Window,    // diferece to prev
     buff: VecDeque<f64>, // A buffer to avoid allocating in each call
     is_new: bool,
 }
@@ -27,19 +25,14 @@ pub struct VelRes {
 }
 
 impl Vel {
-    pub fn new(period: usize) -> TAResult<Self> {
+    pub fn new(ema_period: usize) -> TAResult<Self> {
         // println!("period: {}", period);
-        match period {
+        match ema_period {
             0 => Err(TAErr::WrongArgs),
             _ => Ok(Self {
-                period,
-                ema: EMA::new(period).unwrap(),
-                last_ema: 0.0,
-                diff: Momentum::new(1).unwrap(),
-                store: VecDeque::with_capacity(200),
+                ema: EMA::new(ema_period).unwrap(),
+                last_ema: 0.,
                 store_ema: VecDeque::with_capacity(200),
-                window_1: Window::new(200).unwrap(),
-                // _buff: Window::new(200).unwrap(),
                 buff: VecDeque::with_capacity(200),
                 is_new: true,
             }),
@@ -48,70 +41,87 @@ impl Vel {
 
     pub fn next(&mut self, candle: impl OHLCV) -> VelRes {
         let tp = (candle.high() + candle.low() + candle.close()) / 3.0;
-        self._next_(tp as f64)
+        self._next_(tp)
     }
 
-    fn _next_(&mut self, typical_price: f64) -> VelRes {
-        let p = typical_price;
+    pub fn _next_(&mut self, typical_price: f64) -> VelRes {
         let new_ema = self.ema.next(typical_price);
+        // let new_ema_u64 = (new_ema * MULTIPLIER) as u64 ;
         if self.is_new {
             self.is_new = false;
             self.last_ema = new_ema;
         }
+        let last_ema = self.last_ema;
 
-        let end_vel = new_ema - self.last_ema;
-        self.last_ema = new_ema;
-
-        self.store.push_front(end_vel);
+        // Note: push_front means the start of vector
         self.store_ema.push_front(new_ema);
-        if self.store.len() == self.period {
-            self.store.pop_back(); // remove
+        if self.store_ema.len() == 100 {
             self.store_ema.pop_back(); // remove
         }
 
-        let mut sum = 0.0;
         let mut count = 0;
-        self.buff.clear();
+        // self.buff.clear();
 
-        /*
-             println!("eeema dif: {:?}", self.store);
-             println!("eeema: {:?}", self.store_ema);
-             println!("=============");
-        */
+        let mut buff = vec![];
+        let end_vel = new_ema - last_ema;
+        // let first = new_ema;
+        let mut last = new_ema;
 
         if end_vel > 0. {
+            // bullish
             // MARK A
-            for v in self.store.iter() {
+            for v in self.store_ema.iter() {
                 let v = *v;
-                if v > 0. {
-                    sum += v;
+                if last >= v {
+                    last = v;
+                    // sum += v;
                     count += 1;
-                    self.buff.push_front(v);
+                    buff.push(v);
                 } else {
                     break;
                 }
             }
         } else {
             // COPY OF A WITH NEGATIVE CHECK
-            for v in self.store.iter() {
+            for v in self.store_ema.iter() {
                 let v = *v;
-                if v < 0. {
-                    sum += v;
+                if last <= v {
+                    last = v;
+                    // sum += v;
                     count += 1;
-                    self.buff.push_front(v);
+                    buff.push(v);
                 } else {
                     break;
                 }
             }
         }
 
-        let start_sum: f64 = self.buff.iter().take(3).sum();
-        let start_size: f64 = self.buff.iter().take(3).count() as f64;
+        // println!("{:?}", buff);
+
+        let avg_vel = if count >= 2 {
+            // Note: can divide by zero in f64
+            (new_ema - last) / (count - 1) as f64
+        } else {
+            0.
+        };
+        // println!("eeema: {:?}", self.store_ema);
+        // println!("=============");
+
+        let start_vec: Vec<f64> = buff.iter().rev().take(3).map(|v| *v).rev().collect();
+        let start_vel = if start_vec.len() >= 2 {
+            let first = start_vec.first().unwrap();
+            let last = start_vec.last().unwrap();
+            (first - last) / (start_vec.len() - 1) as f64
+        } else {
+            0.
+        };
+
+        self.last_ema = new_ema;
 
         VelRes {
-            start_vel: start_sum / new_ema,
-            count: count,
-            avg_vel: sum / count as f64,
+            start_vel,
+            count: count - 1,
+            avg_vel,
             end_vel,
         }
     }
@@ -136,12 +146,14 @@ mod tests {
     #[test]
     fn test_next() {
         let mut cci = Vel::new(3).unwrap();
-        /*
-                assert_eq!(cci._next_(2.0), 2.0);
-                assert_eq!(cci._next_(5.0), 3.5);
-                assert_eq!(cci._next_(1.0), 2.25);
-                assert_eq!(cci._next_(6.25), 4.25);
-        */
+        let nums = vec![
+            1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.5, 1.3, 1.2, 1.1, 1.0, 0.9, 0.8, 0.7, 0.6,
+        ];
+
+        for p in nums {
+            let r = cci._next_(p);
+            println!("{} - {:#?}  {:#?}", p, r, cci);
+        }
     }
 
     #[test]

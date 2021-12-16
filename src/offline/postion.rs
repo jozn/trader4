@@ -31,6 +31,7 @@ pub struct Position {
     pub s_ema: f64,
     pub s_mom: f64,
     pub s_roc: f64,
+    pub s_atr: f64,
     pub s_rsi: f64,
     pub s_cci: f64,
     pub s_macd: f64,
@@ -127,6 +128,7 @@ impl Position {
         self.s_ema = t.ema200;
         self.s_mom = t.mom;
         self.s_roc = t.roc;
+        self.s_atr = t.atr;
         self.s_rsi = t.rsi;
         self.s_cci = t.cci;
         self.s_macd = t.macd.macd;

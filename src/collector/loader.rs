@@ -1,16 +1,18 @@
 use crate::candle::Tick;
 use crate::collector::row_data::BTickData;
+use crate::configs::assets::Pair;
 use csv::{Error, StringRecord};
 use std::io::{BufRead, BufReader, Read, Write};
+use std::ops::Range;
 
 impl BTickData {
     pub fn to_tick(&self) -> Tick {
         let multi = 100_000.;
         Tick {
             time_s: self.timestamp_sec as u64,
-            price: self.bid_price * multi,
+            // price_raw: self.bid_price * multi,
             price_raw: self.bid_price,
-            price_multi: multi,
+            multi: 1.,
             qty: 0.0,
             timestamp: self.timestamp,
             bid_price: self.bid_price,
@@ -67,4 +69,18 @@ pub fn load_ticks(file_path: &str) -> Vec<Tick> {
     let arr = load_rows(file_path);
     let res = arr.iter().map(|v| v.to_tick()).collect();
     res
+}
+
+pub fn load_all_pair(pair: &Pair, rng: Range<u16>) -> Vec<BTickData> {
+    let mut arr = vec![];
+    for i in rng {
+        let path = format!("/mnt/c/me/data/{:?}/{}.tsv", pair, i);
+        if std::path::Path::new(&path).exists() {
+            let ticks = load_rows(&path);
+            for t in ticks {
+                arr.push(t);
+            }
+        }
+    }
+    arr
 }

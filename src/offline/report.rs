@@ -1,3 +1,4 @@
+use rand::Rng;
 // use super::portfolio::*;
 use super::kline_ta_csv::*;
 use super::*;
@@ -6,8 +7,9 @@ use crate::core::helper::get_time_sec;
 use crate::gate_api::NewPos;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Default, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Report {
+    pub rnd_num: u16,
     pub acted: Vec<u64>,
     pub balance: Vec<f64>,
     pub middles: Vec<MiddleStatic>,
@@ -16,6 +18,7 @@ pub struct Report {
 impl Report {
     pub fn new() -> Self {
         Self {
+            rnd_num: rand::thread_rng().gen_range(1..1000),
             acted: vec![],
             balance: vec![],
             middles: vec![],
@@ -55,7 +58,10 @@ impl Report {
         let dir = std::env::current_dir().unwrap();
         std::env::set_current_dir(&folder);
 
-        std::fs::write("result.txt", format!("{:#?}", self.report_summery(port)));
+        std::fs::write(
+            format!("result_{}.txt", self.rnd_num),
+            format!("{:#?}", self.report_summery(port)),
+        );
 
         self.report_balance();
         self.report_summery(port);
@@ -63,7 +69,7 @@ impl Report {
         self.report_wins(port);
         self.report_loose(port);
 
-        println!("balance: {:#?}", self.middles.last().unwrap().balance);
+        println!("balance: {:#?}", self.middles.last());
 
         std::env::set_current_dir(dir);
     }
@@ -72,7 +78,7 @@ impl Report {
         let os = to_csv_out(&self.middles);
         let txt = format!("{}", os);
 
-        std::fs::write("balance.csv", txt);
+        std::fs::write(format!("balance_{}.csv", self.rnd_num), txt);
 
         let js = to_json_out(&self.middles);
         std::fs::write("./json/balance.json", format!("{}", js));
@@ -185,7 +191,7 @@ impl Report {
         let os = to_csv_out(&res);
         let txt = format!("{}", os);
 
-        std::fs::write("seq_profit.csv", txt);
+        std::fs::write(format!("seq_profit_{}.csv", self.rnd_num), txt);
     }
 
     fn report_wins(&self, port: &BackendEngine) {
@@ -202,9 +208,9 @@ impl Report {
             }
         }
 
-        write_pos("wins_all", all_arr);
-        write_pos("wins_long", longs_arr);
-        write_pos("wins_short", short_arr);
+        write_pos("wins_all", self.rnd_num, all_arr);
+        write_pos("wins_long", self.rnd_num, longs_arr);
+        write_pos("wins_short", self.rnd_num, short_arr);
     }
 
     fn report_loose(&self, port: &BackendEngine) {
@@ -221,9 +227,9 @@ impl Report {
             }
         }
 
-        write_pos("lose_all", all_arr);
-        write_pos("lose_long", longs_arr);
-        write_pos("lose_short", short_arr);
+        write_pos("lose_all", self.rnd_num, all_arr);
+        write_pos("lose_long", self.rnd_num, longs_arr);
+        write_pos("lose_short", self.rnd_num, short_arr);
     }
 }
 
@@ -273,10 +279,10 @@ pub fn get_all_postions(port: &BackendEngine) -> Vec<Position> {
     all_pos
 }
 
-fn write_pos(name: &str, arr: Vec<Position>) {
+fn write_pos(name: &str, rnd_num: u16, arr: Vec<Position>) {
     let os = to_csv_out(&arr);
     let txt = format!("{}", os);
-    std::fs::write(format!("{}.csv", name), txt);
+    std::fs::write(format!("{}_{}.csv", name, rnd_num), txt);
 
     let js = to_json_out(&arr);
     std::fs::write(format!("./json/{}.json", name), format!("{}", js));

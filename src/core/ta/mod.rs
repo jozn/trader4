@@ -15,6 +15,7 @@ pub use rsi::*;
 pub use sma::*;
 pub use true_range::*;
 pub use vel::*;
+pub use vel_dep::*;
 pub use window::*;
 pub use wma::*;
 
@@ -34,6 +35,7 @@ pub mod rsi;
 pub mod sma;
 pub mod true_range;
 pub mod vel;
+pub mod vel_dep;
 pub mod window;
 pub mod wma;
 
