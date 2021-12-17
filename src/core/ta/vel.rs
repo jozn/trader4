@@ -18,10 +18,10 @@ pub struct Vel {
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct VelRes {
-    pub start_vel: f64,
+    pub start_vel_zz: f64,
     pub count: u32, // all positive/negative candles counts
-    pub avg_vel: f64,
-    pub end_vel: f64,
+    pub avg_vel_zz: f64,
+    pub end_vel_zz: f64,
 }
 
 impl Vel {
@@ -119,10 +119,10 @@ impl Vel {
         self.last_ema = new_ema;
 
         VelRes {
-            start_vel,
+            start_vel_zz: start_vel * 1_000_000.,
             count: count - 1,
-            avg_vel,
-            end_vel,
+            avg_vel_zz: avg_vel * 1_000_000.,
+            end_vel_zz: end_vel * 1_000_000.,
         }
     }
 }

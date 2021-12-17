@@ -32,11 +32,12 @@ pub fn run1() {
             small_tick: 10,
             medium_tick: 24,
             big_tick: 80,
+            vel_period: 37,
         },
     );
     let mut brain = Brain::new(back_arc.clone(), vec![pair_cfg]);
 
-    let ticks = collector::loader::load_rows("/mnt/c/me/data/EURUSD/48.tsv");
+    let ticks = collector::loader::load_rows("/mnt/c/me/data/EURUSD/1.tsv");
     // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 42..43);
 
     for (i, t) in ticks.iter().enumerate() {
@@ -65,6 +66,7 @@ pub fn run2() {
             let mut brain = Brain {
                 con: Box::new(back_arc.clone()),
                 db: vec![],
+                last_trade_time: 0,
                 acted: Default::default(),
             };
 
@@ -92,8 +94,9 @@ pub fn run2() {
 
 pub fn run_optimized() {
     let mut bal = vec![];
+    let mut sum = 0.;
 
-    for i in 40..=53 {
+    for i in 1..=53 {
         let path = format!("/mnt/c/me/data/{:?}/{}.tsv", Pair::EURUSD, i);
         if std::path::Path::new(&path).exists() {
             let backend = BackendEngineOuter::new(100_000);
@@ -106,9 +109,14 @@ pub fn run_optimized() {
                     // small_tick: 24,
                     // medium_tick: 6,
                     // big_tick: 30,
-                    small_tick: 10,
-                    medium_tick: 24,
-                    big_tick: 80,
+                    // small_tick: 10,
+                    // medium_tick: 24,
+                    // big_tick: 80,
+                    // vel_period: 37,
+                    small_tick: 40,
+                    medium_tick: 8,
+                    big_tick: 30,
+                    vel_period: 40,
                 },
             );
             let mut brain = Brain::new(back_arc.clone(), vec![pair_cfg]);
@@ -121,16 +129,21 @@ pub fn run_optimized() {
             }
             let mut x = back_arc.engine.borrow_mut();
             x.close_all_positions();
-            bal.push(x.free_usd)
+            bal.push(x.free_usd);
+
+            // Print as we go
+            {
+                let p = x.free_usd - 100_000.;
+                sum += p;
+                println!(
+                    ">>>          {:.1}             {:.1}%       Sum:{:.0}",
+                    p,
+                    p / 10.,
+                    sum
+                );
+            }
         }
     }
     println!("{:#?}", bal);
-    let mut sum = 0.;
-
-    for b in bal {
-        let p = b - 100_000.;
-        sum += p;
-        println!(">>>          {:}                     {}%", p, p / 10.);
-    }
     println!("Sum: {:}", sum);
 }

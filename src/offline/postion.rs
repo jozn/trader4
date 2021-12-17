@@ -25,21 +25,37 @@ pub struct Position {
     pub profit: f64,
     pub spread_fees: f64,
     pub final_balance: f64,
+    pub touch_low_pip: f64,
+    pub touch_high_pip: f64,
+    pub locked: f64,
 
     // Context flat - When rust fixed csv out move it to ctx
-    // s_ prefix: start_
-    pub s_ema: f64,
-    pub s_mom: f64,
-    pub s_roc: f64,
-    pub s_atr: f64,
-    pub s_rsi: f64,
-    pub s_cci: f64,
-    pub s_macd: f64,
-    pub s_fisher: f64,
-    pub s_start_vel: f64,
-    pub s_count: u32,
-    pub s_avg_vel: f64,
-    pub s_end_vel: f64,
+    // sm_ prefix: start-medium_
+    pub sm_ema: f64,
+    pub sm_mom: f64,
+    pub sm_roc: f64,
+    pub sm_atr: f64,
+    pub sm_rsi: f64,
+    pub sm_cci: f64,
+    pub sm_macd: f64,
+    pub sm_fisher: f64,
+    pub sm_start_vel_zz: f64,
+    pub sm_count: u32,
+    pub sm_avg_vel_zz: f64,
+    pub sm_end_vel_zz: f64,
+    // sb_ prefix: start-big_
+    pub sb_ema: f64,
+    pub sb_mom: f64,
+    pub sb_roc: f64,
+    pub sb_atr: f64,
+    pub sb_rsi: f64,
+    pub sb_cci: f64,
+    pub sb_macd: f64,
+    pub sb_fisher: f64,
+    pub sb_start_vel_zz: f64,
+    pub sb_count: u32,
+    pub sb_avg_vel_zz: f64,
+    pub sb_end_vel_zz: f64,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -62,7 +78,7 @@ pub struct CloseParm {
 }
 
 impl Position {
-    pub fn new(p: &NewPos) -> Self {
+    pub fn new(p: &NewPos, locked: f64) -> Self {
         assert!(p.size_usd > 5);
         let dir = if p.is_short {
             PosDir::Short
@@ -94,6 +110,10 @@ impl Position {
             profit: 0.0,
             spread_fees: 0.0,
             final_balance: 0.0,
+            touch_low_pip: 0.,
+            touch_high_pip: 0.,
+            locked: locked,
+
             ..Default::default()
         };
         res.set_techichal_anylse(p);
@@ -123,22 +143,41 @@ impl Position {
     }
 
     pub fn set_techichal_anylse(&mut self, p: &NewPos) {
-        let t = &p.ta;
+        let t = &p.ta_med;
 
-        self.s_ema = t.ema200;
-        self.s_mom = t.mom;
-        self.s_roc = t.roc;
-        self.s_atr = t.atr;
-        self.s_rsi = t.rsi;
-        self.s_cci = t.cci;
-        self.s_macd = t.macd.macd;
-        self.s_fisher = t.fisher.fisher;
+        self.sm_ema = t.ema200;
+        self.sm_mom = t.mom;
+        self.sm_roc = t.roc;
+        self.sm_atr = t.atr;
+        self.sm_rsi = t.rsi;
+        self.sm_cci = t.cci;
+        self.sm_macd = t.macd.macd;
+        self.sm_fisher = t.fisher.fisher;
 
         // Set vel resutl
         let vel = &t.vel;
-        self.s_start_vel = vel.start_vel;
-        self.s_count = vel.count;
-        self.s_avg_vel = vel.avg_vel;
-        self.s_end_vel = vel.end_vel;
+        self.sm_start_vel_zz = vel.start_vel_zz;
+        self.sm_count = vel.count;
+        self.sm_avg_vel_zz = vel.avg_vel_zz;
+        self.sm_end_vel_zz = vel.end_vel_zz;
+
+        // Set big time frame TA
+        let t = &p.ta_big;
+
+        self.sb_ema = t.ema200;
+        self.sb_mom = t.mom;
+        self.sb_roc = t.roc;
+        self.sb_atr = t.atr;
+        self.sb_rsi = t.rsi;
+        self.sb_cci = t.cci;
+        self.sb_macd = t.macd.macd;
+        self.sb_fisher = t.fisher.fisher;
+
+        // Set vel resutl
+        let vel = &t.vel;
+        self.sb_start_vel_zz = vel.start_vel_zz;
+        self.sb_count = vel.count;
+        self.sb_avg_vel_zz = vel.avg_vel_zz;
+        self.sb_end_vel_zz = vel.end_vel_zz;
     }
 }

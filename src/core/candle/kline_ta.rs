@@ -64,9 +64,8 @@ pub struct TAMethods {
     pub t_ema3: EMA,
 }
 
-// should not be used, just to satasfy compiler for Default
-impl Default for TAMethods {
-    fn default() -> Self {
+impl TAMethods {
+    pub fn new(cfg: &CandleConfig) -> Self {
         TAMethods {
             sma100: ta::SMA::new(100).unwrap(),
             ema200: ta::EMA::new(50).unwrap(),
@@ -76,7 +75,7 @@ impl Default for TAMethods {
             atr: ta::ATR::new(14).unwrap(),
             rsi: ta::RSI::new(14).unwrap(),
             cci: ta::CCI::new(14).unwrap(),
-            vel: ta::Vel::new(50).unwrap(),
+            vel: ta::Vel::new(cfg.vel_period as usize).unwrap(),
             macd: ta::MACD::new(12, 26, 9).unwrap(),
             // macd: ta::MACD::new(18, 34, 9).unwrap(),
             fisher: ta::Fisher::new(9, 6).unwrap(),
@@ -88,6 +87,14 @@ impl Default for TAMethods {
             t_ema2: EMA::new(15).unwrap(),
             t_ema3: EMA::new(50).unwrap(),
         }
+    }
+}
+
+// should not be used, just to satasfy compiler for Default
+impl Default for TAMethods {
+    fn default() -> Self {
+        let cfg = CandleConfig::default();
+        TAMethods::new(&cfg)
     }
 }
 

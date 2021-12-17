@@ -31,7 +31,7 @@ pub fn run1() {
         if i == 100 {
             //break;
         }
-        if i % 5 != 0 {
+        if i % 10 != 0 {
             // only 10%
             continue;
         }
@@ -87,6 +87,41 @@ pub fn get_all_candle_cfgs() -> Vec<PairCandleCfg> {
 
     for s in (4..50).step_by(2) {
         for m in (4..40).step_by(2) {
+            for mut b in (30..31).step_by(5) {
+                for vel in 10..=60 {
+                    if m * s > 500 || b * s > 1000 {
+                        continue;
+                    }
+                    if b < m * 3 {
+                        continue;
+                    }
+
+                    let cfg = CandleConfig {
+                        small_tick: s,
+                        medium_tick: m,
+                        big_tick: b,
+                        vel_period: vel,
+                    };
+
+                    // faster b in higher numbers
+                    if b > 50 {
+                        b += 5;
+                    }
+
+                    arr.push((Pair::EURUSD, cfg));
+                }
+            }
+        }
+    }
+
+    arr
+}
+
+pub fn get_all_candle_cfgs_bk() -> Vec<PairCandleCfg> {
+    let mut arr = vec![];
+
+    for s in (4..50).step_by(2) {
+        for m in (4..40).step_by(2) {
             for mut b in (10..150).step_by(5) {
                 if m * s > 500 || b * s > 1000 {
                     continue;
@@ -99,6 +134,7 @@ pub fn get_all_candle_cfgs() -> Vec<PairCandleCfg> {
                     small_tick: s,
                     medium_tick: m,
                     big_tick: b,
+                    vel_period: 30,
                 };
 
                 // faster b in higher numbers

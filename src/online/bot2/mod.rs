@@ -23,6 +23,7 @@ pub fn run_bot() {
     let mut brain = Brain {
         con: Box::new(ct.clone()),
         db: vec![],
+        last_trade_time: 0,
         acted: Default::default(),
     };
 

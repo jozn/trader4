@@ -66,7 +66,7 @@ impl BackendEngine {
     // todo: optimize with multi bticks per call
     pub fn next_tick(&mut self, symbol_id: i64, btick: BTickData) {
         // set last time, symobl price, close postions
-        if self.las_time_ms > btick.timestamp as u64 {
+        if self.las_time_ms < btick.timestamp as u64 {
             self.las_time_ms = btick.timestamp as u64;
         }
         let mut idx = -1;
@@ -80,7 +80,10 @@ impl BackendEngine {
         if idx >= 0 && self.price.len() > 0 {
             self.price.remove(idx as usize);
         }
-        self.price.push((Pair::id_to_symbol(symbol_id), btick));
+        self.price
+            .push((Pair::id_to_symbol(symbol_id), btick.clone()));
+
+        self.update_touch_prices(symbol_id, &btick);
         self.close_stasfied_poss(symbol_id, false);
     }
 
@@ -91,6 +94,24 @@ impl BackendEngine {
             }
         }
         None
+    }
+
+    fn update_touch_prices(&mut self, symob_id: i64, btick: &BTickData) {
+        for mut pos in self.opens.iter_mut() {
+            if pos.symbol_id != symob_id {
+                continue;
+            }
+
+            let high = (pos.open_price - btick.ask_price) * 10000.;
+            if pos.touch_high_pip < high {
+                pos.touch_high_pip = high;
+            }
+
+            let low = (pos.open_price - btick.bid_price) * 10000.;
+            if pos.touch_low_pip > low {
+                pos.touch_low_pip = low;
+            }
+        }
     }
 
     fn close_stasfied_poss(&mut self, symob_id: i64, force: bool) {
@@ -151,7 +172,7 @@ impl BackendEngine {
             return;
         }
         // println!("buy long long");
-        let mut pos = Position::new(param);
+        let mut pos = Position::new(param, self.get_locked_money());
         self.free_usd -= param.size_usd as f64;
         pos.pos_id = self._next_pos_id();
         self.opens.push(pos);
@@ -161,7 +182,7 @@ impl BackendEngine {
         if !self.has_enough_balance(param.size_usd) {
             return;
         }
-        let mut pos = Position::new(param);
+        let mut pos = Position::new(param, self.get_locked_money());
         pos.pos_id = self._next_pos_id();
         self.opens.push(pos);
     }
@@ -272,7 +293,8 @@ impl BackendEngine {
         self.report.report_summery(&self)
     }
 
-    pub fn report_to_folder(&self, suffix: &str) {
+    pub fn report_to_folder(&mut self, suffix: &str) {
+        self.closed.sort_by(|a, b| a.pos_id.cmp(&b.pos_id));
         self.report.write_to_folder(&self, suffix);
     }
 }

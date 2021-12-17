@@ -14,7 +14,8 @@ pub type PairCandleCfg = (Pair, CandleConfig);
 #[derive(Debug)]
 pub struct Brain {
     pub con: Box<Arc<dyn GateWay>>,
-    pub db: Vec<PairMeta>,
+    pub db: Vec<PairMemory>,
+    pub last_trade_time: u64, // tem
     pub acted: HashSet<String>,
 }
 
@@ -26,11 +27,12 @@ impl Brain {
         let mut brain = Self {
             con: Box::new(backend),
             db: vec![],
+            last_trade_time: 0,
             acted: Default::default(),
         };
 
         for pc in pairs_conf {
-            brain.db.push(PairMeta::new(pc.0, &pc.1))
+            brain.db.push(PairMemory::new(pc.0, &pc.1))
         }
 
         brain
@@ -43,7 +45,7 @@ impl Brain {
         self.con.subscribe_pairs_req(assets::get_all_symbols());
     }
 
-    pub fn borrow_pair_meta(&mut self, si: i64) -> &mut PairMeta {
+    pub fn borrow_pair_meta(&mut self, si: i64) -> &mut PairMemory {
         let mut idx = 0;
         let mut found = false;
         for pm in &self.db {
@@ -54,7 +56,7 @@ impl Brain {
             idx += 1;
         }
         if !found {
-            self.db.push(PairMeta::new(
+            self.db.push(PairMemory::new(
                 Pair::id_to_symbol(si),
                 &CandleConfig::default(),
             ));
@@ -65,7 +67,14 @@ impl Brain {
 }
 
 impl Brain {
-    pub fn go_long(&mut self, symbol_id: i64, kline_id: u64, tick: &Tick, ta_main: &TA1) {
+    pub fn go_long(
+        &mut self,
+        symbol_id: i64,
+        kline_id: u64,
+        tick: &Tick,
+        ta_med: &TA1,
+        ta_big: &TA1,
+    ) {
         let np = NewPos {
             symbol_id,
             is_short: false,
@@ -74,7 +83,8 @@ impl Brain {
             stop_loose_price: rond5(tick.price_raw * 0.999),
             at_price: tick.price_raw,
             time_s: tick.time_s,
-            ta: ta_main.clone(),
+            ta_med: ta_med.clone(),
+            ta_big: ta_big.clone(),
             ..Default::default()
         };
 
@@ -87,7 +97,14 @@ impl Brain {
     }
 
     // ta_main: Medium
-    pub fn go_short(&mut self, symbol_id: i64, kline_id: u64, tick: &Tick, ta_main: &TA1) {
+    pub fn go_short(
+        &mut self,
+        symbol_id: i64,
+        kline_id: u64,
+        tick: &Tick,
+        ta_med: &TA1,
+        ta_big: &TA1,
+    ) {
         let np = NewPos {
             symbol_id,
             is_short: true,
@@ -96,7 +113,8 @@ impl Brain {
             stop_loose_price: rond5(tick.price_raw * 1.001),
             at_price: tick.price_raw,
             time_s: tick.time_s,
-            ta: ta_main.clone(),
+            ta_med: ta_med.clone(),
+            ta_big: ta_big.clone(),
 
             ..Default::default()
         };
@@ -110,10 +128,17 @@ impl Brain {
     }
 
     fn already_acted(&mut self, symbol_id: i64, kline_id: u64) -> bool {
+        let time_sec = self.con.get_time_ms() / 1000;
+        // println!("lat: {}", time_sec);
+        if time_sec < self.last_trade_time + 1800 {
+            return true;
+        }
+
         let kids = format!("{}_{}", symbol_id, kline_id);
         if self.acted.contains(&kids) {
             return true;
         }
+        self.last_trade_time = time_sec;
         self.acted.insert(kids);
         false
     }

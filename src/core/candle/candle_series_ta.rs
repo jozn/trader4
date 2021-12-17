@@ -15,22 +15,35 @@ pub struct CandleSeriesTA {
     pub ticking: KlineSerVec<KlineTATick>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct KlineHolderFrameTA {
-    pub length_ms: u64,
+    pub length_ms: u64, // todo remvoe
+    pub cfg: CandleConfig,
     pub ta_holder: TAMethods,
     pub klines_ta: KlineSerVec<KlineTA>,
     pub kline_ta_tip: Option<KlineTA>,
 }
 
+impl KlineHolderFrameTA {
+    pub fn new(cfg: &CandleConfig) -> Self {
+        Self {
+            length_ms: 0,
+            cfg: cfg.clone(),
+            ta_holder: TAMethods::new(cfg),
+            klines_ta: Default::default(),
+            kline_ta_tip: None,
+        }
+    }
+}
+
 impl CandleSeriesTA {
-    pub fn new_dep(cfg: &CandleConfig) -> Self {
+    pub fn new(cfg: &CandleConfig) -> Self {
         // Self::default()
         Self {
             klines: CandleSeries::new(cfg),
-            small: Default::default(),
-            medium: Default::default(),
-            big: Default::default(),
+            small: KlineHolderFrameTA::new(cfg),
+            medium: KlineHolderFrameTA::new(cfg),
+            big: KlineHolderFrameTA::new(cfg),
             ticking_tip: Default::default(),
             ticking: Default::default(),
         }
