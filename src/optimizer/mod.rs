@@ -85,9 +85,9 @@ pub fn run_sample(pair_cfg: PairCandleCfg, all_tikcs: &Vec<BTickData>) -> Report
 pub fn get_all_candle_cfgs() -> Vec<PairCandleCfg> {
     let mut arr = vec![];
 
-    for s in (4..50).step_by(2) {
-        for m in (4..40).step_by(2) {
-            for mut b in (30..31).step_by(5) {
+    for s in (5..50).step_by(5) {
+        for m in (4..30).step_by(4) {
+            for mut b in (20..150).step_by(10) {
                 for vel in 10..=60 {
                     if m * s > 500 || b * s > 1000 {
                         continue;

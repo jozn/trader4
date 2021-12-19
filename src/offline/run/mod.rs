@@ -33,16 +33,20 @@ pub fn run1() {
             // medium_tick: 24,
             // big_tick: 80,
             // vel_period: 37,
-            small_tick: 26,
-            medium_tick: 8,
-            big_tick: 30,
-            vel_period: 34,
+            // small_tick: 26,
+            // medium_tick: 8,
+            // big_tick: 30,
+            // vel_period: 34,
+            small_tick: 30,
+            medium_tick: 10,
+            big_tick: 120,
+            vel_period: 25,
         },
     );
     let mut brain = Brain::new(back_arc.clone(), vec![pair_cfg]);
 
-    let ticks = collector::loader::load_rows("/mnt/c/me/data/EURUSD/1.tsv");
-    // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 42..43);
+    // let ticks = collector::loader::load_rows("/mnt/c/me/data/EURUSD/1.tsv");
+    let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 40..45);
 
     for (i, t) in ticks.iter().enumerate() {
         if i % 10000 == 0 {
@@ -113,10 +117,14 @@ pub fn run_optimized() {
                     // medium_tick: 24,
                     // big_tick: 80,
                     // vel_period: 37,
-                    small_tick: 24,
+                    // small_tick: 24,
+                    // medium_tick: 10,
+                    // big_tick: 30,
+                    // vel_period: 47,
+                    small_tick: 30,
                     medium_tick: 10,
                     big_tick: 30,
-                    vel_period: 47,
+                    vel_period: 25,
                 },
             );
             let mut brain = Brain::new(back_arc.clone(), vec![pair_cfg]);

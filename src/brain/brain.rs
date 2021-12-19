@@ -75,12 +75,13 @@ impl Brain {
         ta_med: &TA1,
         ta_big: &TA1,
     ) {
+        let atr_pip = ta_big.atr * 10_000.;
         let np = NewPos {
             symbol_id,
             is_short: false,
             size_usd: 10000,
-            take_profit_price: cal_price(tick.price_raw, 10.), // 10 pip
-            stop_loose_price: cal_price(tick.price_raw, -10.),
+            take_profit_price: cal_price(tick.price_raw, atr_pip), // 10 pip
+            stop_loose_price: cal_price(tick.price_raw, -atr_pip),
             at_price: tick.price_raw,
             time_s: tick.time_s,
             ta_med: ta_med.clone(),
@@ -105,12 +106,13 @@ impl Brain {
         ta_med: &TA1,
         ta_big: &TA1,
     ) {
+        let atr_pip = ta_big.atr * 10_000.;
         let np = NewPos {
             symbol_id,
             is_short: true,
             size_usd: 10000,
-            take_profit_price: cal_price(tick.price_raw, -10.),
-            stop_loose_price: cal_price(tick.price_raw, 10.),
+            take_profit_price: cal_price(tick.price_raw, -atr_pip),
+            stop_loose_price: cal_price(tick.price_raw, atr_pip),
             at_price: tick.price_raw,
             time_s: tick.time_s,
             ta_med: ta_med.clone(),

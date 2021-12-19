@@ -20,6 +20,7 @@ pub struct MovingAverageConvergenceDivergence {
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct MACDOutput {
     pub macd: f64,
+    pub macd_pip: f64,
     pub signal_old: f64,
     pub histogram: f64,
     pub signal: SignalsRes,
@@ -57,6 +58,7 @@ impl MovingAverageConvergenceDivergence {
 
         MACDOutput {
             macd,
+            macd_pip: macd * 10_000.,
             signal_old: signal,
             histogram,
             signal: s,

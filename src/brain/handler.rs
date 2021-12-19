@@ -83,13 +83,30 @@ impl Brain {
                 // if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 && big_ema > ma {
                 // if macd_out.macd < 0. && price > ma && ta.vel.count >= 1 && ta.vel.avg_vel_zz > 0. {
 
+                self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
+
+                if big_ta.mom <= 0. && med_ta.mom <= 0. {
+                    // self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
+
+                    // println!("ma {:#?} ", big_ta);
+                    // println!("ma {:#?} {}  {} ", price , big_ta.ema200 , med_ma );
+                    // self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
+                }
+
+                // if big_ta.macd.macd_zz < -400. && price > med_ma {
+                if big_ta.macd.macd_pip < -400. {
+                    // println!("ma {:#?} ", big_ta);
+                    // println!("ma {:#?} {}  {} ", price , big_ta.ema200 , med_ma );
+                    // self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
+                }
+
                 // if price > big_ta.ema200 {
                 if big_ta.vel.count > 1
-                    && big_ta.vel.avg_vel_zz > 0.
+                    && big_ta.vel.avg_vel_pip > 0.
                     && med_ta.vel.count > 1
-                    && med_ta.vel.avg_vel_zz > 0.
+                    && med_ta.vel.avg_vel_pip > 0.
                 {
-                    self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
+                    // self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
                 }
                 // }
                 // self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
@@ -109,13 +126,18 @@ impl Brain {
                 // if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 && big_ema > ma {
                 // if macd_out.macd > 0. && price < ma && ta.vel.count >= 1 && ta.vel.avg_vel_zz < 0. {
 
+                // self.go_short(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
+
+                if big_ta.macd.macd_pip > 400. {
+                    // self.go_short(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
+                }
                 // if price < big_ta.ema200 {
                 if big_ta.vel.count > 1
-                    && big_ta.vel.avg_vel_zz < 0.
+                    && big_ta.vel.avg_vel_pip < 0.
                     && med_ta.vel.count > 1
-                    && med_ta.vel.avg_vel_zz < 0.
+                    && med_ta.vel.avg_vel_pip < 0.
                 {
-                    self.go_short(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
+                    // self.go_short(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
                 }
                 // }
 

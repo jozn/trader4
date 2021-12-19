@@ -27,6 +27,7 @@ pub fn to_csv_out<T: Serialize>(arr: &Vec<T>, tab: bool) -> String {
         csv::WriterBuilder::new()
             .delimiter(b'\t')
             .quote_style(csv::QuoteStyle::NonNumeric)
+            .has_headers(true)
             .from_writer(&mut str_out)
     } else {
         csv::Writer::from_writer(&mut str_out)

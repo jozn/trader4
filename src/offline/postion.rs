@@ -37,12 +37,12 @@ pub struct Position {
     pub sm_atr: f64,
     pub sm_rsi: f64,
     pub sm_cci: f64,
-    pub sm_macd: f64,
+    pub sm_macd_pip: f64,
     pub sm_fisher: f64,
-    pub sm_start_vel_zz: f64,
+    pub sm_start_vel_pip: f64,
     pub sm_count: u32,
-    pub sm_avg_vel_zz: f64,
-    pub sm_end_vel_zz: f64,
+    pub sm_avg_vel_pip: f64,
+    pub sm_end_vel_pip: f64,
     // sb_ prefix: start-big_
     pub sb_ema: f64,
     pub sb_mom: f64,
@@ -50,12 +50,12 @@ pub struct Position {
     pub sb_atr: f64,
     pub sb_rsi: f64,
     pub sb_cci: f64,
-    pub sb_macd: f64,
+    pub sb_macd_pip: f64,
     pub sb_fisher: f64,
-    pub sb_start_vel_zz: f64,
+    pub sb_start_vel_pip: f64,
     pub sb_count: u32,
-    pub sb_avg_vel_zz: f64,
-    pub sb_end_vel_zz: f64,
+    pub sb_avg_vel_pip: f64,
+    pub sb_end_vel_pip: f64,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -152,15 +152,15 @@ impl Position {
         self.sm_atr = t.atr;
         self.sm_rsi = t.rsi;
         self.sm_cci = t.cci;
-        self.sm_macd = t.macd.macd;
+        self.sm_macd_pip = t.macd.macd_pip;
         self.sm_fisher = t.fisher.fisher;
 
         // Set vel resutl
         let vel = &t.vel;
-        self.sm_start_vel_zz = vel.start_vel_zz;
+        self.sm_start_vel_pip = vel.start_vel_pip;
         self.sm_count = vel.count;
-        self.sm_avg_vel_zz = vel.avg_vel_zz;
-        self.sm_end_vel_zz = vel.end_vel_zz;
+        self.sm_avg_vel_pip = vel.avg_vel_pip;
+        self.sm_end_vel_pip = vel.end_vel_pip;
 
         // Set big time frame TA
         let t = &p.ta_big;
@@ -171,14 +171,14 @@ impl Position {
         self.sb_atr = t.atr;
         self.sb_rsi = t.rsi;
         self.sb_cci = t.cci;
-        self.sb_macd = t.macd.macd;
+        self.sb_macd_pip = t.macd.macd_pip;
         self.sb_fisher = t.fisher.fisher;
 
         // Set vel resutl
         let vel = &t.vel;
-        self.sb_start_vel_zz = vel.start_vel_zz;
+        self.sb_start_vel_pip = vel.start_vel_pip;
         self.sb_count = vel.count;
-        self.sb_avg_vel_zz = vel.avg_vel_zz;
-        self.sb_end_vel_zz = vel.end_vel_zz;
+        self.sb_avg_vel_pip = vel.avg_vel_pip;
+        self.sb_end_vel_pip = vel.end_vel_pip;
     }
 }

@@ -68,9 +68,9 @@ impl TAMethods {
     pub fn new(cfg: &CandleConfig) -> Self {
         TAMethods {
             sma100: ta::SMA::new(100).unwrap(),
-            ema200: ta::EMA::new(50).unwrap(),
+            ema200: ta::EMA::new(20).unwrap(),
             hull: ta::HMA::new(10).unwrap(),
-            mom: ta::Momentum::new(10).unwrap(),
+            mom: ta::Momentum::new(14).unwrap(),
             roc: ta::ROC::new(10).unwrap(),
             atr: ta::ATR::new(14).unwrap(),
             rsi: ta::RSI::new(14).unwrap(),
