@@ -29,10 +29,14 @@ pub fn run1() {
             // small_tick: 19,
             // medium_tick: 23,
             // big_tick: 85,
-            small_tick: 10,
-            medium_tick: 24,
-            big_tick: 80,
-            vel_period: 37,
+            // small_tick: 10,
+            // medium_tick: 24,
+            // big_tick: 80,
+            // vel_period: 37,
+            small_tick: 26,
+            medium_tick: 8,
+            big_tick: 30,
+            vel_period: 34,
         },
     );
     let mut brain = Brain::new(back_arc.clone(), vec![pair_cfg]);
@@ -105,18 +109,14 @@ pub fn run_optimized() {
             let pair_cfg = (
                 Pair::EURUSD,
                 CandleConfig {
-                    // good
-                    // small_tick: 24,
-                    // medium_tick: 6,
-                    // big_tick: 30,
                     // small_tick: 10,
                     // medium_tick: 24,
                     // big_tick: 80,
                     // vel_period: 37,
-                    small_tick: 40,
-                    medium_tick: 8,
+                    small_tick: 24,
+                    medium_tick: 10,
                     big_tick: 30,
-                    vel_period: 40,
+                    vel_period: 47,
                 },
             );
             let mut brain = Brain::new(back_arc.clone(), vec![pair_cfg]);

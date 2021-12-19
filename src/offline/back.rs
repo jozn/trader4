@@ -102,12 +102,12 @@ impl BackendEngine {
                 continue;
             }
 
-            let high = (pos.open_price - btick.ask_price) * 10000.;
+            let high = (btick.ask_price - pos.open_price) * 10_000.;
             if pos.touch_high_pip < high {
                 pos.touch_high_pip = high;
             }
 
-            let low = (pos.open_price - btick.bid_price) * 10000.;
+            let low = (btick.bid_price - pos.open_price) * 10_000.;
             if pos.touch_low_pip > low {
                 pos.touch_low_pip = low;
             }
@@ -130,7 +130,7 @@ impl BackendEngine {
 
             let price = btick.ask_price;
             // println!("+++++++++++++++++++ >> : {:#?}, {:?}", pos, btick);
-            if price > pos.high_exit_price || price < pos.low_exit_price || force {
+            if price >= pos.high_exit_price || price <= pos.low_exit_price || force {
                 let p = CloseParm {
                     at_price: price,
                     time: btick.timestamp_sec as u64,

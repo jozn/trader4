@@ -82,9 +82,20 @@ impl Brain {
                 // println!("Entering bull entery");
                 // if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 && big_ema > ma {
                 // if macd_out.macd < 0. && price > ma && ta.vel.count >= 1 && ta.vel.avg_vel_zz > 0. {
-                if med_macd_out.macd < 0. && price > med_ma && med_ta.vel.count >= 1 {
+
+                // if price > big_ta.ema200 {
+                if big_ta.vel.count > 1
+                    && big_ta.vel.avg_vel_zz > 0.
+                    && med_ta.vel.count > 1
+                    && med_ta.vel.avg_vel_zz > 0.
+                {
                     self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
                 }
+                // }
+                // self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
+                if med_macd_out.macd < 0. && price > med_ma && med_ta.vel.count >= 1 {
+                    // self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
+                }
             }
             SimpleCrossEvent::None => {}
             SimpleCrossEvent::Bear(_) => {}
@@ -97,70 +108,21 @@ impl Brain {
                 // println!("Entering bear entery");
                 // if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 && big_ema > ma {
                 // if macd_out.macd > 0. && price < ma && ta.vel.count >= 1 && ta.vel.avg_vel_zz < 0. {
-                if med_macd_out.macd > 0. && price < med_ma && med_ta.vel.count >= 1 {
+
+                // if price < big_ta.ema200 {
+                if big_ta.vel.count > 1
+                    && big_ta.vel.avg_vel_zz < 0.
+                    && med_ta.vel.count > 1
+                    && med_ta.vel.avg_vel_zz < 0.
+                {
                     self.go_short(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
                 }
-            }
-        }
-    }
-    /*
-    fn on_completed_small_candle_bk(&mut self, symbol_id: i64) {
-        // println!("{} - {:?} - small_candle", helper::time_tag_string(), pm.pair);
-        let mut pm = self.borrow_pair_meta(symbol_id);
+                // }
 
-        let t = &pm.last_tick.clone().unwrap();
-        let price = t.price_raw;
-
-        let s = &pm.candles.medium;
-
-        let kt_opt = s.kline_ta_tip.clone();
-        let kt_opt = s.klines_ta.last().clone();
-
-        let big_ema = pm.candles.big.klines_ta.last();
-        if kt_opt.is_none() {
-            return;
-        }
-        if big_ema.is_none() {
-            return;
-        }
-        let kt = kt_opt.unwrap().to_owned();
-        // let big_kline = big_ema.unwrap();
-        let big_ema = big_ema.unwrap().ta1.ema200;
-        let kid = kt.kline.bucket;
-        let ma = kt.ta1.ema200;
-        let macd_out = kt.ta1.macd.clone();
-
-        let up = macd_out.signal.0;
-        let down = macd_out.signal.1;
-
-        let ta = &kt.ta1;
-        let symbol_id = pm.pair.to_symbol_id();
-
-        match up {
-            SimpleCrossEvent::Bull(_) => {
-                // println!("Entering bull entery");
-                // if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 && big_ema > ma {
-                // if macd_out.macd < 0. && price > ma && ta.vel.count >= 1 && ta.vel.avg_vel_zz > 0. {
-                if macd_out.macd < 0. && price > ma && ta.vel.count >= 1 {
-                    self.go_long(symbol_id, kid, t, &ta);
-                }
-            }
-            SimpleCrossEvent::None => {}
-            SimpleCrossEvent::Bear(_) => {}
-        }
-
-        match down {
-            SimpleCrossEvent::Bull(_) => {}
-            SimpleCrossEvent::None => {}
-            SimpleCrossEvent::Bear(_) => {
-                // println!("Entering bear entery");
-                // if macd_out.macd > 0. && price < ma && ta.vel.count >= 3 && big_ema > ma {
-                // if macd_out.macd > 0. && price < ma && ta.vel.count >= 1 && ta.vel.avg_vel_zz < 0. {
-                if macd_out.macd > 0. && price < ma && ta.vel.count >= 1 {
-                    self.go_short(symbol_id, kid, t, &ta);
+                if med_macd_out.macd > 0. && price < med_ma && med_ta.vel.count >= 1 {
+                    // self.go_short(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
                 }
             }
         }
     }
-    */
 }

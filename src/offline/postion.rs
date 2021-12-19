@@ -91,6 +91,7 @@ impl Position {
         } else {
             (p.take_profit_price, p.stop_loose_price)
         };
+        assert!(high > low);
 
         let mut res = Self {
             pos_id: 0,
@@ -125,7 +126,7 @@ impl Position {
         self.duration = to_duration(self.open_time as i64 - param.time as i64);
         self.close_price = param.at_price;
 
-        let mut pl = (self.open_price - self.close_price) * self.pos_size_usd;
+        let mut pl = (self.close_price - self.open_price) * self.pos_size_usd;
         if self.is_short() {
             pl = -pl;
         }

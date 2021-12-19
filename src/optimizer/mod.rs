@@ -31,7 +31,7 @@ pub fn run1() {
         if i == 100 {
             //break;
         }
-        if i % 10 != 0 {
+        if i % 30 != 0 {
             // only 10%
             continue;
         }

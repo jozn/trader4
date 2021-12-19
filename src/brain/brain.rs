@@ -79,8 +79,8 @@ impl Brain {
             symbol_id,
             is_short: false,
             size_usd: 10000,
-            take_profit_price: rond5(tick.price_raw * 1.001), // 10 pip
-            stop_loose_price: rond5(tick.price_raw * 0.999),
+            take_profit_price: cal_price(tick.price_raw, 10.), // 10 pip
+            stop_loose_price: cal_price(tick.price_raw, -10.),
             at_price: tick.price_raw,
             time_s: tick.time_s,
             ta_med: ta_med.clone(),
@@ -109,8 +109,8 @@ impl Brain {
             symbol_id,
             is_short: true,
             size_usd: 10000,
-            take_profit_price: rond5(tick.price_raw * 0.999), // 10 pip
-            stop_loose_price: rond5(tick.price_raw * 1.001),
+            take_profit_price: cal_price(tick.price_raw, -10.),
+            stop_loose_price: cal_price(tick.price_raw, 10.),
             at_price: tick.price_raw,
             time_s: tick.time_s,
             ta_med: ta_med.clone(),
@@ -146,4 +146,9 @@ impl Brain {
 
 fn rond5(num: f64) -> f64 {
     ((num * 100_000.0) as u64) as f64 / 100_000.0
+}
+
+fn cal_price(price: f64, pip: f64) -> f64 {
+    let p = 1. + (pip / 10_000.);
+    rond5(price * p)
 }
