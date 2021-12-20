@@ -3,6 +3,7 @@ use trader3;
 use trader3::candle::{CandleConfig, CandleSeriesTA, Kline, KlineHolderFrameTA, TimeSerVec};
 use trader3::collector;
 use trader3::configs::assets::Pair;
+use trader3::offline::num5;
 
 pub fn main() {
     let pairs = trader3::configs::assets::get_all_symbols();
@@ -29,27 +30,10 @@ pub fn main() {
                         arr.clear();
                     }
                 }
+
                 write_output(&candle.small, &pair, i, "small");
                 write_output(&candle.medium, &pair, i, "medium");
                 write_output(&candle.big, &pair, i, "big");
-                /*
-                let mut vec_candles = vec![];
-                for k in candle.medium.klines_ta.iter() {
-                    vec_candles.push( kline_to_kline_out(&k.kline));
-                }
-
-                let s  = trader3::core::helper::to_csv_out(&vec_candles, true);
-                // let s  = trader3::offline::kline_ta_csv::to_csv_out(&vec_candles);
-
-                // Write to file
-                let dir = format!("/mnt/c/me/data_trans/{:?}", pair);
-                let out_file_path = format!("/mnt/c/me/data_trans/{:?}/{}_med.tsv", pair, i);
-
-                use std::fs;
-                fs::create_dir_all(&dir);
-                fs::write(&out_file_path, s);
-                println!("{}", &out_file_path);
-                */
             }
         }
     }
@@ -68,7 +52,7 @@ fn write_output(khf: &KlineHolderFrameTA, pair: &Pair, week_id: i64, time_frame_
     let dir = format!("/mnt/c/me/data_trans/{:?}", pair);
     let out_file_path = format!(
         "/mnt/c/me/data_trans/{:?}/{}_{}.tsv",
-        pair, time_frame_str, week_id
+        pair, week_id, time_frame_str
     );
 
     use std::fs;
@@ -90,8 +74,8 @@ pub struct KlineOut {
     pub high: f64,
     pub low: f64,
     pub close: f64,
-    pub pip_dif_high: f64, // high loc
-    pub pip_dif_oc: f64,   // open close
+    pub pip_dif_max: f64, // high - low
+    pub pip_dif_oc: f64,  // close - open
     // pub volume: f64,
     pub open_time_str: String,
     pub duration: String,
@@ -111,8 +95,8 @@ fn kline_to_kline_out(k: &Kline) -> KlineOut {
         high: k.high,
         low: k.low,
         close: k.close,
-        pip_dif_high: (k.high - k.low) * 10_000.,
-        pip_dif_oc: (k.close - k.open) * 10_000.,
+        pip_dif_max: num5((k.high - k.low) * 10_000.),
+        pip_dif_oc: num5((k.close - k.open) * 10_000.),
         open_time_str: ots,
         duration: trader3::offline::shared::to_duration((k.close_time - k.open_time) as i64),
     };

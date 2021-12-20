@@ -19,7 +19,7 @@ fn num5i64(v: f64) -> i64 {
     num5(v) as i64
 }
 
-fn num5(v: f64) -> f64 {
+pub fn num5(v: f64) -> f64 {
     let n = v.abs() as u64;
     let dig = if n >= 10_000 {
         0

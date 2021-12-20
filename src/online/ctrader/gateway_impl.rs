@@ -1,5 +1,5 @@
 use crate::configs::assets::Pair;
-use crate::core::gate_api::NewPos;
+use crate::core::gate_api::{NewPos, UpdatePos};
 use crate::gate_api::GateWay;
 use crate::helper;
 use crate::online::CTrader;
@@ -14,7 +14,7 @@ impl GateWay for CTrader {
         self.open_postion_req_new(&new_pos);
     }
 
-    fn update_position(&self) {
+    fn update_position(&self, update: &UpdatePos) {
         todo!()
     }
 

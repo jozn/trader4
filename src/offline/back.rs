@@ -2,8 +2,8 @@ use super::*;
 use crate::collector::row_data::BTickData;
 use crate::configs::assets;
 use crate::configs::assets::Pair;
-use crate::core::gate_api::NewPos;
-use crate::gate_api::GateWay;
+use crate::core::gate_api::{NewPos, UpdatePos};
+use crate::gate_api::{GateWay, PosRes};
 use crate::offline::report::{Report, ReportSummery};
 use std::borrow::BorrowMut;
 use std::cell::RefCell;
@@ -20,6 +20,7 @@ pub struct BackendEngine {
     pub free_usd: f64,
     pub opens: Vec<Position>,
     pub closed: Vec<Position>,
+    pub notify: Vec<PosRes>,
     pub report: Report,
 }
 
@@ -34,6 +35,7 @@ impl BackendEngine {
             free_usd: fund as f64,
             opens: vec![],
             closed: vec![],
+            notify: vec![],
             report: Report::new(),
         }
     }
@@ -54,8 +56,36 @@ impl BackendEngine {
         }
     }
 
-    fn update_position(&self) {
-        todo!()
+    fn update_position(&mut self, req: &UpdatePos) {
+        let pos_opt = self._get_open_pos(req.pos_id as u64);
+        match pos_opt {
+            None => {}
+            Some(mut pos) => {
+                if req.close {
+                    let tick = self.get_symbol_tick(pos.symbol_id).unwrap();
+                    let close_par = CloseParm {
+                        at_price: tick.ask_price,
+                        time: self.las_time_ms,
+                        ta: Default::default(),
+                    };
+                    pos.close_pos(&close_par);
+                    self._remove_open_pos(pos.pos_id as u64);
+                    self.opens.push(pos);
+                } else {
+                    let (high, low) = if pos.is_short() {
+                        (req.stop_loose_price, req.take_profit_price)
+                    } else {
+                        (req.take_profit_price, req.stop_loose_price)
+                    };
+                    if high > 0. {
+                        pos.high_exit_price = high;
+                    }
+                    if low > 0. {
+                        pos.low_exit_price = low;
+                    }
+                }
+            }
+        }
     }
 
     fn get_time_ms(&self) -> u64 {
@@ -154,6 +184,7 @@ impl BackendEngine {
 
                 // self._remove_pos(pos.pos_id);
                 self.closed.push(pos.clone());
+                self.notify.push(pos.to_notify());
             }
         }
 
@@ -175,6 +206,7 @@ impl BackendEngine {
         let mut pos = Position::new(param, self.get_locked_money());
         self.free_usd -= param.size_usd as f64;
         pos.pos_id = self._next_pos_id();
+        self.notify.push(pos.to_notify());
         self.opens.push(pos);
     }
 
@@ -184,6 +216,7 @@ impl BackendEngine {
         }
         let mut pos = Position::new(param, self.get_locked_money());
         pos.pos_id = self._next_pos_id();
+        self.notify.push(pos.to_notify());
         self.opens.push(pos);
     }
 
@@ -247,6 +280,17 @@ impl BackendEngine {
     fn _next_pos_id(&mut self) -> u64 {
         self.pos_id += 1;
         self.pos_id
+    }
+
+    fn _get_open_pos(&self, pos_id: u64) -> Option<Position> {
+        let mut res = None;
+        for (i, p) in self.opens.iter().enumerate() {
+            if p.pos_id == pos_id {
+                res = Some(p.clone());
+                break;
+            }
+        }
+        res
     }
 
     // Remove from open position vector.
@@ -315,6 +359,13 @@ impl BackendEngineOuter {
         let mut eng = self.engine.borrow_mut();
         eng.next_tick(symbol_id, btick);
     }
+
+    pub fn take_notify(&self) -> Vec<PosRes> {
+        let mut eng = self.engine.borrow_mut();
+        let res = eng.notify.clone();
+        eng.notify.clear();
+        res
+    }
 }
 
 impl GateWay for BackendEngineOuter {
@@ -328,8 +379,9 @@ impl GateWay for BackendEngineOuter {
         x.open_position_req_new(new_pos);
     }
 
-    fn update_position(&self) {
-        todo!()
+    fn update_position(&self, update: &UpdatePos) {
+        let mut x = self.engine.borrow_mut();
+        x.update_position(update);
     }
 
     fn get_time_ms(&self) -> u64 {

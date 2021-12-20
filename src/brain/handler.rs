@@ -83,7 +83,7 @@ impl Brain {
                 // if macd_out.macd < 0. && price > ma && ta.vel.count >= 3 && big_ema > ma {
                 // if macd_out.macd < 0. && price > ma && ta.vel.count >= 1 && ta.vel.avg_vel_zz > 0. {
 
-                self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
+                // self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
 
                 if big_ta.mom <= 0. && med_ta.mom <= 0. {
                     // self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
@@ -111,7 +111,7 @@ impl Brain {
                 // }
                 // self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
                 if med_macd_out.macd < 0. && price > med_ma && med_ta.vel.count >= 1 {
-                    // self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
+                    self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
                 }
             }
             SimpleCrossEvent::None => {}
@@ -142,7 +142,7 @@ impl Brain {
                 // }
 
                 if med_macd_out.macd > 0. && price < med_ma && med_ta.vel.count >= 1 {
-                    // self.go_short(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
+                    self.go_short(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
                 }
             }
         }

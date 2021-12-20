@@ -1,3 +1,5 @@
+pub mod back_runner;
+
 use crate::brain::Brain;
 use crate::candle::CandleConfig;
 use crate::collector;
@@ -12,31 +14,6 @@ pub fn run1() {
     let pair_cfg = (
         Pair::EURUSD,
         CandleConfig {
-            // good
-            // small_tick: 8,
-            // medium_tick: 16,
-            // big_tick: 80,
-            // small_tick: 16,
-            // medium_tick: 8,
-            // big_tick: 35,
-            // good
-            // small_tick: 24,
-            // medium_tick: 6,
-            // big_tick: 30,
-            // small_tick: 44,
-            // medium_tick: 4,
-            // big_tick: 20,
-            // small_tick: 19,
-            // medium_tick: 23,
-            // big_tick: 85,
-            // small_tick: 10,
-            // medium_tick: 24,
-            // big_tick: 80,
-            // vel_period: 37,
-            // small_tick: 26,
-            // medium_tick: 8,
-            // big_tick: 30,
-            // vel_period: 34,
             small_tick: 30,
             medium_tick: 10,
             big_tick: 120,
@@ -53,7 +30,11 @@ pub fn run1() {
             // println!("{}", i);
         }
         back_arc.next_tick(1, t.clone());
-        brain.on_price_tick(1, t.to_tick())
+        brain.on_price_tick(1, t.to_tick());
+        let notifys = back_arc.take_notify();
+        for not in notifys {
+            brain.on_notify_position(not);
+        }
     }
     let mut x = back_arc.engine.borrow_mut();
     x.close_all_positions();

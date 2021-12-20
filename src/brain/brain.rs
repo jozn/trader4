@@ -4,7 +4,7 @@ use crate::candle;
 use crate::candle::{CandleConfig, Tick, TA1};
 use crate::configs::assets;
 use crate::configs::assets::*;
-use crate::gate_api::{GateWay, NewPos};
+use crate::gate_api::{GateWay, NewPos, PosRes};
 use std::borrow::BorrowMut;
 use std::collections::HashSet;
 use std::sync::Arc;
@@ -44,6 +44,8 @@ impl Brain {
         println!("ids {:?}", ids);
         self.con.subscribe_pairs_req(assets::get_all_symbols());
     }
+
+    pub fn on_notify_position(&self, pos: PosRes) {}
 
     pub fn borrow_pair_meta(&mut self, si: i64) -> &mut PairMemory {
         let mut idx = 0;

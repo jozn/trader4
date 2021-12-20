@@ -1,7 +1,7 @@
 use super::*;
 use crate::candle::{Tick, TA1};
 use crate::configs::assets::Pair;
-use crate::gate_api::NewPos;
+use crate::gate_api::{NewPos, PosRes};
 use chrono::*;
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
@@ -137,6 +137,20 @@ impl Position {
         self.profit = pl;
         self.spread_fees = 0.;
         self.final_balance = self.pos_size_usd + pl;
+    }
+
+    pub fn to_notify(&self) -> PosRes {
+        let s = self;
+        PosRes {
+            pos_id: s.pos_id,
+            symbol_id: s.symbol_id,
+            is_short: s.is_short(),
+            pos_size_usd: s.pos_size_usd,
+            open_time: s.open_time,
+            open_price: s.open_price,
+            high_exit_price: s.high_exit_price,
+            low_exit_price: s.low_exit_price,
+        }
     }
 
     pub fn is_short(&self) -> bool {
