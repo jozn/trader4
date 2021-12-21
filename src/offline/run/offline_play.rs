@@ -20,8 +20,8 @@ pub fn run1() {
         },
     );
     // let ticks = collector::loader::load_rows("/mnt/c/me/data/EURUSD/1.tsv");
-    let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 44..50);
-    // let ticks = collector::loader::load_week(&Pair::EURUSD, 30);
+    // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 44..50);
+    let ticks = collector::loader::load_week(&Pair::EURUSD, 49);
     // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 44..45);
 
     let mut run_cfg = BackRunConfig {
@@ -43,9 +43,10 @@ pub fn run1() {
 pub fn run_optimized() {
     let mut bal = vec![];
     let mut sum = 0.;
+    let mut sum_abs = 0.;
 
     let mut sub_folder_time = get_time_sec();
-    for i in 1..=53 {
+    for i in 25..=53 {
         let tsv = format!("{:?}/{}.tsv", Pair::EURUSD, i);
         let path = format!("/mnt/c/me/data/{}", tsv);
         if std::path::Path::new(&path).exists() {
@@ -81,7 +82,8 @@ pub fn run_optimized() {
             {
                 let p = x.free_usd - 100_000.;
                 sum += p;
-                println!("{}   {:.1}  {:.1}%    Sum:{:.0}", tsv, p, p / 10., sum);
+                sum_abs += p.abs();
+                println!("{}   {:.1}  {:.1}%    Sum: ({:.0}/{:.0})    {:.1}%", tsv, p, p / 10., sum, sum_abs, sum * 100./ sum_abs);
             }
         }
     }

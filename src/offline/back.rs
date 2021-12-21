@@ -57,6 +57,7 @@ impl BackendEngine {
     }
 
     fn update_position(&mut self, req: &UpdatePos) {
+        // println!("update: {:?}", &req);
         let pos_opt = self._get_open_pos(req.pos_id as u64);
         match pos_opt {
             None => {}
@@ -83,6 +84,9 @@ impl BackendEngine {
                     if low > 0. {
                         pos.low_exit_price = low;
                     }
+                    self._remove_open_pos(pos.pos_id);
+                    self.notify.push(pos.to_notify());
+                    self.opens.push(pos);
                 }
             }
         }

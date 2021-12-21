@@ -39,6 +39,7 @@ impl Brain {
             pm.candles.add_ticks(pm.ticks_arr.clone());
             pm.ticks_arr.clear();
             self.on_completed_small_candle(symbol_id);
+            self.update_all_tailing_pos();
         }
     }
 
@@ -108,10 +109,21 @@ impl Brain {
                 {
                     // self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
                 }
+                if price > big_ema
+                // big_ta.vel.count > 1
+                //      big_ta.vel.avg_vel_pip > 0.
+                    // && med_ta.vel.count > 1
+                    // && big_ta.vel.avg_vel_pip > 0.
+                {
+                    // self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
+                    if med_macd_out.macd < 0. && price > med_ma && med_ta.vel.count >= 1 {
+                        self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
+                    }
+                }
                 // }
                 // self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
                 if med_macd_out.macd < 0. && price > med_ma && med_ta.vel.count >= 1 {
-                    self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
+                    // self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
                 }
             }
             SimpleCrossEvent::None => {}
@@ -142,7 +154,8 @@ impl Brain {
                 // }
 
                 if med_macd_out.macd > 0. && price < med_ma && med_ta.vel.count >= 1 {
-                    self.go_short(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
+                    // todo enable
+                    // self.go_short(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
                 }
             }
         }

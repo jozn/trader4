@@ -29,7 +29,7 @@ pub struct NewPos {
 
 #[derive(Debug, Clone, Default)]
 pub struct UpdatePos {
-    pub pos_id: i64,
+    pub pos_id: u64,
     pub close: bool,
     pub take_profit_price: f64,
     pub stop_loose_price: f64,
@@ -37,8 +37,8 @@ pub struct UpdatePos {
     // Informative
     pub at_price: f64,
     pub time_s: u64, // Brain time
-    pub ta_med: TA1,
-    pub ta_big: TA1,
+    // pub ta_med: TA1,
+    // pub ta_big: TA1,
 }
 
 // Send from backend, cTrader to Brain
@@ -46,6 +46,7 @@ pub struct UpdatePos {
 pub struct PosRes {
     pub pos_id: u64,
     pub symbol_id: i64,
+    pub is_closed: bool,
     pub is_short: bool,
     pub pos_size_usd: f64,
     pub open_time: u64,

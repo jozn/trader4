@@ -144,6 +144,7 @@ impl Position {
         PosRes {
             pos_id: s.pos_id,
             symbol_id: s.symbol_id,
+            is_closed: s.finished,
             is_short: s.is_short(),
             pos_size_usd: s.pos_size_usd,
             open_time: s.open_time,
