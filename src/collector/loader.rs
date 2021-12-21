@@ -71,6 +71,10 @@ pub fn load_ticks(file_path: &str) -> Vec<Tick> {
     res
 }
 
+pub fn load_week(pair: &Pair, week_id: u16) -> Vec<BTickData> {
+    load_all_pair(pair, week_id..(week_id + 1))
+}
+
 pub fn load_all_pair(pair: &Pair, rng: Range<u16>) -> Vec<BTickData> {
     let mut arr = vec![];
     for i in rng {

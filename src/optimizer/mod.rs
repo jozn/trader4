@@ -5,7 +5,7 @@ use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
 use crate::gate_api::GateWay;
 use crate::offline::report::ReportSummery;
-use crate::offline::{BackendEngine, BackendEngineOuter};
+use crate::offline::{BackReportConf, BackendEngine, BackendEngineOuter};
 use std::sync::Arc;
 
 #[derive(Debug)]
@@ -64,7 +64,11 @@ pub fn run1() {
 }
 
 pub fn run_sample(pair_cfg: PairCandleCfg, all_tikcs: &Vec<BTickData>) -> ReportSummery {
-    let backend = BackendEngineOuter::new(100_000);
+    let report_cfg = BackReportConf {
+        report_folder: "../trader4_out/".to_string(),
+        report_sub_folder: "".to_string(),
+    };
+    let backend = BackendEngineOuter::new(100_000, &report_cfg);
     let mut back_arc = Arc::new(backend);
 
     let mut brain = Brain::new(back_arc.clone(), vec![pair_cfg]);

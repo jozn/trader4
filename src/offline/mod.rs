@@ -8,6 +8,7 @@ pub mod run;
 
 pub use back::*;
 pub use postion::*;
+pub use report::*;
 pub use shared::*;
 
 fn round5(v: f64) -> f64 {

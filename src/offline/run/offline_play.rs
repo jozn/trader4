@@ -5,7 +5,8 @@ use crate::candle::CandleConfig;
 use crate::collector;
 use crate::configs::assets::Pair;
 use crate::gate_api::GateWay;
-use crate::offline::{BackendEngine, BackendEngineOuter};
+use crate::helper::get_time_sec;
+use crate::offline::{BackReportConf, BackendEngine, BackendEngineOuter};
 use std::sync::Arc;
 
 pub fn run1() {
@@ -19,13 +20,21 @@ pub fn run1() {
         },
     );
     // let ticks = collector::loader::load_rows("/mnt/c/me/data/EURUSD/1.tsv");
-    let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 40..45);
+    let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 44..50);
+    // let ticks = collector::loader::load_week(&Pair::EURUSD, 30);
+    // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 44..45);
 
     let mut run_cfg = BackRunConfig {
         balance: 100_000,
         pairs_conf: vec![pair_cfg],
         ticks,
+        week_id: 0,
+        print: true,
         report: true,
+        report_cfg: BackReportConf {
+            report_folder: "../trader4_out/".to_string(),
+            report_sub_folder: "".to_string(),
+        },
     };
 
     run_cfg.run();
@@ -35,15 +44,17 @@ pub fn run_optimized() {
     let mut bal = vec![];
     let mut sum = 0.;
 
+    let mut sub_folder_time = get_time_sec();
     for i in 1..=53 {
-        let path = format!("/mnt/c/me/data/{:?}/{}.tsv", Pair::EURUSD, i);
+        let tsv = format!("{:?}/{}.tsv", Pair::EURUSD, i);
+        let path = format!("/mnt/c/me/data/{}", tsv);
         if std::path::Path::new(&path).exists() {
             let pair_cfg = (
                 Pair::EURUSD,
                 CandleConfig {
                     small_tick: 30,
                     medium_tick: 10,
-                    big_tick: 30,
+                    big_tick: 120,
                     vel_period: 25,
                 },
             );
@@ -53,7 +64,13 @@ pub fn run_optimized() {
                 balance: 100_000,
                 pairs_conf: vec![pair_cfg],
                 ticks,
+                week_id: i,
+                print: false,
                 report: true,
+                report_cfg: BackReportConf {
+                    report_folder: "../trader4_out/".to_string(),
+                    report_sub_folder: format!("{}", sub_folder_time),
+                },
             };
             let x = run_cfg.run();
 
@@ -64,12 +81,7 @@ pub fn run_optimized() {
             {
                 let p = x.free_usd - 100_000.;
                 sum += p;
-                println!(
-                    ">>>          {:.1}             {:.1}%       Sum:{:.0}",
-                    p,
-                    p / 10.,
-                    sum
-                );
+                println!("{}   {:.1}  {:.1}%    Sum:{:.0}", tsv, p, p / 10., sum);
             }
         }
     }

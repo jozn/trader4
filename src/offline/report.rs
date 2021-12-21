@@ -9,15 +9,27 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Report {
+    pub folder: String,
+    pub sub_folder: String,
+    pub base_time: u64,
     pub rnd_num: u16,
     pub acted: Vec<u64>,
     pub balance: Vec<f64>,
     pub middles: Vec<MiddleStatic>,
 }
 
+#[derive(Debug)]
+pub struct BackReportConf {
+    pub report_folder: String,
+    pub report_sub_folder: String,
+}
+
 impl Report {
-    pub fn new() -> Self {
+    pub fn new(cfg: &BackReportConf) -> Self {
         Self {
+            folder: cfg.report_folder.clone(),
+            sub_folder: cfg.report_sub_folder.clone(),
+            base_time: get_time_sec(),
             rnd_num: rand::thread_rng().gen_range(1..1000),
             acted: vec![],
             balance: vec![],
@@ -51,7 +63,20 @@ impl Report {
 
     pub fn write_to_folder(&self, port: &BackendEngine, name: &str) {
         let time = get_time_sec();
-        let folder = format!("../trader4_out/{}_{}", time, name);
+
+        // Build folder out
+        // let folder = format!("../trader4_out/{}_{}", time, name);
+        let folder_base = if self.folder.is_empty() {
+            "../trader4_out/".to_string()
+        } else {
+            self.folder.clone()
+        };
+        let folder = if self.sub_folder.is_empty() {
+            format!("../trader4_out/{}_{}", time, name)
+        } else {
+            format!("../trader4_out/{}_SUB/{}_{}", self.sub_folder, time, name)
+        };
+
         let folder_json = format!("{}/json", folder);
         std::fs::create_dir_all(&folder);
         std::fs::create_dir_all(&folder_json).unwrap();
@@ -69,7 +94,7 @@ impl Report {
         self.report_wins(port);
         self.report_loose(port);
 
-        println!("balance: {:#?}", self.middles.last());
+        // println!("balance: {:#?}", self.middles.last());
 
         std::env::set_current_dir(dir);
     }
@@ -150,6 +175,12 @@ impl Report {
         let long_net_profit = long_win_amount - long_lose_amount.abs();
         let short_net_profit = short_win_amount - short_lose_amount.abs();
 
+        // Pure profit cal
+        let long_profit_trans_perc = (long_net_profit) / (long_win_amount + long_lose_amount.abs());
+        let short_profit_trans_perc =
+            (short_net_profit) / (short_win_amount + short_lose_amount.abs());
+        let all_profit_trans_perc = (net_profit) / (win_amount + lose_amount.abs());
+
         let report_res = ReportSummery {
             win_cnt,
             lose_cnt,
@@ -175,6 +206,9 @@ impl Report {
             long_short_ratio,
             long_pl_ratio,
             short_pl_ratio,
+            long_profit_trans_perc,
+            short_profit_trans_perc,
+            all_profit_trans_perc,
         };
 
         report_res
@@ -260,6 +294,9 @@ pub struct ReportSummery {
     pub long_short_ratio: f32,
     pub long_pl_ratio: f64,
     pub short_pl_ratio: f64,
+    pub long_profit_trans_perc: f64,
+    pub short_profit_trans_perc: f64,
+    pub all_profit_trans_perc: f64,
 }
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]

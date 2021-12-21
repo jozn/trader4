@@ -83,7 +83,7 @@ impl Brain {
             is_short: false,
             size_usd: 10000,
             take_profit_price: cal_price(tick.price_raw, atr_pip), // 10 pip
-            stop_loose_price: cal_price(tick.price_raw, -atr_pip),
+            stop_loose_price: cal_price(tick.price_raw, -atr_pip * 1.0),
             at_price: tick.price_raw,
             time_s: tick.time_s,
             ta_med: ta_med.clone(),
@@ -114,7 +114,7 @@ impl Brain {
             is_short: true,
             size_usd: 10000,
             take_profit_price: cal_price(tick.price_raw, -atr_pip),
-            stop_loose_price: cal_price(tick.price_raw, atr_pip),
+            stop_loose_price: cal_price(tick.price_raw, atr_pip * 1.0),
             at_price: tick.price_raw,
             time_s: tick.time_s,
             ta_med: ta_med.clone(),

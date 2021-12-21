@@ -25,7 +25,7 @@ pub struct BackendEngine {
 }
 
 impl BackendEngine {
-    pub fn new(fund: i64) -> Self {
+    pub fn new(fund: i64, cfg: &BackReportConf) -> Self {
         Self {
             balance: fund,
             symbols: vec![],
@@ -36,7 +36,7 @@ impl BackendEngine {
             opens: vec![],
             closed: vec![],
             notify: vec![],
-            report: Report::new(),
+            report: Report::new(cfg),
         }
     }
     // Direct GateWay api calls
@@ -349,9 +349,9 @@ pub struct BackendEngineOuter {
 }
 
 impl BackendEngineOuter {
-    pub fn new(fund: i64) -> Self {
+    pub fn new(fund: i64, cfg: &BackReportConf) -> Self {
         Self {
-            engine: RefCell::new(BackendEngine::new(fund)),
+            engine: RefCell::new(BackendEngine::new(fund, cfg)),
         }
     }
 

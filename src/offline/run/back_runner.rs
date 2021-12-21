@@ -4,14 +4,17 @@ use crate::collector;
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
 use crate::gate_api::GateWay;
-use crate::offline::{BackendEngine, BackendEngineOuter};
+use crate::offline::{BackReportConf, BackendEngine, BackendEngineOuter};
 use std::sync::Arc;
 
 pub struct BackRunConfig {
     pub balance: i64,
     pub pairs_conf: Vec<PairCandleCfg>,
     pub ticks: Vec<BTickData>,
+    pub week_id: u16,
+    pub print: bool,
     pub report: bool,
+    pub report_cfg: BackReportConf,
 }
 
 pub struct BackRunRes {
@@ -20,7 +23,7 @@ pub struct BackRunRes {
 
 impl BackRunConfig {
     pub fn run(mut self) -> BackRunRes {
-        let backend = BackendEngineOuter::new(self.balance);
+        let backend = BackendEngineOuter::new(self.balance, &self.report_cfg);
         let mut back_arc = Arc::new(backend);
         let mut brain = Brain::new(back_arc.clone(), self.pairs_conf);
 
@@ -37,11 +40,14 @@ impl BackRunConfig {
         }
         let mut x = back_arc.engine.borrow_mut();
         x.close_all_positions();
-        println!("{:#?}", x);
-        println!("{:#?}", x.free_usd);
+
+        if self.print {
+            println!("{:#?}", x);
+            println!("{:#?}", x.free_usd);
+        }
 
         if self.report {
-            x.report_to_folder("vdsd");
+            x.report_to_folder(&format!("_week_{}", self.week_id));
         }
         BackRunRes {
             free_usd: x.free_usd,
