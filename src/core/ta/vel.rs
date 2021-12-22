@@ -153,7 +153,7 @@ mod tests {
         ];
 
         for p in nums {
-            let r = cci.next_ohlc(p);
+            let r = cci.next(p);
             println!("{} - {:#?}  {:#?}", p, r, cci);
         }
     }

@@ -3,10 +3,14 @@ pub mod postion;
 pub mod shared;
 
 // pub mod offline_helper;
+pub mod position_ser;
+pub mod position_ta;
 pub mod report;
 pub mod run;
 
 pub use back::*;
+pub use position_ser::*;
+pub use position_ta::*;
 pub use postion::*;
 pub use report::*;
 pub use shared::*;
