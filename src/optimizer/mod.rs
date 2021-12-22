@@ -104,7 +104,8 @@ pub fn get_all_candle_cfgs() -> Vec<PairCandleCfg> {
                         small_tick: s,
                         medium_tick: m,
                         big_tick: b,
-                        vel_period: vel,
+                        vel1_period: vel,
+                        vel2_period: 50, // todo
                     };
 
                     // faster b in higher numbers
@@ -138,7 +139,8 @@ pub fn get_all_candle_cfgs_bk() -> Vec<PairCandleCfg> {
                     small_tick: s,
                     medium_tick: m,
                     big_tick: b,
-                    vel_period: 30,
+                    vel1_period: 30,
+                    vel2_period: 50,
                 };
 
                 // faster b in higher numbers

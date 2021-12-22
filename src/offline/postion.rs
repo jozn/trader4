@@ -30,10 +30,7 @@ pub struct Position {
     pub locked: f64,
 
     // Context flat - When rust fixed csv out move it to ctx
-    // sm_ prefix: start-medium_
-    // pub sm_ma1: f64,
-    // pub sm_ma2: f64,
-    // pub sm_ma3: f64,
+    // Medium time frame sm_ prefix: start-medium_
     pub sm_mom: f64,
     pub sm_roc: f64,
     pub sm_atr: f64,
@@ -41,6 +38,7 @@ pub struct Position {
     pub sm_cci: f64,
     pub sm_macd_pip: f64,
     pub sm_fisher: f64,
+
     pub sm_1_vel_ma: f64,
     pub sm_1_start_vel_pip: f64,
     pub sm_1_count: u32,
@@ -51,10 +49,8 @@ pub struct Position {
     pub sm_2_count: u32,
     pub sm_2_avg_vel_pip: f64,
     pub sm_2_end_vel_pip: f64,
-    // sb_ prefix: start-big_
-    // pub sb_ma1: f64,
-    // pub sb_ma2: f64,
-    // pub sb_ma3: f64,
+
+    // Big time frame- sb_ prefix: start-big_
     pub sb_mom: f64,
     pub sb_roc: f64,
     pub sb_atr: f64,
@@ -62,10 +58,7 @@ pub struct Position {
     pub sb_cci: f64,
     pub sb_macd_pip: f64,
     pub sb_fisher: f64,
-    // pub sb_start_vel_pip: f64,
-    // pub sb_count: u32,
-    // pub sb_avg_vel_pip: f64,
-    // pub sb_end_vel_pip: f64,
+
     pub sb_1_vel_ma: f64,
     pub sb_1_start_vel_pip: f64,
     pub sb_1_count: u32,
@@ -179,13 +172,8 @@ impl Position {
     }
 
     pub fn set_techichal_anylse(&mut self, p: &NewPos) {
-        let t = &p.ta_med;
-
         // ================ For Start Medium Time Frame =============== //
-        // Moving Averages
-        // self.sm_ma1 = t.ma1;
-        // self.sm_ma2 = t.ma2;
-        // self.sm_ma3 = t.ma3;
+        let t = &p.ta_med;
 
         self.sm_mom = t.mom;
         self.sm_roc = t.roc;
@@ -195,7 +183,6 @@ impl Position {
         self.sm_macd_pip = t.macd.macd_pip;
         self.sm_fisher = t.fisher.fisher;
 
-        // Set vel resutl
         let vel_m1 = &t.vel1;
         self.sm_1_vel_ma = vel_m1.ma;
         self.sm_1_start_vel_pip = vel_m1.start_vel_pip;
@@ -209,14 +196,10 @@ impl Position {
         self.sm_2_count = vel_m2.count;
         self.sm_2_avg_vel_pip = vel_m2.avg_vel_pip;
         self.sm_2_end_vel_pip = vel_m2.end_vel_pip;
+
         // ================ For Start Big Time Frame =============== //
         // Set big time frame TA
         let t = &p.ta_big;
-
-        // Moving Averages
-        // self.sb_ma1 = t.ma1;
-        // self.sb_ma2 = t.ma2;
-        // self.sb_ma3 = t.ma3;
 
         self.sb_mom = t.mom;
         self.sb_roc = t.roc;
@@ -226,24 +209,18 @@ impl Position {
         self.sb_macd_pip = t.macd.macd_pip;
         self.sb_fisher = t.fisher.fisher;
 
-        // Set vel resutl
-        // let vel = &t.vel;
-        // self.sb_start_vel_pip = vel.start_vel_pip;
-        // self.sb_count = vel.count;
-        // self.sb_avg_vel_pip = vel.avg_vel_pip;
-        // self.sb_end_vel_pip = vel.end_vel_pip;
-        let vel_m1 = &t.vel1;
-        self.sb_1_vel_ma = vel_m1.ma;
-        self.sb_1_start_vel_pip = vel_m1.start_vel_pip;
-        self.sb_1_count = vel_m1.count;
-        self.sb_1_avg_vel_pip = vel_m1.avg_vel_pip;
-        self.sb_1_end_vel_pip = vel_m1.end_vel_pip;
+        let vel_b1 = &t.vel1;
+        self.sb_1_vel_ma = vel_b1.ma;
+        self.sb_1_start_vel_pip = vel_b1.start_vel_pip;
+        self.sb_1_count = vel_b1.count;
+        self.sb_1_avg_vel_pip = vel_b1.avg_vel_pip;
+        self.sb_1_end_vel_pip = vel_b1.end_vel_pip;
 
-        let vel_m2 = &t.vel2;
-        self.sb_2_vel_ma = vel_m2.ma;
-        self.sb_2_start_vel_pip = vel_m2.start_vel_pip;
-        self.sb_2_count = vel_m2.count;
-        self.sb_2_avg_vel_pip = vel_m2.avg_vel_pip;
-        self.sb_2_end_vel_pip = vel_m2.end_vel_pip;
+        let vel_b2 = &t.vel2;
+        self.sb_2_vel_ma = vel_b2.ma;
+        self.sb_2_start_vel_pip = vel_b2.start_vel_pip;
+        self.sb_2_count = vel_b2.count;
+        self.sb_2_avg_vel_pip = vel_b2.avg_vel_pip;
+        self.sb_2_end_vel_pip = vel_b2.end_vel_pip;
     }
 }

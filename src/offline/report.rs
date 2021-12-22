@@ -1,9 +1,10 @@
 use rand::Rng;
 // use super::portfolio::*;
-use super::kline_ta_csv::*;
+// use super::offline_helper::*;
 use super::*;
 use crate::candle::Tick;
 use crate::core::helper::get_time_sec;
+use crate::core::helper::*;
 use crate::gate_api::NewPos;
 use serde::{Deserialize, Serialize};
 
@@ -100,7 +101,7 @@ impl Report {
     }
 
     fn report_balance(&self) {
-        let os = to_csv_out(&self.middles);
+        let os = to_csv_out(&self.middles, false);
         let txt = format!("{}", os);
 
         std::fs::write(format!("balance_{}.csv", self.rnd_num), txt);
@@ -222,7 +223,7 @@ impl Report {
             res.push(p.profit)
         }
 
-        let os = to_csv_out(&res);
+        let os = to_csv_out(&res, false);
         let txt = format!("{}", os);
 
         std::fs::write(format!("seq_profit_{}.csv", self.rnd_num), txt);
@@ -317,7 +318,7 @@ pub fn get_all_postions(port: &BackendEngine) -> Vec<Position> {
 }
 
 fn write_pos(name: &str, rnd_num: u16, arr: Vec<Position>) {
-    let os = to_csv_out(&arr);
+    let os = to_csv_out(&arr, false);
     let txt = format!("{}", os);
     std::fs::write(format!("{}_{}.csv", name, rnd_num), txt);
 

@@ -16,7 +16,8 @@ pub fn run1() {
             small_tick: 30,
             medium_tick: 10,
             big_tick: 120,
-            vel_period: 25,
+            vel1_period: 25,
+            vel2_period: 50,
         },
     );
     // let ticks = collector::loader::load_rows("/mnt/c/me/data/EURUSD/1.tsv");
@@ -56,7 +57,8 @@ pub fn run_optimized() {
                     small_tick: 30,
                     medium_tick: 10,
                     big_tick: 120,
-                    vel_period: 25,
+                    vel1_period: 25,
+                    vel2_period: 20,
                 },
             );
             let ticks = collector::loader::load_rows(&path);

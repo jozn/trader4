@@ -55,3 +55,8 @@ pub fn to_time_string(time_sec: i64) -> String {
 pub fn time_tag_string() -> String {
     to_time_string(get_time_sec() as i64)
 }
+
+pub fn to_json_out<T: Serialize>(arr: &Vec<T>) -> String {
+    let o = serde_json::to_string_pretty(arr).unwrap();
+    o
+}

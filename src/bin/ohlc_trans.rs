@@ -16,7 +16,7 @@ pub fn main() {
                     small_tick: 40,
                     medium_tick: 10,
                     big_tick: 100,
-                    vel_period: 30,
+                    vel1_period: 30,
                 };
                 let mut candle = CandleSeriesTA::new(&cfg);
 
