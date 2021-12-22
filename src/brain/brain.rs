@@ -5,10 +5,10 @@ use crate::candle::{CandleConfig, Tick, TA1};
 use crate::configs::assets;
 use crate::configs::assets::*;
 use crate::gate_api::{GateWay, NewPos, PosRes, UpdatePos};
+use crate::offline::num5;
 use std::borrow::BorrowMut;
 use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
-use crate::offline::num5;
 
 pub type PairCandleCfg = (Pair, CandleConfig);
 
@@ -18,7 +18,7 @@ pub struct Brain {
     pub db: Vec<PairMemory>,
     pub last_trade_time: u64, // tem
     pub acted: HashSet<String>,
-    pub open: HashMap<u64,PosRes>,
+    pub open: HashMap<u64, PosRes>,
 }
 
 impl Brain {
@@ -31,7 +31,7 @@ impl Brain {
             db: vec![],
             last_trade_time: 0,
             acted: Default::default(),
-            open: Default::default()
+            open: Default::default(),
         };
 
         for pc in pairs_conf {
@@ -57,7 +57,7 @@ impl Brain {
     }
 
     pub fn update_all_tailing_pos(&mut self) {
-        for (_,p) in self.open.clone() {
+        for (_, p) in self.open.clone() {
             // self.on_full_tailing_pl(p);
             // todo enalbe
             self.on_tailing(p);
@@ -79,7 +79,6 @@ impl Brain {
         let atr = ta.ta1.atr;
 
         if pos.is_short {
-
         } else {
             // if we alredy in proift dispostin go on tailing
             if pos.low_exit_price >= pos.open_price {
@@ -87,13 +86,12 @@ impl Brain {
                 return;
             }
 
-
-            let half_distance = ( pos.high_exit_price - pos.open_price) / 2.;
-            let half = pos.open_price + ( pos.high_exit_price - pos.open_price) / 2.;
+            let half_distance = (pos.high_exit_price - pos.open_price) / 2.;
+            let half = pos.open_price + (pos.high_exit_price - pos.open_price) / 2.;
             // if we have travedl half of profit set new stop lose to not this trade be a looser
             if price > half && pos.low_exit_price < pos.open_price {
-                let mut final_low =pos.open_price + half_distance * 0.1; // 0.1 for equality and fees
-                let mut final_hihg =pos.open_price + 4. * half_distance; // 2
+                let mut final_low = pos.open_price + half_distance * 0.1; // 0.1 for equality and fees
+                let mut final_hihg = pos.open_price + 4. * half_distance; // 2
 
                 let up = UpdatePos {
                     pos_id: pos.pos_id,
@@ -125,14 +123,13 @@ impl Brain {
         let atr = ta.ta1.atr;
 
         if pos.is_short {
-
         } else {
-            let new_stop = tick.price_raw  - atr/2.;
-            let new_profit = tick.price_raw + atr/2.;
+            let new_stop = tick.price_raw - atr / 2.;
+            let new_profit = tick.price_raw + atr / 2.;
 
-            let mut changed =false;
-            let mut final_low =pos.low_exit_price;
-            let mut final_hihg =pos.high_exit_price;
+            let mut changed = false;
+            let mut final_low = pos.low_exit_price;
+            let mut final_hihg = pos.high_exit_price;
             if pos.low_exit_price < new_stop {
                 final_low = new_stop;
                 changed = true;
@@ -162,9 +159,7 @@ impl Brain {
 
                 self.con.update_position(&up);
             }
-
         }
-
     }
 
     pub fn borrow_pair_meta(&mut self, si: i64) -> &mut PairMemory {
@@ -233,7 +228,7 @@ impl Brain {
         ta_med: &TA1,
         ta_big: &TA1,
     ) {
-        let atr_pip = ta_big.atr * 10_000.* 0.5;
+        let atr_pip = ta_big.atr * 10_000. * 0.5;
         // let atr_pip = 10.;
         let np = NewPos {
             symbol_id,

@@ -22,9 +22,9 @@ impl KlineId for KlineTA {
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct TA1 {
-    pub sma100: f64,
-    pub ema200: f64,
-    pub hull: f64,
+    // pub sma100: f64,
+    // pub ma3: f64,
+    // pub hull: f64,
     pub mom: f64,
     pub roc: f64,
     pub atr: f64,
@@ -34,19 +34,19 @@ pub struct TA1 {
     pub macd: MACDOutput,
     pub fisher: FisherRes,
     // New trending
-    pub t_hull1: f64,
-    pub t_hull2: f64,
-    pub t_hull3: f64,
-    pub t_ema1: f64,
-    pub t_ema2: f64,
-    pub t_ema3: f64,
+    pub ma1: f64,
+    pub ma2: f64,
+    pub ma3: f64,
+    // pub t_ema1: f64,
+    // pub t_ema2: f64,
+    // pub t_ema3: f64,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TAMethods {
-    pub sma100: ta::SMA,
-    pub ema200: ta::EMA,
-    pub hull: ta::HMA,
+    // pub sma100: ta::SMA,
+    // pub ema200: ta::EMA,
+    // pub hull: ta::HMA,
     pub mom: ta::Momentum,
     pub roc: ta::ROC,
     pub atr: ta::ATR,
@@ -56,20 +56,20 @@ pub struct TAMethods {
     pub macd: ta::MACD,
     pub fisher: ta::Fisher,
     // For trending
-    pub t_hull1: HMA,
-    pub t_hull2: HMA,
-    pub t_hull3: HMA,
-    pub t_ema1: EMA,
-    pub t_ema2: EMA,
-    pub t_ema3: EMA,
+    pub ma1: HMA,
+    pub ma2: HMA,
+    pub ma3: EMA,
+    // pub t_ema1: EMA,
+    // pub t_ema2: EMA,
+    // pub t_ema3: EMA,
 }
 
 impl TAMethods {
     pub fn new(cfg: &CandleConfig) -> Self {
         TAMethods {
-            sma100: ta::SMA::new(100).unwrap(),
-            ema200: ta::EMA::new(20).unwrap(),
-            hull: ta::HMA::new(10).unwrap(),
+            // sma100: ta::SMA::new(100).unwrap(),
+            // ema200: ta::EMA::new(20).unwrap(),
+            // hull: ta::HMA::new(10).unwrap(),
             mom: ta::Momentum::new(14).unwrap(),
             roc: ta::ROC::new(10).unwrap(),
             atr: ta::ATR::new(14).unwrap(),
@@ -80,12 +80,12 @@ impl TAMethods {
             // macd: ta::MACD::new(18, 34, 9).unwrap(),
             fisher: ta::Fisher::new(9, 6).unwrap(),
             // For trending
-            t_hull1: HMA::new(3).unwrap(),
-            t_hull2: HMA::new(15).unwrap(),
-            t_hull3: HMA::new(55).unwrap(),
-            t_ema1: EMA::new(5).unwrap(),
-            t_ema2: EMA::new(15).unwrap(),
-            t_ema3: EMA::new(50).unwrap(),
+            ma1: HMA::new(3).unwrap(),
+            ma2: HMA::new(15).unwrap(),
+            ma3: EMA::new(20).unwrap(),
+            // t_ema1: EMA::new(5).unwrap(),
+            // t_ema2: EMA::new(15).unwrap(),
+            // t_ema3: EMA::new(50).unwrap(),
         }
     }
 }
@@ -107,9 +107,9 @@ pub fn cal_indicators(tam: &mut TAMethods, kline: &Kline) -> KlineTA {
         kline: kline.clone(),
         is_completed: false,
         ta1: TA1 {
-            sma100: tam.sma100.next(price),
-            ema200: tam.ema200.next(price),
-            hull: tam.hull.next(price),
+            // sma100: tam.sma100.next(price),
+            // ma3: tam.ema200.next(price),
+            // hull: tam.hull.next(price),
             mom: tam.mom.next(price),
             roc: tam.roc.next(price),
             atr: tam.atr.next(&kl),
@@ -119,12 +119,12 @@ pub fn cal_indicators(tam: &mut TAMethods, kline: &Kline) -> KlineTA {
             macd: tam.macd.next(kl.close),
             fisher: tam.fisher.next(&kl),
             // For trending
-            t_hull1: tam.t_hull1.next(kl.hlc3()),
-            t_hull2: tam.t_hull2.next(kl.hlc3()),
-            t_hull3: tam.t_hull3.next(kl.hlc3()),
-            t_ema1: tam.t_ema1.next(kl.hlc3()),
-            t_ema2: tam.t_ema2.next(kl.hlc3()),
-            t_ema3: tam.t_ema3.next(kl.hlc3()),
+            ma1: tam.ma1.next(kl.hlc3()),
+            ma2: tam.ma2.next(kl.hlc3()),
+            ma3: tam.ma3.next(kl.hlc3()),
+            // t_ema1: tam.t_ema1.next(kl.hlc3()),
+            // t_ema2: tam.t_ema2.next(kl.hlc3()),
+            // t_ema3: tam.t_ema3.next(kl.hlc3()),
         },
     };
     kta

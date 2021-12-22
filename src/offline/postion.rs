@@ -31,7 +31,9 @@ pub struct Position {
 
     // Context flat - When rust fixed csv out move it to ctx
     // sm_ prefix: start-medium_
-    pub sm_ema: f64,
+    pub sm_ma1: f64,
+    pub sm_ma2: f64,
+    pub sm_ma3: f64,
     pub sm_mom: f64,
     pub sm_roc: f64,
     pub sm_atr: f64,
@@ -44,7 +46,9 @@ pub struct Position {
     pub sm_avg_vel_pip: f64,
     pub sm_end_vel_pip: f64,
     // sb_ prefix: start-big_
-    pub sb_ema: f64,
+    pub sb_ma1: f64,
+    pub sb_ma2: f64,
+    pub sb_ma3: f64,
     pub sb_mom: f64,
     pub sb_roc: f64,
     pub sb_atr: f64,
@@ -161,7 +165,12 @@ impl Position {
     pub fn set_techichal_anylse(&mut self, p: &NewPos) {
         let t = &p.ta_med;
 
-        self.sm_ema = t.ema200;
+        // ================ For Start Medium Time Frame =============== //
+        // Moving Averages
+        self.sm_ma1 = t.ma1;
+        self.sm_ma2 = t.ma2;
+        self.sm_ma3 = t.ma3;
+
         self.sm_mom = t.mom;
         self.sm_roc = t.roc;
         self.sm_atr = t.atr;
@@ -177,10 +186,15 @@ impl Position {
         self.sm_avg_vel_pip = vel.avg_vel_pip;
         self.sm_end_vel_pip = vel.end_vel_pip;
 
+        // ================ For Start Big Time Frame =============== //
         // Set big time frame TA
         let t = &p.ta_big;
 
-        self.sb_ema = t.ema200;
+        // Moving Averages
+        self.sb_ma1 = t.ma1;
+        self.sb_ma2 = t.ma2;
+        self.sb_ma3 = t.ma3;
+
         self.sb_mom = t.mom;
         self.sb_roc = t.roc;
         self.sb_atr = t.atr;

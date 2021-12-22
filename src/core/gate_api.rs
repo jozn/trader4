@@ -37,8 +37,8 @@ pub struct UpdatePos {
     // Informative
     pub at_price: f64,
     pub time_s: u64, // Brain time
-    // pub ta_med: TA1,
-    // pub ta_big: TA1,
+                     // pub ta_med: TA1,
+                     // pub ta_big: TA1,
 }
 
 // Send from backend, cTrader to Brain

@@ -5,13 +5,11 @@ pub mod shared;
 pub mod kline_ta_csv;
 pub mod report;
 pub mod run;
-pub mod trend_pos;
 
 pub use back::*;
 pub use postion::*;
 pub use report::*;
 pub use shared::*;
-pub use trend_pos::*;
 
 fn round5(v: f64) -> f64 {
     let pre = 100_000.;

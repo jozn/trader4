@@ -25,7 +25,7 @@ pub fn run_bot() {
         db: vec![],
         last_trade_time: 0,
         acted: Default::default(),
-        open: Default::default()
+        open: Default::default(),
     };
 
     brain.on_connect();

@@ -83,7 +83,15 @@ pub fn run_optimized() {
                 let p = x.free_usd - 100_000.;
                 sum += p;
                 sum_abs += p.abs();
-                println!("{}   {:.1}  {:.1}%    Sum: ({:.0}/{:.0})    {:.1}%", tsv, p, p / 10., sum, sum_abs, sum * 100./ sum_abs);
+                println!(
+                    "{}   {:.1}  {:.1}%    Sum: ({:.0}/{:.0})    {:.1}%",
+                    tsv,
+                    p,
+                    p / 10.,
+                    sum,
+                    sum_abs,
+                    sum * 100. / sum_abs
+                );
             }
         }
     }
