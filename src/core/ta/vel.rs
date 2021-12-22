@@ -18,6 +18,7 @@ pub struct Vel {
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct VelRes {
+    pub ma: f64,
     pub start_vel_pip: f64,
     pub count: u32, // all positive/negative candles counts
     pub avg_vel_pip: f64,
@@ -39,13 +40,13 @@ impl Vel {
         }
     }
 
-    pub fn next(&mut self, candle: impl OHLCV) -> VelRes {
+    pub fn next_ohlc(&mut self, candle: impl OHLCV) -> VelRes {
         let tp = (candle.high() + candle.low() + candle.close()) / 3.0;
-        self._next_(tp)
+        self.next(tp)
     }
 
-    pub fn _next_(&mut self, typical_price: f64) -> VelRes {
-        let new_ema = self.ema.next(typical_price);
+    pub fn next(&mut self, price: f64) -> VelRes {
+        let new_ema = self.ema.next(price);
         // let new_ema_u64 = (new_ema * MULTIPLIER) as u64 ;
         if self.is_new {
             self.is_new = false;
@@ -119,6 +120,7 @@ impl Vel {
         self.last_ema = new_ema;
 
         VelRes {
+            ma: new_ema,
             start_vel_pip: start_vel * 10_000.,
             count: count - 1,
             avg_vel_pip: avg_vel * 10_000.,
@@ -151,7 +153,7 @@ mod tests {
         ];
 
         for p in nums {
-            let r = cci._next_(p);
+            let r = cci.next_ohlc(p);
             println!("{} - {:#?}  {:#?}", p, r, cci);
         }
     }

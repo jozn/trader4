@@ -6,7 +6,7 @@ use std::time::Duration;
 
 // Note: many functions in this file is not used.
 
-/*#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct CsvOut {
     pub time: String,
     pub open: f64,
@@ -23,13 +23,13 @@ pub struct CsvOut {
     pub cci: i64,
 }
 
-impl CsvOut {}*/
+impl CsvOut {}
 
-/*pub fn to_json_out_csv_out(arr: &Vec<CsvOut>) -> String {
+pub fn to_json_out_csv_out(arr: &Vec<CsvOut>) -> String {
     let o = serde_json::to_string_pretty(arr).unwrap();
     o
 }
-*/
+
 pub fn to_json_out<T: Serialize>(arr: &Vec<T>) -> String {
     let o = serde_json::to_string_pretty(arr).unwrap();
     o
@@ -51,7 +51,7 @@ pub fn to_csv_out<T: Serialize>(arr: &Vec<T>) -> String {
     format!("{:}", s)
 }
 
-/*pub fn to_csv_out_old(arr: &Vec<CsvOut>) -> String {
+pub fn to_csv_out_old(arr: &Vec<CsvOut>) -> String {
     let mut str_out = vec![];
     let mut wtr = csv::Writer::from_writer(&mut str_out);
 
@@ -66,8 +66,8 @@ pub fn to_csv_out<T: Serialize>(arr: &Vec<T>) -> String {
 
     format!("{:}", s)
 }
-*/
-/*pub fn kline_to_csv_out(kt: &KlineTA) -> CsvOut {
+
+pub fn kline_to_csv_out(kt: &KlineTA) -> CsvOut {
     let k = &kt.kline;
     let s = kt;
     let t = &kt.ta1;
@@ -92,4 +92,3 @@ pub fn to_csv_out<T: Serialize>(arr: &Vec<T>) -> String {
 
     o
 }
-*/

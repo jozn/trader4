@@ -66,9 +66,9 @@ impl Brain {
         let kline_ta = kline_ta_opt.unwrap().to_owned();
         let big_kline_ta = big_line_ta_opt.unwrap().to_owned();
         // let big_kline = big_ema.unwrap();
-        let big_ema = big_line_ta_opt.unwrap().ta1.ma3;
+        let big_ema = big_line_ta_opt.unwrap().ta1.vel2.ma;
         let kline_id = kline_ta.kline.bucket;
-        let med_ma = kline_ta.ta1.ma3;
+        let med_ma = kline_ta.ta1.vel2.ma;
         let med_macd_out = kline_ta.ta1.macd.clone();
 
         let up = med_macd_out.signal.0;
@@ -101,14 +101,14 @@ impl Brain {
                     // self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
                 }
 
-                // if price > big_ta.ema200 {
-                if big_ta.vel.count > 1
-                    && big_ta.vel.avg_vel_pip > 0.
-                    && med_ta.vel.count > 1
-                    && med_ta.vel.avg_vel_pip > 0.
-                {
-                    // self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
-                }
+                // // if price > big_ta.ema200 {
+                // if big_ta.vel.count > 1
+                //     && big_ta.vel.avg_vel_pip > 0.
+                //     && med_ta.vel.count > 1
+                //     && med_ta.vel.avg_vel_pip > 0.
+                // {
+                //     // self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
+                // }
                 if price > big_ema
                 // big_ta.vel.count > 1
                 //      big_ta.vel.avg_vel_pip > 0.
@@ -116,13 +116,13 @@ impl Brain {
                 // && big_ta.vel.avg_vel_pip > 0.
                 {
                     // self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
-                    if med_macd_out.macd < 0. && price > med_ma && med_ta.vel.count >= 1 {
+                    if med_macd_out.macd < 0. && price > med_ma && med_ta.vel1.count >= 1 {
                         // self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
                     }
                 }
                 // }
                 // self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
-                if med_macd_out.macd < 0. && price > med_ma && med_ta.vel.count >= 1 {
+                if med_macd_out.macd < 0. && price > med_ma && med_ta.vel1.count >= 1 {
                     self.go_long(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
                 }
             }
@@ -144,16 +144,16 @@ impl Brain {
                     // self.go_short(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
                 }
                 // if price < big_ta.ema200 {
-                if big_ta.vel.count > 1
-                    && big_ta.vel.avg_vel_pip < 0.
-                    && med_ta.vel.count > 1
-                    && med_ta.vel.avg_vel_pip < 0.
-                {
-                    // self.go_short(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
-                }
+                // if big_ta.vel.count > 1
+                //     && big_ta.vel.avg_vel_pip < 0.
+                //     && med_ta.vel.count > 1
+                //     && med_ta.vel.avg_vel_pip < 0.
+                // {
+                //     // self.go_short(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
+                // }
                 // }
 
-                if med_macd_out.macd > 0. && price < med_ma && med_ta.vel.count >= 1 {
+                if med_macd_out.macd > 0. && price < med_ma && med_ta.vel1.count >= 1 {
                     // todo enable
                     // self.go_short(symbol_id, kline_id, last_tick, &med_ta, &big_ta);
                 }
