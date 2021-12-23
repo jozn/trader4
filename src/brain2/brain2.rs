@@ -66,7 +66,7 @@ impl Brain2 {
     ) {
         let atr_pip = ta_big.atr * 10_000.;
         // let atr_pip = ta_med.atr * 10_000.;
-        let profit_pip = atr_pip * 0.6;
+        let profit_pip = atr_pip * 0.9;
         // let profit_pip = atr_pip * 1.;
         let loose_pip = -atr_pip * 0.6;
         // let loose_pip = -atr_pip * 1.;

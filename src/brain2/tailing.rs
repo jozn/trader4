@@ -15,7 +15,7 @@ impl Brain2 {
         for (_, p) in self.open.clone() {
             // self.on_full_tailing_pl(p);
             // todo enalbe
-            self.on_tailing(p);
+            // self.on_tailing(p);
         }
     }
 

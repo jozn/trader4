@@ -53,6 +53,8 @@ pub fn run_optimized() {
     let mut bal = vec![];
     let mut sum = 0.;
     let mut sum_abs = 0.;
+    let mut weeks_up = 0;
+    let mut weeks_down = 0;
 
     let mut sub_folder_time = get_time_sec();
     for i in 25..=53 {
@@ -66,7 +68,7 @@ pub fn run_optimized() {
                     medium_tick: 10,
                     big_tick: 120,
                     vel1_period: 20,
-                    vel2_period: 20,
+                    vel2_period: 200,
                 },
             );
             let ticks = collector::loader::load_rows(&path);
@@ -92,20 +94,30 @@ pub fn run_optimized() {
             // Print as we go
             {
                 let p = x.free_usd - 100_000.;
+                if p > 0. {
+                    weeks_up += 1;
+                } else {
+                    weeks_down += 1;
+                }
                 sum += p;
                 sum_abs += p.abs();
                 println!(
-                    "{}   {:.1}  {:.1}%    Sum: ({:.0}/{:.0})    {:.1}%",
+                    "{}   {:.1}  {:.1}%    Sum: ({:.0}/{:.0})    {:.1}%     weeks(up/down) ({}/{})",
                     tsv,
                     p,
                     p / 10.,
                     sum,
                     sum_abs,
-                    sum * 100. / sum_abs
+                    sum * 100. / sum_abs,
+                    weeks_up,
+                    weeks_down
                 );
             }
         }
     }
     println!("{:#?}", bal);
-    println!("Sum: {:}", sum);
+    println!(
+        "Sum: {:}            weeks(up/down) ({}/{}) ",
+        sum, weeks_up, weeks_down
+    );
 }

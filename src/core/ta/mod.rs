@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 pub use average_absolute_deviation::*;
 pub use average_true_range::*;
 pub use cci::*;
+pub use donchain_channel::*;
 pub use ema::*;
 pub use fisher::*;
 pub use hull::*;

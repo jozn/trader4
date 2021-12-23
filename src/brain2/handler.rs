@@ -33,12 +33,15 @@ impl Brain2 {
         let med = self.candles.medium.klines_ta.last().unwrap().to_owned();
         let big = self.candles.big.klines_ta.last().unwrap().to_owned();
         let last_tik = self.last_tick.clone().unwrap();
+        let price = last_tik.ask_price;
 
         let big_ta = &big.ta1;
         let med_ta = &med.ta1;
+        let ema200 = med_ta.vel2.ma;
 
         // if med_ta.vel2.avg_vel_pip > 0. || true {
-        if med_ta.macd.macd_pip < -2. {
+        if med_ta.macd.macd_pip < -2. && price < ema200 {
+            // println!("> p ema -  {} {}", price , ema200);
             self.go_long(
                 symbol_id,
                 med.kline.open_time,

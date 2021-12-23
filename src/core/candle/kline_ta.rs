@@ -32,6 +32,7 @@ pub struct TA1 {
     // New trending
     pub vel1: VelRes,
     pub vel2: VelRes,
+    pub ta2: TA2, // We insert it here in order to avoid changing Candles source codes
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -46,6 +47,7 @@ pub struct TAMethods {
     // For trending
     pub vel1: ta::Vel,
     pub vel2: ta::Vel,
+    pub ta2: TA2Methods,
 }
 
 impl TAMethods {
@@ -61,6 +63,7 @@ impl TAMethods {
             // For trending
             vel1: ta::Vel::new(cfg.vel1_period as usize).unwrap(),
             vel2: ta::Vel::new(cfg.vel2_period as usize).unwrap(),
+            ta2: TA2Methods::new(cfg),
         }
     }
 }
@@ -77,6 +80,7 @@ pub fn cal_indicators(tam: &mut TAMethods, kline: &Kline) -> KlineTA {
     let kl = kline;
 
     let price = kl.hlc3();
+    let mut tam2 = &mut tam.ta2;
 
     let kta = KlineTA {
         kline: kline.clone(),
@@ -92,7 +96,47 @@ pub fn cal_indicators(tam: &mut TAMethods, kline: &Kline) -> KlineTA {
             // For trending
             vel1: tam.vel1.next(kl.hlc3()),
             vel2: tam.vel2.next(kl.hlc3()),
+            ta2: TA2 {
+                dc: tam2.dc.next(&kl),
+                vel1: tam2.vel1.next(kl.hlc3()),
+                vel2: tam2.vel2.next(kl.hlc3()),
+            },
+            // ..Default::default() // All comment above indicarors
         },
     };
     kta
+}
+
+///////////// Version 2 of TA2 - Donchain Channel ///////////////
+
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct TA2 {
+    pub dc: DCRes,
+    pub vel1: VelRes,
+    pub vel2: VelRes,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TA2Methods {
+    pub dc: ta::DC,
+    pub vel1: ta::Vel,
+    pub vel2: ta::Vel,
+}
+
+impl TA2Methods {
+    pub fn new(cfg: &CandleConfig) -> Self {
+        Self {
+            dc: ta::DC::new(20).unwrap(),
+            vel1: ta::Vel::new(cfg.vel1_period as usize).unwrap(),
+            vel2: ta::Vel::new(cfg.vel2_period as usize).unwrap(),
+        }
+    }
+}
+
+// should not be used, just to satasfy compiler for Default
+impl Default for TA2Methods {
+    fn default() -> Self {
+        let cfg = CandleConfig::default();
+        TA2Methods::new(&cfg)
+    }
 }

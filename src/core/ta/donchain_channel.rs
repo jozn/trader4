@@ -12,11 +12,11 @@ pub struct DonchainChannel {
     window_high: Window,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct DCRes {
-    high: f64,
-    middle: f64,
-    low: f64,
+    pub high: f64,
+    pub middle: f64,
+    pub low: f64,
 }
 
 impl DonchainChannel {
