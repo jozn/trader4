@@ -1,4 +1,4 @@
-use crate::brain::{Brain, PairCandleCfg};
+use crate::brain1::{Brain1, PairCandleCfg};
 use crate::candle::CandleConfig;
 use crate::collector;
 use crate::collector::row_data::BTickData;
@@ -71,7 +71,7 @@ pub fn run_sample(pair_cfg: PairCandleCfg, all_tikcs: &Vec<BTickData>) -> Report
     let backend = BackendEngineOuter::new(100_000, &report_cfg);
     let mut back_arc = Arc::new(backend);
 
-    let mut brain = Brain::new(back_arc.clone(), vec![pair_cfg]);
+    let mut brain = Brain1::new(back_arc.clone(), vec![pair_cfg]);
 
     for (i, t) in all_tikcs.iter().enumerate() {
         if i % 10000 == 0 {

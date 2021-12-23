@@ -49,13 +49,13 @@ pub struct PositionTA {
 }
 
 impl PositionTA {
-    pub fn set_techichal_anylse(&mut self, p: &NewPos) {
+    pub fn set_start_ta(&mut self, p: &NewPos) {
         // ================ For Start Medium Time Frame =============== //
         let t = &p.ta_med;
 
         self.sm_mom = t.mom;
         self.sm_roc = t.roc;
-        self.sm_atr = t.atr;
+        self.sm_atr = t.atr * 10_000.;
         self.sm_rsi = t.rsi;
         self.sm_cci = t.cci;
         self.sm_macd_pip = t.macd.macd_pip;
@@ -81,7 +81,7 @@ impl PositionTA {
 
         self.sb_mom = t.mom;
         self.sb_roc = t.roc;
-        self.sb_atr = t.atr;
+        self.sb_atr = t.atr * 10_000.;
         self.sb_rsi = t.rsi;
         self.sb_cci = t.cci;
         self.sb_macd_pip = t.macd.macd_pip;

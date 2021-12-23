@@ -3,7 +3,7 @@ use crate::configs::assets::Pair;
 use std::fmt::Debug;
 
 pub trait GateWay: Debug {
-    // Calls from brain
+    // Calls from brain1
     fn subscribe_pairs_req(&self, symbols: Vec<Pair>);
     fn open_position_req_new(&self, new_pos: &NewPos);
     fn update_position(&self, update: &UpdatePos);

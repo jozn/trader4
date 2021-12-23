@@ -1,5 +1,5 @@
 use super::*;
-use crate::brain::Brain;
+use crate::brain1::Brain1;
 use crate::candle::Tick;
 use crate::helper;
 // use crate::online::bot::bot::Bot;
@@ -20,7 +20,7 @@ pub fn run_bot() {
     ct.application_auth_req(&cfg.client_id, &cfg.client_secret);
     std::thread::sleep(std::time::Duration::new(2, 0));
 
-    let mut brain = Brain {
+    let mut brain = Brain1 {
         con: Box::new(ct.clone()),
         db: vec![],
         last_trade_time: 0,

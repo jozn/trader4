@@ -319,7 +319,7 @@ pub fn get_all_postions(port: &BackendEngine) -> Vec<Position> {
 
 fn write_pos(name: &str, rnd_num: u16, arr: Vec<Position>) {
     // let os = to_csv_out(&arr, false);
-    let os = serilize_postions(&arr);
+    let os = serialize_position(&arr);
     let txt = format!("{}", os);
     std::fs::write(format!("{}_{}.csv", name, rnd_num), txt);
 

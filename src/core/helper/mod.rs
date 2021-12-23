@@ -1,4 +1,5 @@
 use chrono::NaiveDateTime;
+use rand::Rng;
 use serde::Serialize;
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -18,6 +19,10 @@ pub fn get_time_ms() -> u64 {
         .expect("Time went backwards");
     // println!("{:?}", since_the_epoch);
     since_the_epoch.as_secs() * 1000
+}
+
+pub fn get_rand(max: u64) -> u64 {
+    rand::thread_rng().gen_range(0..max)
 }
 
 pub fn to_csv_out<T: Serialize>(arr: &Vec<T>, tab: bool) -> String {

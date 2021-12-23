@@ -4,7 +4,8 @@
 #![allow(warnings)]
 #![allow(soft_unstable)]
 
-pub mod brain;
+pub mod brain1;
+pub mod brain2;
 pub mod collector;
 pub mod configs;
 pub mod core;

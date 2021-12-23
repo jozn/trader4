@@ -13,7 +13,7 @@ use std::sync::Arc;
 pub type PairCandleCfg = (Pair, CandleConfig);
 
 #[derive(Debug)]
-pub struct Brain {
+pub struct Brain1 {
     pub con: Box<Arc<dyn GateWay>>,
     pub db: Vec<PairMemory>,
     pub last_trade_time: u64, // tem
@@ -21,7 +21,7 @@ pub struct Brain {
     pub open: HashMap<u64, PosRes>,
 }
 
-impl Brain {
+impl Brain1 {
     pub fn new(
         backend: Arc<impl GateWay + 'static>,
         pairs_conf: Vec<(Pair, CandleConfig)>,
@@ -183,7 +183,7 @@ impl Brain {
     }
 }
 
-impl Brain {
+impl Brain1 {
     pub fn go_long(
         &mut self,
         symbol_id: i64,

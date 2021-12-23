@@ -93,7 +93,7 @@ impl Position {
             ..Default::default()
         };
         // res.set_techichal_anylse(p);
-        res.ta.set_techichal_anylse(p);
+        res.ta.set_start_ta(p);
         res
     }
 
@@ -132,9 +132,5 @@ impl Position {
 
     pub fn is_short(&self) -> bool {
         self.direction == PosDir::Short
-    }
-
-    pub fn set_techichal_anylse(&mut self, p: &NewPos) {
-        self.ta.set_techichal_anylse(p);
     }
 }

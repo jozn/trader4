@@ -26,7 +26,7 @@ impl PairMeta {
     }
 }
 
-// todo move to brain
+// todo move to brain1
 impl PairMeta {
     pub(crate) fn on_price_tick(&mut self, tick: Tick, bot: &mut Actor) {
         // println!("on_price_tick {:?}", &tick);

@@ -1,6 +1,6 @@
 use super::*;
 
-use crate::brain::Brain;
+use crate::brain1::Brain1;
 use crate::candle::CandleConfig;
 use crate::collector;
 use crate::configs::assets::Pair;
@@ -13,23 +13,30 @@ pub fn run1() {
     let pair_cfg = (
         Pair::EURUSD,
         CandleConfig {
+            // small_tick: 30,
+            // medium_tick: 10,
+            // big_tick: 50,
+            // vel1_period: 20,
+            // vel2_period: 50,
             small_tick: 30,
             medium_tick: 10,
             big_tick: 120,
-            vel1_period: 25,
+            vel1_period: 20,
             vel2_period: 50,
         },
     );
+    let week_id = 25;
     // let ticks = collector::loader::load_rows("/mnt/c/me/data/EURUSD/1.tsv");
     // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 44..50);
-    let ticks = collector::loader::load_week(&Pair::EURUSD, 49);
+    // let ticks = collector::loader::load_week(&Pair::EURUSD, 49);
+    let ticks = collector::loader::load_week(&Pair::EURUSD, week_id);
     // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 44..45);
 
     let mut run_cfg = BackRunConfig {
-        balance: 100_000,
+        balance: 1000_000,
         pairs_conf: vec![pair_cfg],
         ticks,
-        week_id: 0,
+        week_id: week_id,
         print: true,
         report: true,
         report_cfg: BackReportConf {
@@ -38,7 +45,8 @@ pub fn run1() {
         },
     };
 
-    run_cfg.run();
+    // run_cfg.run_brain1();
+    run_cfg.run_brain2();
 }
 
 pub fn run_optimized() {
@@ -57,7 +65,7 @@ pub fn run_optimized() {
                     small_tick: 30,
                     medium_tick: 10,
                     big_tick: 120,
-                    vel1_period: 25,
+                    vel1_period: 20,
                     vel2_period: 20,
                 },
             );
@@ -75,7 +83,8 @@ pub fn run_optimized() {
                     report_sub_folder: format!("{}", sub_folder_time),
                 },
             };
-            let x = run_cfg.run();
+            // let x = run_cfg.run_brain1();
+            let x = run_cfg.run_brain2();
 
             // collect balance
             bal.push(x.free_usd);

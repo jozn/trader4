@@ -28,7 +28,7 @@ impl PairMemory {
     }
 }
 
-impl Brain {
+impl Brain1 {
     pub fn on_price_tick(&mut self, symbol_id: i64, tick: Tick) {
         let mut pm = self.borrow_pair_meta(symbol_id);
         // pm.on_price_tick(tick, &self);

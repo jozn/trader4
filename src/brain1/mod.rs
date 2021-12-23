@@ -1,7 +1,7 @@
-pub mod brain;
+pub mod brain1;
 pub mod handler;
 
-pub use brain::*;
+pub use brain1::*;
 pub use handler::*;
 
 // How to use Brain:
