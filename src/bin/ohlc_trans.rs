@@ -1,9 +1,9 @@
 use chrono::prelude::*;
 use trader3;
 use trader3::candle::{CandleConfig, CandleSeriesTA, Kline, KlineHolderFrameTA, TimeSerVec};
-use trader3::{collector, helper};
 use trader3::configs::assets::Pair;
 use trader3::offline::num5;
+use trader3::{collector, helper};
 
 pub fn main() {
     let pairs = trader3::configs::assets::get_all_symbols();

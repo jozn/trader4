@@ -1,15 +1,16 @@
 use super::*;
 use crate::base::*;
 use crate::candle::{Tick, TimeSerVec};
+use crate::helper;
 use crate::ta::*;
 use serde::{Deserialize, Serialize};
-use crate::helper;
-
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct SimpleCandle {
+    #[serde(skip)]
     pub open_time: u64, // in mill seconds
     pub open_time_str: String,
+    #[serde(skip)]
     pub close_time: u64,
     pub tick_count: u32,
     pub open: f64,

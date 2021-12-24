@@ -1,10 +1,9 @@
 use super::*;
 use crate::base::*;
 use crate::candle::{Tick, TimeSerVec};
+use crate::helper;
 use crate::ta::*;
 use serde::{Deserialize, Serialize};
-use crate::helper;
-
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct FrameMemConfig {
@@ -18,6 +17,7 @@ pub struct FrameMemConfig {
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct FrameMem {
     pub frame_id: u64,
+    pub finished: bool,
     pub duration: String,
 
     // Donchain Channel
@@ -29,13 +29,18 @@ pub struct FrameMem {
     pub spreed_min: f64,
     pub spreed_max: f64,
 
+    // TA
+    pub ma1: f64,
+    #[serde(skip)]
+    pub vel: VelRes,
+
     // pub ticks_ohlc: [f64; 4], // open, high, low, close of frame ticks
     #[serde(skip)]
     pub ohlc: SimpleCandle,
 }
 
 impl FrameMem {
-    pub fn add_ticks(&mut self, ticks: TimeSerVec<Tick>) {
+    pub fn add_ticks(&mut self, ticks: &TimeSerVec<Tick>) {
         if ticks.len() == 0 {
             println!(">> Trades are empty.");
             // return Err(TErr::EmptyTradesErr);
@@ -56,7 +61,7 @@ impl FrameMem {
         self.duration = helper::to_duration(dur as i64);
     }
 
-    pub fn to_csv(&self) -> (FrameMem, SimpleCandle) {
-        (self.clone(), self.ohlc.clone())
+    pub fn to_csv(&self) -> (FrameMem, SimpleCandle, VelRes) {
+        (self.clone(), self.ohlc.clone(), self.vel.clone())
     }
 }

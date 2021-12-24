@@ -2,10 +2,10 @@ use super::*;
 use crate::candle::{Tick, TA1};
 use crate::configs::assets::Pair;
 use crate::gate_api::{NewPos, PosRes};
+use crate::helper;
 use chrono::*;
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
-use crate::helper;
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Position {

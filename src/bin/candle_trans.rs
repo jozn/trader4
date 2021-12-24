@@ -3,10 +3,10 @@ use trader3;
 use trader3::candle::{
     CandleConfig, CandleSeriesTA, Kline, KlineHolderFrameTA, KlineTA, TimeSerVec, TA2,
 };
-use trader3::{collector, helper};
 use trader3::configs::assets::Pair;
 use trader3::offline::num5;
 use trader3::ta::{DCRes, VelRes};
+use trader3::{collector, helper};
 
 pub fn main() {
     let pairs = trader3::configs::assets::get_all_symbols();

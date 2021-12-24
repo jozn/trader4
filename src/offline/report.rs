@@ -6,8 +6,8 @@ use crate::candle::Tick;
 use crate::core::helper::get_time_sec;
 use crate::core::helper::*;
 use crate::gate_api::NewPos;
-use serde::{Deserialize, Serialize};
 use crate::helper;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Report {

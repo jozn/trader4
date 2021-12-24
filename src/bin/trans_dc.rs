@@ -16,19 +16,15 @@ pub fn main() {
             let path = format!("/mnt/c/me/data/{:?}/{}.tsv", pair, week_id);
             if std::path::Path::new(&path).exists() {
                 let ticks = trader3::collector::loader::load_rows(&path);
-                let mut arr = TimeSerVec::new();
-                let mut frames = vec![];
-                let mut id = 1;
+                let mut dc_parent = trader3::dc_intel::DCParent::new();
+
                 for t in ticks {
-                    arr.push(t.to_tick());
-                    if arr.len() == 400 {
-                        let mut fm = trader3::dc_intel::FrameMem::default();
-                        fm.frame_id = id;
-                        fm.add_ticks(arr.clone());
-                        arr.clear();
-                        frames.push(fm.to_csv());
-                        id +=1;
-                    }
+                    dc_parent.add_tick(&t.to_tick());
+                }
+
+                let mut frames = vec![];
+                for fm in dc_parent.frames.iter() {
+                    frames.push(fm.to_csv());
                 }
 
                 let s = trader3::core::helper::to_csv_out(&frames, true);

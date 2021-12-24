@@ -8,7 +8,6 @@ pub use parent::*;
 
 use serde::{Deserialize, Serialize};
 
-
 pub type TResult<T> = std::result::Result<T, TErr>;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
