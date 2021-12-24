@@ -14,7 +14,9 @@ pub struct DCParent {
     pub dc_med: DC,
     pub dc_big: DC,
     pub ma1: EMA,
+    pub ma2: WMA,
     pub vel: Vel,
+    pub atr: ATR,
 
     // Others
     pub ticks_buff: TimeSerVec<Tick>,
@@ -28,47 +30,58 @@ impl DCParent {
             dc_med: DC::new(20).unwrap(),
             dc_big: DC::new(60).unwrap(),
             ma1: EMA::new(50).unwrap(),
+            ma2: WMA::new(50).unwrap(),
             vel: Vel::new(200).unwrap(),
+            atr: ATR::new(14).unwrap(),
             ..Default::default()
         }
     }
     pub fn add_tick(&mut self, tick: &Tick) {
         self.ticks_buff.push(tick.clone());
-        if self.ticks_buff.len() == 200 {
-            self.run_if_next_frame();
+        if self.ticks_buff.len() == 400 {
+            self.build_next_frame();
         }
     }
 
-    // todo remove
-    pub fn add_ticks(&mut self, ticks: &TimeSerVec<Tick>) {
-        if ticks.len() == 0 {
-            // println!(">> Trades are empty.");
-            return;
-        }
-        for t in ticks.iter() {
-            self.ticks_buff.push(t.clone());
-            self.run_if_next_frame();
-        }
-    }
+    fn build_next_frame(&mut self) {
+        let mut frame = FrameMem::default();
+        frame.add_ticks(&self.ticks_buff);
 
-    fn run_if_next_frame(&mut self) {
-        if self.ticks_buff.len() == 200 {
-            let mut frame = FrameMem::default();
-            frame.add_ticks(&self.ticks_buff);
-            self.frame_id += 1;
-            frame.frame_id = self.frame_id;
-            let dc_res = self.dc_med.next(&frame.ohlc);
-            frame.med_high = dc_res.high;
-            frame.med_low = dc_res.low;
-            let dc_res = self.dc_big.next(&frame.ohlc);
-            frame.big_high = dc_res.high;
-            frame.big_low = dc_res.low;
-            frame.ma1 = self.ma1.next(frame.ohlc.hlc3());
-            frame.vel = self.vel.next(frame.ohlc.hlc3());
+        // Counter
+        self.frame_id += 1;
+        frame.fid = self.frame_id;
 
-            frame.finished = true;
-            self.frames.push(frame);
-            self.ticks_buff.clear();
-        }
+        // Add TA to frame
+        let dc_res = self.dc_med.next(&frame.ohlc);
+        frame.med_high = dc_res.high;
+        frame.med_low = dc_res.low;
+        frame.med_dc_hl_pip = (dc_res.high - dc_res.low) * 10_000.;
+        let dc_res = self.dc_big.next(&frame.ohlc);
+        frame.big_high = dc_res.high;
+        frame.big_low = dc_res.low;
+        frame.big_dc_hl_pip = (dc_res.high - dc_res.low) * 10_000.;
+        frame.ma1 = self.ma1.next(frame.ohlc.hlc3());
+        frame.ma2 = self.ma2.next(frame.ohlc.hlc3());
+        frame.vel = self.vel.next(frame.ohlc.hlc3());
+        frame.atr_p = self.atr.next(&frame.ohlc) * 10_000.;
+
+        frame.set_trend();
+        /*// set trend
+        let r = &frame.vel;
+        let sign = if r.avg_vel_pip > 0. {
+            1.
+        } else {
+            -1.
+        };
+        let trend = if r.end_vel_pip.abs() > 0.2 {
+            (r.end_vel_pip/ (r.avg_vel_pip ) * sign)
+        } else {
+            0.
+        };
+        frame.trend = trend;*/
+
+        frame.finished = true;
+        self.frames.push(frame);
+        self.ticks_buff.clear();
     }
 }

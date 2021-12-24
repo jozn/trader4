@@ -16,7 +16,7 @@ pub struct FrameMemConfig {
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct FrameMem {
-    pub frame_id: u64,
+    pub fid: u64, // frame_id
     pub finished: bool,
     pub duration: String,
 
@@ -28,11 +28,17 @@ pub struct FrameMem {
 
     pub spreed_min: f64,
     pub spreed_max: f64,
+    pub med_dc_hl_pip: f64,
+    pub big_dc_hl_pip: f64,
 
     // TA
     pub ma1: f64,
+    pub ma2: f64,
     #[serde(skip)]
     pub vel: VelRes,
+    pub trd1: f64,
+    pub trd2: f64,
+    pub atr_p: f64,
 
     // pub ticks_ohlc: [f64; 4], // open, high, low, close of frame ticks
     #[serde(skip)]
@@ -59,6 +65,29 @@ impl FrameMem {
         self.ohlc = SimpleCandle::new(ticks.get_vec());
         let dur = self.ohlc.close_time - self.ohlc.open_time;
         self.duration = helper::to_duration(dur as i64);
+    }
+
+    pub fn set_trend(&mut self) {
+        // set trend
+        let v = &self.vel;
+        let sign = if v.avg_vel_pip > 0. { 1. } else { -1. };
+
+        let mut trend_base = v.end_vel_pip / (v.avg_vel_pip);
+        let trend = trend_base * v.end_vel_pip;
+
+        self.trd1 = trend;
+
+        // trd2 - ignore lost momentums
+        let trend_base = if v.end_vel_pip.abs() > v.avg_vel_pip.abs() * 0.70 {
+            (v.end_vel_pip / (v.avg_vel_pip)) // always +
+        } else {
+            0.
+        };
+
+        let mut trend_base = v.end_vel_pip / (v.avg_vel_pip);
+        let trend = trend_base * v.end_vel_pip;
+
+        self.trd1 = trend;
     }
 
     pub fn to_csv(&self) -> (FrameMem, SimpleCandle, VelRes) {

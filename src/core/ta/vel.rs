@@ -9,7 +9,8 @@ const MULTIPLIER: f64 = 1_000_000.0;
 // Velocity
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Vel {
-    ema: EMA,
+    // ema: EMA,
+    ema: WMA,
     last_ema: f64,
     store_ema: VecDeque<f64>,
     buff: VecDeque<f64>, // A buffer to avoid allocating in each call
@@ -31,7 +32,8 @@ impl Vel {
         match ema_period {
             0 => Err(TAErr::WrongArgs),
             _ => Ok(Self {
-                ema: EMA::new(ema_period).unwrap(),
+                // ema: EMA::new(ema_period).unwrap(),
+                ema: WMA::new(ema_period).unwrap(),
                 last_ema: 0.,
                 store_ema: VecDeque::with_capacity(200),
                 buff: VecDeque::with_capacity(200),

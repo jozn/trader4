@@ -17,6 +17,8 @@ pub struct SimpleCandle {
     pub high: f64,
     pub low: f64,
     pub close: f64,
+    pub pip_hl: f64,
+    pub pip_co: f64,
 }
 
 impl SimpleCandle {
@@ -47,16 +49,19 @@ impl SimpleCandle {
 
         assert!(first.time_s < last.time_s);
         assert!(high >= low);
-
+        let open = first.price_raw;
+        let close = last.price_raw;
         Self {
             open_time: first.time_s,
             open_time_str: helper::to_time_string(first.time_s as i64),
             close_time: last.time_s,
             tick_count: num,
-            open: first.price_raw,
-            high: high,
-            low: low,
-            close: last.price_raw,
+            open,
+            high,
+            low,
+            close,
+            pip_hl: (high - low) * 10_000.,
+            pip_co: (close - open).abs() * 10_000.,
         }
     }
 }
