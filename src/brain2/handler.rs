@@ -15,13 +15,77 @@ impl Brain2 {
         if self.ticks_arr.len() >= small_tick_size as usize {
             self.candles.add_ticks(self.ticks_arr.clone());
             self.ticks_arr.clear();
-            self.on_completed_small_candle(symbol_id);
+            // self.on_completed_small_candle(symbol_id);
+            self.on_completed_small_candle_just_trend(symbol_id);
             self.update_all_tailing_pos();
         }
     }
 
-    // run when many ticks complete an small candle
     fn on_completed_small_candle(&mut self, symbol_id: i64) {
+        if self.candles.big.klines_ta.is_empty() {
+            return;
+        }
+        let rnd = helper::get_rand(100);
+        // println!("rnd {} - {}", rnd, self.candles.small.klines_ta.len());
+        if rnd < 90 {
+            // return;
+        }
+        let med = self.candles.medium.klines_ta.last().unwrap().to_owned();
+        let big = self.candles.big.klines_ta.last().unwrap().to_owned();
+        let last_tik = self.last_tick.clone().unwrap();
+        let price = last_tik.ask_price;
+
+        let big_ta = &big.ta1;
+        let med_ta = &med.ta1;
+        let ema200 = med_ta.vel2.ma;
+
+        let r = dc_strategy(&self.candles,self.last_tick.clone().unwrap() );
+        let last_tik = self.last_tick.clone().unwrap();
+
+        if r > 0. || true {
+            self.go_long(
+                symbol_id,
+                med.kline.open_time,
+                &last_tik,
+                &med.ta1,
+                &big.ta1,
+            );
+        }
+    }
+
+    fn on_completed_small_candle_just_trend(&mut self, symbol_id: i64) {
+        if self.candles.big.klines_ta.is_empty() {
+            return;
+        }
+        let rnd = helper::get_rand(100);
+        // println!("rnd {} - {}", rnd, self.candles.small.klines_ta.len());
+        if rnd < 90 {
+            // return;
+        }
+        let med = self.candles.medium.klines_ta.last().unwrap().to_owned();
+        let big = self.candles.big.klines_ta.last().unwrap().to_owned();
+        let last_tik = self.last_tick.clone().unwrap();
+        let price = last_tik.ask_price;
+
+        let big_ta = &big.ta1;
+        let med_ta = &med.ta1;
+        let ema200 = med_ta.vel2.ma;
+
+        let r = dc_strategy(&self.candles,self.last_tick.clone().unwrap() );
+        let last_tik = self.last_tick.clone().unwrap();
+
+        if med_ta.vel1.avg_vel_pip < 0. && med_ta.vel1.count > 5 {
+            self.go_long(
+                symbol_id,
+                med.kline.open_time,
+                &last_tik,
+                &med.ta1,
+                &big.ta1,
+            );
+        }
+    }
+    // run when many ticks complete an small candle
+    fn on_completed_small_candle_bk_random(&mut self, symbol_id: i64) {
         if self.candles.big.klines_ta.is_empty() {
             return;
         }

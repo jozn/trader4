@@ -31,6 +31,8 @@ pub struct Position {
 
     #[serde(skip_serializing)]
     pub ta: PositionTA,
+    #[serde(skip)]
+    pub new_pos: NewPos,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -89,6 +91,7 @@ impl Position {
             touch_low_pip: 0.,
             touch_high_pip: 0.,
             locked: locked,
+            new_pos: p.clone(),
 
             ..Default::default()
         };

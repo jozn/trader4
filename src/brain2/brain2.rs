@@ -66,7 +66,7 @@ impl Brain2 {
     ) {
         let atr_pip = ta_big.atr * 10_000.;
         // let atr_pip = ta_med.atr * 10_000.;
-        let profit_pip = atr_pip * 0.9;
+        let profit_pip = atr_pip * 0.6;
         // let profit_pip = atr_pip * 1.;
         let loose_pip = -atr_pip * 0.6;
         // let loose_pip = -atr_pip * 1.;
@@ -74,7 +74,7 @@ impl Brain2 {
         let np = NewPos {
             symbol_id,
             is_short: false,
-            size_usd: 1000,
+            size_usd: 10000,
             take_profit_price: cal_price(tick.price_raw, atr_pip), // 10 pip
             stop_loose_price: cal_price(tick.price_raw, loose_pip),
             at_price: tick.price_raw,
@@ -85,7 +85,7 @@ impl Brain2 {
         };
 
         if self.already_acted(symbol_id, kline_id) {
-            // return;
+            return;
         }
 
         // println!("Open long {:#?}", np);
