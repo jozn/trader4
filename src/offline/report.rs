@@ -7,6 +7,7 @@ use crate::core::helper::get_time_sec;
 use crate::core::helper::*;
 use crate::gate_api::NewPos;
 use serde::{Deserialize, Serialize};
+use crate::helper;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Report {
@@ -44,7 +45,7 @@ impl Report {
 
     pub fn on_new_trade(&mut self, t: &NewPos, balance: f64, locked_money: f64) {
         let ms = MiddleStatic {
-            time_str: to_date(t.time_s),
+            time_str: helper::to_date(t.time_s),
             balance: balance,
             locked: locked_money as u64,
             profit: 0.,
@@ -54,7 +55,7 @@ impl Report {
 
     pub fn on_close_trade(&mut self, t: &Position, balance: f64) {
         let ms = MiddleStatic {
-            time_str: to_date(t.open_time),
+            time_str: helper::to_date(t.open_time),
             balance: balance,
             locked: 0,
             profit: t.profit,
@@ -131,7 +132,7 @@ impl Report {
         let win_ratio = win_cnt as f32 / (win_cnt + lose_cnt) as f32;
         let pl_ratio = win_amount / lose_amount.abs();
         let net_profit = win_amount - lose_amount.abs();
-        let total_time_str = to_duration(total_time as i64);
+        let total_time_str = helper::to_duration(total_time as i64);
 
         // short/long state
         let mut long_cnt = 0;

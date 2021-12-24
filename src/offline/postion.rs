@@ -5,6 +5,7 @@ use crate::gate_api::{NewPos, PosRes};
 use chrono::*;
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
+use crate::helper;
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Position {
@@ -77,7 +78,7 @@ impl Position {
             pos_size_usd: p.size_usd as f64,
             open_time: p.time_s,
             open_price: p.at_price,
-            open_time_str: to_date(p.time_s),
+            open_time_str: helper::to_date(p.time_s),
             high_exit_price: high,
             low_exit_price: low,
             close_time: 0,
@@ -101,8 +102,8 @@ impl Position {
     }
 
     pub fn close_pos(&mut self, param: &CloseParm) {
-        self.close_time_str = to_date(param.time);
-        self.duration = to_duration(self.open_time as i64 - param.time as i64);
+        self.close_time_str = helper::to_date(param.time);
+        self.duration = helper::to_duration(self.open_time as i64 - param.time as i64);
         self.close_price = param.at_price;
 
         let mut pl = (self.close_price - self.open_price) * self.pos_size_usd;

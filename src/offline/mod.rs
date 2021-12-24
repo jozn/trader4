@@ -1,6 +1,5 @@
 pub mod back;
 pub mod postion;
-pub mod shared;
 
 // pub mod offline_helper;
 pub mod position_ser;
@@ -13,7 +12,6 @@ pub use position_ser::*;
 pub use position_ta::*;
 pub use postion::*;
 pub use report::*;
-pub use shared::*;
 
 fn round5(v: f64) -> f64 {
     let pre = 100_000.;

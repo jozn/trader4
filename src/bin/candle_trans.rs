@@ -3,7 +3,7 @@ use trader3;
 use trader3::candle::{
     CandleConfig, CandleSeriesTA, Kline, KlineHolderFrameTA, KlineTA, TimeSerVec, TA2,
 };
-use trader3::collector;
+use trader3::{collector, helper};
 use trader3::configs::assets::Pair;
 use trader3::offline::num5;
 use trader3::ta::{DCRes, VelRes};
@@ -105,7 +105,7 @@ fn kline_to_kline_out(kh: &KlineTA) -> CsvOut {
         pip_dif_max: num5((k.high - k.low) * 10_000.),
         pip_dif_oc: num5((k.close - k.open) * 10_000.),
         open_time_str: ots,
-        duration: trader3::offline::shared::to_duration((k.close_time - k.open_time) as i64),
+        duration: helper::to_duration((k.close_time - k.open_time) as i64),
         dc_pip_dif: num5((dc.high - dc.low) * 10_000.),
     };
 

@@ -18,14 +18,16 @@ pub fn main() {
                 let ticks = trader3::collector::loader::load_rows(&path);
                 let mut arr = TimeSerVec::new();
                 let mut frames = vec![];
-
+                let mut id = 1;
                 for t in ticks {
                     arr.push(t.to_tick());
                     if arr.len() == 400 {
                         let mut fm = trader3::dc_intel::FrameMem::default();
+                        fm.frame_id = id;
                         fm.add_ticks(arr.clone());
                         arr.clear();
                         frames.push(fm.to_csv());
+                        id +=1;
                     }
                 }
 
