@@ -1,12 +1,12 @@
 pub mod brain2;
+pub mod dc_strategy;
 pub mod handler;
 pub mod tailing;
-pub mod dc_strategy;
 
 pub use brain2::*;
+pub use dc_strategy::*;
 pub use handler::*;
 pub use tailing::*;
-pub use dc_strategy::*;
 
 // Brain2 is just a playground for algoritms development afetr success merge this
 //  with brain1 > Brain2 is single asset and reduceid codes for simpliciyt

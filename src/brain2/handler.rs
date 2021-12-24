@@ -39,7 +39,7 @@ impl Brain2 {
         let med_ta = &med.ta1;
         let ema200 = med_ta.vel2.ma;
 
-        let r = dc_strategy(&self.candles,self.last_tick.clone().unwrap() );
+        let r = dc_strategy(&self.candles, self.last_tick.clone().unwrap());
         let last_tik = self.last_tick.clone().unwrap();
 
         if r > 0. || true {
@@ -71,7 +71,7 @@ impl Brain2 {
         let med_ta = &med.ta1;
         let ema200 = med_ta.vel2.ma;
 
-        let r = dc_strategy(&self.candles,self.last_tick.clone().unwrap() );
+        let r = dc_strategy(&self.candles, self.last_tick.clone().unwrap());
         let last_tik = self.last_tick.clone().unwrap();
 
         if med_ta.vel1.avg_vel_pip < 0. && med_ta.vel1.count > 5 {

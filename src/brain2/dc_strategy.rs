@@ -27,10 +27,9 @@ pub fn dc_strategy(candles: &CandleSeriesTA, last_tick: Tick) -> f64 {
     let pre_dc = &med_pre.ta1.ta2.dc;
     // let now_dc = &med_tip.ta1.ta2.dc;
 
-    if now_dc.high > pre_dc.high && price > ema200  {
+    if now_dc.high > pre_dc.high && price > ema200 {
         1.
     } else {
         0.
-
     }
 }

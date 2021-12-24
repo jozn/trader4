@@ -1,7 +1,7 @@
 use super::*;
 use crate::helper::to_csv_out;
-use csv::Writer;
 use crate::ta::*;
+use csv::Writer;
 
 type Holder = (Position, PositionTA);
 
@@ -22,11 +22,10 @@ pub fn serialize_position_v2(poss: &Vec<Position>) -> String {
     let mut arr = vec![];
     for p in poss {
         let ta2 = p.new_pos.ta_med.ta2.clone();
-        let hold = (p.clone(), ta2.dc, ta2.vel2 );
+        let hold = (p.clone(), ta2.dc, ta2.vel2);
         arr.push(hold);
     }
     let os = to_csv_out(&arr, false);
     let txt = format!("{}", os);
     txt
 }
-

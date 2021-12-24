@@ -1,3 +1,5 @@
+mod dc_intel;
+
 use std::path::Path;
 use trader3::collector;
 
