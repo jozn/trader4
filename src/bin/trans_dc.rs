@@ -4,6 +4,7 @@ use trader3::candle::{
     CandleConfig, CandleSeriesTA, Kline, KlineHolderFrameTA, KlineTA, TimeSerVec, TA2,
 };
 use trader3::collector;
+use trader3::collector::row_data::BTickData;
 use trader3::configs::assets::Pair;
 use trader3::offline::num5;
 use trader3::ta::{DCRes, VelRes};
@@ -19,7 +20,7 @@ pub fn main() {
                 let ticks = trader3::collector::loader::load_rows(&path);
                 let mut dc_parent = trader3::dc_intel::DCParent::new();
 
-                for t in ticks {
+                for t in ticks.clone() {
                     dc_parent.add_tick(&t.to_tick());
                 }
 
@@ -32,14 +33,61 @@ pub fn main() {
 
                 // Write to file
                 const FOLDER: &'static str = "/mnt/c/me/data_dc_intel/";
-                let dir = format!("{}{:?}", FOLDER, pair);
-                let out_file_path = format!("{}{:?}/{}.csv", FOLDER, pair, week_id);
+                let dir = format!("{}{:?}", FOLDER, &pair);
+                let out_file_path = format!("{}{:?}/{}.csv", FOLDER, &pair, week_id);
 
                 use std::fs;
                 fs::create_dir_all(&dir);
                 fs::write(&out_file_path, s);
                 println!("{}", &out_file_path);
+
+                // Write each day
+                wriet_daily(ticks, &pair, week_id);
             }
         }
     }
+}
+
+pub fn wriet_daily(ticks: Vec<BTickData>, pair: &Pair, week_id: u64) {
+    let mut dc_parent = trader3::dc_intel::DCParent::new();
+    let mut day_ticks = vec![];
+    let mut start = ticks.first().unwrap().timestamp_sec;
+    let mut day_num = 1;
+    for t in ticks {
+        if t.timestamp_sec < start + 86_400 {
+            day_ticks.push(t);
+        } else {
+            wriet_single_daily(day_ticks.clone(), pair, week_id, day_num);
+            day_num += 1;
+            start = t.timestamp_sec;
+            day_ticks.clear();
+            day_ticks.push(t);
+        }
+    }
+    wriet_single_daily(day_ticks.clone(), pair, week_id, day_num);
+}
+
+pub fn wriet_single_daily(ticks: Vec<BTickData>, pair: &Pair, week_id: u64, day_num: u64) {
+    let mut dc_parent = trader3::dc_intel::DCParent::new();
+
+    for t in ticks.clone() {
+        dc_parent.add_tick(&t.to_tick());
+    }
+
+    let mut frames = vec![];
+    for fm in dc_parent.frames.iter() {
+        frames.push(fm.to_csv());
+    }
+
+    let s = trader3::core::helper::to_csv_out(&frames, false);
+
+    // Write to file
+    const FOLDER: &'static str = "/mnt/c/me/data_dc_intel/";
+    let dir = format!("{}{:?}", FOLDER, pair);
+    let out_file_path = format!("{}{:?}/{}_{}.csv", FOLDER, pair, week_id, day_num);
+
+    use std::fs;
+    fs::create_dir_all(&dir);
+    fs::write(&out_file_path, s);
+    println!("{}", &out_file_path);
 }

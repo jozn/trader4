@@ -84,10 +84,9 @@ impl FrameMem {
             0.
         };
 
-        let mut trend_base = v.end_vel_pip / (v.avg_vel_pip);
         let trend = trend_base * v.end_vel_pip;
 
-        self.trd1 = trend;
+        self.trd2 = trend;
     }
 
     pub fn to_csv(&self) -> (FrameMem, SimpleCandle, VelRes) {
