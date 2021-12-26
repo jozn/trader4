@@ -33,7 +33,7 @@ pub fn run1() {
     // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 44..45);
 
     let mut run_cfg = BackRunConfig {
-        balance: 1000_000,
+        balance: 100_000,
         pairs_conf: vec![pair_cfg],
         ticks,
         week_id: week_id,
@@ -46,7 +46,8 @@ pub fn run1() {
     };
 
     // run_cfg.run_brain1();
-    run_cfg.run_brain2();
+    // run_cfg.run_brain2();
+    run_cfg.run_brain3();
 }
 
 pub fn run_optimized() {
@@ -86,7 +87,8 @@ pub fn run_optimized() {
                 },
             };
             // let x = run_cfg.run_brain1();
-            let x = run_cfg.run_brain2();
+            // let x = run_cfg.run_brain2();
+            let x = run_cfg.run_brain3();
 
             // collect balance
             bal.push(x.free_usd);

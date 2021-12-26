@@ -9,6 +9,8 @@ use trader3::configs::assets::Pair;
 use trader3::offline::num5;
 use trader3::ta::{DCRes, VelRes};
 
+const OUT_FOLDER: &'static str = "/mnt/c/me/data_dc_intel/";
+
 pub fn main() {
     let pairs = trader3::configs::assets::get_all_symbols();
     let pairs = vec![trader3::configs::assets::Pair::EURUSD]; // todo: remove
@@ -32,9 +34,8 @@ pub fn main() {
                 let s = trader3::core::helper::to_csv_out(&frames, false);
 
                 // Write to file
-                const FOLDER: &'static str = "/mnt/c/me/data_dc_intel/";
-                let dir = format!("{}{:?}", FOLDER, &pair);
-                let out_file_path = format!("{}{:?}/{}.csv", FOLDER, &pair, week_id);
+                let dir = format!("{}{:?}", OUT_FOLDER, &pair);
+                let out_file_path = format!("{}{:?}/{}.csv", OUT_FOLDER, &pair, week_id);
 
                 use std::fs;
                 fs::create_dir_all(&dir);
@@ -82,12 +83,26 @@ pub fn wriet_single_daily(ticks: Vec<BTickData>, pair: &Pair, week_id: u64, day_
     let s = trader3::core::helper::to_csv_out(&frames, false);
 
     // Write to file
-    const FOLDER: &'static str = "/mnt/c/me/data_dc_intel/";
-    let dir = format!("{}{:?}", FOLDER, pair);
-    let out_file_path = format!("{}{:?}/{}_{}.csv", FOLDER, pair, week_id, day_num);
+    let dir = format!("{}{:?}", OUT_FOLDER, pair);
+    let out_file_path = format!("{}{:?}/{}_{}.csv", OUT_FOLDER, pair, week_id, day_num);
 
     use std::fs;
     fs::create_dir_all(&dir);
     fs::write(&out_file_path, s);
+    println!("{}", &out_file_path);
+}
+
+fn wriet_file_dep(content: String, pair: &Pair, week_id: u64, day_num: u64) {
+    // Write to file
+    let dir = format!("{}{:?}", OUT_FOLDER, pair);
+    let out_file_path = if day_num == 0 {
+        format!("{}{:?}/{}.csv", OUT_FOLDER, &pair, week_id)
+    } else {
+        format!("{}{:?}/{}_{}.csv", OUT_FOLDER, pair, week_id, day_num)
+    };
+
+    use std::fs;
+    fs::create_dir_all(&dir);
+    fs::write(&out_file_path, content);
     println!("{}", &out_file_path);
 }

@@ -6,6 +6,7 @@
 
 pub mod brain1;
 pub mod brain2;
+pub mod brain3;
 pub mod collector;
 pub mod configs;
 pub mod core;

@@ -28,7 +28,7 @@ impl Brain2 {
 
         let tick = self.last_tick.clone().unwrap();
         let price = tick.price_raw;
-        let ta = self.candles.big.klines_ta.last().unwrap();
+        let ta = self.candles_dep.big.klines_ta.last().unwrap();
         let atr = ta.ta1.atr;
 
         if pos.is_short {
@@ -71,7 +71,7 @@ impl Brain2 {
 
         // let old_ops = self.open.get(&pos.pos_id);
         let tick = self.last_tick.clone().unwrap();
-        let ta = self.candles.big.klines_ta.last().unwrap();
+        let ta = self.candles_dep.big.klines_ta.last().unwrap();
         let atr = ta.ta1.atr;
 
         if pos.is_short {

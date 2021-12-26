@@ -31,19 +31,25 @@ impl DCParent {
             dc_big: DC::new(60).unwrap(),
             ma1: EMA::new(50).unwrap(),
             ma2: WMA::new(50).unwrap(),
-            vel: Vel::new(200).unwrap(),
+            vel: Vel::new(50).unwrap(),
             atr: ATR::new(14).unwrap(),
             ..Default::default()
         }
     }
-    pub fn add_tick(&mut self, tick: &Tick) {
+    pub fn add_tick(&mut self, tick: &Tick) -> Option<FrameMem> {
         self.ticks_buff.push(tick.clone());
         if self.ticks_buff.len() == 400 {
-            self.build_next_frame();
+            let frame = self.build_next_frame();
+            self.frames.push(frame.clone());
+            self.ticks_buff.clear();
+            Some(frame)
+        } else {
+            None
         }
     }
 
-    fn build_next_frame(&mut self) {
+    // todo move to frame
+    fn build_next_frame(&mut self) -> FrameMem {
         let mut frame = FrameMem::default();
         frame.add_ticks(&self.ticks_buff);
 
@@ -66,22 +72,51 @@ impl DCParent {
         frame.atr_p = self.atr.next(&frame.ohlc) * 10_000.;
 
         frame.set_trend();
-        /*// set trend
-        let r = &frame.vel;
-        let sign = if r.avg_vel_pip > 0. {
-            1.
-        } else {
-            -1.
-        };
-        let trend = if r.end_vel_pip.abs() > 0.2 {
-            (r.end_vel_pip/ (r.avg_vel_pip ) * sign)
-        } else {
-            0.
-        };
-        frame.trend = trend;*/
 
+        let dc_str = self.get_strength(&frame);
         frame.finished = true;
-        self.frames.push(frame);
-        self.ticks_buff.clear();
+        frame.dc_strength = dc_str;
+
+        frame
+    }
+
+    fn get_strength(&self, last: &FrameMem) -> DCStrength {
+        let len = self.frames.len();
+        if self.frames.len() < 3 {
+            return DCStrength::default();
+        }
+
+        // old del
+        // let last = self.frames.last().unwrap();
+        // let pre = self.frames.get(len - 2).unwrap();
+        let pre = self.frames.last().unwrap();
+
+        let mut dc_str = DCStrength {
+            trend: last.trd2,
+            buy: false,
+            buy2: false,
+            l_low: false,
+            strength: 0.0,
+        };
+
+        // going up?
+        if last.med_high > pre.med_high {
+            dc_str.buy = true;
+            if last.trd2 > 0. {
+                dc_str.buy2 = true;
+            }
+        }
+
+        // going up?
+        if last.med_low < pre.med_low {
+            dc_str.l_low = true;
+        }
+
+        if dc_str.buy == true && dc_str.l_low == true {
+            dc_str.buy = false;
+            dc_str.l_low = false;
+        }
+
+        dc_str
     }
 }

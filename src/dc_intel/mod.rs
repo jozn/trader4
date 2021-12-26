@@ -1,10 +1,12 @@
 pub mod dc_candle;
 pub mod frame;
 pub mod parent;
+pub mod strength;
 
 pub use dc_candle::*;
 pub use frame::*;
 pub use parent::*;
+pub use strength::*;
 
 use serde::{Deserialize, Serialize};
 

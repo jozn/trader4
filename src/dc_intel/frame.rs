@@ -43,6 +43,8 @@ pub struct FrameMem {
     // pub ticks_ohlc: [f64; 4], // open, high, low, close of frame ticks
     #[serde(skip)]
     pub ohlc: SimpleCandle,
+    #[serde(skip)]
+    pub dc_strength: DCStrength,
 }
 
 impl FrameMem {
@@ -78,7 +80,7 @@ impl FrameMem {
         self.trd1 = trend;
 
         // trd2 - ignore lost momentums
-        let trend_base = if v.end_vel_pip.abs() > v.avg_vel_pip.abs() * 0.70 {
+        let trend_base = if v.end_vel_pip.abs() > v.avg_vel_pip.abs() * 0.75 {
             (v.end_vel_pip / (v.avg_vel_pip)) // always +
         } else {
             0.
@@ -89,7 +91,16 @@ impl FrameMem {
         self.trd2 = trend;
     }
 
-    pub fn to_csv(&self) -> (FrameMem, SimpleCandle, VelRes) {
+    pub fn to_csv(&self) -> (FrameMem, SimpleCandle, VelRes, DCStrength) {
+        (
+            self.clone(),
+            self.ohlc.clone(),
+            self.vel.clone(),
+            self.dc_strength.clone(),
+        )
+    }
+
+    pub fn to_csv_bk(&self) -> (FrameMem, SimpleCandle, VelRes) {
         (self.clone(), self.ohlc.clone(), self.vel.clone())
     }
 }

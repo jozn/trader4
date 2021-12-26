@@ -1,5 +1,6 @@
 use crate::candle::TA1;
 use crate::configs::assets::Pair;
+use crate::dc_intel::FrameMem;
 use std::fmt::Debug;
 
 pub trait GateWay: Debug {
@@ -24,6 +25,7 @@ pub struct NewPos {
     pub time_s: u64, // Brain time
     pub ta_med: TA1,
     pub ta_big: TA1,
+    pub frame: FrameMem,
     // add comment, label too
 }
 
