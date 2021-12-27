@@ -61,7 +61,7 @@ impl Brain3 {
         // let atr_pip = ta_big.atr * 10_000.;
         // let atr_pip = ta_med.atr * 10_000.;
         // let atr_pip = 12.;
-        let atr_pip = frame.atr_p;
+        let atr_pip = frame.atr_p * 2.;
         // let profit_pip = atr_pip * 0.6;
         let profit_pip = atr_pip * 1.;
         // let loose_pip = -atr_pip * 0.6;
@@ -70,6 +70,38 @@ impl Brain3 {
         let np = NewPos {
             symbol_id,
             is_short: false,
+            size_usd: 10000,
+            take_profit_price: cal_price(tick.price_raw, profit_pip), // 10 pip
+            stop_loose_price: cal_price(tick.price_raw, loose_pip),
+            at_price: tick.price_raw,
+            time_s: tick.time_s,
+            frame: frame.clone(),
+            // ta_med: ta_med.clone(),
+            // ta_big: ta_big.clone(),
+            ..Default::default()
+        };
+
+        if self.already_acted(symbol_id, kline_id) {
+            return;
+        }
+
+        // println!("Open long {:#?}", np);
+        self.con.open_position_req_new(&np);
+    }
+
+    pub fn go_short(&mut self, symbol_id: i64, kline_id: u64, tick: &Tick, frame: &FrameMem) {
+        // let atr_pip = ta_big.atr * 10_000.;
+        // let atr_pip = ta_med.atr * 10_000.;
+        // let atr_pip = 12.;
+        let atr_pip = frame.atr_p * 2.;
+        // let profit_pip = atr_pip * 0.6;
+        let profit_pip = -atr_pip * 1.5;
+        // let loose_pip = -atr_pip * 0.6;
+        let loose_pip = atr_pip * 1.;
+        // let atr_pip = 10.;
+        let np = NewPos {
+            symbol_id,
+            is_short: true,
             size_usd: 10000,
             take_profit_price: cal_price(tick.price_raw, profit_pip), // 10 pip
             stop_loose_price: cal_price(tick.price_raw, loose_pip),

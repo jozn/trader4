@@ -10,12 +10,14 @@ pub struct DCParent {
     pub frame_id: u64, // For next frame id
     pub frames: Vec<FrameMem>,
 
+    // todo extract to a struct
     // TA holders
     pub dc_med: DC,
     pub dc_big: DC,
     pub ma1: EMA,
     pub ma2: WMA,
     pub vel: Vel,
+    pub vel2: Vel2,
     pub atr: ATR,
 
     // Others
@@ -31,14 +33,15 @@ impl DCParent {
             dc_big: DC::new(60).unwrap(),
             ma1: EMA::new(50).unwrap(),
             ma2: WMA::new(50).unwrap(),
-            vel: Vel::new(50).unwrap(),
+            vel: Vel::new(1000).unwrap(),
+            vel2: Vel2::new(100).unwrap(),
             atr: ATR::new(14).unwrap(),
             ..Default::default()
         }
     }
     pub fn add_tick(&mut self, tick: &Tick) -> Option<FrameMem> {
         self.ticks_buff.push(tick.clone());
-        if self.ticks_buff.len() == 400 {
+        if self.ticks_buff.len() == 150 {
             let frame = self.build_next_frame();
             self.frames.push(frame.clone());
             self.ticks_buff.clear();
@@ -48,7 +51,6 @@ impl DCParent {
         }
     }
 
-    // todo move to frame
     fn build_next_frame(&mut self) -> FrameMem {
         let mut frame = FrameMem::default();
         frame.add_ticks(&self.ticks_buff);
@@ -69,54 +71,15 @@ impl DCParent {
         frame.ma1 = self.ma1.next(frame.ohlc.hlc3());
         frame.ma2 = self.ma2.next(frame.ohlc.hlc3());
         frame.vel = self.vel.next(frame.ohlc.hlc3());
+        frame.vel2 = self.vel2.next(frame.ohlc.hlc3());
         frame.atr_p = self.atr.next(&frame.ohlc) * 10_000.;
 
         frame.set_trend();
 
-        let dc_str = self.get_strength(&frame);
+        let dc_str = get_strength(&frame, &self.frames);
         frame.finished = true;
         frame.dc_strength = dc_str;
 
         frame
-    }
-
-    fn get_strength(&self, last: &FrameMem) -> DCStrength {
-        let len = self.frames.len();
-        if self.frames.len() < 3 {
-            return DCStrength::default();
-        }
-
-        // old del
-        // let last = self.frames.last().unwrap();
-        // let pre = self.frames.get(len - 2).unwrap();
-        let pre = self.frames.last().unwrap();
-
-        let mut dc_str = DCStrength {
-            trend: last.trd2,
-            buy: false,
-            buy2: false,
-            l_low: false,
-            strength: 0.0,
-        };
-
-        // going up?
-        if last.med_high > pre.med_high {
-            dc_str.buy = true;
-            if last.trd2 > 0. {
-                dc_str.buy2 = true;
-            }
-        }
-
-        // going up?
-        if last.med_low < pre.med_low {
-            dc_str.l_low = true;
-        }
-
-        if dc_str.buy == true && dc_str.l_low == true {
-            dc_str.buy = false;
-            dc_str.l_low = false;
-        }
-
-        dc_str
     }
 }

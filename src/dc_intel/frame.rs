@@ -39,6 +39,8 @@ pub struct FrameMem {
     pub trd1: f64,
     pub trd2: f64,
     pub atr_p: f64,
+    #[serde(skip)]
+    pub vel2: VelRes2,
 
     // pub ticks_ohlc: [f64; 4], // open, high, low, close of frame ticks
     #[serde(skip)]
@@ -48,6 +50,10 @@ pub struct FrameMem {
 }
 
 impl FrameMem {
+    // pub fn new(ticks: &TimeSerVec<Tick>) -> Self {
+    //
+    // }
+
     pub fn add_ticks(&mut self, ticks: &TimeSerVec<Tick>) {
         if ticks.len() == 0 {
             println!(">> Trades are empty.");
@@ -91,12 +97,17 @@ impl FrameMem {
         self.trd2 = trend;
     }
 
-    pub fn to_csv(&self) -> (FrameMem, SimpleCandle, VelRes, DCStrength) {
+    pub fn get_med_middle(&self) -> f64 {
+        (self.med_high + self.med_low) / 2.
+    }
+
+    pub fn to_csv(&self) -> (FrameMem, SimpleCandle, VelRes, DCStrength, VelRes2) {
         (
             self.clone(),
             self.ohlc.clone(),
             self.vel.clone(),
             self.dc_strength.clone(),
+            self.vel2.clone(),
         )
     }
 
