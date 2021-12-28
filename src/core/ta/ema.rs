@@ -71,6 +71,16 @@ mod tests {
     }
 
     #[test]
+    fn test_next_one_period() {
+        let mut ema = ExponentialMovingAverage::new(1).unwrap();
+
+        assert_eq!(ema.next(2.0), 2.0);
+        assert_eq!(ema.next(5.0), 5.0);
+        assert_eq!(ema.next(5.5), 5.5);
+        // assert_eq!(ema.next(6.25), 4.25);
+    }
+
+    #[test]
     fn test_next_peek() {
         let mut ema = ExponentialMovingAverage::new(3).unwrap();
 

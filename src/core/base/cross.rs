@@ -6,6 +6,12 @@ type DiffParam = (f64, f64);
 pub type SignalsRes = (SimpleCrossEvent, SimpleCrossEvent);
 
 #[derive(Debug, Default, Clone, Copy, Serialize, Deserialize)]
+pub struct CrossRes {
+    pub crossed_above: bool, // If line1 crossed above line2
+    pub crossed_under: bool, // If line1 crossed under line2
+}
+
+#[derive(Debug, Default, Clone, Copy, Serialize, Deserialize)]
 pub struct SimpleCross {
     up: CrossAbove,
     down: CrossUnder,
@@ -19,7 +25,8 @@ impl SimpleCross {
         }
     }
 
-    pub fn next(&mut self, value1: f64, value2: f64) -> SignalsRes {
+    // deprecate this, it's unessecory more complicated.
+    pub fn next_v1(&mut self, value1: f64, value2: f64) -> SignalsRes {
         let up = self.up.binary(value1, value2);
         let r_up = SimpleCrossEvent::conv_bull(up);
 
@@ -27,6 +34,17 @@ impl SimpleCross {
         let r_down = SimpleCrossEvent::conv_bear(down);
 
         (r_up, r_down)
+    }
+
+    // A simpler version
+    pub fn next_v2(&mut self, line1: f64, line2: f64) -> CrossRes {
+        let up = self.up.binary(line1, line2);
+        let down = self.down.binary(line1, line2);
+
+        CrossRes {
+            crossed_above: up,
+            crossed_under: down,
+        }
     }
 }
 

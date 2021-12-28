@@ -53,7 +53,7 @@ impl MovingAverageConvergenceDivergence {
         let signal = self.signal_ma.next(macd);
         let histogram = macd - signal;
 
-        let s = self.cross.next(macd, signal);
+        let s = self.cross.next_v1(macd, signal);
         // let s = self.cross.next(fast_ma, slow_ma);
 
         MACDOutput {

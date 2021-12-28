@@ -55,7 +55,7 @@ impl Fisher {
 
         let last_y = y + 0.5 * self.prev_val;
 
-        let event = self.cross.next(last_y, self.prev_val);
+        let event = self.cross.next_v1(last_y, self.prev_val);
 
         self.prev_val = last_y;
         self.prev_x = x;
