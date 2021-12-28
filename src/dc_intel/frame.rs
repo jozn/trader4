@@ -107,7 +107,7 @@ impl FrameMem {
         (self.med_high + self.med_low) / 2.
     }
 
-    pub fn get_bear_discount_id(&self, price: f64 ) -> u64 {
+    pub fn get_bear_discount_id(&self, price: f64) -> u64 {
         let middle = self.get_med_middle();
         // let high = self.med_high;
         // let low = self.med_low;
@@ -117,12 +117,13 @@ impl FrameMem {
             0
         } else if price < (self.get_med_middle() + self.med_high) / 2. {
             1
-        } else { // price is higher than 3/4 of high-low range
+        } else {
+            // price is higher than 3/4 of high-low range
             2
         }
     }
 
-    pub fn get_bull_discount_id(&self, price: f64 ) -> u64 {
+    pub fn get_bull_discount_id(&self, price: f64) -> u64 {
         let middle = self.get_med_middle();
         // let high = self.med_high;
         // let low = self.med_low;
@@ -132,40 +133,27 @@ impl FrameMem {
             0
         } else if price > (low + middle) / 2. {
             1
-        } else { // price is lower than 1/4 of high-low range
+        } else {
+            // price is lower than 1/4 of high-low range
             2
         }
     }
 
-    pub fn get_bear_discount_price(&self, id: u64 ) -> f64 {
+    pub fn get_bear_discount_price(&self, id: u64) -> f64 {
         let middle = self.get_med_middle();
         match id {
-            1 => {
-                self.get_med_middle()
-            }
-            2 => {
-                (self.get_med_middle() + self.med_high) / 2.
-            }
-            3 | _ => {
-                middle + (self.med_high - middle) * 0.8
-            }
-            // _ => {}
+            1 => self.get_med_middle(),
+            2 => (self.get_med_middle() + self.med_high) / 2.,
+            3 | _ => middle + (self.med_high - middle) * 0.8, // _ => {}
         }
     }
 
-    pub fn get_bull_discount_price(&self, id: u64 ) -> f64 {
+    pub fn get_bull_discount_price(&self, id: u64) -> f64 {
         let middle = self.get_med_middle();
         match id {
-            1 => {
-                self.get_med_middle()
-            }
-            2 => {
-                (self.med_low + middle) / 2.
-            }
-            3 | _ => {
-                self.med_low + (middle - self.med_low) * 0.2
-            }
-            // _ => {}
+            1 => self.get_med_middle(),
+            2 => (self.med_low + middle) / 2.,
+            3 | _ => self.med_low + (middle - self.med_low) * 0.2, // _ => {}
         }
     }
 

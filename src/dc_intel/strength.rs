@@ -1,5 +1,5 @@
-use crate::candle::Tick;
 use super::*;
+use crate::candle::Tick;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct DCStrength {
@@ -118,10 +118,10 @@ impl FramesRels<'_> {
         let mut midle = self.last.get_med_middle();
         for f in self.frames2.iter().rev().take(self.period) {
             let fstr = &f.dc_strength;
-            if fstr.l_low{
+            if fstr.l_low {
                 postive += 1.;
             }
-            if fstr.h_high{
+            if fstr.h_high {
                 negative += 1.;
             }
         }
@@ -142,10 +142,10 @@ impl FramesRels<'_> {
         let mut midle = self.last.get_med_middle();
         for f in self.frames2.iter().rev().take(self.period) {
             let fstr = &f.dc_strength;
-            if fstr.h_high{
+            if fstr.h_high {
                 postive += 1.;
             }
-            if fstr.l_low{
+            if fstr.l_low {
                 negative += 1.;
             }
         }
