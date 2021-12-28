@@ -50,7 +50,8 @@ impl RelativeStrengthIndex {
         let down_ema = self.down_ma.next(down);
 
         if up_ema != 0. || down_ema != 0. {
-            100.0 * up_ema / (up_ema + down_ema)
+            // 100.0 * up_ema / (up_ema + down_ema) // old formula - from one rust lib
+            100. - (100. / (1. + up_ema / down_ema) ) // real formula from tradingview and investpeida and wiki
         } else {
             50.
         }

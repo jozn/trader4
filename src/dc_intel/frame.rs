@@ -21,10 +21,12 @@ pub struct FrameMem {
     pub duration: String,
 
     // Donchain Channel
-    pub med_high: f64,
     pub med_low: f64,
-    pub big_high: f64,
+    pub med_high: f64,
+    pub med_mid: f64,
     pub big_low: f64,
+    pub big_high: f64,
+    pub big_mid: f64,
 
     pub spreed_min: f64,
     pub spreed_max: f64,
@@ -101,7 +103,73 @@ impl FrameMem {
         (self.med_high + self.med_low) / 2.
     }
 
-    pub fn to_csv(&self) -> (FrameMem, SimpleCandle, VelRes, DCStrength, VelRes2) {
+    pub fn get_big_middle(&self) -> f64 {
+        (self.med_high + self.med_low) / 2.
+    }
+
+    pub fn get_bear_discount_id(&self, price: f64 ) -> u64 {
+        let middle = self.get_med_middle();
+        // let high = self.med_high;
+        // let low = self.med_low;
+        let high = self.big_high;
+        let low = self.big_low;
+        if price < middle {
+            0
+        } else if price < (self.get_med_middle() + self.med_high) / 2. {
+            1
+        } else { // price is higher than 3/4 of high-low range
+            2
+        }
+    }
+
+    pub fn get_bull_discount_id(&self, price: f64 ) -> u64 {
+        let middle = self.get_med_middle();
+        // let high = self.med_high;
+        // let low = self.med_low;
+        let high = self.big_high;
+        let low = self.big_low;
+        if price > middle {
+            0
+        } else if price > (low + middle) / 2. {
+            1
+        } else { // price is lower than 1/4 of high-low range
+            2
+        }
+    }
+
+    pub fn get_bear_discount_price(&self, id: u64 ) -> f64 {
+        let middle = self.get_med_middle();
+        match id {
+            1 => {
+                self.get_med_middle()
+            }
+            2 => {
+                (self.get_med_middle() + self.med_high) / 2.
+            }
+            3 | _ => {
+                middle + (self.med_high - middle) * 0.8
+            }
+            // _ => {}
+        }
+    }
+
+    pub fn get_bull_discount_price(&self, id: u64 ) -> f64 {
+        let middle = self.get_med_middle();
+        match id {
+            1 => {
+                self.get_med_middle()
+            }
+            2 => {
+                (self.med_low + middle) / 2.
+            }
+            3 | _ => {
+                self.med_low + (middle - self.med_low) * 0.2
+            }
+            // _ => {}
+        }
+    }
+
+    pub fn to_csv(&self) -> FrameCsv {
         (
             self.clone(),
             self.ohlc.clone(),
@@ -115,3 +183,5 @@ impl FrameMem {
         (self.clone(), self.ohlc.clone(), self.vel.clone())
     }
 }
+
+pub type FrameCsv = (FrameMem, SimpleCandle, VelRes, DCStrength, VelRes2);

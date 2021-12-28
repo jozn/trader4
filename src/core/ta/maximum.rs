@@ -57,6 +57,7 @@ impl Maximum {
         self.max
     }
 
+    // should not be used
     fn next_peek(&self, next_val: f64) -> f64 {
         let old_val = self.window.peek_period_tail();
         let mut max = self.max;

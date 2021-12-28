@@ -34,7 +34,7 @@ impl DCParent {
             ma1: EMA::new(50).unwrap(),
             ma2: WMA::new(50).unwrap(),
             vel: Vel::new(1000).unwrap(),
-            vel2: Vel2::new(100).unwrap(),
+            vel2: Vel2::new(20).unwrap(),
             atr: ATR::new(14).unwrap(),
             ..Default::default()
         }
@@ -53,6 +53,7 @@ impl DCParent {
 
     fn build_next_frame(&mut self) -> FrameMem {
         let mut frame = FrameMem::default();
+        let tick = self.ticks_buff.last().unwrap();
         frame.add_ticks(&self.ticks_buff);
 
         // Counter
@@ -63,20 +64,23 @@ impl DCParent {
         let dc_res = self.dc_med.next(&frame.ohlc);
         frame.med_high = dc_res.high;
         frame.med_low = dc_res.low;
+        frame.med_mid = frame.get_med_middle();
         frame.med_dc_hl_pip = (dc_res.high - dc_res.low) * 10_000.;
         let dc_res = self.dc_big.next(&frame.ohlc);
-        frame.big_high = dc_res.high;
         frame.big_low = dc_res.low;
+        frame.big_high = dc_res.high;
+        frame.big_mid = (frame.big_high + frame.big_low) / 2.;
         frame.big_dc_hl_pip = (dc_res.high - dc_res.low) * 10_000.;
         frame.ma1 = self.ma1.next(frame.ohlc.hlc3());
         frame.ma2 = self.ma2.next(frame.ohlc.hlc3());
         frame.vel = self.vel.next(frame.ohlc.hlc3());
         frame.vel2 = self.vel2.next(frame.ohlc.hlc3());
+        // frame.vel2 = self.vel2.next(frame.big_mid);
         frame.atr_p = self.atr.next(&frame.ohlc) * 10_000.;
 
         frame.set_trend();
 
-        let dc_str = get_strength(&frame, &self.frames);
+        let dc_str = get_strength(&frame, &self.frames, tick);
         frame.finished = true;
         frame.dc_strength = dc_str;
 

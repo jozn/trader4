@@ -6,14 +6,15 @@ use trader3::candle::{
 use trader3::collector;
 use trader3::collector::row_data::BTickData;
 use trader3::configs::assets::Pair;
+use trader3::dc_intel::{FrameCsv, FrameMem};
 use trader3::offline::num5;
 use trader3::ta::{DCRes, VelRes};
 
 const OUT_FOLDER: &'static str = "/mnt/c/me/data_dc_intel/";
 
 pub fn main() {
-    let pairs = trader3::configs::assets::get_all_symbols();
-    // let pairs = vec![trader3::configs::assets::Pair::EURUSD]; // todo: remove
+    // let pairs = trader3::configs::assets::get_all_symbols();
+    let pairs = vec![trader3::configs::assets::Pair::EURUSD]; // todo: remove
 
     for pair in pairs {
         for week_id in 25..=53 {
@@ -25,11 +26,13 @@ pub fn main() {
                 for t in ticks.clone() {
                     dc_parent.add_tick(&t.to_tick());
                 }
+                //
+                // let mut frames = vec![];
+                // for fm in dc_parent.frames.iter() {
+                //     frames.push(fm.to_csv());
+                // }
 
-                let mut frames = vec![];
-                for fm in dc_parent.frames.iter() {
-                    frames.push(fm.to_csv());
-                }
+                let frames = to_frame_csv(dc_parent.frames.clone());
 
                 let s = trader3::core::helper::to_csv_out(&frames, false);
 
@@ -75,10 +78,11 @@ pub fn wriet_single_daily(ticks: Vec<BTickData>, pair: &Pair, week_id: u64, day_
         dc_parent.add_tick(&t.to_tick());
     }
 
-    let mut frames = vec![];
-    for fm in dc_parent.frames.iter() {
-        frames.push(fm.to_csv());
-    }
+    // let mut frames = vec![];
+    // for fm in dc_parent.frames.iter() {
+    //     frames.push(fm.to_csv());
+    // }
+    let frames = to_frame_csv(dc_parent.frames.clone());
 
     let s = trader3::core::helper::to_csv_out(&frames, false);
 
@@ -105,4 +109,20 @@ fn wriet_file_dep(content: String, pair: &Pair, week_id: u64, day_num: u64) {
     fs::create_dir_all(&dir);
     fs::write(&out_file_path, content);
     println!("{}", &out_file_path);
+}
+
+fn to_frame_csv(frames: Vec<FrameMem>) -> Vec<FrameCsv> {
+    let mut arr = vec![];
+    for fm in frames.iter() {
+        let mut fm = fm.clone();
+        let dc_str = &fm.dc_strength;
+        if dc_str.dis_bull == 2 && fm.trd2 > 0. && fm.vel.avg_vel_pip > 0. {
+            fm.ohlc.close = fm.ohlc.close * 1.002; // 2pip
+        }
+        if dc_str.dis_bear == 2 && fm.trd2 < 0. && fm.vel.avg_vel_pip < 0. {
+            fm.ohlc.close = fm.ohlc.close * 1.003; // 2pip
+        }
+        arr.push(fm.to_csv());
+    }
+    arr
 }

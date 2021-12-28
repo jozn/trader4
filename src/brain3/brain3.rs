@@ -63,7 +63,7 @@ impl Brain3 {
         // let atr_pip = 12.;
         let atr_pip = frame.atr_p * 2.;
         // let profit_pip = atr_pip * 0.6;
-        let profit_pip = atr_pip * 1.;
+        let profit_pip = atr_pip * 1.5;
         // let loose_pip = -atr_pip * 0.6;
         let loose_pip = -atr_pip * 1.;
         // let atr_pip = 10.;
