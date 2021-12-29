@@ -187,6 +187,7 @@ fn aggregate_tickss_to_kline(ticks: &Vec<Tick>) -> Kline {
     }
 
     let kline = Kline {
+        kid: 0,
         open_time: first.time_s,
         close_time: last.time_s,
         bucket: bucket_id, // this should be override in codes who calls this
@@ -269,6 +270,7 @@ fn sum_klines_from_small(arr: KlineSerVec<Kline>) -> Kline {
     }
 
     Kline {
+        kid: 0,
         open_time: first.open_time,
         close_time: last.close_time,
         bucket: first.bucket, // todo

@@ -6,6 +6,7 @@ use std::cmp::Ordering;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct Kline {
+    pub kid: u64,
     pub open_time: u64, // in mill seconds
     pub close_time: u64,
     pub bucket: u64,

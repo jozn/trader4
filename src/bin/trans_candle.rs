@@ -71,6 +71,7 @@ pub struct KlineOut {
     // pub kline: Kline,
     // pub open_time: u64, // in mill seconds
     // pub close_time: u64,
+    pub kid: u64,
     pub bucket: u64,
     // pub tick_count: u32,
     // pub kline_num: i32, // -1: from trades sums >0 sums of klines
@@ -93,6 +94,7 @@ fn kline_to_kline_out(kh: &KlineTA) -> CsvOut {
     let ta = &kh.ta1.ta2;
     let dc = &kh.ta1.ta2.dc;
     let o = KlineOut {
+        kid: k.kid,
         // kline: k.clone(),
         // open_time: k.open_time,
         bucket: k.bucket,

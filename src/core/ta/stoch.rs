@@ -6,7 +6,7 @@ use super::*;
 // https://www.investopedia.com/terms/s/stochrsi.asp
 // Stochastic itself
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct StochRes {
     pub main_k: f64,
     pub smooth_d: f64,

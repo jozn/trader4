@@ -41,6 +41,9 @@ pub struct FrameMem {
     pub trd1: f64,
     pub trd2: f64,
     pub atr_p: f64,
+    pub rsi: f64,
+    #[serde(skip)]
+    pub rsi_sth: StochRes, // rsi_stoch
     #[serde(skip)]
     pub vel2: VelRes2,
 
@@ -159,6 +162,7 @@ impl FrameMem {
 
     pub fn to_csv(&self) -> FrameCsv {
         (
+            self.rsi_sth.clone(),
             self.clone(),
             self.ohlc.clone(),
             self.vel.clone(),
@@ -172,4 +176,11 @@ impl FrameMem {
     }
 }
 
-pub type FrameCsv = (FrameMem, SimpleCandle, VelRes, DCStrength, VelRes2);
+pub type FrameCsv = (
+    StochRes,
+    FrameMem,
+    SimpleCandle,
+    VelRes,
+    DCStrength,
+    VelRes2,
+);

@@ -1,46 +1,32 @@
 use super::*;
 use crate::base::*;
-use crate::candle::{Tick, TimeSerVec};
+use crate::candle::{CandleConfig, CandleSeriesTA, Tick, TimeSerVec};
 use crate::helper;
 use crate::ta::*;
 use serde::{Deserialize, Serialize};
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct DCParent {
+// NE: New Engine
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct NERoot {
+    //
     pub frame_id: u64, // For next frame id
     pub frames: Vec<FrameMem>,
-
-    // todo extract to a struct
-    // TA holders
-    pub dc_med: DC,
-    pub dc_big: DC,
-    pub ma1: EMA,
-    pub ma2: WMA,
-    pub vel: Vel,
-    pub vel2: Vel2,
-    pub atr: ATR,
-    pub rsi: RSI,
-    pub rsi_stoch: StochRSI,
-
-    // Others
+    pub candles: CandleSeriesTA,
     pub ticks_buff: TimeSerVec<Tick>,
 }
 
-impl DCParent {
+impl NERoot {
     pub fn new() -> Self {
         Self {
             frame_id: 0,
             frames: vec![],
-            dc_med: DC::new(20).unwrap(),
-            dc_big: DC::new(60).unwrap(),
-            ma1: EMA::new(50).unwrap(),
-            ma2: WMA::new(50).unwrap(),
-            vel: Vel::new(1000).unwrap(),
-            vel2: Vel2::new(20).unwrap(),
-            atr: ATR::new(14).unwrap(),
-            rsi: RSI::new(14).unwrap(),
-            rsi_stoch: StochRSI::new(14, 2, 3).unwrap(),
-            ..Default::default()
+            candles: CandleSeriesTA::new(&CandleConfig {
+                small_tick: 50,
+                medium_tick: 3,
+                big_tick: 9,
+                vel1_period: 10,
+                vel2_period: 100,
+            }),
+            ticks_buff: Default::default(),
         }
     }
     pub fn add_tick(&mut self, tick: &Tick) -> Option<FrameMem> {
@@ -56,6 +42,18 @@ impl DCParent {
     }
 
     fn build_next_frame(&mut self) -> FrameMem {
+        let mut frame = FrameMem::default();
+        let tick = self.ticks_buff.last().unwrap();
+        self.candles.add_ticks(self.ticks_buff.clone());
+        self.ticks_buff.clear();
+
+        let k_med = self.candles.medium.kline_ta_tip.clone().unwrap();
+        let k_big = self.candles.big.kline_ta_tip.clone().unwrap();
+
+        frame
+    }
+
+    /*fn build_next_frame_bk(&mut self) -> FrameMem {
         let mut frame = FrameMem::default();
         let tick = self.ticks_buff.last().unwrap();
         frame.add_ticks(&self.ticks_buff);
@@ -91,5 +89,5 @@ impl DCParent {
         frame.dc_strength = dc_str;
 
         frame
-    }
+    }*/
 }

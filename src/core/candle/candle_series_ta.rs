@@ -18,6 +18,7 @@ pub struct CandleSeriesTA {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct KlineHolderFrameTA {
     pub length_ms: u64, // todo remvoe
+    pub kid_cnt: u64,
     pub cfg: CandleConfig,
     pub ta_holder: TAMethods,
     pub klines_ta: KlineSerVec<KlineTA>,
@@ -28,6 +29,7 @@ impl KlineHolderFrameTA {
     pub fn new(cfg: &CandleConfig) -> Self {
         Self {
             length_ms: 0,
+            kid_cnt: 0,
             cfg: cfg.clone(),
             ta_holder: TAMethods::new(cfg),
             klines_ta: Default::default(),
@@ -63,17 +65,26 @@ impl CandleSeriesTA {
 
         fn doer(ctf: KlineHolderFrame, cta: &mut KlineHolderFrameTA) {
             for k in ctf.klines.get_vec() {
-                let kta = cal_indicators(&mut cta.ta_holder.clone(), k);
+                let mut kta = cal_indicators(&mut cta.ta_holder.clone(), k);
                 // cta.klines_ta.push_replace(kta);
+                // let kid = cta.kid_cnt + 1;
                 match cta.kline_ta_tip.clone() {
-                    None => cta.kline_ta_tip = Some(kta),
+                    None => {
+                        // cta.kid_cnt += 1; // first
+                        kta.kline.kid = cta.kid_cnt;
+                        cta.kline_ta_tip = Some(kta)
+                    }
                     Some(per_kline_ta) => {
                         if per_kline_ta.kline.bucket == kta.kline.bucket {
+                            kta.kline.kid = cta.kid_cnt + 1;
                             cta.kline_ta_tip = Some(kta)
                         } else {
-                            let kta_per_final =
+                            let mut kta_per_final =
                                 cal_indicators(&mut cta.ta_holder, &per_kline_ta.kline);
+                            cta.kid_cnt += 1;
+                            kta_per_final.kline.kid = cta.kid_cnt;
                             cta.klines_ta.push_replace(kta_per_final);
+                            kta.kline.kid = cta.kid_cnt + 1;
                             cta.kline_ta_tip = Some(kta)
                         }
                     }
