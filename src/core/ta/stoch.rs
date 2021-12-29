@@ -49,8 +49,8 @@ impl Stoch {
             100. * (next_val - min) / (max - min)
         };
 
-        let ema_k = self.ema_k.next(next_val);
-        let ema_d = self.ema_d.next(next_val);
+        let ema_k = self.ema_k.next(stoch);
+        let ema_d = self.ema_d.next(stoch);
         let cross = self.cross.next_v2(ema_k, ema_d);
 
         StochRes {

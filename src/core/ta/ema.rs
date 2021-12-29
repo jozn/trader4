@@ -81,6 +81,14 @@ mod tests {
     }
 
     #[test]
+    fn test_next_one_play() {
+        let mut ema = ExponentialMovingAverage::new(1).unwrap();
+
+        for  i in 1..100 {
+            // println!("{} -> {}",i, ema.next(i as f64));
+        }
+    }
+    #[test]
     fn test_next_peek() {
         let mut ema = ExponentialMovingAverage::new(3).unwrap();
 
