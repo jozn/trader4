@@ -8,31 +8,51 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct NERoot {
     //
-    pub frame_id: u64, // For next frame id
-    pub frames: Vec<FrameMem>,
-    pub candles: CandleSeriesTA,
+    pub frame_id: u64,     // For next frame id
+    pub cfg: CandleConfig, // For next frame id
+    pub frames: Vec<NEFrame>,
+    pub candles: CandleSeriesTA, // todo: build a candle ver 2 like canlde but better
     pub ticks_buff: TimeSerVec<Tick>,
+    pub ticks_buff2: TimeSerVec<Tick>, // for internal frame process
 }
 
 impl NERoot {
     pub fn new() -> Self {
+        let cfg = CandleConfig {
+            small_tick: 50,
+            medium_tick: 3,
+            big_tick: 9,
+            vel1_period: 10,
+            vel2_period: 100,
+        };
+
         Self {
             frame_id: 0,
+            cfg: cfg.clone(),
             frames: vec![],
-            candles: CandleSeriesTA::new(&CandleConfig {
-                small_tick: 50,
-                medium_tick: 3,
-                big_tick: 9,
-                vel1_period: 10,
-                vel2_period: 100,
-            }),
+            candles: CandleSeriesTA::new(&cfg),
             ticks_buff: Default::default(),
+            ticks_buff2: Default::default(),
         }
     }
-    pub fn add_tick(&mut self, tick: &Tick) -> Option<FrameMem> {
+
+    pub fn add_tick(&mut self, tick: &Tick) -> Option<NEFrame> {
         self.ticks_buff.push(tick.clone());
+        self.ticks_buff2.push(tick.clone());
         if self.ticks_buff.len() == 50 {
+            // number should always be dived to meidum tikc size
             let frame = self.build_next_frame();
+            let last = self.frames.last();
+            match last {
+                None => {
+                    // self.frames.push(frame);
+                }
+                Some(f) => {
+                    if f.fid == frame.fid {
+                        self.frames.pop();
+                    }
+                }
+            }
             self.frames.push(frame.clone());
             self.ticks_buff.clear();
             Some(frame)
@@ -41,8 +61,8 @@ impl NERoot {
         }
     }
 
-    fn build_next_frame(&mut self) -> FrameMem {
-        let mut frame = FrameMem::default();
+    fn build_next_frame(&mut self) -> NEFrame {
+        let mut frame = NEFrame::default();
         let tick = self.ticks_buff.last().unwrap();
         self.candles.add_ticks(self.ticks_buff.clone());
         self.ticks_buff.clear();
@@ -50,44 +70,12 @@ impl NERoot {
         let k_med = self.candles.medium.kline_ta_tip.clone().unwrap();
         let k_big = self.candles.big.kline_ta_tip.clone().unwrap();
 
+        let mut frame = new_frame(&k_med, &k_big);
+        frame.set_spread(&self.ticks_buff2);
+        // be aware not go out of sync - could be a bug source
+        if self.ticks_buff2.len() as u64 == self.cfg.small_tick * self.cfg.medium_tick {
+            self.ticks_buff2.clear();
+        }
         frame
     }
-
-    /*fn build_next_frame_bk(&mut self) -> FrameMem {
-        let mut frame = FrameMem::default();
-        let tick = self.ticks_buff.last().unwrap();
-        frame.add_ticks(&self.ticks_buff);
-
-        // Counter
-        self.frame_id += 1;
-        frame.fid = self.frame_id;
-
-        // Add TA to frame
-        let dc_res = self.dc_med.next(&frame.ohlc);
-        frame.med_high = dc_res.high;
-        frame.med_low = dc_res.low;
-        frame.med_mid = frame.get_med_middle();
-        frame.med_dc_hl_pip = (dc_res.high - dc_res.low) * 10_000.;
-        let dc_res = self.dc_big.next(&frame.ohlc);
-        frame.big_low = dc_res.low;
-        frame.big_high = dc_res.high;
-        frame.big_mid = (frame.big_high + frame.big_low) / 2.;
-        frame.big_dc_hl_pip = (dc_res.high - dc_res.low) * 10_000.;
-        frame.ma1 = self.ma1.next(frame.ohlc.hlc3());
-        frame.ma2 = self.ma2.next(frame.ohlc.hlc3());
-        frame.vel = self.vel.next(frame.ohlc.hlc3());
-        frame.vel2 = self.vel2.next(frame.ohlc.hlc3());
-        // frame.vel2 = self.vel2.next(frame.big_mid);
-        frame.atr_p = self.atr.next(&frame.ohlc) * 10_000.;
-        frame.rsi = self.rsi.next(frame.ohlc.hlc3());
-        frame.rsi_sth = self.rsi_stoch.next(frame.ohlc.hlc3());
-
-        frame.set_trend();
-
-        let dc_str = get_strength(&frame, &self.frames, tick);
-        frame.finished = true;
-        frame.dc_strength = dc_str;
-
-        frame
-    }*/
 }

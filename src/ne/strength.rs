@@ -2,7 +2,7 @@ use super::*;
 use crate::candle::Tick;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct DCStrength {
+pub struct NEStrength {
     pub trend: f64,
     pub h_high: bool, // higher high
     pub buy2: bool,

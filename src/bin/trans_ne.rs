@@ -6,7 +6,7 @@ use trader3::candle::{
 use trader3::collector;
 use trader3::collector::row_data::BTickData;
 use trader3::configs::assets::Pair;
-use trader3::ne::{FrameCsv, FrameMem};
+use trader3::ne::{FrameCsv, NEFrame};
 use trader3::offline::num5;
 use trader3::ta::{DCRes, VelRes};
 
@@ -65,6 +65,7 @@ pub fn wriet_daily(ticks: Vec<BTickData>, pair: &Pair, week_id: u64) {
     wriet_single_daily(day_ticks.clone(), pair, week_id, day_num);
 }
 
+// todo: change in way not to build a new NERoot but break wikly frames into days
 pub fn wriet_single_daily(ticks: Vec<BTickData>, pair: &Pair, week_id: u64, day_num: u64) {
     let mut root = trader3::ne::NERoot::new();
 
@@ -101,7 +102,7 @@ fn wriet_file_dep(content: String, pair: &Pair, week_id: u64, day_num: u64) {
     println!("{}", &out_file_path);
 }
 
-fn to_frame_csv(frames: Vec<FrameMem>) -> Vec<FrameCsv> {
+fn to_frame_csv(frames: Vec<NEFrame>) -> Vec<FrameCsv> {
     let mut arr = vec![];
     for fm in frames.iter() {
         let mut fm = fm.clone();

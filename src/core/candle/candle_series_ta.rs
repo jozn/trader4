@@ -67,16 +67,17 @@ impl CandleSeriesTA {
             for k in ctf.klines.get_vec() {
                 let mut kta = cal_indicators(&mut cta.ta_holder.clone(), k);
                 // cta.klines_ta.push_replace(kta);
-                // let kid = cta.kid_cnt + 1;
+                let kid = cta.kid_cnt + 1; // for when not presisted
                 match cta.kline_ta_tip.clone() {
                     None => {
                         // cta.kid_cnt += 1; // first
-                        kta.kline.kid = cta.kid_cnt;
+                        kta.kline.kid = kid;
                         cta.kline_ta_tip = Some(kta)
                     }
                     Some(per_kline_ta) => {
                         if per_kline_ta.kline.bucket == kta.kline.bucket {
-                            kta.kline.kid = cta.kid_cnt + 1;
+                            // update
+                            kta.kline.kid = kid;
                             cta.kline_ta_tip = Some(kta)
                         } else {
                             let mut kta_per_final =

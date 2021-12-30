@@ -97,9 +97,12 @@ pub fn cal_indicators(tam: &mut TAMethods, kline: &Kline) -> KlineTA {
             vel1: tam.vel1.next(kl.hlc3()),
             vel2: tam.vel2.next(kl.hlc3()),
             ta2: TA2 {
+                atr: tam2.atr.next(&kl),
                 dc: tam2.dc.next(&kl),
                 vel1: tam2.vel1.next(kl.hlc3()),
                 vel2: tam2.vel2.next(kl.hlc3()),
+                rsi: tam2.rsi.next(kl.hlc3()),
+                rsi_sth: tam2.rsi_stoch.next(kl.hlc3()),
             },
             // ..Default::default() // All comment above indicarors
         },
@@ -111,24 +114,33 @@ pub fn cal_indicators(tam: &mut TAMethods, kline: &Kline) -> KlineTA {
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct TA2 {
+    pub atr: f64,
     pub dc: DCRes,
     pub vel1: VelRes,
-    pub vel2: VelRes,
+    pub vel2: VelRes2,
+    pub rsi: f64,
+    pub rsi_sth: StochRes,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TA2Methods {
+    pub atr: ta::ATR,
     pub dc: ta::DC,
     pub vel1: ta::Vel,
-    pub vel2: ta::Vel,
+    pub vel2: ta::Vel2,
+    pub rsi: ta::RSI,
+    pub rsi_stoch: ta::StochRSI,
 }
 
 impl TA2Methods {
     pub fn new(cfg: &CandleConfig) -> Self {
         Self {
+            atr: ta::ATR::new(14).unwrap(),
             dc: ta::DC::new(20).unwrap(),
             vel1: ta::Vel::new(cfg.vel1_period as usize).unwrap(),
-            vel2: ta::Vel::new(cfg.vel2_period as usize).unwrap(),
+            vel2: ta::Vel2::new(cfg.vel2_period as usize).unwrap(),
+            rsi: ta::RSI::new(cfg.vel2_period as usize).unwrap(),
+            rsi_stoch: ta::StochRSI::new(14, 1, 3).unwrap(),
         }
     }
 }
