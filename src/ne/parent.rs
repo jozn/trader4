@@ -22,8 +22,8 @@ impl NERoot {
             small_tick: 50,
             medium_tick: 3,
             big_tick: 9,
-            vel1_period: 10,
-            vel2_period: 100,
+            vel1_period: 200,
+            vel2_period: 20,
         };
 
         Self {
@@ -39,7 +39,7 @@ impl NERoot {
     pub fn add_tick(&mut self, tick: &Tick) -> Option<NEFrame> {
         self.ticks_buff.push(tick.clone());
         self.ticks_buff2.push(tick.clone());
-        if self.ticks_buff.len() == 50 {
+        if self.ticks_buff.len() == self.cfg.get_medium_tick_size() as usize  {
             // number should always be dived to meidum tikc size
             let frame = self.build_next_frame();
             let last = self.frames.last();
@@ -62,10 +62,9 @@ impl NERoot {
     }
 
     fn build_next_frame(&mut self) -> NEFrame {
-        let mut frame = NEFrame::default();
         let tick = self.ticks_buff.last().unwrap();
+        let mut frame = NEFrame::default();
         self.candles.add_ticks(self.ticks_buff.clone());
-        self.ticks_buff.clear();
 
         let k_med = self.candles.medium.kline_ta_tip.clone().unwrap();
         let k_big = self.candles.big.kline_ta_tip.clone().unwrap();
@@ -76,6 +75,11 @@ impl NERoot {
         if self.ticks_buff2.len() as u64 == self.cfg.small_tick * self.cfg.medium_tick {
             self.ticks_buff2.clear();
         }
+
+        frame.set_trend();
+        frame.set_advanced_trend(&self.frames, tick);
+
+        self.ticks_buff.clear();
         frame
     }
 }

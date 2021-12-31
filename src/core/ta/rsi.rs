@@ -33,9 +33,10 @@ impl RelativeStrengthIndex {
 
         if self.is_new {
             self.is_new = false;
-            // Initialize with some small seed numbers to avoid division by zero
-            up = 0.1;
-            down = 0.1;
+            // Initialize with some small seed numbers to avoid division by zero,
+            //  this numbers should be very low in order to avoid small forex numbers.
+            up = 0.00001;
+            down = 0.00001;
         } else {
             if next_val > self.prev_val {
                 up = next_val - self.prev_val;
@@ -45,13 +46,16 @@ impl RelativeStrengthIndex {
         }
 
         self.prev_val = next_val;
+        // up *= 10_000.;
+        // down *= 10_000.;
         // todo correct?
         let up_ema = self.up_ma.next(up);
         let down_ema = self.down_ma.next(down);
 
         if up_ema != 0. || down_ema != 0. {
+            let rs = up_ema / down_ema;
             // 100.0 * up_ema / (up_ema + down_ema) // old formula - from one rust lib
-            100. - (100. / (1. + up_ema / down_ema)) // real formula from tradingview and investpeida and wiki
+            100. - (100. / (1. + rs)) // real formula from tradingview and investpeida and wiki
         } else {
             50.
         }

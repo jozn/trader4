@@ -139,7 +139,7 @@ impl TA2Methods {
             dc: ta::DC::new(20).unwrap(),
             vel1: ta::Vel::new(cfg.vel1_period as usize).unwrap(),
             vel2: ta::Vel2::new(cfg.vel2_period as usize).unwrap(),
-            rsi: ta::RSI::new(cfg.vel2_period as usize).unwrap(),
+            rsi: ta::RSI::new(14).unwrap(),
             rsi_stoch: ta::StochRSI::new(14, 1, 3).unwrap(),
         }
     }

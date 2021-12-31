@@ -28,6 +28,12 @@ pub struct CandleConfig {
     pub vel2_period: u64,
 }
 
+impl CandleConfig {
+    pub fn get_medium_tick_size(&self) -> u64 {
+        self.small_tick * self.medium_tick
+    }
+}
+
 pub type CandleSeriesDiff = CandleSeries; // Only trades is not set
 
 impl CandleSeries {

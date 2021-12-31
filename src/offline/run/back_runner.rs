@@ -100,7 +100,7 @@ impl BackRunConfig {
                 // println!("{}", i);
             }
             back_arc.next_tick(1, t.clone());
-            brain.on_price_tick(1, t.to_tick());
+            brain.on_price_tick_NE(1, t.to_tick());
             let notifys = back_arc.take_notify();
             for not in notifys {
                 brain.on_notify_position(not);

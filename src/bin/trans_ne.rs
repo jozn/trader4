@@ -106,12 +106,18 @@ fn to_frame_csv(frames: Vec<NEFrame>) -> Vec<FrameCsv> {
     let mut arr = vec![];
     for fm in frames.iter() {
         let mut fm = fm.clone();
-        let dc_str = &fm.dc_strength;
-        if dc_str.dis_bull == 2 && fm.trd2 > 0. && fm.vel.avg_vel_pip > 0. {
+        let dc_str = &fm.strength;
+        /*if dc_str.dis_bull == 2 && fm.trd2 > 0. && fm.vel.avg_vel_pip > 0. {
             fm.ohlc.close = fm.ohlc.close * 1.002; // 2pip
         }
         if dc_str.dis_bear == 2 && fm.trd2 < 0. && fm.vel.avg_vel_pip < 0. {
             fm.ohlc.close = fm.ohlc.close * 1.003; // 2pip
+        }*/
+        if dc_str.buy  {
+            fm.ohlc.close = fm.ohlc.close * 1.003; // 3pip
+        }
+        if dc_str.sell {
+            fm.ohlc.close = fm.ohlc.close * 1.0015; // .5pip
         }
         arr.push(fm.to_csv());
     }

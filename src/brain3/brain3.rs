@@ -10,6 +10,7 @@ use crate::offline::num5;
 use std::borrow::BorrowMut;
 use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
+use crate::ne::{NEFrame, NERoot};
 
 pub type PairCandleCfg = (Pair, CandleConfig);
 
@@ -24,6 +25,7 @@ pub struct Brain3 {
     pub last_trade_time: u64,
     pub ticks_arr: TimeSerVec<Tick>,
     pub dc_intl: DCParent,
+    pub ne: NERoot,
 }
 
 impl Brain3 {
@@ -37,6 +39,7 @@ impl Brain3 {
             pair: Pair::EURUSD,
             last_tick: None,
             dc_intl: DCParent::new(),
+            ne: NERoot::new(),
         };
 
         brain
@@ -58,14 +61,17 @@ impl Brain3 {
 
 impl Brain3 {
     pub fn go_long(&mut self, symbol_id: i64, kline_id: u64, tick: &Tick, frame: &FrameMem) {
+
+    }
+    pub fn go_long2(&mut self, symbol_id: i64, kline_id: u64, tick: &Tick, frame: &NEFrame) {
         // let atr_pip = ta_big.atr * 10_000.;
         // let atr_pip = ta_med.atr * 10_000.;
         // let atr_pip = 12.;
-        let atr_pip = frame.atr_p * 2.;
+        let atr_pip = frame.atr_p * 3.;
         // let profit_pip = atr_pip * 0.6;
-        let profit_pip = atr_pip * 1.5;
+        let profit_pip = atr_pip * 1.;
         // let loose_pip = -atr_pip * 0.6;
-        let loose_pip = -atr_pip * 1.;
+        let loose_pip = -atr_pip * 5.;
         // let atr_pip = 10.;
         let np = NewPos {
             symbol_id,
@@ -75,7 +81,7 @@ impl Brain3 {
             stop_loose_price: cal_price(tick.price_raw, loose_pip),
             at_price: tick.price_raw,
             time_s: tick.time_s,
-            frame: frame.clone(),
+            // frame: frame.clone(),
             // ta_med: ta_med.clone(),
             // ta_big: ta_big.clone(),
             ..Default::default()
@@ -90,14 +96,17 @@ impl Brain3 {
     }
 
     pub fn go_short(&mut self, symbol_id: i64, kline_id: u64, tick: &Tick, frame: &FrameMem) {
+
+    }
+    pub fn go_short2(&mut self, symbol_id: i64, kline_id: u64, tick: &Tick, frame: &NEFrame) {
         // let atr_pip = ta_big.atr * 10_000.;
         // let atr_pip = ta_med.atr * 10_000.;
         // let atr_pip = 12.;
-        let atr_pip = frame.atr_p * 2.;
+        let atr_pip = frame.atr_p * 3.;
         // let profit_pip = atr_pip * 0.6;
-        let profit_pip = -atr_pip * 1.5;
+        let profit_pip = -atr_pip * 1.;
         // let loose_pip = -atr_pip * 0.6;
-        let loose_pip = atr_pip * 1.;
+        let loose_pip = atr_pip * 5.;
         // let atr_pip = 10.;
         let np = NewPos {
             symbol_id,
@@ -107,7 +116,7 @@ impl Brain3 {
             stop_loose_price: cal_price(tick.price_raw, loose_pip),
             at_price: tick.price_raw,
             time_s: tick.time_s,
-            frame: frame.clone(),
+            // frame: frame.clone(),
             // ta_med: ta_med.clone(),
             // ta_big: ta_big.clone(),
             ..Default::default()

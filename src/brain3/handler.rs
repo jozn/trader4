@@ -9,6 +9,40 @@ use crate::gate_api::GateWay;
 use crate::{candle, helper};
 
 impl Brain3 {
+    // new engine
+    pub fn on_price_tick_NE(&mut self, symbol_id: i64, tick: Tick) {
+        self.last_tick = Some(tick.clone());
+
+        let frame_opt = self.ne.add_tick(&tick);
+
+        match frame_opt {
+            None => {}
+            Some(frame) => {
+                let nstr = &frame.strength;
+
+                if nstr.buy {
+                    self.go_short2(1, frame.fid, &tick, &frame);
+                    // self.go_long2(1, frame.fid, &tick, &frame);
+                }
+
+                if nstr.sell {
+                    self.go_long2(1, frame.fid, &tick, &frame);
+                    // self.go_short2(1, frame.fid, &tick, &frame);
+                }
+            }
+        }
+
+        // self.ticks_arr.push(tick);
+        // let small_tick_size = 400;
+        // if self.ticks_arr.len() >= small_tick_size as usize {
+        //     self.dc_intl.add_tick(self.ticks_arr.clone());
+        //     self.ticks_arr.clear();
+        //     // self.on_completed_small_candle(symbol_id);
+        //     self.on_completed_small_candle(symbol_id);
+        //     self.update_all_tailing_pos();
+        // }
+    }
+
     pub fn on_price_tick22(&mut self, symbol_id: i64, tick: Tick) {
         self.last_tick = Some(tick.clone());
 
