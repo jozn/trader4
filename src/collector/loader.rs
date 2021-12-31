@@ -88,3 +88,21 @@ pub fn load_all_pair(pair: &Pair, rng: Range<u16>) -> Vec<BTickData> {
     }
     arr
 }
+
+pub fn load_day(pair: &Pair, week_id: u16, day_id: u16) -> Vec<BTickData> {
+    load_days_pair(pair, week_id,day_id..(day_id + 1))
+}
+
+pub fn load_days_pair(pair: &Pair,week_id: u16, rng: Range<u16>) -> Vec<BTickData> {
+    let mut arr = vec![];
+    for i in rng {
+        let path = format!("/mnt/c/me/data_daily/{:?}/{}_{}.tsv", pair,week_id, i);
+        if std::path::Path::new(&path).exists() {
+            let ticks = load_rows(&path);
+            for t in ticks {
+                arr.push(t);
+            }
+        }
+    }
+    arr
+}

@@ -41,3 +41,16 @@ pub fn serialize_position_v3(poss: &Vec<Position>) -> String {
     let txt = format!("{}", os);
     txt
 }
+
+// v4: contains NEFrame data for New Engine
+pub fn serialize_position_v4(poss: &Vec<Position>) -> String {
+    let mut arr = vec![];
+    for p in poss {
+        let frame = p.new_pos.frame_ne.to_csv();
+        arr.push((p.clone(), frame));
+    }
+    let os = to_csv_out(&arr, false);
+    let txt = format!("{}", os);
+    txt
+}
+

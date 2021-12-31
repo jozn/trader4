@@ -110,7 +110,7 @@ impl BackRunConfig {
         x.close_all_positions();
 
         if self.print {
-            println!("{:#?}", x);
+            // println!("{:#?}", x);
             println!("{:#?}", x.free_usd);
         }
 

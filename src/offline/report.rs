@@ -96,6 +96,8 @@ impl Report {
         self.report_wins(port);
         self.report_loose(port);
 
+        write_pos("all", self.rnd_num, port.closed.clone());
+
         // println!("balance: {:#?}", self.middles.last());
 
         std::env::set_current_dir(dir);
@@ -323,6 +325,7 @@ fn write_pos(name: &str, rnd_num: u16, arr: Vec<Position>) {
     let os = serialize_position_v1(&arr); // ignore for now
     let os = serialize_position_v2(&arr);
     let os = serialize_position_v3(&arr);
+    let os = serialize_position_v4(&arr);
     let txt = format!("{}", os);
     std::fs::write(format!("{}_{}.csv", name, rnd_num), txt);
 

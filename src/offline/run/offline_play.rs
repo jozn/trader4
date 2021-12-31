@@ -30,6 +30,7 @@ pub fn run1() {
     // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 44..50);
     // let ticks = collector::loader::load_week(&Pair::EURUSD, 49);
     let ticks = collector::loader::load_week(&Pair::EURUSD, week_id);
+    let ticks = collector::loader::load_day(&Pair::EURUSD, week_id,1);
     // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 44..45);
 
     let mut run_cfg = BackRunConfig {

@@ -2,6 +2,7 @@ use crate::candle::TA1;
 use crate::configs::assets::Pair;
 use crate::dc_intel::FrameMem;
 use std::fmt::Debug;
+use crate::ne::NEFrame;
 
 pub trait GateWay: Debug {
     // Calls from brain1
@@ -26,6 +27,7 @@ pub struct NewPos {
     pub ta_med: TA1,
     pub ta_big: TA1,
     pub frame: FrameMem,
+    pub frame_ne: NEFrame,
     // add comment, label too
 }
 
