@@ -1,8 +1,8 @@
 use crate::candle::TA1;
 use crate::configs::assets::Pair;
 use crate::dc_intel::FrameMem;
-use std::fmt::Debug;
 use crate::ne::NEFrame;
+use std::fmt::Debug;
 
 pub trait GateWay: Debug {
     // Calls from brain1

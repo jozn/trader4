@@ -1,17 +1,21 @@
 // Next Engine
+pub mod crossing;
+pub mod dc;
 pub mod frame;
 pub mod parent;
-pub mod strength;
 pub mod rel;
+pub mod strength;
 
+pub use crossing::*;
+pub use dc::*;
 pub use frame::*;
 pub use parent::*;
-pub use strength::*;
 pub use rel::*;
+pub use strength::*;
 
-pub use serde::{Deserialize, Serialize};
 use crate::candle::Kline;
 use crate::helper;
+pub use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct NECandle {
@@ -41,7 +45,7 @@ impl NECandle {
             low: k.low,
             close: k.close,
             pip_hl: (k.high - k.low) * 10_000.,
-            pip_co: (k.close - k.open).abs() * 10_000.
+            pip_co: (k.close - k.open).abs() * 10_000.,
         };
 
         nc

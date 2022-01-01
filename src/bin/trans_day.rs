@@ -58,4 +58,3 @@ pub fn wriet_single_daily(ticks: Vec<BTickData>, pair: &Pair, week_id: u64, day_
     fs::write(&out_file_path, s);
     println!("{}", &out_file_path);
 }
-

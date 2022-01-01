@@ -39,7 +39,7 @@ impl NERoot {
     pub fn add_tick(&mut self, tick: &Tick) -> Option<NEFrame> {
         self.ticks_buff.push(tick.clone());
         self.ticks_buff2.push(tick.clone());
-        if self.ticks_buff.len() == self.cfg.get_medium_tick_size() as usize  {
+        if self.ticks_buff.len() == self.cfg.get_medium_tick_size() as usize {
             // number should always be dived to meidum tikc size
             let frame = self.build_next_frame();
             let last = self.frames.last();

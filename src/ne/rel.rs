@@ -19,21 +19,21 @@ impl FramesRels<'_> {
         for f in self.frames2.iter().rev().take(self.period) {
             let fstr = &f.strength;
             if f.trd4 > 0. {
-                up +=1.;
+                up += 1.;
             }
             if f.trd4 < 0. {
-                down +=1.;
+                down += 1.;
             }
             if f.trd4 == 0. {
-                zero +=1.;
+                zero += 1.;
             }
         }
         let sum = self.period as f64;
         let mut trend = 0.;
-        if (up/sum) >= 0.2 && (down / sum ) < 0.20 {
+        if (up / sum) >= 0.2 && (down / sum) < 0.20 {
             trend = 1.;
         }
-        if (up/sum) < 0.2 && (down / sum ) > 0.20 {
+        if (up / sum) < 0.2 && (down / sum) > 0.20 {
             trend = -1.;
         }
         // todo remove chuby from it

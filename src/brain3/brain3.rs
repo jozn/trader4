@@ -6,11 +6,11 @@ use crate::configs::assets;
 use crate::configs::assets::*;
 use crate::dc_intel::{DCParent, FrameMem};
 use crate::gate_api::{GateWay, NewPos, PosRes, UpdatePos};
+use crate::ne::{NEFrame, NERoot};
 use crate::offline::num5;
 use std::borrow::BorrowMut;
 use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
-use crate::ne::{NEFrame, NERoot};
 
 pub type PairCandleCfg = (Pair, CandleConfig);
 
@@ -60,18 +60,15 @@ impl Brain3 {
 }
 
 impl Brain3 {
-    pub fn go_long(&mut self, symbol_id: i64, kline_id: u64, tick: &Tick, frame: &FrameMem) {
-
-    }
     pub fn go_long2(&mut self, symbol_id: i64, kline_id: u64, tick: &Tick, frame: &NEFrame) {
         // let atr_pip = ta_big.atr * 10_000.;
         // let atr_pip = ta_med.atr * 10_000.;
         // let atr_pip = 12.;
         let atr_pip = frame.atr_p * 3.;
         // let profit_pip = atr_pip * 0.6;
-        let profit_pip = atr_pip * 1.;
+        let profit_pip = atr_pip * 1.5;
         // let loose_pip = -atr_pip * 0.6;
-        let loose_pip = -atr_pip * 5.;
+        let loose_pip = -atr_pip * 1.;
         // let atr_pip = 10.;
         let np = NewPos {
             symbol_id,
@@ -96,18 +93,15 @@ impl Brain3 {
         self.con.open_position_req_new(&np);
     }
 
-    pub fn go_short(&mut self, symbol_id: i64, kline_id: u64, tick: &Tick, frame: &FrameMem) {
-
-    }
     pub fn go_short2(&mut self, symbol_id: i64, kline_id: u64, tick: &Tick, frame: &NEFrame) {
         // let atr_pip = ta_big.atr * 10_000.;
         // let atr_pip = ta_med.atr * 10_000.;
         // let atr_pip = 12.;
         let atr_pip = frame.atr_p * 3.;
         // let profit_pip = atr_pip * 0.6;
-        let profit_pip = -atr_pip * 1.;
+        let profit_pip = -atr_pip * 1.5;
         // let loose_pip = -atr_pip * 0.6;
-        let loose_pip = atr_pip * 5.;
+        let loose_pip = atr_pip * 1.;
         // let atr_pip = 10.;
         let np = NewPos {
             symbol_id,
@@ -146,5 +140,68 @@ impl Brain3 {
         self.last_trade_time = time_sec;
         self.acted.insert(kids);
         false
+    }
+}
+
+/// for DC
+impl Brain3 {
+    pub fn go_long(&mut self, symbol_id: i64, kline_id: u64, tick: &Tick, frame: &FrameMem) {
+        let atr_pip = frame.atr_p * 3.;
+        // let profit_pip = atr_pip * 0.6;
+        let profit_pip = atr_pip * 1.;
+        // let loose_pip = -atr_pip * 0.6;
+        let loose_pip = -atr_pip * 1.;
+        // let atr_pip = 10.;
+        let np = NewPos {
+            symbol_id,
+            is_short: false,
+            size_usd: 10000,
+            take_profit_price: cal_price(tick.price_raw, profit_pip), // 10 pip
+            stop_loose_price: cal_price(tick.price_raw, loose_pip),
+            at_price: tick.price_raw,
+            time_s: tick.time_s,
+            // frame_ne: frame.clone(),
+            frame: frame.clone(),
+            // ta_med: ta_med.clone(),
+            // ta_big: ta_big.clone(),
+            ..Default::default()
+        };
+
+        if self.already_acted(symbol_id, kline_id) {
+            return;
+        }
+
+        // println!("Open long {:#?}", np);
+        self.con.open_position_req_new(&np);
+    }
+
+    pub fn go_short(&mut self, symbol_id: i64, kline_id: u64, tick: &Tick, frame: &FrameMem) {
+        let atr_pip = frame.atr_p * 3.;
+        // let profit_pip = atr_pip * 0.6;
+        let profit_pip = -atr_pip * 1.;
+        // let loose_pip = -atr_pip * 0.6;
+        let loose_pip = atr_pip * 1.;
+        // let atr_pip = 10.;
+        let np = NewPos {
+            symbol_id,
+            is_short: true,
+            size_usd: 10000,
+            take_profit_price: cal_price(tick.price_raw, profit_pip), // 10 pip
+            stop_loose_price: cal_price(tick.price_raw, loose_pip),
+            at_price: tick.price_raw,
+            time_s: tick.time_s,
+            // frame_ne: frame.clone(),
+            frame: frame.clone(),
+            // ta_med: ta_med.clone(),
+            // ta_big: ta_big.clone(),
+            ..Default::default()
+        };
+
+        if self.already_acted(symbol_id, kline_id) {
+            return;
+        }
+
+        // println!("Open long {:#?}", np);
+        self.con.open_position_req_new(&np);
     }
 }

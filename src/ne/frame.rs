@@ -5,7 +5,8 @@ use crate::helper;
 use crate::ta::*;
 use serde::{Deserialize, Serialize};
 
-pub type FrameCsv = (NECandle,NEStrength,StochRes, NEFrame,  VelRes,  VelRes2);
+// pub type FrameCsv = (NECandle,NEStrength,StochRes, NEFrame,  VelRes,  VelRes2);
+pub type FrameCsv = (NECandle, DCSRes, NEDC, NEStrength, NEFrame, VelRes, VelRes2);
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct NEFrame {
@@ -51,14 +52,20 @@ pub struct NEFrame {
     pub ohlc: NECandle,
     #[serde(skip)]
     pub strength: NEStrength,
+    #[serde(skip)]
+    pub dc: NEDC,
+    #[serde(skip)]
+    pub dcs: DCSRes,
 }
 
 impl NEFrame {
     pub fn to_csv(&self) -> FrameCsv {
         (
             self.ohlc.clone(),
+            self.dcs.clone(),
+            self.dc.clone(),
             self.strength.clone(),
-            self.rsi_sth.clone(),
+            // self.rsi_sth.clone(),
             self.clone(),
             self.vel.clone(),
             self.vel2.clone(),
@@ -99,23 +106,23 @@ impl NEFrame {
 
         self.trd2 = trd2;
         if trd2 != 0. {
-            self.trd2b = trd2/ trd2.abs(); // set 1 or -1 of trd2b
+            self.trd2b = trd2 / trd2.abs(); // set 1 or -1 of trd2b
         }
 
         // mix trend
         let v1 = &self.vel;
         let v2 = &self.vel2;
-        let trd3 = if v1.avg_vel_pip > 0. && v2.v2_avg_vel_pip >0. {
+        let trd3 = if v1.avg_vel_pip > 0. && v2.v2_avg_vel_pip > 0. {
             1.
-        }  else if v1.avg_vel_pip < 0. && v2.v2_avg_vel_pip < 0. {
+        } else if v1.avg_vel_pip < 0. && v2.v2_avg_vel_pip < 0. {
             -1.
         } else {
             0.
         };
         self.trd3 = trd3;
-        let trd4 = if trd3 > 0.  &&  trd2 > 0. {
+        let trd4 = if trd3 > 0. && trd2 > 0. {
             1.
-        } else if  trd3 < 0.  &&  trd2 < 0.{
+        } else if trd3 < 0. && trd2 < 0. {
             -1.
         } else {
             0.
@@ -124,14 +131,22 @@ impl NEFrame {
     }
 
     pub fn set_advanced_trend(&mut self, frames: &Vec<NEFrame>, tick: &Tick) {
-        if frames.len() >2  {
+        if frames.len() > 2 {
             let rel = FramesRels {
                 frames2: frames,
-                last:&self,
+                last: &self,
                 period: 14,
             };
 
             self.trd_ad = rel.trends_detection();
+
+            // dirty code
+            let rel = FramesRels {
+                frames2: frames,
+                last: &self,
+                period: 14,
+            };
+            self.dc = NEDC::new(&self, tick, &rel);
         }
         self.strength = NEStrength::new(&self);
     }
@@ -155,7 +170,7 @@ pub fn new_frame(k_med: &KlineTA, k_big: &KlineTA) -> NEFrame {
         med_mid: (med_ta.dc.high + med_ta.dc.low) / 2.,
         big_low: big_ta.dc.low,
         big_high: big_ta.dc.high,
-        big_mid: (big_ta.dc.high+ big_ta.dc.low)/2.,
+        big_mid: (big_ta.dc.high + big_ta.dc.low) / 2.,
         spreed_min: 0.0,
         spreed_max: 0.0,
         med_dc_hl_pip: (med_ta.dc.high - med_ta.dc.low) * 10_000.,
@@ -169,6 +184,7 @@ pub fn new_frame(k_med: &KlineTA, k_big: &KlineTA) -> NEFrame {
         rsi: med_ta.rsi,
         rsi_sth: big_ta.rsi_sth.clone(),
         vel2: med_ta.vel2.clone(),
+        dcs: med_ta.dcs.clone(),
         ohlc: NECandle::new(med_k),
         strength: Default::default(),
         ..Default::default()

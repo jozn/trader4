@@ -53,4 +53,3 @@ pub fn serialize_position_v4(poss: &Vec<Position>) -> String {
     let txt = format!("{}", os);
     txt
 }
-

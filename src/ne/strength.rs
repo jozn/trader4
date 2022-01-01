@@ -7,7 +7,7 @@ pub struct NEStrength {
     pub rsi_st_bear: bool,
     pub trend: f64,
     pub h_high: bool, // higher high
-    pub l_low: bool, // lower low
+    pub l_low: bool,  // lower low
     pub strength: f64,
     pub dir: f64,  // 1 up _ 0 neturalze _ -1 down
     pub dir2: f64, // 1 up _ 0 neturalze _ -1 down
@@ -38,18 +38,17 @@ impl NEStrength {
             ..Default::default()
         };
         if frame.trd_ad > 0. && st_rsi.k_above_d {
-        // if frame.trd_ad > 0. {
+            // if frame.trd_ad > 0. {
             // println!("set");
-        // if  st_rsi.k_above_d {
+            // if  st_rsi.k_above_d {
             str.buy = true;
         }
         if frame.trd_ad < 0. && st_rsi.k_under_d {
-        // if frame.trd_ad < 0. {
-        // if st_rsi.k_under_d {
+            // if frame.trd_ad < 0. {
+            // if st_rsi.k_under_d {
             str.sell = true;
         }
 
         str
     }
-
 }

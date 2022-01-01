@@ -1,6 +1,7 @@
 pub mod brain3;
 pub mod dc_strategy;
 pub mod handler;
+pub mod handler_ne;
 pub mod tailing;
 
 pub use brain3::*;

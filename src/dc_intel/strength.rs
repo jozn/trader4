@@ -33,7 +33,7 @@ pub fn get_strength(last: &FrameMem, frames: &Vec<FrameMem>, tick: &Tick) -> DCS
     };
 
     // going up?
-    if last.med_high > pre.med_high {
+    if last.big_high > pre.big_high {
         dc_str.h_high = true;
         if last.trd2 > 0. {
             dc_str.buy2 = true;
@@ -41,7 +41,7 @@ pub fn get_strength(last: &FrameMem, frames: &Vec<FrameMem>, tick: &Tick) -> DCS
     }
 
     // going up?
-    if last.med_low < pre.med_low {
+    if last.big_low < pre.big_low {
         dc_str.l_low = true;
     }
 

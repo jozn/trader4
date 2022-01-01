@@ -113,12 +113,14 @@ fn to_frame_csv(frames: Vec<NEFrame>) -> Vec<FrameCsv> {
         if dc_str.dis_bear == 2 && fm.trd2 < 0. && fm.vel.avg_vel_pip < 0. {
             fm.ohlc.close = fm.ohlc.close * 1.003; // 2pip
         }*/
+        // Disable now
+        /*
         if dc_str.buy  {
             fm.ohlc.close = fm.ohlc.close * 1.003; // 3pip
         }
         if dc_str.sell {
             fm.ohlc.close = fm.ohlc.close * 1.0015; // .5pip
-        }
+        }*/
         arr.push(fm.to_csv());
     }
     arr

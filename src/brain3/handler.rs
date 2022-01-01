@@ -135,12 +135,16 @@ impl Brain3 {
                     // self.go_long(1, frame.fid, &tick, &frame);
                 }
 
-                if dc_str.h_high && frame.trd2 > 0. && frame.vel.avg_vel_pip > 0. {
+                // if dc_str.h_high && frame.trd2 > 0. && frame.vel.avg_vel_pip > 0. {
+                // if dc_str.h_high && frame.trd2 < 0. && frame.vel.avg_vel_pip < 0. {
+                if dc_str.h_high {
                     // self.go_long(1, frame.fid, &tick, &frame);
                     self.go_short(1, frame.fid, &tick, &frame);
                 }
 
-                if dc_str.l_low && frame.trd2 < 0. && frame.vel.avg_vel_pip < 0. {
+                // if dc_str.l_low && frame.trd2 < 0. && frame.vel.avg_vel_pip < 0. {
+                // if dc_str.l_low && frame.trd2 > 0. && frame.vel.avg_vel_pip > 0. {
+                if dc_str.l_low {
                     // self.go_short(1, frame.fid, &tick, &frame);
                     self.go_long(1, frame.fid, &tick, &frame);
                 }

@@ -99,6 +99,7 @@ pub fn cal_indicators(tam: &mut TAMethods, kline: &Kline) -> KlineTA {
             ta2: TA2 {
                 atr: tam2.atr.next(&kl),
                 dc: tam2.dc.next(&kl),
+                dcs: tam2.dcs.next(&kl),
                 vel1: tam2.vel1.next(kl.hlc3()),
                 vel2: tam2.vel2.next(kl.hlc3()),
                 rsi: tam2.rsi.next(kl.hlc3()),
@@ -116,6 +117,7 @@ pub fn cal_indicators(tam: &mut TAMethods, kline: &Kline) -> KlineTA {
 pub struct TA2 {
     pub atr: f64,
     pub dc: DCRes,
+    pub dcs: DCSRes,
     pub vel1: VelRes,
     pub vel2: VelRes2,
     pub rsi: f64,
@@ -126,6 +128,7 @@ pub struct TA2 {
 pub struct TA2Methods {
     pub atr: ta::ATR,
     pub dc: ta::DC,
+    pub dcs: ta::DCS,
     pub vel1: ta::Vel,
     pub vel2: ta::Vel2,
     pub rsi: ta::RSI,
@@ -137,6 +140,7 @@ impl TA2Methods {
         Self {
             atr: ta::ATR::new(14).unwrap(),
             dc: ta::DC::new(20).unwrap(),
+            dcs: ta::DCS::new(40).unwrap(),
             vel1: ta::Vel::new(cfg.vel1_period as usize).unwrap(),
             vel2: ta::Vel2::new(cfg.vel2_period as usize).unwrap(),
             rsi: ta::RSI::new(14).unwrap(),
