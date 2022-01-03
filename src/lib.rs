@@ -12,6 +12,7 @@ pub mod configs;
 pub mod core;
 pub mod dc_intel;
 pub mod ne;
+pub mod ne2;
 pub mod offline;
 pub mod online;
 pub mod optimizer;

@@ -28,7 +28,7 @@ pub fn run1() {
     let week_id = 25;
     // let ticks = collector::loader::load_rows("/mnt/c/me/data/EURUSD/1.tsv");
     // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 25..50);
-    let ticks = collector::loader::load_all_pair(&Pair::NZDUSD, 25..50);
+    let ticks = collector::loader::load_all_pair(&Pair::USDCHF, 25..50);
     // let ticks = collector::loader::load_week(&Pair::EURUSD, 49);
     // let ticks = collector::loader::load_week(&Pair::EURUSD, week_id);
     // let ticks = collector::loader::load_day(&Pair::EURUSD, week_id, 2);
@@ -48,8 +48,8 @@ pub fn run1() {
     };
 
     // run_cfg.run_brain1();
-    // run_cfg.run_brain2();
-    run_cfg.run_brain3();
+    run_cfg.run_brain2();
+    // run_cfg.run_brain3();
 }
 
 pub fn run_optimized() {
