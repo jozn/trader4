@@ -6,7 +6,8 @@ use crate::ta::*;
 use serde::{Deserialize, Serialize};
 
 // pub type FrameCsv = (NECandle,NEStrength,StochRes, NEFrame,  VelRes,  VelRes2);
-pub type FrameCsv = (NECandle, DCSRes, NEDC, NEStrength, NEFrame, VelRes, VelRes2);
+// pub type FrameCsv = (NECandle, DCSRes, NEDC, NEStrength, NEFrame, VelRes, VelRes2);
+pub type FrameCsv = (NECandle, DCSRes, VelRes, NEDC, NEStrength, NEFrame, VelRes2);
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct NEFrame {
@@ -63,11 +64,12 @@ impl NEFrame {
         (
             self.ohlc.clone(),
             self.dcs.clone(),
+            self.dcs.vvv.clone(),
             self.dc.clone(),
             self.strength.clone(),
             // self.rsi_sth.clone(),
             self.clone(),
-            self.vel.clone(),
+            // self.vel.clone(),
             self.vel2.clone(),
         )
     }

@@ -22,6 +22,39 @@ impl Brain3 {
                 let dc = &frame.dcs;
                 let f = &frame;
 
+                // if dc.buy1  {
+                // if dc.buy1 && dc.vvv.avg_vel_pip >=0. {
+                // if dc.buy1 && dc.dir > 0. {
+                if dc.low_sig && dc.dir > 0. {
+                    // if dc.low_sig {
+                    // if dc.low_sig && f.trd_ad >=0. {
+                    //     self.go_short2(1, frame.fid, &tick, &frame);
+                    self.go_long2(1, frame.fid, &tick, &frame);
+                }
+
+                // if dc.sell1 {
+                // if dc.sell1 && dc.dir < 0. {
+                if dc.up_sig && dc.dir < 0. {
+                    // if dc.up_sig && f.trd_ad <=0.  {
+                    //     self.go_long2(1, frame.fid, &tick, &frame);
+                    //     self.go_short2(1, frame.fid, &tick, &frame);
+                }
+            }
+        }
+    }
+
+    pub fn on_price_tick_ne_dc_v2a(&mut self, symbol_id: i64, tick: Tick) {
+        self.last_tick = Some(tick.clone());
+
+        let frame_opt = self.ne.add_tick(&tick);
+
+        match frame_opt {
+            None => {}
+            Some(frame) => {
+                let nstr = &frame.strength;
+                let dc = &frame.dcs;
+                let f = &frame;
+
                 if dc.low_sig {
                     // if dc.low_sig && f.trd_ad >=0. {
                     //     self.go_short2(1, frame.fid, &tick, &frame);

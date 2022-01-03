@@ -13,6 +13,17 @@ pub use parent::*;
 pub use rel::*;
 pub use strength::*;
 
+/// This engine is mainly a successful engine:
+///  (all below result are on longs trades only)
+/// - we was postive +0.07 (transactions) on Euro/USD pair in long direction.
+/// - USD/GBP was +0.11 of transactions.
+/// - USD/CHF was particaly good +0.34 of all transaction in long with a consistance proftis almost in all weeks.
+/// - USD/CAD was +0.11 with a good looking balance graph.
+/// - USD/AUD was +0.22 a good balance graph - 61% win rate
+/// - USD/NZD was +0.22 a good balance graph - 62% win rate
+///
+///  In the next engine we should consider more or long term trends.
+///
 use crate::candle::Kline;
 use crate::helper;
 pub use serde::{Deserialize, Serialize};

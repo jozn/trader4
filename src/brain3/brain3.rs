@@ -64,9 +64,9 @@ impl Brain3 {
         // let atr_pip = ta_big.atr * 10_000.;
         // let atr_pip = ta_med.atr * 10_000.;
         // let atr_pip = 12.;
-        let atr_pip = frame.atr_p * 3.;
+        let atr_pip = frame.atr_p * 1.;
         // let profit_pip = atr_pip * 0.6;
-        let profit_pip = atr_pip * 1.5;
+        let profit_pip = atr_pip * 1.;
         // let loose_pip = -atr_pip * 0.6;
         let loose_pip = -atr_pip * 1.;
         // let atr_pip = 10.;

@@ -27,12 +27,13 @@ pub fn run1() {
     );
     let week_id = 25;
     // let ticks = collector::loader::load_rows("/mnt/c/me/data/EURUSD/1.tsv");
-    // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 44..50);
+    // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 25..50);
+    let ticks = collector::loader::load_all_pair(&Pair::NZDUSD, 25..50);
     // let ticks = collector::loader::load_week(&Pair::EURUSD, 49);
-    let ticks = collector::loader::load_week(&Pair::EURUSD, week_id);
-    let ticks = collector::loader::load_day(&Pair::EURUSD, week_id, 1);
+    // let ticks = collector::loader::load_week(&Pair::EURUSD, week_id);
+    // let ticks = collector::loader::load_day(&Pair::EURUSD, week_id, 2);
     // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 44..45);
-
+    println!("loaded...");
     let mut run_cfg = BackRunConfig {
         balance: 100_000,
         pairs_conf: vec![pair_cfg],

@@ -18,14 +18,29 @@ pub struct DCSRes {
     pub ll: bool,
     pub b_high: f64,
     pub b_low: f64,
+    pub b_hh: bool,
+    pub b_ll: bool,
+    pub b_middle: f64,
+    #[serde(skip)]
+    pub price: f64,
+    pub wight: f64,
+    pub sum: f64,
+    pub ratio: f64,
+    pub buy1: bool,
+    pub sell1: bool,
+    pub dir: f64,
+    #[serde(skip)]
+    pub vvv: VelRes,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DCS {
+    period: usize,
     max: Maximum,
     max_big: Maximum,
     min: Minimum,
     min_big: Minimum,
+    vel: Vel,
     cross_high: SimpleCross,
     cross_low: SimpleCross,
     past: VecDeque<DCSRes>,
@@ -34,14 +49,17 @@ pub struct DCS {
 // Note: the logic of functionality is taken from tradingview's "DCSastic" indicator.
 //  use smooth_k 1 for no effect of EMA
 impl DCS {
-    pub fn new(period_k: usize) -> TAResult<Self> {
-        match period_k {
+    pub fn new(period: usize) -> TAResult<Self> {
+        let big_period = period * 3;
+        match period {
             0 => Err(TAErr::WrongArgs),
             _ => Ok(Self {
-                max: Maximum::new(period_k)?,
-                max_big: Maximum::new(period_k * 3)?,
-                min: Minimum::new(period_k)?,
-                min_big: Minimum::new(period_k * 3)?,
+                period,
+                max: Maximum::new(period)?,
+                max_big: Maximum::new(big_period)?,
+                min: Minimum::new(period)?,
+                min_big: Minimum::new(big_period)?,
+                vel: Vel::new(5)?,
                 cross_high: SimpleCross::new(),
                 cross_low: SimpleCross::new(),
                 past: VecDeque::new(),
@@ -75,9 +93,12 @@ impl DCS {
             x_perc: perc,
             b_high: big_high,
             b_low: big_low,
+            b_middle: (big_high + big_low) / 2.,
+            price: price,
             ..Default::default()
         };
 
+        let mut old_dir = 0.;
         let pre_opt = self.past.front();
         match pre_opt {
             None => {}
@@ -88,14 +109,58 @@ impl DCS {
                 if now.x_low < pre.x_low {
                     now.ll = true;
                 }
+
+                // big
+                if now.b_high > pre.b_high {
+                    now.b_hh = true;
+                }
+                if now.b_low < pre.b_low {
+                    now.b_ll = true;
+                }
+                old_dir = pre.dir;
             }
         }
 
-        if self.past.len() == 200 {
+        if self.past.len() == self.period * 2 {
             self.past.pop_back();
         }
-        self.past.push_front(now.clone());
 
+        let bars = self.past.len() as f64;
+        let mut trend = 0.;
+        let mut sum = 0.;
+        for f in self.past.iter() {
+            trend += f.price - f.b_low;
+            sum += f.b_high - f.b_low;
+        }
+        now.wight = trend / bars;
+        now.sum = sum / bars;
+        now.ratio = now.wight / now.sum;
+
+        let ratio = now.ratio;
+        let valid_pip = if now.x_pip >= 12.0 { true } else { false };
+
+        if ratio < 0.75 && now.up_sig && valid_pip {
+            now.sell1 = true;
+        }
+        if ratio > 0.25 && now.low_sig && valid_pip {
+            now.buy1 = true;
+        }
+
+        now.vvv = self.vel.next(now.b_middle);
+        if now.vvv.avg_vel_pip > 0. {
+            now.dir = 1.
+        } else if now.vvv.avg_vel_pip < 0. {
+            now.dir = -1.
+        } else {
+            // 0.
+            now.dir = old_dir;
+        }
+
+        if now.dir == 0. {
+            // now.dir = old_dir;
+        }
+
+        self.past.push_front(now.clone());
         now
     }
 }
