@@ -48,8 +48,8 @@ pub fn run1() {
     };
 
     // run_cfg.run_brain1();
-    run_cfg.run_brain2();
-    // run_cfg.run_brain3();
+    // run_cfg.run_brain2();
+    run_cfg.run_brain3();
 }
 
 pub fn run_optimized() {

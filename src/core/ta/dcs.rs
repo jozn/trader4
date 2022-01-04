@@ -21,6 +21,7 @@ pub struct DCSRes {
     pub b_hh: bool,
     pub b_ll: bool,
     pub b_middle: f64,
+    pub b_perc: f64,
     #[serde(skip)]
     pub price: f64,
     pub wight: f64,
@@ -31,6 +32,8 @@ pub struct DCSRes {
     pub dir: f64,
     #[serde(skip)]
     pub vvv: VelRes,
+    // #[serde(skip)]
+    pub rsi: f64,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -41,6 +44,7 @@ pub struct DCS {
     min: Minimum,
     min_big: Minimum,
     vel: Vel,
+    rsi: RSI,
     cross_high: SimpleCross,
     cross_low: SimpleCross,
     past: VecDeque<DCSRes>,
@@ -60,6 +64,7 @@ impl DCS {
                 min: Minimum::new(period)?,
                 min_big: Minimum::new(big_period)?,
                 vel: Vel::new(5)?,
+                rsi: RSI::new(14)?,
                 cross_high: SimpleCross::new(),
                 cross_low: SimpleCross::new(),
                 past: VecDeque::new(),
@@ -77,6 +82,7 @@ impl DCS {
         let price = candle.close();
 
         let perc = (price - low) / (high - low);
+        let b_perc = (price - big_low) / (big_high - big_low);
         let cut_off = (high - low) / 5.; // 0.2
         let high_cross_line = high - cut_off;
         let low_cross_line = low + cut_off;
@@ -94,7 +100,9 @@ impl DCS {
             b_high: big_high,
             b_low: big_low,
             b_middle: (big_high + big_low) / 2.,
+            b_perc,
             price: price,
+            rsi: self.rsi.next(perc),
             ..Default::default()
         };
 
@@ -121,7 +129,7 @@ impl DCS {
             }
         }
 
-        if self.past.len() == self.period * 2 {
+        if self.past.len() == self.period {
             self.past.pop_back();
         }
 
@@ -137,6 +145,8 @@ impl DCS {
         now.ratio = now.wight / now.sum;
 
         let ratio = now.ratio;
+        // now.rsi = self.rsi.next(now);
+
         let valid_pip = if now.x_pip >= 12.0 { true } else { false };
 
         if ratio < 0.75 && now.up_sig && valid_pip {

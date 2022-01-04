@@ -180,10 +180,9 @@ impl Report {
         let short_net_profit = short_win_amount - short_lose_amount.abs();
 
         // Pure profit cal
-        let long_profit_trans_perc = (long_net_profit) / (long_win_amount + long_lose_amount.abs());
-        let short_profit_trans_perc =
-            (short_net_profit) / (short_win_amount + short_lose_amount.abs());
-        let all_profit_trans_perc = (net_profit) / (win_amount + lose_amount.abs());
+        let long_profit_perc = long_net_profit / long_win_amount;
+        let short_profit_perc = short_net_profit / short_win_amount;
+        let all_profit_perc = net_profit / win_amount;
 
         let report_res = ReportSummery {
             win_cnt,
@@ -210,9 +209,9 @@ impl Report {
             long_short_ratio,
             long_pl_ratio,
             short_pl_ratio,
-            long_profit_trans_perc,
-            short_profit_trans_perc,
-            all_profit_trans_perc,
+            long_profit_perc,
+            short_profit_perc,
+            all_profit_perc,
         };
 
         report_res
@@ -298,9 +297,9 @@ pub struct ReportSummery {
     pub long_short_ratio: f32,
     pub long_pl_ratio: f64,
     pub short_pl_ratio: f64,
-    pub long_profit_trans_perc: f64,
-    pub short_profit_trans_perc: f64,
-    pub all_profit_trans_perc: f64,
+    pub long_profit_perc: f64,
+    pub short_profit_perc: f64,
+    pub all_profit_perc: f64,
 }
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]

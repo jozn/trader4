@@ -31,6 +31,9 @@ impl RelativeStrengthIndex {
         let mut up = 0.0;
         let mut down = 0.0;
 
+        let next_val = if next_val.is_nan() { 0. } else { next_val };
+        // println!("nan: {}", nex_val);
+
         if self.is_new {
             self.is_new = false;
             // Initialize with some small seed numbers to avoid division by zero,
@@ -54,6 +57,7 @@ impl RelativeStrengthIndex {
 
         if up_ema != 0. || down_ema != 0. {
             let rs = up_ema / down_ema;
+            // println!("down: {}  {}", rs, down_ema);
             // 100.0 * up_ema / (up_ema + down_ema) // old formula - from one rust lib
             100. - (100. / (1. + rs)) // real formula from tradingview and investpeida and wiki
         } else {

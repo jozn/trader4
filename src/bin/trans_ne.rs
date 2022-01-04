@@ -6,7 +6,7 @@ use trader3::candle::{
 use trader3::collector;
 use trader3::collector::row_data::BTickData;
 use trader3::configs::assets::Pair;
-use trader3::ne::{FrameCsv, NEFrame};
+use trader3::ne2::{FrameCsv, NEFrame};
 use trader3::offline::num5;
 use trader3::ta::{DCRes, VelRes};
 
@@ -21,7 +21,7 @@ pub fn main() {
             let path = format!("/mnt/c/me/data/{:?}/{}.tsv", pair, week_id);
             if std::path::Path::new(&path).exists() {
                 let ticks = trader3::collector::loader::load_rows(&path);
-                let mut root = trader3::ne::NERoot::new();
+                let mut root = trader3::ne2::NERoot::new();
 
                 for t in ticks.clone() {
                     root.add_tick(&t.to_tick());
@@ -67,7 +67,7 @@ pub fn wriet_daily(ticks: Vec<BTickData>, pair: &Pair, week_id: u64) {
 
 // todo: change in way not to build a new NERoot but break wikly frames into days
 pub fn wriet_single_daily(ticks: Vec<BTickData>, pair: &Pair, week_id: u64, day_num: u64) {
-    let mut root = trader3::ne::NERoot::new();
+    let mut root = trader3::ne2::NERoot::new();
 
     for t in ticks.clone() {
         root.add_tick(&t.to_tick());
