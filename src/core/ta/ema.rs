@@ -14,11 +14,15 @@ pub struct ExponentialMovingAverage {
 
 impl ExponentialMovingAverage {
     pub fn new(period: usize) -> TAResult<Self> {
+        Self::new_alpha(period, 2.)
+    }
+
+    pub fn new_alpha(period: usize, alpha: f64) -> TAResult<Self> {
         match period {
             0 => Err(TAErr::WrongArgs),
             _ => Ok(Self {
                 period,
-                k: 2.0 / (period + 1) as f64,
+                k: alpha / (period + 1) as f64,
                 current: 0.0,
                 is_new: true,
             }),

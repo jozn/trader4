@@ -19,8 +19,8 @@ impl RelativeStrengthIndex {
             0 => Err(TAErr::WrongArgs),
             _ => Ok(Self {
                 period,
-                up_ma: EMA::new(period).unwrap(),
-                down_ma: EMA::new(period).unwrap(),
+                up_ma: EMA::new_alpha(period, 1.).unwrap(),
+                down_ma: EMA::new_alpha(period, 1.).unwrap(),
                 prev_val: 0.0,
                 is_new: true,
             }),

@@ -48,6 +48,9 @@ impl Vel {
     }
 
     pub fn next(&mut self, price: f64) -> VelRes {
+        if price.is_nan() {
+            return VelRes::default();
+        }
         let new_ema = self.ema.next(price);
         // let new_ema_u64 = (new_ema * MULTIPLIER) as u64 ;
         if self.is_new {

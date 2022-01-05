@@ -24,7 +24,7 @@ pub struct DCSRes {
     pub b_perc: f64,
     #[serde(skip)]
     pub price: f64,
-    pub wight: f64,
+    pub wight: f64, // todo skip
     pub sum: f64,
     pub ratio: f64,
     pub buy1: bool,
@@ -34,6 +34,11 @@ pub struct DCSRes {
     pub vvv: VelRes,
     // #[serde(skip)]
     pub rsi: f64,
+    pub rti: f64,
+    pub rt_up: bool,
+    pub rt_down: bool,
+    #[serde(skip)]
+    pub vel2: VelRes2,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -44,7 +49,10 @@ pub struct DCS {
     min: Minimum,
     min_big: Minimum,
     vel: Vel,
+    vel2: Vel2,
+    v_cross: SimpleCross,
     rsi: RSI,
+    rti: RTI,
     cross_high: SimpleCross,
     cross_low: SimpleCross,
     past: VecDeque<DCSRes>,
@@ -64,7 +72,10 @@ impl DCS {
                 min: Minimum::new(period)?,
                 min_big: Minimum::new(big_period)?,
                 vel: Vel::new(5)?,
+                vel2: Vel2::new(period)?,
+                v_cross: SimpleCross::new(),
                 rsi: RSI::new(14)?,
+                rti: RTI::new(big_period * 3)?,
                 cross_high: SimpleCross::new(),
                 cross_low: SimpleCross::new(),
                 past: VecDeque::new(),
@@ -145,7 +156,10 @@ impl DCS {
         now.ratio = now.wight / now.sum;
 
         let ratio = now.ratio;
-        // now.rsi = self.rsi.next(now);
+        now.vel2 = self.vel2.next(ratio);
+        let cr = self.v_cross.next_v2(ratio, now.vel2.v2_ma);
+        now.rt_up = cr.crossed_under;
+        now.rt_down = cr.crossed_above;
 
         let valid_pip = if now.x_pip >= 12.0 { true } else { false };
 
@@ -169,6 +183,8 @@ impl DCS {
         if now.dir == 0. {
             // now.dir = old_dir;
         }
+
+        now.rti = self.rti.next(big_high, big_low);
 
         self.past.push_front(now.clone());
         now
