@@ -45,8 +45,9 @@ pub fn serialize_position_v3(poss: &Vec<Position>) -> String {
 // v4: contains NEFrame data for New Engine
 pub fn serialize_position_v4(poss: &Vec<Position>) -> String {
     let mut arr = vec![];
-    for p in poss {
+    for mut p in poss.clone() {
         let frame = p.new_pos.frame_ne.to_csv();
+        p.fid = frame.5.fid;
         arr.push((p.clone(), frame));
     }
     let os = to_csv_out(&arr, false);

@@ -26,12 +26,14 @@ pub fn run1() {
         },
     );
     let week_id = 25;
+    let week_id = 49;
     // let ticks = collector::loader::load_rows("/mnt/c/me/data/EURUSD/1.tsv");
-    // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 25..50);
+    // let ticks = collector::loader::load_all_pair(&Pair::USDCAD, 25..50);
     let ticks = collector::loader::load_all_pair(&Pair::USDCHF, 25..50);
+    // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 25..50);
     // let ticks = collector::loader::load_week(&Pair::EURUSD, 49);
     // let ticks = collector::loader::load_week(&Pair::EURUSD, week_id);
-    // let ticks = collector::loader::load_day(&Pair::EURUSD, week_id, 2);
+    // let ticks = collector::loader::load_day(&Pair::EURUSD, week_id, 3);
     // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 44..45);
     println!("loaded...");
     let mut run_cfg = BackRunConfig {
@@ -61,7 +63,8 @@ pub fn run_optimized() {
 
     let mut sub_folder_time = get_time_sec();
     for i in 25..=53 {
-        let tsv = format!("{:?}/{}.tsv", Pair::EURUSD, i);
+        // let tsv = format!("{:?}/{}.tsv", Pair::EURUSD, i);
+        let tsv = format!("{:?}/{}.tsv", Pair::USDCHF, i);
         let path = format!("/mnt/c/me/data/{}", tsv);
         if std::path::Path::new(&path).exists() {
             let pair_cfg = (

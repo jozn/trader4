@@ -8,6 +8,9 @@ use super::*;
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct DCSRes {
+    pub buy2: bool,
+    pub sell2: bool,
+
     pub x_pip: f64,
     pub x_high: f64,
     pub x_low: f64,
@@ -72,7 +75,7 @@ impl DCS {
                 min: Minimum::new(period)?,
                 min_big: Minimum::new(big_period)?,
                 vel: Vel::new(5)?,
-                vel2: Vel2::new(period)?,
+                vel2: Vel2::new(period * 2)?,
                 v_cross: SimpleCross::new(),
                 rsi: RSI::new(14)?,
                 rti: RTI::new(big_period * 3)?,
@@ -156,10 +159,6 @@ impl DCS {
         now.ratio = now.wight / now.sum;
 
         let ratio = now.ratio;
-        now.vel2 = self.vel2.next(ratio);
-        let cr = self.v_cross.next_v2(ratio, now.vel2.v2_ma);
-        now.rt_up = cr.crossed_under;
-        now.rt_down = cr.crossed_above;
 
         let valid_pip = if now.x_pip >= 12.0 { true } else { false };
 
@@ -184,7 +183,25 @@ impl DCS {
             // now.dir = old_dir;
         }
 
-        now.rti = self.rti.next(big_high, big_low);
+        let rti = self.rti.next(big_high, big_low);
+        now.rti = rti;
+
+        now.vel2 = self.vel2.next(now.rti);
+        let cr = self.v_cross.next_v2(now.rti, now.vel2.v2_ma);
+        now.rt_up = cr.crossed_under;
+        now.rt_down = cr.crossed_above;
+
+        let rti_up = if rti > now.vel2.v2_ma { true } else { false };
+
+        // buy2 sell2 signals
+        if !rti_up && rti < 70. && now.up_sig && valid_pip {
+            now.sell2 = true;
+        }
+        // if rti_up && rti > 30. && now.low_sig && valid_pip {
+        if rti_up && now.low_sig && valid_pip {
+            // if rti_up  && now.low_sig {
+            now.buy2 = true;
+        }
 
         self.past.push_front(now.clone());
         now

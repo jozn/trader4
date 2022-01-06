@@ -10,11 +10,13 @@ use std::cmp::Ordering;
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Position {
     pub pos_id: u64,
+    pub fid: u64,
     pub symbol_id: i64,
     pub direction: PosDir,
     pub pos_size_usd: f64,
     pub open_time: u64,
     pub open_time_str: String,
+    pub updates: u64,
     pub open_price: f64,
     pub high_exit_price: f64,
     pub low_exit_price: f64,

@@ -14,7 +14,7 @@ const OUT_FOLDER: &'static str = "/mnt/c/me/data_ne/";
 
 pub fn main() {
     // let pairs = trader3::configs::assets::get_all_symbols();
-    let pairs = vec![trader3::configs::assets::Pair::EURUSD]; // todo: remove
+    let pairs = vec![trader3::configs::assets::Pair::USDCHF]; // todo: remove
 
     for pair in pairs {
         for week_id in 25..=53 {

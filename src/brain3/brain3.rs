@@ -18,7 +18,7 @@ pub type PairCandleCfg = (Pair, CandleConfig);
 pub struct Brain3 {
     pub con: Box<Arc<dyn GateWay>>,
     pub acted: HashSet<String>,
-    pub open: HashMap<u64, PosRes>,
+    pub open_pos: HashMap<u64, PosRes>,
     // From PairMemo
     pub pair: Pair,
     pub last_tick: Option<Tick>,
@@ -35,7 +35,7 @@ impl Brain3 {
             last_trade_time: 0,
             ticks_arr: Default::default(),
             acted: Default::default(),
-            open: Default::default(),
+            open_pos: Default::default(),
             pair: Pair::EURUSD,
             last_tick: None,
             dc_intl: DCParent::new(),
@@ -51,10 +51,12 @@ impl Brain3 {
     }
 
     pub fn on_notify_position(&mut self, pos: PosRes) {
+        // println!(">>> {:?}", pos);
         if pos.is_closed {
-            self.open.remove(&pos.pos_id);
+            self.open_pos.remove(&pos.pos_id);
         } else {
-            self.open.insert(pos.pos_id, pos);
+            self.open_pos.insert(pos.pos_id, pos);
+            self.update_all_tailing_pos();
         }
     }
 }
@@ -97,9 +99,9 @@ impl Brain3 {
         // let atr_pip = ta_big.atr * 10_000.;
         // let atr_pip = ta_med.atr * 10_000.;
         // let atr_pip = 12.;
-        let atr_pip = frame.atr_p * 3.;
+        let atr_pip = frame.atr_p * 1.;
         // let profit_pip = atr_pip * 0.6;
-        let profit_pip = -atr_pip * 1.5;
+        let profit_pip = -atr_pip * 1.;
         // let loose_pip = -atr_pip * 0.6;
         let loose_pip = atr_pip * 1.;
         // let atr_pip = 10.;
@@ -126,7 +128,7 @@ impl Brain3 {
         self.con.open_position_req_new(&np);
     }
 
-    fn already_acted(&mut self, symbol_id: i64, kline_id: u64) -> bool {
+    pub fn already_acted(&mut self, symbol_id: i64, kline_id: u64) -> bool {
         let time_sec = self.con.get_time_ms() / 1000;
         // println!("lat: {}", time_sec);
         if time_sec < self.last_trade_time + 1800 {

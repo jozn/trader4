@@ -62,6 +62,8 @@ impl BackendEngine {
         match pos_opt {
             None => {}
             Some(mut pos) => {
+                // println!("=======> update {:?}", pos);
+                pos.updates += 1;
                 if req.close {
                     let tick = self.get_symbol_tick(pos.symbol_id).unwrap();
                     let close_par = CloseParm {
@@ -85,7 +87,8 @@ impl BackendEngine {
                         pos.low_exit_price = low;
                     }
                     self._remove_open_pos(pos.pos_id);
-                    self.notify.push(pos.to_notify());
+                    // commented to avoid forever loops
+                    // self.notify.push(pos.to_notify());
                     self.opens.push(pos);
                 }
             }
