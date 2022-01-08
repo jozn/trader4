@@ -29,7 +29,9 @@ pub fn run1() {
     let week_id = 49;
     // let ticks = collector::loader::load_rows("/mnt/c/me/data/EURUSD/1.tsv");
     // let ticks = collector::loader::load_all_pair(&Pair::USDCAD, 25..50);
+    // let ticks = collector::loader::load_all_pair(&Pair::NZDUSD, 25..50);
     let ticks = collector::loader::load_all_pair(&Pair::USDCHF, 25..50);
+    // let ticks = collector::loader::load_week(&Pair::USDCHF, 25);
     // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 25..50);
     // let ticks = collector::loader::load_week(&Pair::EURUSD, 49);
     // let ticks = collector::loader::load_week(&Pair::EURUSD, week_id);

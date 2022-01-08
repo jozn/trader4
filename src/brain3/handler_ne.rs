@@ -40,10 +40,12 @@ impl Brain3 {
                         symbol_id: 1,
                         is_short: false,
                         size_usd: 10000,
-                        take_profit_price: profit, // 10 pip
+                        // take_profit_price: profit, // 10 pip
                         // take_profit_price: cal_price(tick.price_raw, med_pip * 2. ), // 10 pip
-                        stop_loose_price: f.big_low,
+                        take_profit_price: cal_price(tick.price_raw, 7.), // 10 pip
+                        // stop_loose_price: f.big_low,
                         // stop_loose_price: cal_price(tick.price_raw, - med_pip ),
+                        stop_loose_price: cal_price(tick.price_raw, -7.),
                         at_price: tick.price_raw,
                         time_s: tick.time_s,
                         frame_ne: frame.clone(),
@@ -58,10 +60,10 @@ impl Brain3 {
                         is_short: false,
                         size_usd: 10000,
                         // take_profit_price: cal_price(tick.price_raw, 4.7 ), // 10 pip
-                        take_profit_price: cal_price(tick.price_raw, 6.7), // 10 pip
+                        take_profit_price: cal_price(tick.price_raw, 4.5), // 10 pip
                         // take_profit_price: 0., // 10 pip
                         // stop_loose_price: cal_price(tick.price_raw, - 4.7 ),
-                        stop_loose_price: cal_price(tick.price_raw, -2.2),
+                        stop_loose_price: cal_price(tick.price_raw, -4.5),
                         at_price: tick.price_raw,
                         time_s: tick.time_s,
                         frame_ne: frame.clone(),
