@@ -1,14 +1,14 @@
-use std::sync::Arc;
+use super::*;
 
+use crate::brain1::Brain1;
 use crate::candle::CandleConfig;
 use crate::collector;
-use crate::configs::assets;
 use crate::configs::assets::Pair;
 use crate::gate_api::GateWay;
 use crate::helper::get_time_sec;
 use crate::offline::{BackReportConf, BackendEngine, BackendEngineOuter};
-
-use super::*;
+use std::sync::Arc;
+use crate::configs::assets;
 
 pub fn run1() {
     let pairs = assets::get_all_symbols();
@@ -60,7 +60,9 @@ pub fn run_pair(pair: &Pair) {
         },
     };
 
-    run_cfg.run_brain4();
+    // run_cfg.run_brain1();
+    // run_cfg.run_brain2();
+    run_cfg.run_brain3();
 }
 
 pub fn run_optimized() {
@@ -101,7 +103,9 @@ pub fn run_optimized() {
                     report_sub_folder: format!("{}", sub_folder_time),
                 },
             };
-            let x = run_cfg.run_brain4();
+            // let x = run_cfg.run_brain1();
+            // let x = run_cfg.run_brain2();
+            let x = run_cfg.run_brain3();
 
             // collect balance
             bal.push(x.free_usd);

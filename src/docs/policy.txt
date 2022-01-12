@@ -1,0 +1,3 @@
+== 21 Day 1400
+ + Have a strategy named with it's own module file.
+ + Opeing postions should be defined in each PairMem with retruing and struct about kline_id, ...

@@ -1,14 +1,16 @@
-use super::*;
+use std::borrow::BorrowMut;
+use std::collections::{HashMap, HashSet};
+use std::sync::Arc;
+
 use crate::base::SignalsRes;
 use crate::candle;
-use crate::candle::{CandleConfig, Tick, TA1};
+use crate::candle::{CandleConfig, TA1, Tick};
 use crate::configs::assets;
 use crate::configs::assets::*;
 use crate::gate_api::{GateWay, NewPos, PosRes, UpdatePos};
 use crate::offline::num5;
-use std::borrow::BorrowMut;
-use std::collections::{HashMap, HashSet};
-use std::sync::Arc;
+
+use super::*;
 
 pub type PairCandleCfg = (Pair, CandleConfig);
 

@@ -30,7 +30,7 @@ pub fn serialize_position_v2(poss: &Vec<Position>) -> String {
     txt
 }
 
-// v3: contains FrameMem data for Donchain Channel
+/*// v3: contains FrameMem data for Donchain Channel
 pub fn serialize_position_v3(poss: &Vec<Position>) -> String {
     let mut arr = vec![];
     for p in poss {
@@ -41,13 +41,14 @@ pub fn serialize_position_v3(poss: &Vec<Position>) -> String {
     let txt = format!("{}", os);
     txt
 }
+*/
 
 // v4: contains NEFrame data for New Engine
 pub fn serialize_position_v4(poss: &Vec<Position>) -> String {
     let mut arr = vec![];
     for mut p in poss.clone() {
-        let frame = p.new_pos.frame_ne.to_csv();
-        p.fid = frame.5.fid;
+        let frame = p.new_pos.frame_ne2.to_csv();
+        p.fid = frame.4.fid;
         arr.push((p.clone(), frame));
     }
     let os = to_csv_out(&arr, false);

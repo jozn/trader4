@@ -323,7 +323,7 @@ fn write_pos(name: &str, rnd_num: u16, arr: Vec<Position>) {
     // let os = to_csv_out(&arr, false);
     let os = serialize_position_v1(&arr); // ignore for now
     let os = serialize_position_v2(&arr);
-    let os = serialize_position_v3(&arr);
+    // let os = serialize_position_v3(&arr);
     let os = serialize_position_v4(&arr);
     let txt = format!("{}", os);
     std::fs::write(format!("{}_{}.csv", name, rnd_num), txt);

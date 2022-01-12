@@ -1,0 +1,5 @@
+== 21 Day 1400
+ + Boundaray ailing in Brain3 is a good impl which needs works. >> migrate this later.
+ + ne moudle uses a self contined Candle builder, ne2 used our old Canldes modules(3 small, medium, big)
+    in nex we should build a new moulde like ne with Ticks building it's each output (no more small,...).
+ + in NE we did not used any stop tailing. In NE2 used a simple stop tailing with mixed results.

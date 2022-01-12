@@ -24,6 +24,7 @@ pub use strength::*;
 ///
 ///  In the next engine we should consider more or long term trends.
 ///
+///  This moudle uses a self contained Candle builder.
 use crate::candle::Kline;
 use crate::helper;
 pub use serde::{Deserialize, Serialize};
