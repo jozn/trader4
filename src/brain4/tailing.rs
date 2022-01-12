@@ -16,8 +16,9 @@ impl Brain4 {
     pub fn update_all_tailing_pos(&mut self) {
         // simple tailing
         // for (_, ph) in self.open_pos.clone() {
-        for (_, ph) in self.open_pos.iter_mut() {
-            let tick = self.last_tick.clone().unwrap();
+        for (_, ph) in self.open_pos.iter() {
+            let pm = self.read_pair_meta(ph.pos_res.symbol_id);
+            let tick = pm.last_tick.clone().unwrap();
             let p = &ph.pos_res;
             let new_sl = cal_price(tick.price_raw, -4.5);
             if p.low_exit_price < new_sl {

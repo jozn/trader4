@@ -9,11 +9,47 @@ use crate::gate_api::{GateWay, NewPos};
 use crate::{candle, helper};
 
 impl Brain4 {
+    pub fn read_pair_meta(&self, si: i64) -> &PairMemory {
+        let mut idx = 0;
+        let mut found = false;
+        for pm in &self.db {
+            if pm.pair.to_symbol_id() == si {
+                found = true;
+                break;
+            }
+            idx += 1;
+        }
+        assert!(found);
+        let m = self.db.get(idx).unwrap();
+        m
+    }
+
+    pub fn borrow_pair_meta(&mut self, si: i64) -> &mut PairMemory {
+        let mut idx = 0;
+        let mut found = false;
+        for pm in &self.db {
+            if pm.pair.to_symbol_id() == si {
+                found = true;
+                break;
+            }
+            idx += 1;
+        }
+        if !found {
+            self.db.push(PairMemory::new(
+                Pair::id_to_symbol(si),
+                &CandleConfig::default(),
+            ));
+        }
+        let m = self.db.get_mut(idx).unwrap();
+        m
+    }
+
     // new engine
     pub fn on_price_tick_ne_dc_v3(&mut self, symbol_id: i64, tick: Tick) {
-        self.last_tick = Some(tick.clone());
+        let mut pari_mem = self.borrow_pair_meta(symbol_id);
+        pari_mem.last_tick = Some(tick.clone());
+        let frame_opt = pari_mem.ne3.add_tick(&tick);
         self.update_all_tailing_pos();
-        let frame_opt = self.ne.add_tick(&tick);
 
         match frame_opt {
             None => {}

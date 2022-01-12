@@ -21,15 +21,15 @@ pub type PairCandleCfg = (Pair, CandleConfig);
 pub struct Brain4 {
     pub con: Box<Arc<dyn GateWay>>,
     pub acted: HashSet<String>,
+    pub db: Vec<PairMemory>,
     // pub open_pos: HashMap<u64, PosRes>,
     pub open_pos: HashMap<u64, PosHolder>,
     // From PairMemo
-    pub pair: Pair,
-    pub last_tick: Option<Tick>,
-    pub last_trade_time: u64,
-    pub ticks_arr: TimeSerVec<Tick>,
-    // pub dc_intl: DCParent,
-    pub ne: NERoot,
+    // pub pair: Pair,
+    // pub last_tick: Option<Tick>,
+    pub last_trade_time: u64, // used in Acted filter
+                              // pub ticks_arr: TimeSerVec<Tick>,
+                              // pub ne: NERoot,
 }
 
 impl Brain4 {
@@ -37,13 +37,14 @@ impl Brain4 {
         let mut brain = Self {
             con: Box::new(backend),
             last_trade_time: 0,
-            ticks_arr: Default::default(),
+            // ticks_arr: Default::default(),
             acted: Default::default(),
+            db: vec![],
             open_pos: Default::default(),
-            pair: Pair::EURUSD,
-            last_tick: None,
+            // pair: Pair::EURUSD,
+            // last_tick: None,
             // dc_intl: DCParent::new(),
-            ne: NERoot::new(),
+            // ne: NERoot::new(),
         };
 
         brain
@@ -69,12 +70,9 @@ impl Brain4 {
                     self.open_pos.insert(pos.pos_id, ph);
                 }
                 Some(ph) => {
-                    ph.pos_res = pos.clone();
-                    // self.open_pos.insert(pos.pos_id, pos);
+                    ph.pos_res = pos; // update
                 }
             }
-
-            // self.update_all_tailing_pos();
         }
     }
 
