@@ -60,10 +60,13 @@ impl Brain3 {
                         is_short: false,
                         size_usd: 10000,
                         // take_profit_price: cal_price(tick.price_raw, 4.7 ), // 10 pip
-                        take_profit_price: cal_price(tick.price_raw, 4.5), // 10 pip
+                        // take_profit_price: cal_price(tick.price_raw, 14.5), // 10 pip
+                        take_profit_price: cal_price(tick.price_raw, 7.5), // 10 pip
                         // take_profit_price: 0., // 10 pip
                         // stop_loose_price: cal_price(tick.price_raw, - 4.7 ),
-                        stop_loose_price: cal_price(tick.price_raw, -4.5),
+                        stop_loose_price: cal_price(tick.price_raw, -4.2),
+                        // stop_loose_price: cal_price(tick.price_raw, -12.5),
+                        // stop_loose_price: cal_price(tick.price_raw, -7.5),
                         at_price: tick.price_raw,
                         time_s: tick.time_s,
                         frame_ne: frame.clone(),
@@ -154,7 +157,7 @@ impl Brain3 {
     }
 
     // new engine
-    pub fn on_price_tick_ne_dc_old(&mut self, symbol_id: i64, tick: Tick) {
+    pub fn on_price_tick_ne_dc_old(&mut self, symbol_id: i64, tick: Tick)  {
         self.last_tick = Some(tick.clone());
 
         let frame_opt = self.ne.add_tick(&tick);

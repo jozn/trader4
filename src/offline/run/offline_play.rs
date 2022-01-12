@@ -8,8 +8,15 @@ use crate::gate_api::GateWay;
 use crate::helper::get_time_sec;
 use crate::offline::{BackReportConf, BackendEngine, BackendEngineOuter};
 use std::sync::Arc;
+use crate::configs::assets;
 
 pub fn run1() {
+    let pairs = assets::get_all_symbols();
+    for p in &pairs {
+        run_pair(p);
+    }
+}
+pub fn run_pair(pair: &Pair) {
     let pair_cfg = (
         Pair::EURUSD,
         CandleConfig {
@@ -29,19 +36,21 @@ pub fn run1() {
     let week_id = 49;
     // let ticks = collector::loader::load_rows("/mnt/c/me/data/EURUSD/1.tsv");
     // let ticks = collector::loader::load_all_pair(&Pair::USDCAD, 25..50);
+    let ticks = collector::loader::load_all_pair(&pair, 25..50);
     // let ticks = collector::loader::load_all_pair(&Pair::NZDUSD, 25..50);
-    let ticks = collector::loader::load_all_pair(&Pair::USDCHF, 25..50);
+    // let ticks = collector::loader::load_all_pair(&Pair::USDCHF, 25..50);
     // let ticks = collector::loader::load_week(&Pair::USDCHF, 25);
     // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 25..50);
     // let ticks = collector::loader::load_week(&Pair::EURUSD, 49);
     // let ticks = collector::loader::load_week(&Pair::EURUSD, week_id);
     // let ticks = collector::loader::load_day(&Pair::EURUSD, week_id, 3);
     // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 44..45);
-    println!("loaded...");
+    println!("loaded... {:?}", &pair);
     let mut run_cfg = BackRunConfig {
         balance: 100_000,
         pairs_conf: vec![pair_cfg],
         ticks,
+        pair: pair.clone(),
         week_id: week_id,
         print: true,
         report: true,
@@ -85,6 +94,7 @@ pub fn run_optimized() {
                 balance: 100_000,
                 pairs_conf: vec![pair_cfg],
                 ticks,
+                pair: Pair::EURUSD,
                 week_id: i,
                 print: false,
                 report: true,

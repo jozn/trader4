@@ -11,6 +11,7 @@ use std::cmp::Ordering;
 pub struct Position {
     pub pos_id: u64,
     pub fid: u64,
+    pub won: i64,
     pub symbol_id: i64,
     pub direction: PosDir,
     pub pos_size_usd: f64,
@@ -23,10 +24,13 @@ pub struct Position {
     pub close_price: f64,
     pub close_time: u64,
     pub close_time_str: String,
+    #[serde(skip)]
     pub finished: bool, // tod: status
     pub duration: String,
     pub profit: f64,
+    #[serde(skip)]
     pub spread_fees: f64,
+    #[serde(skip)]
     pub final_balance: f64,
     pub touch_low_pip: f64,
     pub touch_high_pip: f64,
@@ -111,6 +115,12 @@ impl Position {
         let mut pl = (self.close_price - self.open_price) * self.pos_size_usd;
         if self.is_short() {
             pl = -pl;
+        }
+
+        if pl > 0. {
+            self.won = 1;
+        } else {
+            self.won = -1;
         }
 
         self.close_price = param.at_price;

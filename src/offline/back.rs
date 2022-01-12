@@ -25,7 +25,7 @@ pub struct BackendEngine {
 }
 
 impl BackendEngine {
-    pub fn new(fund: i64, cfg: &BackReportConf) -> Self {
+    pub fn new(fund: i64, report_cfg: &BackReportConf) -> Self {
         Self {
             balance: fund,
             symbols: vec![],
@@ -36,7 +36,7 @@ impl BackendEngine {
             opens: vec![],
             closed: vec![],
             notify: vec![],
-            report: Report::new(cfg),
+            report: Report::new(report_cfg),
         }
     }
     // Direct GateWay api calls
@@ -62,7 +62,10 @@ impl BackendEngine {
         match pos_opt {
             None => {}
             Some(mut pos) => {
-                // println!("=======> update {:?}", pos);
+                if pos.pos_id == 9 {
+                    // println!("{:#?} \n {:#?} \n===========================", pos , req);
+                }
+
                 pos.updates += 1;
                 if req.close {
                     let tick = self.get_symbol_tick(pos.symbol_id).unwrap();
@@ -73,7 +76,9 @@ impl BackendEngine {
                     };
                     pos.close_pos(&close_par);
                     self._remove_open_pos(pos.pos_id as u64);
-                    self.opens.push(pos);
+                    // self.opens.push(pos);
+                    self.notify.push(pos.to_notify());
+                    self.closed.push(pos);
                 } else {
                     let (high, low) = if pos.is_short() {
                         (req.stop_loose_price, req.take_profit_price)
@@ -88,7 +93,7 @@ impl BackendEngine {
                     }
                     self._remove_open_pos(pos.pos_id);
                     // commented to avoid forever loops
-                    // self.notify.push(pos.to_notify());
+                    self.notify.push(pos.to_notify());
                     self.opens.push(pos);
                 }
             }

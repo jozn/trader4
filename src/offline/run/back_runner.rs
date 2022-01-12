@@ -13,6 +13,7 @@ pub struct BackRunConfig {
     pub balance: i64,
     pub pairs_conf: Vec<PairCandleCfg>,
     pub ticks: Vec<BTickData>,
+    pub pair: Pair,
     pub week_id: u16,
     pub print: bool,
     pub report: bool,
@@ -117,7 +118,7 @@ impl BackRunConfig {
         }
 
         if self.report {
-            x.report_to_folder(&format!("_week_{}", self.week_id));
+            x.report_to_folder(&format!("_week_{}_{}", self.week_id,self.pair.to_string()));
         }
         BackRunRes {
             free_usd: x.free_usd,

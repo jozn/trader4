@@ -18,7 +18,8 @@ pub type PairCandleCfg = (Pair, CandleConfig);
 pub struct Brain3 {
     pub con: Box<Arc<dyn GateWay>>,
     pub acted: HashSet<String>,
-    pub open_pos: HashMap<u64, PosRes>,
+    // pub open_pos: HashMap<u64, PosRes>,
+    pub open_pos: HashMap<u64, PosHolder>,
     // From PairMemo
     pub pair: Pair,
     pub last_tick: Option<Tick>,
@@ -55,8 +56,22 @@ impl Brain3 {
         if pos.is_closed {
             self.open_pos.remove(&pos.pos_id);
         } else {
-            self.open_pos.insert(pos.pos_id, pos);
-            self.update_all_tailing_pos();
+            let mut res_opt = self.open_pos.get_mut(&pos.pos_id);
+            match res_opt {
+                None => {
+                    let ph = PosHolder {
+                        pos_res: pos.clone(),
+                        profit_level: 0,
+                    };
+                    self.open_pos.insert(pos.pos_id, ph);
+                }
+                Some(ph) => {
+                    ph.pos_res = pos.clone();
+                    // self.open_pos.insert(pos.pos_id, pos);
+                }
+            }
+
+            // self.update_all_tailing_pos();
         }
     }
 }
@@ -206,4 +221,10 @@ impl Brain3 {
         // println!("Open long {:#?}", np);
         self.con.open_position_req_new(&np);
     }
+}
+
+#[derive(Debug, Clone, Default)]
+pub struct PosHolder {
+    pub pos_res: PosRes,
+    pub profit_level: i32,
 }
