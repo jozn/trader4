@@ -72,7 +72,7 @@ fn collecto_symbols() {
                     ass_arr.push(o);
                 }
                 let s = format!("{:#?}", ass_arr);
-                println!("> AssetListRes {}", s);
+                // println!("> AssetListRes {}", s);
                 // fs::write("./ctrader_dubg/assets_list.txt", s);
             }
             ResponseEvent::SymbolsListRes(r) => {
@@ -81,7 +81,7 @@ fn collecto_symbols() {
 
                 // fs::write("./ctrader_dubg/symbols_list.txt", s);
 
-                println!("> SymbolsListRes {}", s);
+                // println!("> SymbolsListRes {}", s);
 
                 // get symbols details
                 let mut symols = vec![];
@@ -93,7 +93,7 @@ fn collecto_symbols() {
             ResponseEvent::SymbolByIdRes(r) => {
                 builder.symbols_det = r.symbol.clone();
                 let s = format!("{:#?}", &r);
-                println!("> SymbolByIdRes {}", s);
+                // println!("> SymbolByIdRes {}", s);
 
                 builder.build();
 
@@ -131,7 +131,7 @@ impl Builder {
             };
             ass_arr.push(o);
         }
-        let assets_str = format!("{:#?}", ass_arr);
+        let assets_str = format!("{:#?}", &ass_arr);
 
         // Symbols
         let mut sym_arr = vec![];
@@ -153,8 +153,19 @@ impl Builder {
         }
         let sym_str = format!("{:#?}", sym_arr);
 
-        println!("Assets {}", assets_str);
-        println!("Symbols {}", sym_str);
+        // println!("Assets {}", assets_str);
+        // println!("Symbols {}", sym_str);
+
+        let ass_fn_str = print_assets(&ass_arr);
+        let sym_fn_str = print_symbols(&sym_arr);
+
+        println!("templ Ass {}", ass_fn_str);
+        println!("templ Sym {}", sym_fn_str);
+        let out = format!(
+            "use super::super::*; \n\n {} \n\n {} \n",
+            sym_fn_str, ass_fn_str
+        );
+        std::fs::write("./src/configs/gen/pepperstone.rs", out);
     }
 
     fn get_asset(&self, aid: i64) -> pb::Asset {
@@ -174,6 +185,22 @@ impl Builder {
         }
         panic!("Symobl not found {}", sid)
     }
+}
+
+fn print_assets(ass_arr: &Vec<TAsset>) -> String {
+    let assets_str = format!("{:#?}", ass_arr);
+    format!(
+        "pub fn get_assets_list() -> Vec<TAsset> {{ \n vec!{} \n }}",
+        assets_str
+    )
+}
+
+fn print_symbols(syms_arr: &Vec<TSymbol>) -> String {
+    let syms_str = format!("{:#?}", syms_arr);
+    format!(
+        "pub fn get_symbols_list() -> Vec<TSymbol> {{ \n vec!{} \n }}",
+        syms_str
+    )
 }
 
 #[derive(Debug)]
