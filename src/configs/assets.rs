@@ -1,7 +1,46 @@
+use super::*;
 use crate::candle::CandleConfig;
 use enum_iterator::IntoEnumIterator;
+use lazy_static::lazy_static;
+use once_cell::sync::OnceCell;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use std::fmt::format;
+
+// static ALL_SYMBOLS: OnceCell<HashMap<i64,TSymbol>> = OnceCell::new();
+
+lazy_static! {
+    static ref ALL_SYMBOLS_NAME: HashMap<String, TSymbol> = {
+        let symbs = super::gen::pepperstone::get_symbols_list();
+        let mut m = HashMap::new();
+        for s in symbs {
+            m.insert(s.name.to_string(), s);
+        }
+        m
+    };
+    static ref ALL_SYMBOLS_ID: HashMap<i64, TSymbol> = {
+        let symbs = super::gen::pepperstone::get_symbols_list();
+        let mut m = HashMap::new();
+        for s in symbs {
+            m.insert(s.symbol_id, s);
+        }
+        m
+    };
+}
+
+fn get_pepperstone_symbol_name(name: &str) -> TSymbol {
+    let s = ALL_SYMBOLS_NAME
+        .get(name)
+        .expect("Symbol not found in symbols map.");
+    s.clone()
+}
+
+fn get_pepperstone_symbol(sid: i64) -> TSymbol {
+    let s = ALL_SYMBOLS_ID
+        .get(&sid)
+        .expect("Symbol not found in symbols map.");
+    s.clone()
+}
 
 #[derive(Debug, Serialize, Deserialize, Clone, IntoEnumIterator, PartialEq)]
 pub enum Pair {
@@ -16,7 +55,7 @@ pub enum Pair {
 }
 
 impl Pair {
-    pub fn to_symbol_id(&self) -> i64 {
+    /*pub fn to_symbol_id_dep(&self) -> i64 {
         use Pair::*;
         match self {
             EURUSD => 1,
@@ -28,20 +67,32 @@ impl Pair {
             NZDUSD => 12,
             // NONE => 0,
         }
+    }*/
+
+    pub fn to_symbol_id(&self) -> i64 {
+        let name = self.to_string();
+        let sym = get_pepperstone_symbol_name(&name);
+        sym.symbol_id
     }
 
-    pub fn get_pip(&self) -> i64 {
-        use Pair::*;
-        match self {
-            EURUSD | GBPUSD | AUDUSD | USDCHF | USDCAD | NZDUSD => 10_000,
-            USDJPY => 10_00,
+    pub fn get_conf(&self) -> TSymbol {
+        let name = self.to_string();
+        get_pepperstone_symbol_name(&name)
+    }
+    /*
+        pub fn get_pip_old(&self) -> i64 {
+            use Pair::*;
+            match self {
+                EURUSD | GBPUSD | AUDUSD | USDCHF | USDCAD | NZDUSD => 10_000,
+                USDJPY => 10_00,
+            }
         }
-    }
-
+    */
     pub fn to_string(&self) -> String {
         format!("{:?}", self)
     }
 
+    // todo: update?
     pub fn id_to_symbol(id: i64) -> Self {
         use Pair::*;
         let r = Pair::into_enum_iter().find(|p| p.to_symbol_id() == id);
@@ -53,18 +104,17 @@ impl Pair {
 }
 
 pub fn get_all_symbols_ids() -> Vec<i64> {
-    let a = get_pairs();
     let ids: Vec<i64> = Pair::into_enum_iter().map(|p| p.to_symbol_id()).collect();
     ids
 }
 
 pub fn get_all_symbols() -> Vec<Pair> {
-    let a = get_pairs();
     let pairs: Vec<Pair> = Pair::into_enum_iter().map(|p| p).collect();
     pairs
 }
 
-#[derive(Debug, Default)]
+////////// Deprece4ated: Save fot Delte////
+/*#[derive(Debug, Default)]
 pub struct PairCfg {
     pub symbol_id: i64,
     // pub active: bool,
@@ -125,3 +175,4 @@ pub fn get_def_conf_dep(pair: Pair, id: i64) -> PairConfDep {
         stop_loose_xpip: 100,
     }
 }
+*/
