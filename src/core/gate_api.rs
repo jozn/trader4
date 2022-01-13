@@ -17,7 +17,9 @@ pub trait GateWay: Debug {
 pub struct NewPos {
     pub symbol_id: i64,
     pub is_short: bool,
-    pub size_usd: i64, // Could be other currency -- as the cTrader works this way we do not use XLot
+    // Base currency - USD, Euro, typical higher valued (BTC vs USD) ( Euro vs USD)
+    //  -- as the cTrader works this way we do not use XLot
+    pub size_base: i64,
     pub take_profit_price: f64,
     pub stop_loose_price: f64,
 

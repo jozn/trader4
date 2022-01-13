@@ -275,7 +275,7 @@ impl CTrader {
             symbol_id: np.symbol_id,
             order_type: pb::OrderType::Market as i32,
             trade_side: dir as i32,
-            volume: np.size_usd * 100, // 1000$
+            volume: np.size_base * 100, // 1000$
             limit_price: None,
             stop_price: None,
             time_in_force: None,

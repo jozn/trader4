@@ -78,7 +78,7 @@ impl Brain4 {
                     let np = NewPos {
                         symbol_id: symbol_id,
                         is_short: false,
-                        size_usd: 10000,
+                        size_base: 10000,
                         // take_profit_price: profit, // 10 pip
                         // take_profit_price: cal_price(tick.price_raw, med_pip * 2. ), // 10 pip
                         // take_profit_price: cal_price(tick.price_raw, 7.), // 10 pip
@@ -98,7 +98,7 @@ impl Brain4 {
                     let np = NewPos {
                         symbol_id: symbol_id,
                         is_short: false,
-                        size_usd: 10000,
+                        size_base: 10000,
                         // take_profit_price: cal_price(tick.price_raw, 4.7 ), // 10 pip
                         // take_profit_price: cal_price(tick.price_raw, 14.5), // 10 pip
                         take_profit_price: pair.cal_price(tick.price_raw, 7.5), // 10 pip

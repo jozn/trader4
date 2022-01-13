@@ -55,7 +55,7 @@ pub fn run_pair(pair: &Pair) {
         print: true,
         report: true,
         report_cfg: BackReportConf {
-            report_folder: "../trader4_out/".to_string(),
+            report_folder: "../trader5_out/".to_string(),
             report_sub_folder: "".to_string(),
         },
     };
@@ -99,7 +99,7 @@ pub fn run_optimized() {
                 print: false,
                 report: true,
                 report_cfg: BackReportConf {
-                    report_folder: "../trader4_out/".to_string(),
+                    report_folder: "../trader5_out/".to_string(),
                     report_sub_folder: format!("{}", sub_folder_time),
                 },
             };

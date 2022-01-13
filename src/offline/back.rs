@@ -214,19 +214,19 @@ impl BackendEngine {
 
     // Privates
     fn buy_long(&mut self, param: &NewPos) {
-        if !self.has_enough_balance(param.size_usd) {
+        if !self.has_enough_balance(param.size_base) {
             return;
         }
         // println!("buy long long");
         let mut pos = Position::new(param, self.get_locked_money());
-        self.free_usd -= param.size_usd as f64;
+        self.free_usd -= param.size_base as f64;
         pos.pos_id = self._next_pos_id();
         self.notify.push(pos.to_notify());
         self.opens.push(pos);
     }
 
     fn sell_short(&mut self, param: &NewPos) {
-        if !self.has_enough_balance(param.size_usd) {
+        if !self.has_enough_balance(param.size_base) {
             return;
         }
         let mut pos = Position::new(param, self.get_locked_money());

@@ -65,7 +65,7 @@ pub fn run1() {
 
 pub fn run_sample(pair_cfg: PairCandleCfg, all_tikcs: &Vec<BTickData>) -> ReportSummery {
     let report_cfg = BackReportConf {
-        report_folder: "../trader4_out/".to_string(),
+        report_folder: "../trader5_out/".to_string(),
         report_sub_folder: "".to_string(),
     };
     let backend = BackendEngineOuter::new(100_000, &report_cfg);

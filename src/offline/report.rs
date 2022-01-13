@@ -67,16 +67,16 @@ impl Report {
         let time = get_time_sec();
 
         // Build folder out
-        // let folder = format!("../trader4_out/{}_{}", time, name);
+        // let folder = format!("../trader5_out/{}_{}", time, name);
         let folder_base = if self.folder.is_empty() {
-            "../trader4_out/".to_string()
+            "../trader5_out/".to_string()
         } else {
             self.folder.clone()
         };
         let folder = if self.sub_folder.is_empty() {
-            format!("../trader4_out/{}_{}", time, name)
+            format!("../trader5_out/{}_{}", time, name)
         } else {
-            format!("../trader4_out/{}_SUB/{}_{}", self.sub_folder, time, name)
+            format!("../trader5_out/{}_SUB/{}_{}", self.sub_folder, time, name)
         };
 
         let folder_json = format!("{}/json", folder);
