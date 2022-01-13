@@ -13,16 +13,8 @@ pub use position_ta::*;
 pub use postion::*;
 pub use report::*;
 
-// fn round5(v: f64) -> f64 {
-//     let pre = 100_000.;
-//     ((v * pre) as i64) as f64 / pre
-// }
-
-// fn num5i64(v: f64) -> i64 {
-//     num5(v) as i64
-// }
-
-pub fn num5(v: f64) -> f64 {
+//
+pub fn num5_dep(v: f64) -> f64 {
     let n = v.abs() as u64;
     let dig = if n >= 10_000 {
         0

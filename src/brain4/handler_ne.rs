@@ -113,8 +113,8 @@ impl Brain4 {
                         ..Default::default()
                     };
 
-                    println!("pari {:#?}", &pair);
-                    println!("np {:#?}", &np);
+                    // println!("pari {:#?}", &pair);
+                    // println!("np {:#?}", &np);
 
                     if self.already_acted(symbol_id, kline_id) {
                         return;

@@ -11,7 +11,6 @@ use crate::configs::assets::*;
 use crate::gate_api::{GateWay, NewPos, PosRes, UpdatePos};
 // use crate::ne::{NEFrame, NERoot};
 use crate::ne3::NERoot;
-use crate::offline::num5;
 
 use super::*;
 

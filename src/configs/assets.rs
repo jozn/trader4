@@ -46,6 +46,7 @@ pub enum Pair {
     USDCHF,
     USDCAD,
     NZDUSD,
+
 }
 
 impl Pair {
@@ -60,6 +61,7 @@ impl Pair {
         get_pepperstone_symbol_name(&name)
     }
 
+    // 10_000. for USDEUR
     pub fn get_pip_multi(&self) -> f64 {
         let sym = self.get_conf();
         10_u32.pow(sym.pip as u32) as f64

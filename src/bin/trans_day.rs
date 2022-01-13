@@ -6,7 +6,7 @@ use trader3::candle::{
 use trader3::collector;
 use trader3::collector::row_data::BTickData;
 use trader3::configs::assets::Pair;
-use trader3::offline::num5;
+use trader3::offline::num5_dep;
 use trader3::ta::{DCRes, VelRes};
 
 const OUT_FOLDER: &'static str = "/mnt/c/me/data_daily/";

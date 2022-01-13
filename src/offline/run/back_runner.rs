@@ -33,7 +33,7 @@ impl BackRunConfig {
             if i % 10000 == 0 {
                 // println!("{}", i);
             }
-            back_arc.next_tick_dep(pair.to_symbol_id(), t.clone());
+            back_arc.next_tick(&pair, t.clone());
             // brain.on_price_tick_NE(1, t.to_tick());
             // brain.on_price_tick(1, t.to_tick());
             // brain.on_price_tick_ne_dc_v3(1, t.to_tick());

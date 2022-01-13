@@ -2,7 +2,7 @@ use chrono::prelude::*;
 use trader3;
 use trader3::candle::{CandleConfig, CandleSeriesTA, Kline, KlineHolderFrameTA, TimeSerVec};
 use trader3::configs::assets::Pair;
-use trader3::offline::num5;
+use trader3::offline::num5_dep;
 use trader3::{collector, helper};
 
 pub fn main() {
@@ -96,8 +96,8 @@ fn kline_to_kline_out(k: &Kline) -> KlineOut {
         high: k.high,
         low: k.low,
         close: k.close,
-        pip_dif_max: num5((k.high - k.low) * 10_000.),
-        pip_dif_oc: num5((k.close - k.open) * 10_000.),
+        pip_dif_max: num5_dep((k.high - k.low) * 10_000.),
+        pip_dif_oc: num5_dep((k.close - k.open) * 10_000.),
         open_time_str: ots,
         duration: helper::to_duration((k.close_time - k.open_time) as i64),
     };

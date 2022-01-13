@@ -15,6 +15,7 @@ pub struct Position {
     pub symbol_id: i64,
     pub direction: PosDir,
     pub pos_size_usd: f64,
+    pub got_assets: f64,
     pub open_time: u64,
     pub open_time_str: String,
     pub updates: u64,
@@ -77,11 +78,19 @@ impl Position {
         };
         assert!(high > low);
 
+        // let got_assets = if p.is_short {
+        //
+        // } else {
+        //     p.size_usd as f64 / p.at_price
+        // };
+        let got_assets = p.size_usd as f64 / p.at_price;
+
         let mut res = Self {
             pos_id: 0,
             symbol_id: p.symbol_id,
             direction: dir,
             pos_size_usd: p.size_usd as f64,
+            got_assets,
             open_time: p.time_s,
             open_price: p.at_price,
             open_time_str: helper::to_date(p.time_s),
@@ -112,7 +121,7 @@ impl Position {
         self.duration = helper::to_duration(self.open_time as i64 - param.time as i64);
         self.close_price = param.at_price;
 
-        let mut pl = (self.close_price - self.open_price) * self.pos_size_usd;
+        let mut pl = (self.close_price - self.open_price) * self.got_assets;
         if self.is_short() {
             pl = -pl;
         }

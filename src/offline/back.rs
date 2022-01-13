@@ -106,7 +106,8 @@ impl BackendEngine {
 
     // From script/bot calls
     // todo: optimize with multi bticks per call
-    pub fn next_tick(&mut self, symbol_id: i64, btick: BTickData) {
+    pub fn next_tick(&mut self, pair: &Pair, btick: BTickData) {
+        let symbol_id = pair.to_symbol_id();
         // set last time, symobl price, close postions
         if self.las_time_ms < btick.timestamp as u64 {
             self.las_time_ms = btick.timestamp as u64;
@@ -122,10 +123,9 @@ impl BackendEngine {
         if idx >= 0 && self.price.len() > 0 {
             self.price.remove(idx as usize);
         }
-        self.price
-            .push((Pair::id_to_symbol(symbol_id), btick.clone()));
+        self.price.push((pair.clone(), btick.clone()));
 
-        self.update_touch_prices(symbol_id, &btick);
+        self.update_touch_prices(pair, &btick);
         self.close_stasfied_poss(symbol_id, false);
     }
 
@@ -138,18 +138,21 @@ impl BackendEngine {
         None
     }
 
-    fn update_touch_prices(&mut self, symob_id: i64, btick: &BTickData) {
+    fn update_touch_prices(&mut self,  pair: &Pair, btick: &BTickData) {
+        let symbol_id = pair.to_symbol_id();
         for mut pos in self.opens.iter_mut() {
-            if pos.symbol_id != symob_id {
+            if pos.symbol_id != symbol_id {
                 continue;
             }
 
-            let high = (btick.ask_price - pos.open_price) * 10_000.;
+            let mutl = pair.get_pip_multi();
+
+            let high = (btick.ask_price - pos.open_price) * mutl;
             if pos.touch_high_pip < high {
                 pos.touch_high_pip = high;
             }
 
-            let low = (btick.bid_price - pos.open_price) * 10_000.;
+            let low = (btick.bid_price - pos.open_price) * mutl;
             if pos.touch_low_pip > low {
                 pos.touch_low_pip = low;
             }
@@ -367,15 +370,15 @@ impl BackendEngineOuter {
         }
     }
 
-    // todo replace with Pair next_tick
-    pub fn next_tick_dep(&self, symbol_id: i64, btick: BTickData) {
-        let mut eng = self.engine.borrow_mut();
-        eng.next_tick(symbol_id, btick);
-    }
+    // // todo replace with Pair next_tick
+    // pub fn next_tick(&self, symbol_id: i64, btick: BTickData) {
+    //     let mut eng = self.engine.borrow_mut();
+    //     eng.next_tick(symbol_id, btick);
+    // }
 
     pub fn next_tick(&self, pair: &Pair, btick: BTickData) {
         let mut eng = self.engine.borrow_mut();
-        eng.next_tick(symbol_id, btick);
+        eng.next_tick(pair, btick);
     }
 
     pub fn take_notify(&self) -> Vec<PosRes> {

@@ -5,7 +5,6 @@ use crate::candle::{CandleConfig, CandleSeriesTA, Tick, TimeSerVec, TA1};
 use crate::configs::assets;
 use crate::configs::assets::*;
 use crate::gate_api::{GateWay, NewPos, PosRes, UpdatePos};
-use crate::offline::num5;
 use crate::ta::Vel;
 use std::borrow::BorrowMut;
 use std::collections::{HashMap, HashSet};
