@@ -11,4 +11,3 @@ pub use tailing::*;
 
 // Brain2 is just a playground for algoritms development afetr success merge this
 //  with brain1 > Brain2 is single asset and reduceid codes for simpliciyt
-

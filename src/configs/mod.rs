@@ -19,6 +19,7 @@ pub struct TSymbol {
     pub base_asset: &'static str,
     pub quote_asset: &'static str,
     pub category: &'static str,
+    pub class: &'static str,
     pub description: &'static str,
     pub digits: i32,
     pub pip: i32,

@@ -117,7 +117,7 @@ impl Position {
         self.close_price = param.at_price;
 
         let price_diff_percentage = (self.close_price - self.open_price) / self.open_price;
-        let mut pl =  price_diff_percentage * self.pos_size_usd;
+        let mut pl = price_diff_percentage * self.pos_size_usd;
         if self.is_short() {
             pl = -pl;
         }

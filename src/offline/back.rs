@@ -138,7 +138,7 @@ impl BackendEngine {
         None
     }
 
-    fn update_touch_prices(&mut self,  pair: &Pair, btick: &BTickData) {
+    fn update_touch_prices(&mut self, pair: &Pair, btick: &BTickData) {
         let symbol_id = pair.to_symbol_id();
         for mut pos in self.opens.iter_mut() {
             if pos.symbol_id != symbol_id {

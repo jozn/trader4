@@ -37,16 +37,74 @@ fn get_pepperstone_symbol(sid: i64) -> TSymbol {
     s.clone()
 }
 
+// todo: Write a macro to seperate each Pari with catefory and then merge them
+//  in Pair.
 #[derive(Debug, Serialize, Deserialize, Clone, IntoEnumIterator, PartialEq)]
 pub enum Pair {
+    // Forex -
+    // "FX Majors" - 6
     EURUSD,
     GBPUSD,
     USDJPY,
     AUDUSD,
     USDCHF,
     USDCAD,
-    NZDUSD,
 
+    // "FX Minors" - 10
+    AUDCAD,
+    AUDCHF,
+    AUDNZD,
+    AUDSGD,
+    EURAUD,
+    EURCHF,
+    EURGBP,
+    GBPAUD,
+    GBPCHF,
+    NZDUSD, // In first assets list
+
+    // "FX Crosses" - 14 list - maybe
+
+    // "FX Exotics"
+    USDNOK,
+    USDMXN,
+    USDSGD,
+    USDSEK,
+    EURSEK,
+    GBPSGD,
+    EURNOK,
+    EURHUF,
+    USDPLN,
+    USDDKK,
+    GBPNOK,
+    CHFSGD,
+    EURCZK,
+    EURDKK,
+    EURHKD,
+    EURPLN,
+    EURSGD,
+    EURTRY,
+    EURZAR,
+    GBPDKK,
+    GBPSEK,
+    GBPTRY,
+    NOKJPY,
+    NOKSEK,
+    SEKJPY,
+    USDCZK,
+    USDHKD,
+    USDTRY,
+    USDZAR,
+    EURMXN,
+    USDHUF,
+    USDRUB,
+    USDCNH,
+    USDTHB,
+    ZARJPY,
+    GBPMXN,
+    GBPZAR,
+
+    // Metals
+    XAUUSD,
 }
 
 impl Pair {

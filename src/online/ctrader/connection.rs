@@ -210,6 +210,28 @@ impl CTrader {
         self.send(req_pb, api_id)
     }
 
+    pub fn category_list_req(&self) {
+        let api_id = pb::PayloadType::OaSymbolCategoryReq as u32;
+
+        let req_pb = pb::SymbolCategoryListReq {
+            payload_type: None,
+            ctid_trader_account_id: self.cfg.ctid as i64,
+        };
+
+        self.send(req_pb, api_id)
+    }
+
+    pub fn asset_class_list_req(&self) {
+        let api_id = pb::PayloadType::OaAssetClassListReq as u32;
+
+        let req_pb = pb::AssetClassListReq {
+            payload_type: None,
+            ctid_trader_account_id: self.cfg.ctid as i64,
+        };
+
+        self.send(req_pb, api_id)
+    }
+
     //todo
     pub fn symbol_for_conv_req(&self, symbols: Vec<i64>) {
         let api_id = pb::PayloadType::OaSymbolsForConversionReq as u32;

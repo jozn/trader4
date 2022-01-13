@@ -10,6 +10,8 @@ pub fn run_play_api() {
     collecto_symbols();
 }
 
+// todo: waht is asset_class in pb
+
 fn get_cfg() -> Config {
     Config {
         host: "demo.ctraderapi.com".to_string(),
@@ -32,7 +34,7 @@ fn collecto_symbols() {
 
     std::thread::sleep(std::time::Duration::new(2, 0));
 
-    ct.list_assets_req();
+    ct.category_list_req();
     // ct.version_req();
 
     // ct.list_symbols_req();
@@ -56,6 +58,19 @@ fn collecto_symbols() {
         match e {
             ResponseEvent::Refresh => {
                 // println!("refresh")
+            }
+
+            ResponseEvent::SymbolCategoryListRes(r) => {
+                println!("> SymbolCategoryListRes {:#?}", r);
+                builder.categories = r.symbol_category.clone();
+                ct.asset_class_list_req();
+                // ct.list_assets_req();
+            }
+
+            ResponseEvent::AssetClassListRes(r) => {
+                println!("> AssetClassListRes {:#?}", r);
+                builder.assets_class = r.asset_class.clone();
+                ct.list_assets_req();
             }
 
             ResponseEvent::AssetListRes(r) => {
@@ -114,6 +129,8 @@ fn collecto_symbols() {
 
 #[derive(Debug, Default)]
 struct Builder {
+    categories: Vec<pb::SymbolCategory>,
+    assets_class: Vec<pb::AssetClass>,
     assets: Vec<pb::Asset>,
     symbols_light: Vec<pb::LightSymbol>,
     symbols_det: Vec<pb::Symbol>,
@@ -139,12 +156,15 @@ impl Builder {
             let base = self.get_asset(s.base_asset_id.unwrap());
             let quote = self.get_asset(s.quote_asset_id.unwrap());
             let symbol = self.get_symbol(s.symbol_id);
+            let cat = self.get_category(s.symbol_category_id.unwrap());
+            let class = self.get_class(s.symbol_category_id.unwrap());
             let o = TSymbol {
                 name: s.symbol_name.unwrap(),
                 symbol_id: s.symbol_id,
                 base_asset: base.name,
                 quote_asset: quote.name,
-                category: "".to_string(),
+                category: cat.name.clone(),
+                class: class.name.unwrap().clone(),
                 description: s.description.unwrap(),
                 digits: symbol.digits,
                 pip: symbol.pip_position,
@@ -185,6 +205,26 @@ impl Builder {
         }
         panic!("Symobl not found {}", sid)
     }
+
+    fn get_category(&self, cid: i64) -> pb::SymbolCategory {
+        for c in &self.categories {
+            if c.id == cid {
+                return c.clone();
+            }
+        }
+        panic!("Category not found {}", cid)
+    }
+
+    fn get_class(&self, cid: i64) -> pb::AssetClass {
+        let sym_cat = self.get_category(cid);
+        let asset_class_id = sym_cat.asset_class_id;
+        for c in &self.assets_class {
+            if c.id.unwrap() == asset_class_id {
+                return c.clone();
+            }
+        }
+        panic!("Class list not found {}", cid)
+    }
 }
 
 fn print_assets(ass_arr: &Vec<TAsset>) -> String {
@@ -217,6 +257,7 @@ struct TSymbol {
     base_asset: String,
     quote_asset: String,
     category: String,
+    class: String,
     description: String,
     digits: i32,
     pip: i32,
