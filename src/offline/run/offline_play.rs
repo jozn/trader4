@@ -11,6 +11,10 @@ use crate::offline::{BackReportConf, BackendEngine, BackendEngineOuter};
 use super::*;
 
 pub fn run1() {
+    run_pair(&Pair::USDJPY);
+}
+
+pub fn run2() {
     let pairs = assets::get_all_symbols();
     for p in &pairs {
         run_pair(p);

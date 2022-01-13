@@ -367,7 +367,13 @@ impl BackendEngineOuter {
         }
     }
 
-    pub fn next_tick(&self, symbol_id: i64, btick: BTickData) {
+    // todo replace with Pair next_tick
+    pub fn next_tick_dep(&self, symbol_id: i64, btick: BTickData) {
+        let mut eng = self.engine.borrow_mut();
+        eng.next_tick(symbol_id, btick);
+    }
+
+    pub fn next_tick(&self, pair: &Pair, btick: BTickData) {
         let mut eng = self.engine.borrow_mut();
         eng.next_tick(symbol_id, btick);
     }

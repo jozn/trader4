@@ -60,6 +60,28 @@ impl Pair {
         get_pepperstone_symbol_name(&name)
     }
 
+    pub fn get_pip_multi(&self) -> f64 {
+        let sym = self.get_conf();
+        10_u32.pow(sym.pip as u32) as f64
+    }
+
+    pub fn cal_price(&self, price: f64, pip: f64) -> f64 {
+        // let sym = self.get_conf();
+        // let mutl = 10_u32.pow(sym.pip as u32) as f64;
+        // let adder = 1. + (pip / mutl);
+        // let p = price * adder;
+        // self.rond(p)
+        let p = 1. + (pip / 10_000.);
+        self.rond(price * p)
+    }
+
+    // Round price to it's supported fraction
+    pub fn rond(&self, price: f64) -> f64 {
+        let sym = self.get_conf();
+        let frac = 10_u32.pow(sym.digits as u32) as f64;
+        ((price * frac) as u64) as f64 / frac
+    }
+
     pub fn to_string(&self) -> String {
         format!("{:?}", self)
     }

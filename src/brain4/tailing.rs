@@ -12,8 +12,9 @@ use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
 
 impl Brain4 {
-    pub fn update_all_tailing_pos2(&mut self) {}
-    pub fn update_all_tailing_pos(&mut self) {
+    pub fn update_all_tailing_pos(&mut self) {}
+
+    pub fn update_all_tailing_pos2(&mut self) {
         // simple tailing
         // for (_, ph) in self.open_pos.clone() {
         for (_, ph) in self.open_pos.iter() {

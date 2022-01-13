@@ -28,15 +28,16 @@ impl BackRunConfig {
         let backend = BackendEngineOuter::new(self.balance, &self.report_cfg);
         let mut back_arc = Arc::new(backend);
         let mut brain = Brain4::new(back_arc.clone(), self.pairs_conf.first().unwrap().clone());
-
+        let pair = self.pair.clone();
         for (i, t) in self.ticks.iter().enumerate() {
             if i % 10000 == 0 {
                 // println!("{}", i);
             }
-            back_arc.next_tick(1, t.clone());
+            back_arc.next_tick_dep(pair.to_symbol_id(), t.clone());
             // brain.on_price_tick_NE(1, t.to_tick());
             // brain.on_price_tick(1, t.to_tick());
-            brain.on_price_tick_ne_dc_v3(1, t.to_tick());
+            // brain.on_price_tick_ne_dc_v3(1, t.to_tick());
+            brain.on_price_tick_ne_dc_v4(&pair, t.to_tick());
             let notifys = back_arc.take_notify();
             for not in notifys {
                 brain.on_notify_position(not);
