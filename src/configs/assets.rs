@@ -103,8 +103,102 @@ pub enum Pair {
     GBPMXN,
     GBPZAR,
 
-    // Metals
+    // Crypto 19
+    BTCUSD,
+    ETHUSD,
+    LTCUSD,
+    DASHUSD,
+    Ripple,
+    BitcoinCash,
+    BCHUSD,
+    DOTUSD,
+    LINKUSD,
+    XLMUSD,
+    ETHBTC,
+    XRPUSD,
+    UNIUSD,
+    DOGEUSD,
+    ADAUSD,
+    BNBUSD,
+    XAUBTC,
+    EOSUSD,
+    XTZUSD,
+
+    // Indices 30
+    AUS200,
+    EUSTX50,
+    FRA40,
+    GER40,
+    HK50,
+    IT40,
+    JPN225,
+    AEX,
+    WIG20,
+    SPA35,
+    SMI,
+    UK100,
+    US2000,
+    US500,
+    NAS100,
+    US30,
+    CN50,
+    SCI25,
+    VIX,
+    Crypto10,
+    Crypto20,
+    Crypto30,
+    CA60,
+    CHINAH,
+    MidDE50,
+    NETH25,
+    NOR25,
+    SA40,
+    SWI20,
+    GERTEC30,
+
+    // Energies  7
+    XBRUSD,
+    XTIUSD,
+    XNGUSD,
+    SpotBrent,
+    SpotCrude,
+    NatGas,
+    Gasoline,
+
+    //Metals (Spot) : 11
     XAUUSD,
+    XAGUSD,
+    XAUEUR,
+    XAGEUR,
+    XPDUSD,
+    XPTUSD,
+    XAUAUD,
+    XAUCHF,
+    XAUGBP,
+    XAGAUD,
+    XAUJPY,
+
+    // Stocks USA
+    Alibaba_Group,
+    Microsoft,
+    Amazon_com,
+    Apple,
+    Facebook,
+    Alphabet_C,
+    Netflix,
+    Coinbase_Global,
+    NVIDIA,
+    Tesla,
+    AT_T,
+    Baidu,
+    Citigroup,
+    Goldman_Sachs_Group,
+    IBM,
+    JPMorgan_Chase,
+    Mastercard,
+    McDonalds,
+    NIKE,
+    Oracle,
 }
 
 impl Pair {
@@ -143,7 +237,22 @@ impl Pair {
     }
 
     pub fn to_string(&self) -> String {
-        format!("{:?}", self)
+        let stocks = self.to_stocks_string();
+        match stocks {
+            None => {
+                format!("{:?}", self)
+            }
+            Some(sr) => sr.to_string(),
+        }
+    }
+
+    fn to_stocks_string(&self) -> Option<&str> {
+        use Self::*;
+        let r = match self {
+            Alibaba_Group => Some("Alibaba_Group"),
+            _ => None,
+        };
+        r
     }
 
     // todo: update?
