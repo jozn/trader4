@@ -45,32 +45,34 @@ fn main() {
         print_it(&list);
     }
 
-    // List of assets based class types
+    // Stocks
+    println!("\n\n\n================================");
 
     let classify = |class: &str| {
         let mut list_out = vec![];
         for c in &symbols {
             if c.class == class {
-                list_out.push(stock_to_name(c.name));
+                // data type = (stock enum name (String), stock full name (String))
+                list_out.push((stock_to_name(c.name),(c.name.to_string())));
             }
         }
         list_out
     };
 
-    println!("\n\n\n================================");
-    // List of stock name normizle
-    let mut list_stocks = vec![];
-    for c in &symbols {
-        if c.class == "US Equities (CFDs)" {
-            // if c.class == "GER Equities (CFDs)" {
-            list_stocks.push(c.name);
-        }
-    }
-    for st in list_stocks {
-        let n = stock_to_name(st);
-        println!("{}          <=            {}", n, st);
-        // println!("{}", n);
-    }
+    // // List of stock name normizle
+    // let mut list_stocks = vec![];
+    // for c in &symbols {
+    //     if c.class == "US Equities (CFDs)" {
+    //         // if c.class == "GER Equities (CFDs)" {
+    //         list_stocks.push(c.name);
+    //     }
+    // }
+    // for st in list_stocks {
+    //     let n = stock_to_name(st);
+    //     println!("{}          <=            {}", n, st);
+    //     // println!("{}", n);
+    // }
+
     let usa_stocks = classify("US Equities (CFDs)");
     let ger_stocks = classify("GER Equities (CFDs)");
     let eu_stocks = classify("EU Equities (CFDs)");
@@ -89,13 +91,16 @@ fn print_it(list: &Vec<&str>) {
     }
 }
 
-fn print_it2(title: &str, list: &Vec<String>) {
+fn print_it2(title: &str, list: &Vec<(String,String)>) {
     println!("\n\n\n=============\n>>> {} {:}\n", title, list.len());
     for name in list {
-        println!("{:},", name);
+        println!("{:},", name.0);
     }
-    println!("\n\n");
+    println!("\n");
     // for enum string
+    for name in list {
+        println!(r#"Self::{:} => Some("{}"),"#, name.0, name.1 );
+    }
 }
 //  Uber_Technologies_(UBER.N) =>  Uber_Technologies
 fn stock_to_name(name: &str) -> String {

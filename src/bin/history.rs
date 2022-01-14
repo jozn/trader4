@@ -6,13 +6,14 @@ use trader3::configs::assets::Pair;
 use trader3::core::helper;
 use trader3::online;
 use trader3::online::ctrader::{CTrader, Config};
+use threadpool::ThreadPool;
 
 fn main() {
     run();
 }
 
 const YEAR_ZERO_WEEK: i64 = 1609632000_000; // Sunday, 3 January 2021 00:00:00
-const START_WEEK: i64 = YEAR_ZERO_WEEK; // 3 Jan 2021
+const START_WEEK: i64 = YEAR_ZERO_WEEK + 24 * MS_IN_WEEK; // 3 Jan 2021
 const MS_IN_WEEK: i64 = 7 * 86400_000;
 
 fn run() {
@@ -21,16 +22,22 @@ fn run() {
         port: 5035,
         client_id: "3042_mso8gOm4NPAzIYizUC0gp941QCGvnXcRPJzTrNjVZNG0EeRFYT".to_string(),
         client_secret: "geDkrRiRyfbanU6OUwZMXKIjr4vKQyfs1Ete0unffXtS8Ah14o".to_string(),
-        client_token: "mRqipe6dLQgxNqdJirAB5kCMJbl03CISOSRx755JkgE".to_string(),
+        client_token: "lcd2-Q0fEVUMMILzkyjwcG1YKmj1vsI1HFRZJx5ETCw".to_string(),
+        // ctid: 23382349,
         ctid: 22851452,
     };
 
-    let pair_ids = assets::get_all_symbols_ids();
+    let pool = ThreadPool::new(10);
+
+    let mut pair_ids = assets::get_all_symbols_ids();
+    // pair_ids.reverse(); // TEMP: first stocks
     // let pair_ids = vec![8];// todo: remove
+    // let pair_ids = vec![10099,10096,10011,41];// gold
     for pair_id in pair_ids {
         let pair = assets::Pair::id_to_symbol(pair_id);
         let cfg = cfg.clone();
-        thread::spawn(move || {
+        // thread::spawn(move || {
+        pool.execute(move || {
             let mut current_week_start_ms = START_WEEK;
 
             loop {
@@ -38,7 +45,6 @@ fn run() {
 
                 let folder = get_folder_path(&pair);
                 let file_path = get_file_path(&pair, week_id);
-                std::fs::create_dir_all(&folder).unwrap();
 
                 // Old legacy .csv to .tsv file rename
                 let old_csv_file = file_path.replace(".tsv", ".csv");
@@ -87,6 +93,7 @@ fn run() {
                 }
 
                 if csv_res.len() > 0 {
+                    std::fs::create_dir_all(&folder).unwrap();
                     std::fs::write(&file_path, &csv_res);
                 }
 
@@ -108,7 +115,7 @@ fn run() {
         });
     }
 
-    std::thread::sleep(std::time::Duration::new(2_000_000, 0));
+    std::thread::sleep(std::time::Duration::new(20_000_000, 0));
 }
 
 fn get_weeks_num(seconds: i64) -> i64 {

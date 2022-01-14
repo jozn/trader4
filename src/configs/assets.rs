@@ -247,9 +247,28 @@ impl Pair {
     }
 
     fn to_stocks_string(&self) -> Option<&str> {
-        use Self::*;
+        // use Self::*;
         let r = match self {
-            Alibaba_Group => Some("Alibaba_Group"),
+            Self::Alibaba_Group => Some("Alibaba_Group_(BABA.N)"),
+            Self::Microsoft => Some("Microsoft_Corp_(MSFT.O)"),
+            Self::Amazon_com => Some("Amazon.com_Inc_(AMZN.O)"),
+            Self::Apple => Some("Apple_Inc_(AAPL.O)"),
+            Self::Facebook => Some("Facebook_Inc_(FB.O)"),
+            Self::Alphabet_C => Some("Alphabet_Inc_C_(GOOG.O)"),
+            Self::Netflix => Some("Netflix_Inc_(NFLX.O)"),
+            Self::Coinbase_Global => Some("Coinbase_Global_Inc_(COIN.O)"),
+            Self::NVIDIA => Some("NVIDIA_Corporation_(NVDA.O)"),
+            Self::Tesla => Some("Tesla_Inc_(TSLA.O)"),
+            Self::AT_T => Some("AT&T_Inc_(T.N)"),
+            Self::Baidu => Some("Baidu_Inc_(BIDU.O)"),
+            Self::Citigroup => Some("Citigroup_Inc_(C.N)"),
+            Self::Goldman_Sachs_Group => Some("Goldman_Sachs_Group_(GS.N)"),
+            Self::IBM => Some("IBM_Corporation_(IBM.N)"),
+            Self::JPMorgan_Chase => Some("JPMorgan_Chase_&_Co_(JPM.N)"),
+            Self::Mastercard => Some("Mastercard_Inc_(MA.N)"),
+            Self::McDonalds => Some("McDonalds_Corporation_(MCD.N)"),
+            Self::NIKE => Some("NIKE_Inc_(NKE.N)"),
+            Self::Oracle => Some("Oracle_Corporation_(ORCL.N)"),
             _ => None,
         };
         r
