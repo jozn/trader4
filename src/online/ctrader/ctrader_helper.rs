@@ -95,16 +95,26 @@ pub fn dispatch_read_thread(ctrader: CTraderInst) {
     });
 }
 
-pub fn dispatch_write_thread(ctrader: CTraderInst, ch: mpsc::Receiver<Vec<u8>>) {
+// pub fn dispatch_write_thread(ctrader: CTraderInst, ch: mpsc::Receiver<Vec<u8>>) {
+pub fn dispatch_write_thread(ctrader: CTraderInst, ch: crossbeam_channel::Receiver<Vec<u8>>) {
     // let stream_lock = ctrader.stream.clone();
     let stream_lock = ctrader.inner.clone();
     thread::spawn(move || loop {
+        // let msg_data = ch.recv().expect("dispatch_write_thread: could not recive message.");
         let msg_data = ch.recv();
         if ctrader.is_disconnect() {
             println!("[ENDING] Existing ping loop.");
             break;
         }
         match msg_data {
+            None => {}
+            Some(msg_data) => {
+                // println!("------------- wire {:?}", msg_data.len());
+                let mut locket_stream = stream_lock.lock().unwrap();
+                locket_stream.borrow_mut().stream.write(&msg_data);
+            }
+        }
+        /*match msg_data {
             Ok(msg_data) => {
                 // println!("------------- wire {:?}", msg_data.len());
                 let mut locket_stream = stream_lock.lock().unwrap();
@@ -113,7 +123,7 @@ pub fn dispatch_write_thread(ctrader: CTraderInst, ch: mpsc::Receiver<Vec<u8>>) 
             Err(e) => {
                 println!("Error in sending data thread channel {:?}", e);
             }
-        }
+        }*/
     });
 }
 

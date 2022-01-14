@@ -14,12 +14,13 @@ use std::io::{Error, Read, Write};
 use std::net::TcpStream;
 use std::ops::Deref;
 use std::sync::atomic::Ordering;
-use std::sync::mpsc;
-use std::sync::mpsc::RecvError;
+// use std::sync::mpsc;
+// use std::sync::mpsc::RecvError;
 use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
 use tcp_stream::HandshakeError;
+use crossbeam_channel;
 
 use super::*;
 use super::*;
@@ -39,14 +40,17 @@ pub type CTraderInst = Arc<CTrader>;
 #[derive(Debug)]
 pub struct ConnectRes {
     pub conn: Arc<CTrader>,
-    pub response_chan: std::sync::mpsc::Receiver<ResponseEvent>,
+    pub response_chan: crossbeam_channel::Receiver<ResponseEvent>,
+    // pub response_chan: std::sync::mpsc::Receiver<ResponseEvent>,
 }
 
 #[derive(Debug)]
 pub struct CTrader {
     cfg: Config,
-    writer_chan: std::sync::mpsc::SyncSender<Vec<u8>>,
-    pub response_chan: std::sync::mpsc::SyncSender<ResponseEvent>,
+    // writer_chan: std::sync::mpsc::SyncSender<Vec<u8>>,
+    writer_chan: crossbeam_channel::Sender<Vec<u8>>,
+    // pub response_chan: std::sync::mpsc::SyncSender<ResponseEvent>,
+    pub response_chan: crossbeam_channel::Sender<ResponseEvent>,
     pub(crate) inner: Arc<Mutex<RefCell<InnderData>>>,
 }
 
@@ -59,8 +63,10 @@ pub struct InnderData {
 impl CTrader {
     pub fn connect2(cfg: &Config) -> ConnectRes {
         // Channel making
-        let (sender_ch, reciver_ch) = std::sync::mpsc::sync_channel(1000);
-        let (sender_event_ch, reciver_event_ch) = std::sync::mpsc::sync_channel(1000);
+        // let (sender_ch, reciver_ch) = std::sync::mpsc::sync_channel(1000);
+        let (sender_ch, reciver_ch) = crossbeam_channel::bounded(1000);
+        // let (sender_event_ch, reciver_event_ch) = std::sync::mpsc::sync_channel(1000);
+        let (sender_event_ch, reciver_event_ch) = crossbeam_channel::bounded(1000);
 
         let stream = new_socket(&cfg);
         let inner = InnderData { stream, end: false };
