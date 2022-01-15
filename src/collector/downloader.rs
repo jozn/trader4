@@ -4,6 +4,126 @@ use crate::configs::assets::Pair;
 use crate::helper;
 use crate::online::*;
 
+pub struct Downloader {
+    cr: ConnectRes, // cTrader connection result
+    pair: Pair,
+    pub disconnected: bool,
+}
+
+impl Downloader {
+    pub fn new(pair: &Pair, cfg: &Config) -> Self {
+        let con_res = CTrader::connect2(&cfg);
+        // con_res.auth(ct.clone());
+        auth_connection(cfg,con_res.conn.clone());
+
+        Self {
+            cr: con_res,
+            pair: pair.clone(),
+            disconnected: false,
+        }
+    }
+
+    pub fn get_data(&mut self, from_time_ms: i64, to_time_ms: i64) -> (String, bool) {
+        let symbol_id = self.pair.to_symbol_id();
+        let start_time = from_time_ms;
+        let mut time_ms = to_time_ms;
+
+        let mut collector = Collector::new();
+        let mut in_bids = true;
+
+        let pari = self.pair.clone();
+        let ct = self.cr.conn.clone();
+        let rc_event = self.cr.response_chan.clone();
+
+        // ct.auth(ct.clone());
+
+        ct.get_bid_tick_data_req(symbol_id, from_time_ms, to_time_ms);
+
+        let mut cnt = 0;
+        let mut pre_mature_end = false;
+
+        for e in rc_event {
+            match e.clone() {
+                _ => {
+                    // println!("EVENT: {:#?}", e);
+                }
+            };
+
+            match e {
+                ResponseEvent::Refresh => {
+                    // println!("EVENT");
+                }
+                ResponseEvent::DisConnected => {
+                    println!("{:?} > Disconnected ...", pari);
+                    pre_mature_end = true;
+                    self.disconnected = true;
+                    break;
+                }
+                ResponseEvent::ErrorRes(e) => {
+                    println!("{:?} > Error {:?} ...", pari, e);
+                }
+                ResponseEvent::GetTickDataRes(r) => {
+                    let ts = trans_ticks(&r.tick_data);
+                    // let first_tick = ts.first().unwrap();
+                    cnt += 1;
+                    if in_bids {
+                        if ts.len() > 0 {
+                            let first_tick = ts.first().unwrap();
+                            println!(
+                                "{:?} > Bid {} - Time: {} - Dur: {} - Tick Counts: {}",
+                                pari,
+                                cnt,
+                                helper::to_time_string(time_ms / 1000),
+                                (time_ms - first_tick.timestamp) / 3600_000,
+                                ts.len()
+                            );
+                            // bids
+                            ts.iter().for_each(|v| collector.bids.push(v.clone()));
+                        }
+
+                        if r.has_more {
+                            time_ms = ts.first().unwrap().timestamp;
+                            ct.get_bid_tick_data_req(symbol_id, from_time_ms, time_ms);
+                        } else {
+                            in_bids = false;
+                            time_ms = to_time_ms;
+                            ct.get_ask_tick_data_req(symbol_id, from_time_ms, time_ms);
+                        }
+                    } else {
+                        if ts.is_empty() {
+                            break;
+                        }
+                        let first_tick = ts.first().unwrap();
+                        println!(
+                            "{:?} > Ask {} - Time: {} - Dur: {} - Tick Counts: {}",
+                            pari,
+                            cnt,
+                            helper::to_time_string(time_ms / 1000),
+                            (time_ms - first_tick.timestamp) / 3600_000,
+                            ts.len()
+                        );
+                        ts.iter().for_each(|v| collector.asks.push(v.clone()));
+                        if r.has_more {
+                            time_ms = first_tick.timestamp;
+                            ct.get_ask_tick_data_req(symbol_id, from_time_ms, time_ms);
+                        } else {
+                            break;
+                        }
+                    }
+                }
+                _ => {}
+            };
+        }
+
+        // ct.disconnect();
+
+        // let res = collector.final_result();
+        let res = collector.to_csv();
+        let tsv = format!("{:}", res);
+        (tsv, pre_mature_end)
+    }
+}
+
 pub fn collect_data_from_api_csv(
     // cfg: &Config,
     cr: ConnectRes,

@@ -53,7 +53,7 @@ fn main() {
         for c in &symbols {
             if c.class == class {
                 // data type = (stock enum name (String), stock full name (String))
-                list_out.push((stock_to_name(c.name),(c.name.to_string())));
+                list_out.push((stock_to_name(c.name), (c.name.to_string())));
             }
         }
         list_out
@@ -91,7 +91,7 @@ fn print_it(list: &Vec<&str>) {
     }
 }
 
-fn print_it2(title: &str, list: &Vec<(String,String)>) {
+fn print_it2(title: &str, list: &Vec<(String, String)>) {
     println!("\n\n\n=============\n>>> {} {:}\n", title, list.len());
     for name in list {
         println!("{:},", name.0);
@@ -99,7 +99,7 @@ fn print_it2(title: &str, list: &Vec<(String,String)>) {
     println!("\n");
     // for enum string
     for name in list {
-        println!(r#"Self::{:} => Some("{}"),"#, name.0, name.1 );
+        println!(r#"Self::{:} => Some("{}"),"#, name.0, name.1);
     }
 }
 //  Uber_Technologies_(UBER.N) =>  Uber_Technologies

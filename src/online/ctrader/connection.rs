@@ -16,11 +16,11 @@ use std::ops::Deref;
 use std::sync::atomic::Ordering;
 // use std::sync::mpsc;
 // use std::sync::mpsc::RecvError;
+use crossbeam_channel;
 use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
 use tcp_stream::HandshakeError;
-use crossbeam_channel;
 
 use super::*;
 use super::*;
@@ -60,6 +60,13 @@ pub struct InnderData {
     pub end: bool,
 }
 
+pub fn auth_connection(cfg: &Config, ct: Arc<CTrader>) {
+    // let cfg = &self.cfg;
+    ct.application_auth_req(&cfg.client_id, &cfg.client_secret);
+    std::thread::sleep(std::time::Duration::new(2, 0));
+    println!(">>>> Got connected ");
+}
+
 impl CTrader {
     pub fn connect2(cfg: &Config) -> ConnectRes {
         // Channel making
@@ -88,6 +95,7 @@ impl CTrader {
         }
     }
 
+    // todo delte
     pub fn auth(&self, ct: Arc<CTrader>) {
         let cfg = &self.cfg;
         ct.application_auth_req(&cfg.client_id, &cfg.client_secret);
