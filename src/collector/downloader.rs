@@ -14,7 +14,7 @@ impl Downloader {
     pub fn new(pair: &Pair, cfg: &Config) -> Self {
         let con_res = CTrader::connect2(&cfg);
         // con_res.auth(ct.clone());
-        auth_connection(cfg,con_res.conn.clone());
+        auth_connection(cfg, con_res.conn.clone());
 
         Self {
             cr: con_res,
