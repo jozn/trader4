@@ -4,6 +4,8 @@ use crate::configs::assets::Pair;
 use crate::helper;
 use crate::online::*;
 
+// Note: Downloader has high cpu consumtion, probelbey due to it's sorting mechanism.
+
 pub struct Downloader {
     cr: ConnectRes, // cTrader connection result
     pair: Pair,

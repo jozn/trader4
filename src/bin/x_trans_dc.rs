@@ -10,6 +10,8 @@ use trader3::dc_intel::{FrameCsv, FrameMem};
 use trader3::offline::num5_dep;
 use trader3::ta::{DCRes, VelRes};
 
+// Deprecated
+
 const OUT_FOLDER: &'static str = "/mnt/c/me/data_dc_intel/";
 
 pub fn main() {

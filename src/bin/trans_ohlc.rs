@@ -1,11 +1,8 @@
 use chrono::prelude::*;
 use trader3;
-use trader3::candle::{
-    CandleConfig, CandleSeriesTA, Kline, KlineHolderFrameTA, KlineTA, TimeSerVec, TA2,
-};
+use trader3::candle::{CandleConfig, CandleSeriesTA, Kline, KlineHolderFrameTA, TimeSerVec};
 use trader3::configs::assets::Pair;
 use trader3::offline::num5_dep;
-use trader3::ta::{DCRes, VelRes};
 use trader3::{collector, helper};
 
 pub fn main() {
@@ -13,7 +10,8 @@ pub fn main() {
 
     for pair in pairs {
         for i in 1..=53 {
-            let path = format!("/mnt/c/me/data/{:?}/{}.tsv", pair, i);
+            let cat  = pair.to_category();
+            let path = format!("/mnt/j/trader/data/{}/{:?}/{}.tsv",cat, pair, i);
             if std::path::Path::new(&path).exists() {
                 let cfg = CandleConfig {
                     small_tick: 40,
@@ -46,16 +44,19 @@ pub fn main() {
 fn write_output(khf: &KlineHolderFrameTA, pair: &Pair, week_id: i64, time_frame_str: &str) {
     let mut vec_candles = vec![];
     for k in khf.klines_ta.iter() {
-        vec_candles.push(kline_to_kline_out(&k));
+        vec_candles.push(kline_to_kline_out(&k.kline));
     }
 
     let s = trader3::core::helper::to_csv_out(&vec_candles, true);
     // let s  = trader3::offline::kline_ta_csv::to_csv_out(&vec_candles);
 
     // Write to file
-    const FOLDER: &'static str = "/mnt/c/me/data_candle_trans/";
-    let dir = format!("{}{:?}", FOLDER, pair);
-    let out_file_path = format!("{}{:?}/{}_{}.tsv", FOLDER, pair, week_id, time_frame_str);
+    let cat  = pair.to_category();
+    let dir = format!("/mnt/j/trader/data_trans/{}/{:?}",cat ,pair);
+    let out_file_path = format!(
+        "/mnt/j/trader/data_trans/{}/{:?}/{}_{}.tsv",
+        cat,pair, week_id, time_frame_str
+    );
 
     use std::fs;
     fs::create_dir_all(&dir);
@@ -63,19 +64,16 @@ fn write_output(khf: &KlineHolderFrameTA, pair: &Pair, week_id: i64, time_frame_
     println!("{}", &out_file_path);
 }
 
-type CsvOut = (KlineOut, DCRes, VelRes);
-
 #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, Default)]
 pub struct KlineOut {
     // #[serde(flatten)]
     // pub kline: Kline,
-    // pub open_time: u64, // in mill seconds
+    pub open_time: u64, // in mill seconds
     // pub close_time: u64,
-    pub kid: u64,
     pub bucket: u64,
-    // pub tick_count: u32,
-    // pub kline_num: i32, // -1: from trades sums >0 sums of klines
-    // pub open: f64,
+    pub tick_count: u32,
+    pub kline_num: i32, // -1: from trades sums >0 sums of klines
+    pub open: f64,
     pub high: f64,
     pub low: f64,
     pub close: f64,
@@ -84,23 +82,19 @@ pub struct KlineOut {
     // pub volume: f64,
     pub open_time_str: String,
     pub duration: String,
-    pub dc_pip_dif: f64, // high - low
 }
 
-fn kline_to_kline_out(kh: &KlineTA) -> CsvOut {
-    let k = &kh.kline;
+fn kline_to_kline_out(k: &Kline) -> KlineOut {
     let open_time = NaiveDateTime::from_timestamp(k.open_time as i64, 0);
     let ots = open_time.format("%Y-%m-%d %H:%M:%S").to_string();
-    let ta = &kh.ta1.ta2;
-    let dc = &kh.ta1.ta2.dc;
+
     let o = KlineOut {
-        kid: k.kid,
         // kline: k.clone(),
-        // open_time: k.open_time,
+        open_time: k.open_time,
         bucket: k.bucket,
-        // tick_count: k.tick_count,
-        // kline_num: k.kline_num,
-        // open: k.open,
+        tick_count: k.tick_count,
+        kline_num: k.kline_num,
+        open: k.open,
         high: k.high,
         low: k.low,
         close: k.close,
@@ -108,8 +102,7 @@ fn kline_to_kline_out(kh: &KlineTA) -> CsvOut {
         pip_dif_oc: num5_dep((k.close - k.open) * 10_000.),
         open_time_str: ots,
         duration: helper::to_duration((k.close_time - k.open_time) as i64),
-        dc_pip_dif: num5_dep((dc.high - dc.low) * 10_000.),
     };
 
-    (o, ta.dc.clone(), ta.vel2.clone())
+    o
 }

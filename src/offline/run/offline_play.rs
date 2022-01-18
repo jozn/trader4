@@ -17,13 +17,16 @@ pub fn run2() {
 pub fn run1() {
     let pairs = assets::get_all_symbols();
     for p in &pairs {
-        run_pair(p);
+        if p.is_forex() {
+            run_pair(p);
+        }
     }
 }
 
 pub fn run_pair(pair: &Pair) {
     let pair_cfg = (
-        Pair::EURUSD,
+        // Pair::EURUSD,
+        pair.clone(),
         CandleConfig {
             // small_tick: 30,
             // medium_tick: 10,

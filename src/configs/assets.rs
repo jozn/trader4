@@ -246,6 +246,43 @@ impl Pair {
         }
     }
 
+    pub fn is_forex(&self) -> bool {
+        let cat = self.to_category();
+        cat.eq("forex")
+    }
+
+    pub fn is_us_forex(&self) -> bool {
+        let cat = self.to_category();
+        cat.eq("us_stocks")
+    }
+
+    pub fn folder_path(&self) -> String {
+        format!("{}/{}", self.to_category(), self.to_string())
+    }
+
+    pub fn to_category(&self) -> String {
+        let str = self.get_conf();
+        // for pepperstone only - others might be dfferent
+        let cat = match str.class {
+            "GER Equities (CFDs)" => "Equities",
+            "Metals (Spot)" => "Metals",
+            "Currency Index (Spot)" => "Currency",
+            "US Equities (CFDs)"=> "US_Stocks",
+            "Commodities (Cash)"=> "Commodities",
+            "ETFs"=> "ETF",
+            "EU Equities (CFDs)"=> "EU_Stocks",
+            "Energies (Spot)"=> "Energies",
+            "Forex (Spot)"=> "Forex",
+            "TEST"=> "TEST",
+            "AU Equities (CFDs)"=> "AU_Stocks",
+            "Thematics"=> "Thematics",
+            "Crypto Currency (Spot)"=> "Crypto",
+            "Indices (Spot)"=> "Indices",
+            _ => "Others",
+        };
+        cat.to_lowercase()
+    }
+
     fn to_stocks_string(&self) -> Option<&str> {
         // use Self::*;
         let r = match self {

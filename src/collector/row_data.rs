@@ -21,3 +21,20 @@ impl BTickData {
         self.bid_price
     }
 }
+
+#[derive( serde::Serialize,  serde::Deserialize, PartialEq, Debug)]
+pub struct TickBinFast {
+    pub timestamp: i64,
+    pub bid_price: f64,
+    pub ask_price: f64,
+}
+
+impl BTickData {
+    pub fn to_fast_bin(&self) -> TickBinFast {
+        TickBinFast {
+            timestamp: self.timestamp,
+            bid_price: self.bid_price,
+            ask_price: self.ask_price
+        }
+    }
+}
