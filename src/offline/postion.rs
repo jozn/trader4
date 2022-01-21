@@ -6,6 +6,9 @@ use crate::helper;
 use chrono::*;
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
+use crate::collector::row_data::BTickData;
+use crate::configs::assets;
+use crate::ta::round;
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Position {
@@ -29,7 +32,9 @@ pub struct Position {
     pub finished: bool, // tod: status
     pub duration: String,
     pub profit: f64,
-    #[serde(skip)]
+    // #[serde(skip)]
+    pub spread_open: f64,
+    pub spread_close: f64,
     pub spread_fees: f64,
     #[serde(skip)]
     pub final_balance: f64,
@@ -57,18 +62,24 @@ impl Default for PosDir {
 
 #[derive(Debug, Clone, Default)]
 pub struct CloseParm {
-    pub at_price: f64,
+    pub at_price_dep: f64,
     pub time: u64, // Brain time
     pub ta: TA1,
 }
 
 impl Position {
-    pub fn new(p: &NewPos, locked: f64) -> Self {
+    pub fn new(p: &NewPos, tick: &BTickData , locked: f64) -> Self {
         assert!(p.size_base > 5);
         let dir = if p.is_short {
             PosDir::Short
         } else {
             PosDir::Long
+        };
+
+        let at_price = if p.is_short {
+            tick.bid_price
+        } else {
+            tick.ask_price
         };
 
         let (high, low) = if p.is_short {
@@ -78,7 +89,14 @@ impl Position {
         };
         assert!(high > low);
 
-        let got_assets = p.size_base as f64 * p.at_price;
+        let got_assets = p.size_base as f64 * at_price;
+        let pair = assets::Pair::id_to_symbol(p.symbol_id);
+        let spreed_open = tick.get_spread_pip(&pair) ;
+        // let got_assets = if p.is_short {
+        //     p.size_base as f64 * at_price
+        // } else {
+        //     p.size_base as f64 * at_price
+        // };
 
         let mut res = Self {
             pos_id: 0,
@@ -87,7 +105,7 @@ impl Position {
             pos_size_usd: p.size_base as f64,
             got_assets,
             open_time: p.time_s,
-            open_price: p.at_price,
+            open_price: at_price,
             open_time_str: helper::to_date(p.time_s),
             high_exit_price: high,
             low_exit_price: low,
@@ -97,6 +115,7 @@ impl Position {
             duration: "".to_string(),
             // profit_xpip: 0,
             profit: 0.0,
+            spread_open: spreed_open,
             spread_fees: 0.0,
             final_balance: 0.0,
             touch_low_pip: 0.,
@@ -111,11 +130,21 @@ impl Position {
         res
     }
 
-    pub fn close_pos(&mut self, param: &CloseParm) {
+    pub fn close_pos(&mut self, param: &CloseParm ,tick: &BTickData) {
+        let pair = assets::Pair::id_to_symbol(self.symbol_id);
+        let close_price = if self.is_short() {
+            tick.ask_price
+        } else {
+            tick.bid_price
+        };
+        let spreed_close = tick.get_spread_pip(&pair) ;
         self.close_time_str = helper::to_date(param.time);
         self.duration = helper::to_duration(self.open_time as i64 - param.time as i64);
-        self.close_price = param.at_price;
+        self.close_price = close_price;
 
+        // let spread_fees = ((self.spread_open + self.spread_close) / 2.) * ((self.open_price + self.close_price) / 2.) ;
+        let spread_fees = ((self.spread_open + self.spread_close) / 2.);
+        let spread_fees = round(spread_fees);
         let price_diff_percentage = (self.close_price - self.open_price) / self.open_price;
         let mut pl = price_diff_percentage * self.pos_size_usd;
         if self.is_short() {
@@ -128,11 +157,12 @@ impl Position {
             self.won = -1;
         }
 
-        self.close_price = param.at_price;
+        // self.close_price = close_price;
         self.close_time = param.time;
         self.finished = true;
         self.profit = pl;
-        self.spread_fees = 0.;
+        self.spread_close = spreed_close;
+        self.spread_fees = spread_fees;
         self.final_balance = self.pos_size_usd + pl;
     }
 

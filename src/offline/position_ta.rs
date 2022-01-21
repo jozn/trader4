@@ -3,7 +3,7 @@ use crate::gate_api::NewPos;
 use serde::{Deserialize, Serialize};
 
 // Note: maybe a custom serde Serializer would be better to extract both medium and big into one struct.
-
+// todo remove
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct PositionTA {
     // Context flat - When rust fixed csv out move it to ctx

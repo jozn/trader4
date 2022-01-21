@@ -7,6 +7,7 @@ use trader3::{collector, helper};
 
 pub fn main() {
     let pairs = trader3::configs::assets::get_all_symbols();
+    // let pairs = trader3::configs::assets::get_all_symbols();
 
     for pair in pairs {
         for i in 1..=60 {
@@ -27,6 +28,7 @@ pub fn main() {
                 // println!("{}", &path);
 
                 let ticks = trader3::collector::loader::load_rows_fast(&path);
+                assert!(ticks.len() > 0 );
                 let mut arr = TimeSerVec::new();
 
                 for t in ticks {

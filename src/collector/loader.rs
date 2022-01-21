@@ -65,9 +65,9 @@ pub fn load_all_pair(pair: &Pair, rng: Range<u16>) -> Vec<BTickData> {
     let mut arr = vec![];
     let cat = pair.to_category();
     for i in rng {
-        let path = format!("/mnt/j/trader/data/{}/{:?}/{}.tsv",cat, pair, i);
+        let path = format!("/mnt/t/trader/data_fast/{}/{:?}/{}.bin",cat, pair, i);
         if std::path::Path::new(&path).exists() {
-            let ticks = load_rows(&path);
+            let ticks = load_rows_fast(&path);
             for t in ticks {
                 arr.push(t);
             }

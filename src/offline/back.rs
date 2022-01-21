@@ -70,11 +70,11 @@ impl BackendEngine {
                 if req.close {
                     let tick = self.get_symbol_tick(pos.symbol_id).unwrap();
                     let close_par = CloseParm {
-                        at_price: tick.ask_price,
+                        at_price_dep: tick.ask_price,
                         time: self.las_time_ms,
                         ta: Default::default(),
                     };
-                    pos.close_pos(&close_par);
+                    pos.close_pos(&close_par,&tick);
                     self._remove_open_pos(pos.pos_id as u64);
                     // self.opens.push(pos);
                     self.notify.push(pos.to_notify());
@@ -175,13 +175,13 @@ impl BackendEngine {
 
             let price = btick.ask_price;
             // println!("+++++++++++++++++++ >> : {:#?}, {:?}", pos, btick);
-            if price >= pos.high_exit_price || price <= pos.low_exit_price || force {
+            if btick.ask_price >= pos.high_exit_price || btick.bid_price <= pos.low_exit_price || force {
                 let p = CloseParm {
-                    at_price: price,
+                    at_price_dep: price,
                     time: btick.timestamp_sec as u64,
                     ta: Default::default(),
                 };
-                pos.close_pos(&p);
+                pos.close_pos(&p, &btick);
                 closed_some = true;
 
                 // println!("+++++++++++++++++++ closding pos : {:#?}", pos);
@@ -218,7 +218,8 @@ impl BackendEngine {
             return;
         }
         // println!("buy long long");
-        let mut pos = Position::new(param, self.get_locked_money());
+        let tick = self.get_symbol_tick(param.symbol_id).unwrap();
+        let mut pos = Position::new(param, &tick,self.get_locked_money());
         self.free_usd -= param.size_base as f64;
         pos.pos_id = self._next_pos_id();
         self.notify.push(pos.to_notify());
@@ -229,7 +230,8 @@ impl BackendEngine {
         if !self.has_enough_balance(param.size_base) {
             return;
         }
-        let mut pos = Position::new(param, self.get_locked_money());
+        let tick = self.get_symbol_tick(param.symbol_id).unwrap();
+        let mut pos = Position::new(param, &tick, self.get_locked_money());
         pos.pos_id = self._next_pos_id();
         self.notify.push(pos.to_notify());
         self.opens.push(pos);
@@ -257,11 +259,11 @@ impl BackendEngine {
             let btick = self.get_symbol_tick(pos.symbol_id).unwrap();
             let mut pos_cp = pos.clone();
             let p = CloseParm {
-                at_price: btick.bid_price,
+                at_price_dep: btick.bid_price,
                 time: btick.timestamp_sec as u64,
                 ta: Default::default(),
             };
-            pos_cp.close_pos(&p);
+            pos_cp.close_pos(&p,&btick);
 
             if pos_cp.is_short() {
                 locked_usd += pos_cp.profit;

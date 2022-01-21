@@ -1,6 +1,7 @@
 // use super::loader::*;
 
 use crate::candle::Tick;
+use crate::configs::assets::Pair;
 
 #[derive(Debug)]
 pub struct TransTickData {
@@ -21,6 +22,10 @@ pub struct BTickData {
 impl BTickData {
     pub fn get_price(&self) -> f64 {
         self.bid_price
+    }
+
+    pub fn get_spread_pip(&self, pair: &Pair) -> f64 {
+        (self.ask_price - self.bid_price) * pair.get_pip_multi()
     }
 
     pub fn to_tick(&self) -> Tick {
