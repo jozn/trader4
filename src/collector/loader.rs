@@ -1,25 +1,11 @@
 use crate::candle::Tick;
-use crate::collector::row_data::BTickData;
+use crate::collector::row_data::{BTickData, TickBinFast};
 use crate::configs::assets::Pair;
 use csv::{Error, StringRecord};
 use std::io::{BufRead, BufReader, Read, Write};
 use std::ops::Range;
 
 impl BTickData {
-    pub fn to_tick(&self) -> Tick {
-        let multi = 100_000.;
-        Tick {
-            time_s: self.timestamp_sec as u64,
-            // price_raw: self.bid_price * multi,
-            price_raw: self.bid_price,
-            multi: 1.,
-            qty: 0.0,
-            timestamp: self.timestamp,
-            bid_price: self.bid_price,
-            ask_price: self.ask_price,
-        }
-    }
-
     // Note: probelby manulay of this is unneccessory but as we we alerady implemented this
     //  for other structs it's good. Serde will works prefectely for this type.
     fn from_csv(csv_row: csv::StringRecord) -> Self {
@@ -106,4 +92,26 @@ pub fn load_days_pair(pair: &Pair, week_id: u16, rng: Range<u16>) -> Vec<BTickDa
         }
     }
     arr
+}
+
+// Fast fns
+pub fn load_ticks_fast(file_path: &str) -> Vec<Tick> {
+    let arr = load_rows_fast(file_path);
+    let res = arr.iter().map(|v| v.to_tick()).collect();
+    res
+}
+
+pub fn load_rows_fast(file_path: &str) -> Vec<BTickData> {
+    let file = std::fs::read(file_path).unwrap();
+
+    let arr_bins :Vec<TickBinFast> = bincode::deserialize(&file).unwrap();
+
+    let mut i = 0;
+    let mut out_arr = Vec::with_capacity(arr_bins.len());
+    for b in arr_bins {
+        out_arr.push(b.to_tick());
+    }
+    // println!("num :{}", i);
+
+    out_arr
 }

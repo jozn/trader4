@@ -6,22 +6,23 @@ use trader3::candle::{
 use trader3::collector;
 use trader3::collector::row_data::BTickData;
 use trader3::configs::assets::Pair;
-use trader3::ne2::{FrameCsv, NEFrame};
+use trader3::ne3::{FrameCsv, NEFrame};
 use trader3::offline::num5_dep;
 use trader3::ta::{DCRes, VelRes};
 
-const OUT_FOLDER: &'static str = "/mnt/c/me/data_ne/";
+const OUT_FOLDER: &'static str = "/mnt/t/trader/data_ne/";
 
 pub fn main() {
     // let pairs = trader3::configs::assets::get_all_symbols();
     let pairs = vec![trader3::configs::assets::Pair::USDCHF]; // todo: remove
 
     for pair in pairs {
-        for week_id in 25..=53 {
-            let path = format!("/mnt/c/me/data/{:?}/{}.tsv", pair, week_id);
+        for week_id in 25..=60 {
+            let path = format!("/mnt/t/trader/data_fast/{}/{}.bin", pair.folder_path(), week_id);
             if std::path::Path::new(&path).exists() {
-                let ticks = trader3::collector::loader::load_rows(&path);
-                let mut root = trader3::ne2::NERoot::new();
+                let ticks = trader3::collector::loader::load_rows_fast(&path);
+                // println!("len {}  {}", ticks.len(), &path);
+                let mut root = trader3::ne3::NERoot::new();
 
                 for t in ticks.clone() {
                     root.add_tick(&t.to_tick());
@@ -45,22 +46,24 @@ pub fn main() {
                 // wriet_daily(ticks, &pair, week_id);
 
                 // Write frames for each day
-                let mut day_frames = vec![];
-                let mut start = root.frames.first().unwrap().ohlc.open_time;
-                let mut day_num = 1;
-                for frame in root.frames {
-                    if frame.ohlc.open_time < start + 86_400 {
-                        day_frames.push(frame);
-                    } else {
-                        write_single_day_frames(day_frames.clone(), &pair, week_id, day_num);
-                        day_num += 1;
-                        start = frame.ohlc.open_time;
-                        day_frames.clear();
-                        day_frames.push(frame);
+                if root.frames.len() > 0 {
+                    let mut day_frames = vec![];
+                    let mut start = root.frames.first().unwrap().ohlc.open_time;
+                    let mut day_num = 1;
+                    for frame in root.frames {
+                        if frame.ohlc.open_time < start + 86_400 {
+                            day_frames.push(frame);
+                        } else {
+                            write_single_day_frames(day_frames.clone(), &pair, week_id, day_num);
+                            day_num += 1;
+                            start = frame.ohlc.open_time;
+                            day_frames.clear();
+                            day_frames.push(frame);
+                        }
                     }
+                    // last day (5)
+                    write_single_day_frames(day_frames.clone(), &pair, week_id, day_num);
                 }
-                // last day (5)
-                write_single_day_frames(day_frames.clone(), &pair, week_id, day_num);
             }
         }
     }
@@ -129,7 +132,7 @@ pub fn wriet_daily(ticks: Vec<BTickData>, pair: &Pair, week_id: u64) {
 
 // todo: change in way not to build a new NERoot but break wikly frames into days
 pub fn wriet_single_daily(ticks: Vec<BTickData>, pair: &Pair, week_id: u64, day_num: u64) {
-    let mut root = trader3::ne2::NERoot::new();
+    let mut root = trader3::ne3::NERoot::new();
 
     for t in ticks.clone() {
         root.add_tick(&t.to_tick());

@@ -12,7 +12,7 @@ use serde::{Serialize, Deserialize};
 
 // Note: we do not generate binary for daily now.
 
-const OUT_FOLDER: &'static str = "/mnt/j/trader/data_fast/";
+const OUT_FOLDER: &'static str = "/mnt/t/trader/data_fast/";
 const DAILY_DATA: bool = false;
 
 pub fn main() {
@@ -20,10 +20,15 @@ pub fn main() {
     // let pairs = vec![trader3::configs::assets::Pair::EURUSD]; // todo: remove
 
     for pair in pairs {
-        for week_id in 25..=53 {
-            let path = format!("/mnt/j/trader/data/{}/{}.tsv", pair.folder_path(), week_id);
-            if std::path::Path::new(&path).exists() {
-                let ticks = trader3::collector::loader::load_rows(&path);
+        for week_id in 25..=60 {
+            // let cat = pair.to_category();
+            let path_tsv = format!("/mnt/t/trader/data/{}/{}.tsv", pair.folder_path(), week_id);
+            let path_bin = format!("{}{}/{}.bin", OUT_FOLDER, &pair.folder_path(), week_id);
+            if std::path::Path::new(&path_bin).exists() {
+                continue;
+            }
+            if std::path::Path::new(&path_tsv).exists() {
+                let ticks = trader3::collector::loader::load_rows(&path_tsv);
 
                 // Fast weekly data
                 write_week_fast(&ticks,&pair,week_id);

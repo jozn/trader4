@@ -1,5 +1,7 @@
 // use super::loader::*;
 
+use crate::candle::Tick;
+
 #[derive(Debug)]
 pub struct TransTickData {
     pub timestamp: i64,
@@ -20,6 +22,28 @@ impl BTickData {
     pub fn get_price(&self) -> f64 {
         self.bid_price
     }
+
+    pub fn to_tick(&self) -> Tick {
+        let multi = 100_000.;
+        Tick {
+            time_s: self.timestamp_sec as u64,
+            // price_raw: self.bid_price * multi,
+            price_raw: self.bid_price,
+            multi: 1.,
+            qty: 0.0,
+            timestamp: self.timestamp,
+            bid_price: self.bid_price,
+            ask_price: self.ask_price,
+        }
+    }
+
+    pub fn to_fast_bin(&self) -> TickBinFast {
+        TickBinFast {
+            timestamp: self.timestamp,
+            bid_price: self.bid_price,
+            ask_price: self.ask_price
+        }
+    }
 }
 
 #[derive( serde::Serialize,  serde::Deserialize, PartialEq, Debug)]
@@ -29,12 +53,14 @@ pub struct TickBinFast {
     pub ask_price: f64,
 }
 
-impl BTickData {
-    pub fn to_fast_bin(&self) -> TickBinFast {
-        TickBinFast {
+impl TickBinFast {
+    pub fn to_tick(&self) -> BTickData {
+        BTickData {
+            date_str: "".to_string(),
+            timestamp_sec: self.timestamp / 1000,
             timestamp: self.timestamp,
             bid_price: self.bid_price,
-            ask_price: self.ask_price
+            ask_price: self.ask_price,
         }
     }
 }
