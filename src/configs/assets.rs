@@ -267,17 +267,17 @@ impl Pair {
             "GER Equities (CFDs)" => "Equities",
             "Metals (Spot)" => "Metals",
             "Currency Index (Spot)" => "Currency",
-            "US Equities (CFDs)"=> "US_Stocks",
-            "Commodities (Cash)"=> "Commodities",
-            "ETFs"=> "ETF",
-            "EU Equities (CFDs)"=> "EU_Stocks",
-            "Energies (Spot)"=> "Energies",
-            "Forex (Spot)"=> "Forex",
-            "TEST"=> "TEST",
-            "AU Equities (CFDs)"=> "AU_Stocks",
-            "Thematics"=> "Thematics",
-            "Crypto Currency (Spot)"=> "Crypto",
-            "Indices (Spot)"=> "Indices",
+            "US Equities (CFDs)" => "US_Stocks",
+            "Commodities (Cash)" => "Commodities",
+            "ETFs" => "ETF",
+            "EU Equities (CFDs)" => "EU_Stocks",
+            "Energies (Spot)" => "Energies",
+            "Forex (Spot)" => "Forex",
+            "TEST" => "TEST",
+            "AU Equities (CFDs)" => "AU_Stocks",
+            "Thematics" => "Thematics",
+            "Crypto Currency (Spot)" => "Crypto",
+            "Indices (Spot)" => "Indices",
             _ => "Others",
         };
         cat.to_lowercase()
@@ -322,6 +322,11 @@ impl Pair {
     }
 }
 
+impl Default for Pair {
+    fn default() -> Self {
+        Pair::EURUSD
+    }
+}
 pub fn get_all_symbols_ids() -> Vec<i64> {
     let ids: Vec<i64> = Pair::into_enum_iter().map(|p| p.to_symbol_id()).collect();
     ids

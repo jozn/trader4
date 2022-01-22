@@ -12,6 +12,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Euro vs US Dollar",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "EURJPY",
@@ -23,6 +25,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Euro vs Japanese Yen",
             digits: 3,
             pip: 2,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "AUDCAD",
@@ -34,6 +38,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Australian Dollar vs Canadian Dollar",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "USDNOK",
@@ -45,6 +51,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "US Dollar vs Norwegian Krone",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "XAUUSD",
@@ -56,6 +64,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Gold vs US Dollar",
             digits: 2,
             pip: 1,
+            lot: 100.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "GBPUSD",
@@ -67,6 +77,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "British Pound vs US Dollar",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "GBPJPY",
@@ -78,6 +90,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "British Pound vs Japanese Yen",
             digits: 3,
             pip: 2,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "AUDCHF",
@@ -89,6 +103,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Australian Dollar vs Swiss Franc",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "USDMXN",
@@ -100,6 +116,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "US Dollar vs Mexican Peso",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "XAGUSD",
@@ -111,6 +129,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Silver vs US Dollar",
             digits: 3,
             pip: 2,
+            lot: 5000.0,
+            min_vol: 50.0,
         },
         TSymbol {
             name: "XBRUSD",
@@ -122,6 +142,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Brent Crude vs US Dollar",
             digits: 2,
             pip: 1,
+            lot: 100.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "USDX",
@@ -133,6 +155,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "US Dollar Index",
             digits: 3,
             pip: 2,
+            lot: 100.0,
+            min_vol: 100.0,
         },
         TSymbol {
             name: "CAN20",
@@ -144,6 +168,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Global Cannabis Giants Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "EURUSDW",
@@ -155,6 +181,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Weekend EURUSD",
             digits: 4,
             pip: 3,
+            lot: 100000.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "Alibaba_Group_(BABA.N)",
@@ -166,6 +194,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Alibaba Group",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "3D_Printing_ETF_(PRNT.P)",
@@ -177,6 +207,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "The 3D Printing ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "USDJPY",
@@ -188,6 +220,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "US Dollar vs Japanese Yen",
             digits: 3,
             pip: 2,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "AUDJPY",
@@ -199,6 +233,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Australian Dollar vs Japanese Yen",
             digits: 3,
             pip: 2,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "AUDNZD",
@@ -210,6 +246,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Australian vs New Zealand Dollar",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "USDSGD",
@@ -221,6 +259,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "US Dollar vs Singapore Dollar",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "XAUEUR",
@@ -232,6 +272,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Gold vs Euro",
             digits: 2,
             pip: 1,
+            lot: 100.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "XTIUSD",
@@ -243,6 +285,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "West Texas Intermediate vs US Dollar",
             digits: 2,
             pip: 1,
+            lot: 100.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "LIT15",
@@ -254,6 +298,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "American Lithium and Battery Metal Giants Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "JPYX",
@@ -265,6 +311,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "JPY Currency Index",
             digits: 1,
             pip: 0,
+            lot: 100.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "GBPUSDW",
@@ -276,6 +324,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Weekend GBPUSD",
             digits: 4,
             pip: 3,
+            lot: 100000.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "Microsoft_Corp_(MSFT.O)",
@@ -287,6 +337,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Microsoft Corp",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "ARK_Fintech_ETF_(ARKF.P)",
@@ -298,6 +350,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "ARK Fintech Innovation ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "AUDUSD",
@@ -309,6 +363,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Australian vs US Dollar",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "CHFJPY",
@@ -320,6 +376,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Swiss Franc vs Japanese Yen",
             digits: 2,
             pip: 2,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "USDSEK",
@@ -331,6 +389,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "US Dollar vs Swedish Krona",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "AUDSGD",
@@ -342,6 +402,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Australian Dollar vs Singapore Dollar",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "XAGEUR",
@@ -353,6 +415,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Silver vs Euro",
             digits: 3,
             pip: 2,
+            lot: 5000.0,
+            min_vol: 50.0,
         },
         TSymbol {
             name: "XNGUSD",
@@ -364,6 +428,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Natural Gas vs US Dollar",
             digits: 4,
             pip: 3,
+            lot: 10000.0,
+            min_vol: 100.0,
         },
         TSymbol {
             name: "FIN30",
@@ -375,6 +441,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "North American Core Finance Giants Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "EURX",
@@ -386,6 +454,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "EUR Currency Index",
             digits: 1,
             pip: 0,
+            lot: 100.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "AUDUSDW",
@@ -397,6 +467,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Weekend AUDUSD",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "Amazon.com_Inc_(AMZN.O)",
@@ -408,6 +480,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Amazon.com Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "ARK_Genomic_Rev._(ARKG.Z)",
@@ -419,6 +493,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "ARK Genomic Revolution ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "USDCHF",
@@ -430,6 +506,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "US Dollar vs Swiss Franc",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "EURAUD",
@@ -441,6 +519,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Euro vs Australian Dollar",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "CADJPY",
@@ -452,6 +532,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Canadian Dollar vs Japanese Yen",
             digits: 3,
             pip: 2,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "EURSEK",
@@ -463,6 +545,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Euro vs Swedish Krona",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "XPDUSD",
@@ -474,6 +558,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Palladium vs US Dollar",
             digits: 2,
             pip: 1,
+            lot: 100.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "CNI30",
@@ -485,6 +571,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "China Internet Giants Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "USDJPYW",
@@ -496,6 +584,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Weekend USDJPY",
             digits: 2,
             pip: 1,
+            lot: 100.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "Apple_Inc_(AAPL.O)",
@@ -507,6 +597,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Apple Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "ARK_Innovation_ETF_(ARKK.P)",
@@ -518,6 +610,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "ARK ETF Trust - ARK Innovation ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "USDCAD",
@@ -529,6 +623,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "US Dollar vs Canadian",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "EURCHF",
@@ -540,6 +636,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Euro vs Swiss Franc",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "EURCAD",
@@ -551,6 +649,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Euro vs Canadian Dollar",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "GBPSGD",
@@ -562,6 +662,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Great Britain Pound vs Singapore Dollar",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "XPTUSD",
@@ -573,6 +675,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Platinum vs US Dollar",
             digits: 2,
             pip: 1,
+            lot: 100.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "BIO30",
@@ -584,6 +688,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "US Biotech Giants Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "USDCADW",
@@ -595,6 +701,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Weekend USDCAD",
             digits: 4,
             pip: 3,
+            lot: 100000.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "Facebook_Inc_(FB.O)",
@@ -606,6 +714,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Facebook Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "ARK_Space_Innov_ETF_(ARKX.K)",
@@ -617,6 +727,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "ARK Space Exploration &Innovation ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "EURGBP",
@@ -628,6 +740,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Euro vs British Pound",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "GBPCAD",
@@ -639,6 +753,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "British Pound vs Canadian Dollar",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "EURNOK",
@@ -650,6 +766,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Euro vs Norwegian Krone",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "FNG10",
@@ -661,6 +779,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "FAANGs 10 Equally Weighted Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "USDSGDW",
@@ -672,6 +792,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Weekend USDSGD",
             digits: 4,
             pip: 3,
+            lot: 100000.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "Alphabet_Inc_C_(GOOG.O)",
@@ -683,6 +805,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Alphabet Inc Class C",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Ark_Web_x.0_ETF_(ARKW.P)",
@@ -694,6 +818,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "ARK Web x.0 ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "GBPAUD",
@@ -705,6 +831,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "British Pound vs Australian Dollar",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "NZDJPY",
@@ -716,6 +844,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "New Zealand Dollar vs Japanese Yen",
             digits: 3,
             pip: 2,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "EURHUF",
@@ -727,6 +857,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Euro vs Hungarian Forint",
             digits: 2,
             pip: 2,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "GRN30",
@@ -738,6 +870,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "North America Green Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "USDCHFW",
@@ -749,6 +883,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Weekend USDCHF",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "Netflix_Inc_(NFLX.O)",
@@ -760,6 +896,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Netflix Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Bank_ETF_(KBE.P)",
@@ -771,6 +909,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "SPDR S&P Bank ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "GBPNZD",
@@ -782,6 +922,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "British Pound vs New Zealand Dollar ",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "USDPLN",
@@ -793,6 +935,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "US Dollar vs Polish Zloty",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "GBPCHF",
@@ -804,6 +948,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "British Pound vs Swiss Franc",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "LAT30",
@@ -815,6 +961,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Latin America Giants Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Coinbase_Global_Inc_(COIN.O)",
@@ -826,6 +974,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Coinbase Global Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Betashares_Crypto_(CRYP.AX)",
@@ -837,6 +987,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Betashares Crypto Innovators ETF",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "NZDUSD",
@@ -848,6 +1000,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "New Zealand Dollar vs US Dollar",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "EURNZD",
@@ -859,6 +1013,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Euro vs New Zealand Dollar",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "USDDKK",
@@ -870,6 +1026,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "US Dollar vs Danish Krone",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "NVIDIA_Corporation_(NVDA.O)",
@@ -881,6 +1039,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "NVIDIA Corporation",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Biotech_ETF_(XBI.P)",
@@ -892,6 +1052,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "SPDR S&P Biotech ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "CADCHF",
@@ -903,6 +1065,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Canadian Dollar vs Swiss Franc",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "Copper_Miners_ETF_(COPX.P)",
@@ -914,6 +1078,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Global X Funds - Global X Copper Miners ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "GBPNOK",
@@ -925,6 +1091,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "British Pound vs Norwegian Krone",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "Tesla_Inc_(TSLA.O)",
@@ -936,6 +1104,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Tesla Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "NZDCAD",
@@ -947,6 +1117,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "New Zealand Dollar vs Canadian Dollar",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "Dividend_ETF_(SDY.P)",
@@ -958,6 +1130,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "SPDR S&P Dividend ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "AT&T_Inc_(T.N)",
@@ -969,6 +1143,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "AT&T Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "NZDCHF",
@@ -980,6 +1156,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "New Zealand Dollar vs Swiss Franc",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "CHFSGD",
@@ -991,6 +1169,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Swiss Franc vs Singapore Dollar",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "EM_Dividend_ETF_(EDIV.P)",
@@ -1002,6 +1182,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "SPDR S&P Emerging Markets Dividend ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Baidu_Inc_(BIDU.O)",
@@ -1013,6 +1195,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Baidu Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "EURCZK",
@@ -1024,6 +1208,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Euro vs Czech Koruna",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "SGDJPY",
@@ -1035,6 +1221,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Singapore Dollar vs Japanese Yen",
             digits: 3,
             pip: 2,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "EM_SmallCap_ETF_(EWX.P)",
@@ -1046,6 +1234,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "SPDR S&P Emerging Markets SmallCap ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Citigroup_Inc_(C.N)",
@@ -1057,6 +1247,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Citigroup Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "EURDKK",
@@ -1068,6 +1260,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Euro vs Danish Krone",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "Energy_Select_Fund_(XLE.P)",
@@ -1079,6 +1273,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Energy Select Sector SPDR Fund",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Goldman_Sachs_Group_(GS.N)",
@@ -1090,6 +1286,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Goldman Sachs Group",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "EURHKD",
@@ -1101,6 +1299,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Euro vs Hong Kong Dollar",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "Esport_&_Dig._Ent_(NERD.P)",
@@ -1112,6 +1312,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Roundhill BITKRAFT Esports & Digital Entertainment ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "IBM_Corporation_(IBM.N)",
@@ -1123,6 +1325,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "IBM Corporation",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "EURPLN",
@@ -1134,6 +1338,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Euro vs Polish Zloty",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "ETFMG_Alt_Harvest_(MJX.P)",
@@ -1145,6 +1351,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "ETFMG Alternative Harvest ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "JPMorgan_Chase_&_Co_(JPM.N)",
@@ -1156,6 +1364,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "JPMorgan Chase & Co",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "EURSGD",
@@ -1167,6 +1377,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Euro vs Singapore Dollar",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "ETFS_Gold_Trust_(SGOL.P)",
@@ -1178,6 +1390,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "ETFS Gold Trust",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Mastercard_Inc_(MA.N)",
@@ -1189,6 +1403,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Mastercard Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "EURTRY",
@@ -1200,6 +1416,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Euro vs Turkish Lira",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "Glbl_Financial_ETF_(IXG.P)",
@@ -1211,6 +1429,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares Global Financials ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "McDonalds_Corporation_(MCD.N)",
@@ -1222,6 +1442,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "McDonalds Corporation",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "EURZAR",
@@ -1233,6 +1455,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Euro vs South African Rand",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "Glbl_Industrials_ETF_(EXI.P)",
@@ -1244,6 +1468,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares Global Industrials ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "NIKE_Inc_(NKE.N)",
@@ -1255,6 +1481,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "NIKE Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "GBPDKK",
@@ -1266,6 +1494,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "British Pound vs Danish Krone",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "Glbl_Wind_Energy_ETF_(FAN.P)",
@@ -1277,6 +1507,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Trust Global Wind Energy ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Oracle_Corporation_(ORCL.N)",
@@ -1288,6 +1520,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Oracle Corporation",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "GBPSEK",
@@ -1299,6 +1533,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "British Pound vs Swedish Krona",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "Global_Carbon_ETF_(KRBN.P)",
@@ -1310,6 +1546,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "KFA Global Carbon ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Pfizer_Inc_(PFE.N)",
@@ -1321,6 +1559,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Pfizer Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "GBPTRY",
@@ -1332,6 +1572,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "British Pound vs Turkish Lira",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "Global_Energy_ETF_(IXC.P)",
@@ -1343,6 +1585,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares Global Energy ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Procter_&_Gamble_Co_(PG.N)",
@@ -1354,6 +1598,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Procter & Gamble Co",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "NOKJPY",
@@ -1365,6 +1611,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Norwegian Krone vs Japanese Yen",
             digits: 3,
             pip: 2,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "Global_Forestry_(WOOD.OQ)",
@@ -1376,6 +1624,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares Global Timber & Forestry ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "SPDR_S&P500_ETF_Trust_(SPY.P)",
@@ -1387,6 +1637,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "SPDR S&P500 ETF Trust",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "NOKSEK",
@@ -1398,6 +1650,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Norwegian Krone vs Swedish Krona",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "Global_Infrast._ETF_(IGF.P)",
@@ -1409,6 +1663,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares Global Infrastructure ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "The_Boeing_Company_(BA.N)",
@@ -1420,6 +1676,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "The Boeing Company",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "SEKJPY",
@@ -1431,6 +1689,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Swedish Krona vs Japanese Yen",
             digits: 3,
             pip: 2,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "Global_Silver_Miners_(SIL.P)",
@@ -1442,6 +1702,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Global X Silver Miners ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "The_Walt_Disney_Co_(DIS.N)",
@@ -1453,6 +1715,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "The Walt Disney Co",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "USDCZK",
@@ -1464,6 +1728,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "US Dollar vs Czech Koruna",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "Global_Telecom_ETF_(IXP.P)",
@@ -1475,6 +1741,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares Global Telecom ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Visa_Inc_(V.N)",
@@ -1486,6 +1754,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Visa Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "USDHKD",
@@ -1497,6 +1767,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "US Dollar vs Hong Kong Dollar",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "Global_Uranium_ETF_(URA.P)",
@@ -1508,6 +1780,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Global X Uranium ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Walmart_Inc_(WMT.N)",
@@ -1519,6 +1793,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Walmart Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "USDTRY",
@@ -1530,6 +1806,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "US Dollar vs Turkish Lira",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "Gold_Miners_ETF_(GDX.P)",
@@ -1541,6 +1819,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "VanEck Vectors Gold Miners ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Twitter_Inc_(TWTR.N)",
@@ -1552,6 +1832,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Twitter Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "USDZAR",
@@ -1563,6 +1845,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "US Dollar vs South African Rand",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "Homebuilders_ETF_(XHB.P)",
@@ -1574,6 +1858,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "SPDR S&P Homebuilders ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Uber_Technologies_(UBER.N)",
@@ -1585,6 +1871,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Uber Technologies",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Industrial_Select_(XLI.P)",
@@ -1596,6 +1884,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Industrial Select Sector SPDR ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "PayPal_Holdings_Inc_(PYPL.O)",
@@ -1607,6 +1897,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "PayPal Holdings Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "EURMXN",
@@ -1618,6 +1910,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Euro vs Mexican Peso",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "Invesco_DB_Ag_Fund_(DBA.P)",
@@ -1629,6 +1923,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Invesco DB Agriculture Fund",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "American_Express_(AXP.N)",
@@ -1640,6 +1936,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "American Express",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "iShares_ACWI_ETF_(ACWI.OQ)",
@@ -1651,6 +1949,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI ACWI ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Lockheed_Martin___(LMT.N)",
@@ -1662,6 +1962,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Lockheed Martin",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "USDHUF",
@@ -1673,6 +1975,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "US Dollar vs Hungarian Forint",
             digits: 2,
             pip: 2,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "iShares_Brazil_ETF_(EWZ.P)",
@@ -1684,6 +1988,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI Brazil Capped ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Adv._Micro_Devices_(AMD.O)",
@@ -1695,6 +2001,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Adv. Micro Devices",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "iShares_Brazil_S-Cap_(BRF.P)",
@@ -1706,6 +2014,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI Brazil Small-Cap",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Electronic_Arts_(EA.O)",
@@ -1717,6 +2027,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Electronic Arts",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "USDRUB",
@@ -1728,6 +2040,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "US Dollar vs Russian Ruble",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "iShares_Canada_ETF_(EWC.P)",
@@ -1739,6 +2053,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI Canada ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Qualcomm_(QCOM.O)",
@@ -1750,6 +2066,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Qualcomm",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "USDCNH",
@@ -1761,6 +2079,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "US Dollar vs China Offshore Spot",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "iShares_China_25_ETF_(FXI.P)",
@@ -1772,6 +2092,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares China 25 ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "T-Mobile_US_(TMUS.O)",
@@ -1783,6 +2105,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "T-Mobile US",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "USDTHB",
@@ -1794,6 +2118,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "US Dollar vs Thai Bhat",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "iShares_EAFE_ETF_(EFA.P)",
@@ -1805,6 +2131,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI EAFE ETF - EFA",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Moderna_(MRNA.O)",
@@ -1816,6 +2144,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Moderna",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "iShares_Europe_ETF_(IEV.P)",
@@ -1827,6 +2157,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares Europe ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "ZARJPY",
@@ -1838,6 +2170,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "South African Rand vs Japanese Yen",
             digits: 3,
             pip: 2,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "iShares_France_ETF_(EWQ.P)",
@@ -1849,6 +2183,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI France ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "iShares_Germany_ETF_(EWG.P)",
@@ -1860,6 +2196,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI Germany ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "iShares_Malaysia_ETF_(EWM.P)",
@@ -1871,6 +2209,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI Malaysia ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "iShares_Mexico_ETF_(EWW.P)",
@@ -1882,6 +2222,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI Mexico Capped ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "iShares_New_Zealand_(ENZL.P)",
@@ -1893,6 +2235,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI New Zealand Capped ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "iShares_Peru_ETF_(EPU.P)",
@@ -1904,6 +2248,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI All Peru Capped ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "iShares_Russell_3000_(IWV.P)",
@@ -1915,6 +2261,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares Russell 3000 ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "iShares_Spain_ETF_(EWP.P)",
@@ -1926,6 +2274,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI Spain ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "iShares_Sweden_ETF_(EWD.P)",
@@ -1937,6 +2287,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI Sweden ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "iShares_Taiwan_ETF_(EWT.P)",
@@ -1948,6 +2300,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI Taiwan ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "iShares_Thailand_ETF_(THD.P)",
@@ -1959,6 +2313,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI Thailand Capped ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "iShares_U.K_ETF_(EWU.P)",
@@ -1970,6 +2326,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI United Kingdom ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "iShares_US_Growth_(IUSG.P)",
@@ -1981,6 +2339,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares Core US Growth ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "iShares_US_Prf_Stock_(PFF.P)",
@@ -1992,6 +2352,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares US Preferred Stock ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Jnr_Gold_Miner_(GDXJ.P)",
@@ -2003,6 +2365,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "VanEck Vectors Junior Gold Miners ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "LATAM_40_ETF_(ILF.P)",
@@ -2014,6 +2378,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares Latin America 40 ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Lithium_ETF_(LIT.P)",
@@ -2025,6 +2391,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Global X Lithium ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Metals_&_Mining_(XME.P)",
@@ -2036,6 +2404,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "SPDR S&P Metals & Mining ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "MidCap_400_ETF_(MDY.P)",
@@ -2047,6 +2417,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "SPDR S&P MidCap 400 ETF Trust",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "MSCI_Australia_ETF_(EWA.P)",
@@ -2058,6 +2430,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI Australia ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "MSCI_Hong_Kong_ETF_(EWH.P)",
@@ -2069,6 +2443,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI Hong Kong ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "MSCI_Indonesia_ETF_(EIDO.P)",
@@ -2080,6 +2456,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI Indonesia ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "MSCI_Norway_ETF_(NORW.P)",
@@ -2091,6 +2469,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Global X MSCI Norway ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "MSCI_Pacific_ex-JP_(EPP.P)",
@@ -2102,6 +2482,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI Pacific ex Japan ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "MSCI_Pakistan_ETF_(PAK.P)",
@@ -2113,6 +2495,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Global X MSCI Pakistan ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "MSCI_Philippine_ETF_(EPHE.P)",
@@ -2124,6 +2508,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI Philippines ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "MSCI_Portugal_ETF_(PGAL.P)",
@@ -2135,6 +2521,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Global X MSCI FTSE Portugal 20 ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "MSCI_Singapore_ETF_(EWS.P)",
@@ -2146,6 +2534,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI Singapore ETF - EWS",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "MSCI_South_Korea_ETF_(EWY.P)",
@@ -2157,6 +2547,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI South Korea ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "MSCI_Sth_Africa_ETF_(EZA.P)",
@@ -2168,6 +2560,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares MSCI South Africa ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "N.A_NatRes_ETF_(IGE.P)",
@@ -2179,6 +2573,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares North American Natural Resources ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "OilGas_Exp_&_Prod_(XOP.P)",
@@ -2190,6 +2586,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "SPDR S&P Oil & Gas Exploration & Production ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Pharmaceuticals_ETF_(XPH.P)",
@@ -2201,6 +2599,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "SPDR S&P Pharmaceuticals ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Physical_Gold_ETF_(AAAU.P)",
@@ -2212,6 +2612,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Perth Mint Physical Gold Etf",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Renaissance_IPO_ETF_(IPO.P)",
@@ -2223,6 +2625,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Renaissance IPO ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Retail_ETF_(XRT.P)",
@@ -2234,6 +2638,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "SPDR S&P Retail ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Rgnl._Banking_ETF_(KRE.P)",
@@ -2245,6 +2651,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "SPDR S&P Regional Banking ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Russell_2000_ETF_(IWM.P)",
@@ -2256,6 +2664,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares Russell 2000 ETF (All Sessions)",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Social_Sentimnt_ETF_(BUZZ.P)",
@@ -2267,6 +2677,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "VanEck Vectors Social Sentiment ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "SPDR_DJ_Ind._Avg._(DIA.P)",
@@ -2278,6 +2690,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "SPDR Dow Jones Industrial Average ETF Trust (All Sessions)",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "US_Real_Est_ETF_(IYR.P)",
@@ -2289,6 +2703,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "iShares US Real Estate ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Van_Cons_Staples_ETF_(VDC.P)",
@@ -2300,6 +2716,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Vanguard Consumer Staples Index Fund ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "VanEck_Agribusiness_(MOO.P)",
@@ -2311,6 +2729,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "VanEck Vectors Agribusiness ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Vanguard_Util_ETF_(VPU.P)",
@@ -2322,6 +2742,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Vanguard Utilities Index Fund ETF",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "AUS200",
@@ -2333,6 +2755,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Australian S&P/ASX 200 Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "EUSTX50",
@@ -2344,6 +2768,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "EURO STOXX 50 Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "FRA40",
@@ -2355,6 +2781,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "French CAC 40 Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "GER40",
@@ -2366,6 +2794,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "German DAX 40 Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "HK50",
@@ -2377,6 +2807,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Chinese Hang Seng 50 Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "IT40",
@@ -2388,6 +2820,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Italian FTSE MIB Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "JPN225",
@@ -2399,6 +2833,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Japan Nikkei 225 Index",
             digits: 1,
             pip: 0,
+            lot: 100.0,
+            min_vol: 10.0,
         },
         TSymbol {
             name: "AEX",
@@ -2410,6 +2846,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Netherlandish AEX 25 Index",
             digits: 1,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "WIG20",
@@ -2421,6 +2859,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Poland WIG20 Index",
             digits: 1,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "SPA35",
@@ -2432,6 +2872,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Spanish IBEX 35 Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "SMI",
@@ -2443,6 +2885,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Swiss Market Index",
             digits: 1,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "UK100",
@@ -2454,6 +2898,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "UK 100 Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "US2000",
@@ -2465,6 +2911,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "USA Russell 2000 Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "US500",
@@ -2476,6 +2924,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "USA S&P 500 Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "NAS100",
@@ -2487,6 +2937,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "USA NASDAQ 100 Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "US30",
@@ -2498,6 +2950,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "USA Dow Jones IA Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "CN50",
@@ -2509,6 +2963,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "China A50 Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Sugar",
@@ -2520,6 +2976,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Sugar Cash Contract",
             digits: 3,
             pip: 2,
+            lot: 100.0,
+            min_vol: 100.0,
         },
         TSymbol {
             name: "Coffee",
@@ -2531,6 +2989,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Coffee Cash Contract",
             digits: 2,
             pip: 1,
+            lot: 10.0,
+            min_vol: 10.0,
         },
         TSymbol {
             name: "Cotton",
@@ -2542,6 +3002,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Cotton Cash Contract",
             digits: 3,
             pip: 2,
+            lot: 100.0,
+            min_vol: 100.0,
         },
         TSymbol {
             name: "Cocoa",
@@ -2553,6 +3015,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Cocoa Cash Contract",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "OrangeJuice",
@@ -2564,6 +3028,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Orange Juice Cash Contract",
             digits: 2,
             pip: 1,
+            lot: 20.0,
+            min_vol: 20.0,
         },
         TSymbol {
             name: "XAUAUD",
@@ -2575,6 +3041,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Gold vs AUD",
             digits: 2,
             pip: 1,
+            lot: 100.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "BTCUSD",
@@ -2586,6 +3054,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Bitcoin vs US Dollar",
             digits: 1,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.01,
         },
         TSymbol {
             name: "ETHUSD",
@@ -2597,6 +3067,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Ethereum vs US Dollar",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.01,
         },
         TSymbol {
             name: "LTCUSD",
@@ -2608,6 +3080,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Litecoin vs US Dollar",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.01,
         },
         TSymbol {
             name: "DASHUSD",
@@ -2619,6 +3093,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Dash vs US Dollar",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.01,
         },
         TSymbol {
             name: "Ripple",
@@ -2630,6 +3106,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Ripple vs US Dollar",
             digits: 4,
             pip: 3,
+            lot: 100.0,
+            min_vol: 100000.0,
         },
         TSymbol {
             name: "BitcoinCash",
@@ -2641,6 +3119,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "BitcoinCash vs US Dollar",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.01,
         },
         TSymbol {
             name: "GBPMXN",
@@ -2652,6 +3132,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "British Pound vs Mexican Peso",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "LondonSugar",
@@ -2663,6 +3145,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Sugar no. 5 Cash Contract",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "Wheat",
@@ -2674,6 +3158,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Wheat Cash Contract",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "SCI25",
@@ -2685,6 +3171,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "MSCI Singapore Free Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Soybeans",
@@ -2696,6 +3184,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Soybeans Cash Contract",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "VIX",
@@ -2707,6 +3197,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "US Volatility Index",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Crypto10",
@@ -2718,6 +3210,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Global 10 Crypto Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Crypto20",
@@ -2729,6 +3223,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Global 20 Crypto Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Crypto30",
@@ -2740,6 +3236,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Global 30 Crypto Index",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "SpotBrent",
@@ -2751,6 +3249,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Brent Crude (Spot)",
             digits: 3,
             pip: 2,
+            lot: 100.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "SpotCrude",
@@ -2762,6 +3262,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "WTI Cash (or Spot) Contract",
             digits: 3,
             pip: 2,
+            lot: 100.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "NatGas",
@@ -2773,6 +3275,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Natural Gas (Spot)",
             digits: 3,
             pip: 2,
+            lot: 10000.0,
+            min_vol: 100.0,
         },
         TSymbol {
             name: "Gasoline",
@@ -2784,6 +3288,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Gasoline (Cash)",
             digits: 4,
             pip: 3,
+            lot: 1000.0,
+            min_vol: 0.01,
         },
         TSymbol {
             name: "XAUCHF",
@@ -2795,6 +3301,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Gold vs Swiss Franc",
             digits: 2,
             pip: 1,
+            lot: 100.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "XAUGBP",
@@ -2806,6 +3314,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Gold vs Great Britain Pound",
             digits: 2,
             pip: 1,
+            lot: 100.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "XAGAUD",
@@ -2817,6 +3327,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Silver vs Australian Dollar",
             digits: 3,
             pip: 2,
+            lot: 5000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "XAUJPY",
@@ -2828,6 +3340,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Gold vs Japanese Yen",
             digits: 1,
             pip: 1,
+            lot: 100.0,
+            min_vol: 100.0,
         },
         TSymbol {
             name: "GBPZAR",
@@ -2839,6 +3353,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Great Britain Pound vs South African Rand",
             digits: 5,
             pip: 4,
+            lot: 100000.0,
+            min_vol: 1000.0,
         },
         TSymbol {
             name: "OJ",
@@ -2850,6 +3366,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Orange Juice Cash Contract",
             digits: 2,
             pip: 1,
+            lot: 20.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "LDSugar",
@@ -2861,6 +3379,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Sugar no. 5 Cash Contract",
             digits: 1,
             pip: 0,
+            lot: 1.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "BCHUSD",
@@ -2872,6 +3392,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "BitcoinCash vs US Dollar",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.01,
         },
         TSymbol {
             name: "CA60",
@@ -2883,6 +3405,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Canada 60 Index",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "CHINAH",
@@ -2894,6 +3418,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Hong Kong China H-shares Index",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "MidDE50",
@@ -2905,6 +3431,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Germany Mid 50 Index",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "NETH25",
@@ -2916,6 +3444,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Netherlands 25 Index",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "NOR25",
@@ -2927,6 +3457,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Norway 25 Index",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "SA40",
@@ -2938,6 +3470,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "South Africa 40 Index",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "SWI20",
@@ -2949,6 +3483,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Switzerland 20 Index",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "GERTEC30",
@@ -2960,6 +3496,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Germany Tech 30 Index",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "DOTUSD",
@@ -2971,6 +3509,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Polkadot vs US Dollar",
             digits: 3,
             pip: 2,
+            lot: 10.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "LINKUSD",
@@ -2982,6 +3522,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Chainlink vs US Dollar",
             digits: 3,
             pip: 2,
+            lot: 10.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "XLMUSD",
@@ -2993,6 +3535,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Stellar Lumens vs US Dollar",
             digits: 4,
             pip: 3,
+            lot: 100.0,
+            min_vol: 10.0,
         },
         TSymbol {
             name: "ETHBTC",
@@ -3004,6 +3548,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Ethereum vs Bitcoin",
             digits: 5,
             pip: 4,
+            lot: 1000.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "XRPUSD",
@@ -3015,6 +3561,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Ripple vs US Dollar",
             digits: 4,
             pip: 3,
+            lot: 100.0,
+            min_vol: 10.0,
         },
         TSymbol {
             name: "Lumber",
@@ -3026,6 +3574,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Lumber (Cash)",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "Corn",
@@ -3037,6 +3587,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Corn (Cash)",
             digits: 4,
             pip: 3,
+            lot: 100.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "LeanHogs",
@@ -3048,6 +3600,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Lean Hogs (Cash)",
             digits: 5,
             pip: 4,
+            lot: 1000.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "Cattle",
@@ -3059,6 +3613,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Live Cattle (Cash)",
             digits: 5,
             pip: 4,
+            lot: 1000.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "Oats",
@@ -3070,6 +3626,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Oats (Cash)",
             digits: 4,
             pip: 3,
+            lot: 1000.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "SoyMeal",
@@ -3081,6 +3639,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Soybean Meal (Cash)",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "SoyOil",
@@ -3092,6 +3652,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Soybean Oil (Cash)",
             digits: 5,
             pip: 4,
+            lot: 1000.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "RghRice",
@@ -3103,6 +3665,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Rough Rice (Cash)",
             digits: 3,
             pip: 2,
+            lot: 100.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "Copper",
@@ -3114,6 +3678,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Copper Cash Contract",
             digits: 4,
             pip: 3,
+            lot: 2000.0,
+            min_vol: 2000.0,
         },
         TSymbol {
             name: "UNIUSD",
@@ -3125,6 +3691,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Uniswap vs US Dollar",
             digits: 3,
             pip: 2,
+            lot: 10.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "DOGEUSD",
@@ -3136,6 +3704,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Dogecoin vs US Dollar",
             digits: 5,
             pip: 4,
+            lot: 1000.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "ADAUSD",
@@ -3147,6 +3717,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Cardano vs US Dollar",
             digits: 4,
             pip: 3,
+            lot: 100.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "BNBUSD",
@@ -3158,6 +3730,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Binance Coin vs US Dollar",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "XAUBTC",
@@ -3169,6 +3743,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Gold vs Bitcoin",
             digits: 5,
             pip: 4,
+            lot: 1000.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "EOSUSD",
@@ -3180,6 +3756,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "EOS vs US Dollar",
             digits: 4,
             pip: 3,
+            lot: 100.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "XTZUSD",
@@ -3191,6 +3769,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Tezos vs US Dollar",
             digits: 4,
             pip: 3,
+            lot: 100.0,
+            min_vol: 1.0,
         },
         TSymbol {
             name: "Airbnb_Inc_(ABNB.O)",
@@ -3202,6 +3782,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Airbnb Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Beyond_Meat_Inc_(BYND.O)",
@@ -3213,6 +3795,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Beyond Meat Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Palantir_Tech_(PLTR.O)",
@@ -3224,6 +3808,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Palantir Technologies Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Peloton_Inter._(PTON.O)",
@@ -3235,6 +3821,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Peloton Interactive Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "salesforce.com_Inc_(CRM.O)",
@@ -3246,6 +3834,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "salesforce.com Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Snap_Inc_(SNAP.O)",
@@ -3257,6 +3847,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Snap Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Virgin_Galactic_(SPCE.O)",
@@ -3268,6 +3860,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Virgin Galactic Holdings Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Zoom_Video_(ZM.O)",
@@ -3279,6 +3873,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Zoom Video Communications Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "CRH_(CRH.L)",
@@ -3290,6 +3886,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "CRH",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "GoPro_Inc_(GPRO.O)",
@@ -3301,6 +3899,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "GoPro Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Kogan_(KGN.AX)",
@@ -3312,6 +3912,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Kogan.com Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Victrex_PLC_(VCT.L)",
@@ -3323,6 +3925,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Victrex PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "3i_Group_(III.L)",
@@ -3334,6 +3938,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "3i Group",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Aareal_Bank_AG_(ARL.DE)",
@@ -3345,6 +3951,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Aareal Bank AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Abacus_Property_Grp_(ABP.AX)",
@@ -3356,6 +3964,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Abacus Property Group",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Adelaide_Brighton_(ABC.AX)",
@@ -3367,6 +3977,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Adelaide Brighton",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Adidas_(ADS.DE)",
@@ -3378,6 +3990,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Adidas",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Admiral_Group_(ADM.L)",
@@ -3389,6 +4003,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Admiral Group",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "AGL_Energy_Ltd_(AGL.AX)",
@@ -3400,6 +4016,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "AGL Energy Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Aixtron_SE_(AIXA.DE)",
@@ -3411,6 +4029,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Aixtron SE",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "AJ_Bell_PLC_(AJB.L)",
@@ -3422,6 +4042,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "AJ Bell PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Allbirds_(BIRD.O)",
@@ -3433,6 +4055,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Allbirds Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Alliance_Trust_PLC_(ATST.L)",
@@ -3444,6 +4068,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Alliance Trust PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Allianz_SE_(ALV.DE)",
@@ -3455,6 +4081,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Allianz SE",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "ALS_Limited_(ALQ.AX)",
@@ -3466,6 +4094,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "ALS Limited",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Alstria_Office_REIT_(AOX.DE)",
@@ -3477,6 +4107,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Alstria Office REIT-AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Altium_Ltd_(ALU.AX)",
@@ -3488,6 +4120,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Altium Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Alumina_Ltd_(AWC.AX)",
@@ -3499,6 +4133,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Alumina Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Amcor_CDI_(AMC.AX)",
@@ -3510,6 +4146,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Amcor Plc",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "AMP_Ltd_(AMP.AX)",
@@ -3521,6 +4159,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "AMP Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Ampol_Ltd_(ALD.AX)",
@@ -3532,6 +4172,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Ampol Limited",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Anglo_American_(AAL.L)",
@@ -3543,6 +4185,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Anglo American",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Ansell_Ltd_(ANN.AX)",
@@ -3554,6 +4198,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Ansell Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Antofagasta_(ANTO.L)",
@@ -3565,6 +4211,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Antofagasta",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "ANZ_Banking_Group_(ANZ.AX)",
@@ -3576,6 +4224,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Australia and New Zealand Banking Group Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "AP_Eagers_Pty_Ltd_(APE.AX)",
@@ -3587,6 +4237,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "AP Eagers Pty Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "APA_Group_(APA.AX)",
@@ -3598,6 +4250,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "APA Group",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Appen_Limited_(APX.AX)",
@@ -3609,6 +4263,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Appen Limited",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "ARB_Corporation_(ARB.AX)",
@@ -3620,6 +4276,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "ARB Corporation",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Aristocrat_Leisure_(ALL.AX)",
@@ -3631,6 +4289,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Aristocrat Leisure Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Aroundtown_S.A._(AT1D.DE)",
@@ -3642,6 +4302,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Aroundtown S.A.",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Ashmore_Group_PLC_(ASHM.L)",
@@ -3653,6 +4315,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Ashmore Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Ashtead_Group_(AHT.L)",
@@ -3664,6 +4328,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Ashtead Group",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Asso_British_Foods_(ABF.L)",
@@ -3675,6 +4341,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Associated British Foods",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Assura_PLC_(AGR.L)",
@@ -3686,6 +4354,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Assura PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "AstraZeneca_(AZN.L)",
@@ -3697,6 +4367,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "AstraZeneca",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "ASX_Ltd_(ASX.AX)",
@@ -3708,6 +4380,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "ASX Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Atlas_Arteria_(ALX.AX)",
@@ -3719,6 +4393,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Atlas Arteria",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Aurizon_Hldgs_Ltd_(AZJ.AX)",
@@ -3730,6 +4406,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Aurizon Holdings Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Aurubis_AG_(NDA.DE)",
@@ -3741,6 +4419,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Aurubis AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "AusNet_Services_Ltd_(AST.AX)",
@@ -3752,6 +4432,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "AusNet Services Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Austal_Ltd_(ASB.AX)",
@@ -3763,6 +4445,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Austal Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Auto_Trader_Group_(AUTO.L)",
@@ -3774,6 +4458,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Auto Trader Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Aveva_Group_(AVV.L)",
@@ -3785,6 +4471,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Aveva Group",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Avis_(CAR.O)",
@@ -3796,6 +4484,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Avis Budget Group Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Avita_Medical_(AVH.AX)",
@@ -3807,6 +4497,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Avita Medical",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Aviva_(AV.L)",
@@ -3818,6 +4510,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Aviva",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "BA_Tobacco_(BATS.L)",
@@ -3829,6 +4523,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "British American Tobacco",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Babcock_Int._Grp_(BAB.L)",
@@ -3840,6 +4536,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Babcock International Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "BAE_Systems_(BA.L)",
@@ -3851,6 +4549,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "BAE Systems",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Balfour_Beatty_PLC_(BBY.L)",
@@ -3862,6 +4562,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Balfour Beatty PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Bank_of_Queensland_(BOQ.AX)",
@@ -3873,6 +4575,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Bank of Queensland",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Bapcor_Ltd_(BAP.AX)",
@@ -3884,6 +4588,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Bapcor Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Barclays_(BARC.L)",
@@ -3895,6 +4601,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Barclays",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Barratt_Dvlpmts_(BDEV.L)",
@@ -3906,6 +4614,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Barratt Developments",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "BASF_SE_(BAS.DE)",
@@ -3917,6 +4627,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "BASF SE",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Bayer_AG_(BAYN.DE)",
@@ -3928,6 +4640,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Bayer AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Beach_Energy_Ltd_(BPT.AX)",
@@ -3939,6 +4653,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Beach Energy Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Beazley_PLC_(BEZ.L)",
@@ -3950,6 +4666,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Beazley PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Bechtle_AG_(BC8.DE)",
@@ -3961,6 +4679,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Bechtle AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Bega_Cheese_Ltd_(BGA.AX)",
@@ -3972,6 +4692,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Bega Cheese Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Beiersdorf_(BEI.DE)",
@@ -3983,6 +4705,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Beiersdorf",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Bellway_PLC_(BWY.L)",
@@ -3994,6 +4718,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Bellway PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Bendigo_&_Adel._Bnk_(BEN.AX)",
@@ -4005,6 +4731,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Bendigo and Adelaide Bank",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Berkeley_Group_(BKG.L)",
@@ -4016,6 +4744,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Berkeley Group",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "BHP_Group_Ltd_(BHP.AX)",
@@ -4027,6 +4757,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "BHP Group Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "BHP_Group_PLC_(BHP.L)",
@@ -4038,6 +4770,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "BHP Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Big_Yellow_Group_PLC_(BYG.L)",
@@ -4049,6 +4783,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Big Yellow Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Bingo_Industries_(BIN.AX)",
@@ -4060,6 +4796,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Bingo Industries Limited",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "BioNTech_(BNTX.O)",
@@ -4071,6 +4809,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "BioNTech SE - ADR",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Blackmores_Ltd_(BKL.AX)",
@@ -4082,6 +4822,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Blackmores Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "BlueScope_Steel_Ltd_(BSL.AX)",
@@ -4093,6 +4835,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "BlueScope Steel Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "BMW_(BMW.DE)",
@@ -4104,6 +4848,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "BMW",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Bodycote_PLC_(BOY.L)",
@@ -4115,6 +4861,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Bodycote PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Boral_Ltd_(BLD.AX)",
@@ -4126,6 +4874,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Boral Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "BP_(BP.L)",
@@ -4137,6 +4887,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "BP",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Brambles_Ltd_(BXB.AX)",
@@ -4148,6 +4900,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Brambles Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Bravura_Solution_(BVS.AX)",
@@ -4159,6 +4913,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Bravura Solution Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Brenntag_AG_(BNR.DE)",
@@ -4170,6 +4926,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Brenntag AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Breville_Group_Ltd_(BRG.AX)",
@@ -4181,6 +4939,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Breville Group Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Brickworks_Ltd_(BKW.AX)",
@@ -4192,6 +4952,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Brickworks Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "British_Land_(BLND.L)",
@@ -4203,6 +4965,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "British Land",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Britvic_PLC_(BVIC.L)",
@@ -4214,6 +4978,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Britvic PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "BT_Group_(BTA.L)",
@@ -4225,6 +4991,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "BT Group",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Bunzl_(BNZL.L)",
@@ -4236,6 +5004,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Bunzl",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Burberry_Group_(BRBY.L)",
@@ -4247,6 +5017,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Burberry Group",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "BWP_Trust_(BWP.AX)",
@@ -4258,6 +5030,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "BWP Trust",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Cancom_SE_(COK.DE)",
@@ -4269,6 +5043,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Cancom SE",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Capco_(CAPC.L)",
@@ -4280,6 +5056,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Capital & Counties Properties PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Carl_Zeiss_Meditec_(AFX.DE)",
@@ -4291,6 +5069,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Carl Zeiss Meditec AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Carnival_(CCL.L)",
@@ -4302,6 +5082,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Carnival",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Carsales.com_(CAR.AX)",
@@ -4313,6 +5095,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Carsales.com",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Centrica_(CNA.L)",
@@ -4324,6 +5108,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Centrica",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Challenger_Ltd_(CGF.AX)",
@@ -4335,6 +5121,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Challenger Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Charter_Hall_Group_(CHC.AX)",
@@ -4346,6 +5134,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Charter Hall Group",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Charter_Hall_LWR_FP_(CLW.AX)",
@@ -4357,6 +5147,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Charter Hall Long WALE REIT",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Charter_Hall_Retail_(CQR.AX)",
@@ -4368,6 +5160,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Charter Hall Retail",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Chorus_Ltd_(CNU.AX)",
@@ -4379,6 +5173,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Chorus Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Cimic_Group_Ltd_(CIM.AX)",
@@ -4390,6 +5186,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Cimic Group Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Cleanaway_Waste_Ltd_(CWY.AX)",
@@ -4401,6 +5199,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Cleanaway Waste Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Clinuvel_Pharmaceut_(CUV.AX)",
@@ -4412,6 +5212,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Clinuvel Pharmaceut",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Coca-Cola_HBC_(CCH.L)",
@@ -4423,6 +5225,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Coca-Cola HBC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Cochlear_Ltd_(COH.AX)",
@@ -4434,6 +5238,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Cochlear Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Coles_Group_Ltd_(COL.AX)",
@@ -4445,6 +5251,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Coles Group Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Collins_Food_Ltd_(CKF.AX)",
@@ -4456,6 +5264,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Collins Food Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Commerzbank_AG_(CBK.DE)",
@@ -4467,6 +5277,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Commerzbank AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Compass_Group_(CPG.L)",
@@ -4478,6 +5290,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Compass Group",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "CompuGroup_Medical_(COP.DE)",
@@ -4489,6 +5303,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "CompuGroup Medical SE",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Computacenter_PLC_(CCC.L)",
@@ -4500,6 +5316,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Computacenter PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Computershare_Ltd_(CPU.AX)",
@@ -4511,6 +5329,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Computershare Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Continental_(CON.DE)",
@@ -4522,6 +5342,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Continental",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Convatec_Group_PLC_(CTEC.L)",
@@ -4533,6 +5355,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Convatec Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "CooperEnergy_Ltd_(COE.AX)",
@@ -4544,6 +5368,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "CooperEnergy Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Corp_Travel_Ltd_(CTD.AX)",
@@ -4555,6 +5381,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Corp Travel Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Costa_Group_Hldgs_(CGC.AX)",
@@ -4566,6 +5394,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Costa Group Holdings",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Covestro_AG_(COV.DE)",
@@ -4577,6 +5407,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Covestro AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Cranswick_PLC_(CWK.L)",
@@ -4588,6 +5420,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Cranswick PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Credit_Corp_Group_(CCP.AX)",
@@ -4599,6 +5433,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Credit Corp Group",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Crocs_Inc_(CROX.O)",
@@ -4610,6 +5446,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Crocs Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Croda_(CRDA.L)",
@@ -4621,6 +5459,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Croda",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Cromwell_Property_(CMW.AX)",
@@ -4632,6 +5472,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Cromwell Property",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Crown_Resorts_Ltd_(CWN.AX)",
@@ -4643,6 +5485,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Crown Resorts Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "CSL_Ltd_(CSL.AX)",
@@ -4654,6 +5498,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "CSL Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "CSR_Ltd_(CSR.AX)",
@@ -4665,6 +5511,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "CSR Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "CTS_Eventim_AG_(EVD.DE)",
@@ -4676,6 +5524,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "CTS Eventim AG & Co. KGaA",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Daimler_AG_(DAI.DE)",
@@ -4687,6 +5537,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Daimler AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "DCC_(DCC.L)",
@@ -4698,6 +5550,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "DCC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Genus_PLC_(GNS.L)",
@@ -4709,6 +5563,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Genus PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Dechra_Pharmac_(DPH.L)",
@@ -4720,6 +5576,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Dechra Pharmaceuticals PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Delivery_Hero_(DHR.DE)",
@@ -4731,6 +5589,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Wirecard",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "DermTech_(DMTK.O)",
@@ -4742,6 +5602,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "DermTech Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Derwent_London_PLC_(DLN.L)",
@@ -4753,6 +5615,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Derwent London PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Deutsche_Bank_AG_(DBK.DE)",
@@ -4764,6 +5628,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Deutsche Bank AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Deutsche_Boerse_(DB1.DE)",
@@ -4775,6 +5641,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Deutsche Boerse",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Deutsche_Telekom_(DTE.DE)",
@@ -4786,6 +5654,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Deutsche Telekom AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Dexus_Property_Grp_(DXS.AX)",
@@ -4797,6 +5667,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Dexus",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Diageo_(DGE.L)",
@@ -4808,6 +5680,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Diageo",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Digital_World_Acq._(DWAC.O)",
@@ -4819,6 +5693,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Digital World Acquisition Corporation",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Diploma_PLC_(DPLM.L)",
@@ -4830,6 +5706,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Diploma PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Direct_Line_Grp_(DLG.L)",
@@ -4841,6 +5719,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Direct Line Insurance Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Dixons_Carphone_PLC_(DC.L)",
@@ -4852,6 +5732,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Dixons Carphone PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Domain_Hldgs_Aust._(DHG.AX)",
@@ -4863,6 +5745,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Domain Holdings Australia",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Domino_PIZZA_Ent._(DMP.AX)",
@@ -4874,6 +5758,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Domino PIZZA Enterprises",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Dominos_Pizza_Grp_(DOM.L)",
@@ -4885,6 +5771,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Domino's Pizza Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Downer_Edi_Ltd_(DOW.AX)",
@@ -4896,6 +5784,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Downer Edi Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Drax_Group_PLC_(DRX.L)",
@@ -4907,6 +5797,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Drax Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Dropbox_(DBX.O)",
@@ -4918,6 +5810,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Dropbox Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "DS_Smith_(SMDS.L)",
@@ -4929,6 +5823,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "DS Smith",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Dunelm_Group_PLC_(DNLM.L)",
@@ -4940,6 +5836,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Dunelm Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Durr_AG_(DUE.DE)",
@@ -4951,6 +5849,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Durr AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "E.ON_SE_(EON.DE)",
@@ -4962,6 +5862,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "E.ON SE",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "EasyJet_(EZJ.L)",
@@ -4973,6 +5875,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "EasyJet",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Elders_Limited_(ELD.AX)",
@@ -4984,6 +5888,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Elders Limited",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Electrocomponents_(ECM.L)",
@@ -4995,6 +5901,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Electrocomponents PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "EML_Payments_Ltd_(EML.AX)",
@@ -5006,6 +5914,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "EML Payments Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Estia_Health_Ltd_(EHE.AX)",
@@ -5017,6 +5927,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Estia Health Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Evolution_Mining_(EVN.AX)",
@@ -5028,6 +5940,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Evolution Mining Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Evonik_Industries_(EVK.DE)",
@@ -5039,6 +5953,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Evonik Industries AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Evotec_SE_(EVT.DE)",
@@ -5050,6 +5966,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Evotec SE",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Evraz_(EVR.L)",
@@ -5061,6 +5979,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Evraz",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Experian_(EXPN.L)",
@@ -5072,6 +5992,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Experian",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "F&C_Investment_Trst_(FCIT.L)",
@@ -5083,6 +6005,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "F&C Investment Trust PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Ferguson_Plc_(FERG.L)",
@@ -5094,6 +6018,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Ferguson Plc",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Ferrexpo_PLC_(FXPO.L)",
@@ -5105,6 +6031,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Ferrexpo PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Fidelity_China_Spcl_(FCSS.L)",
@@ -5116,6 +6044,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Fidelity China Special Situations PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Finsbury_Grwth_Trst_(FGT.L)",
@@ -5127,6 +6057,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Finsbury Growth & Income Trust PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Fisher_&_Paykel_(FPH.AX)",
@@ -5138,6 +6070,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Fisher & Paykel H Foreign Exempt NZX",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Fletcher_Building_(FBU.AX)",
@@ -5149,6 +6083,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Fletcher Building Foreign Exempt NZX",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Flight_Centre_Trav._(FLT.AX)",
@@ -5160,6 +6096,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Flight Centre Travel",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Flutter_Entertain_(FLTR.L)",
@@ -5171,6 +6109,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Flutter Entertainment",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Fortescue_Metals_(FMG.AX)",
@@ -5182,6 +6122,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Fortescue Metals Group Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Fraport_AG_(FRA.DE)",
@@ -5193,6 +6135,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Fraport AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Frasers_Group_PLC_(FRAS.L)",
@@ -5204,6 +6148,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Frasers Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Freenet_AG_(FNTN.DE)",
@@ -5215,6 +6161,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Freenet AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Fresenius_(FRE.DE)",
@@ -5226,6 +6174,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Fresenius",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Fresenius_Med_Care_(FME.DE)",
@@ -5237,6 +6187,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Fresenius Medical Care AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Fresnillo_(FRES.L)",
@@ -5248,6 +6200,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Fresnillo",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Fuchs_Petrolub_SE_(FPE.DE)",
@@ -5259,6 +6213,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Fuchs Petrolub SE",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Future_PLC_(FUTR.L)",
@@ -5270,6 +6226,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Future PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "G.U.D._Holdings_(GUD.AX)",
@@ -5281,6 +6239,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "G.U.D. Holdings",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "G8_Education_Ltd_(GEM.AX)",
@@ -5292,6 +6252,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "G8 Education Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Games_Workshop_Grp_(GAW.L)",
@@ -5303,6 +6265,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Games Workshop Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Gamesys_Group_PLC_(GYS.L)",
@@ -5314,6 +6278,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Gamesys Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "GEA_Group_AG_(G1A.DE)",
@@ -5325,6 +6291,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "GEA Group AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Gerresheimer_AG_(GXI.DE)",
@@ -5336,6 +6304,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Gerresheimer AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Gitlab_(GTLB.O)",
@@ -5347,6 +6317,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Gitlab Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "GlaxoSmithKline_(GSK.L)",
@@ -5358,6 +6330,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "GlaxoSmithKline",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Glencore_Xstrata_(GLEN.L)",
@@ -5369,6 +6343,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Glencore Xstrata",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Gold_Road_Res_Ltd_(GOR.AX)",
@@ -5380,6 +6356,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Gold Road Res Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Goodman_Group_(GMG.AX)",
@@ -5391,6 +6369,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Goodman Group",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Gores_Guggenheim_(GGPI.O)",
@@ -5402,6 +6382,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Gore Guggenheim Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "GPT_Group_(GPT.AX)",
@@ -5413,6 +6395,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "GPT Group",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Grafton_Group_PLC_(GFTU.L)",
@@ -5424,6 +6408,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Grafton Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "GrainCorp_Ltd_(GNC.AX)",
@@ -5435,6 +6421,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "GrainCorp Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Grainger_PLC_(GRI.L)",
@@ -5446,6 +6434,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Grainger PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Grand_City_Prop._(GYCD.DE)",
@@ -5457,6 +6447,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Grand City Properties S.A.",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Great_Portland_Ests_(GPOR.L)",
@@ -5468,6 +6460,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Great Portland Estates PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Greencoat_UK_Wind__(UKW.L)",
@@ -5479,6 +6473,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Greencoat UK Wind PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Greggs_PLC_(GRG.L)",
@@ -5490,6 +6486,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Greggs PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Grenke_AG_(GLJ.DE)",
@@ -5501,6 +6499,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Grenke AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Growthpoint_Prop._(GOZ.AX)",
@@ -5512,6 +6512,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Growthpoint Property",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "GWA_Group_Ltd_(GWA.AX)",
@@ -5523,6 +6525,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "GWA Group Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Halma_(HLMA.L)",
@@ -5534,6 +6538,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Halma",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Hannover_RE_AG_(HNR1.DE)",
@@ -5545,6 +6551,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Hannover Rockversicherung AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "HarbourVest_Glbl_PE_(HVPE.L)",
@@ -5556,6 +6564,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "HarbourVest Global Private Equity Limited",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Hargreaves_Lansdown_(HL.L)",
@@ -5567,6 +6577,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Hargreaves Lansdown",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Harvey_Norman_(HVN.AX)",
@@ -5578,6 +6590,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Harvey Norman",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Hays_PLC_(HAS.L)",
@@ -5589,6 +6603,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Hays PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Healius_(HLS.AX)",
@@ -5600,6 +6616,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Healius",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "HeidelbergCement_(HEI.DE)",
@@ -5611,6 +6629,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "HeidelbergCement",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "HELLA_GmbH_&_Co._(HLED.DE)",
@@ -5622,6 +6642,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "HELLA GmbH & Co. KGaA",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "HelloFresh_SE_(HFG.DE)",
@@ -5633,6 +6655,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "HelloFresh SE",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Henkel_AG_&_Co_(HNK.DE)",
@@ -5644,6 +6668,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Henkel AG & Co",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Hikma_Pharma_(HIK.L)",
@@ -5655,6 +6681,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Hikma Pharma",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Hochtief_AG_(HOT.DE)",
@@ -5666,6 +6694,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Hochtief AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "HomeServe_PLC_(HSV.L)",
@@ -5677,6 +6707,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "HomeServe PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Howden_Joinery_Grp_(HWDN.L)",
@@ -5688,6 +6720,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Howden Joinery Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "HSBC_(HSBA.L)",
@@ -5699,6 +6733,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "HSBC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "HUB24_Ltd_(HUB.AX)",
@@ -5710,6 +6746,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "HUB24 Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Hugo_Boss_AG_(BOSS.DE)",
@@ -5721,6 +6759,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Hugo Boss AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Idp_Education_Ltd_(IEL.AX)",
@@ -5732,6 +6772,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Idp Education Limited",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "IG_Group_Holdings_(IGG.L)",
@@ -5743,6 +6785,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "IG Group Holdings PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Iluka_Resources_(ILU.AX)",
@@ -5754,6 +6798,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Iluka Resources",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Imperial_Brands_(IMB.L)",
@@ -5765,6 +6811,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Imperial Brands",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Inchcape_PLC_(INCH.L)",
@@ -5776,6 +6824,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Inchcape PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Incitec_Pivot_(IPL.AX)",
@@ -5787,6 +6837,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Incitec Pivot",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Independence_Group_(IGO.AX)",
@@ -5798,6 +6850,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Independence Group",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Infineon_(IFX.DE)",
@@ -5809,6 +6863,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Infineon",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Informa_(INF.L)",
@@ -5820,6 +6876,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Informa",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Ingenia_Group_(INA.AX)",
@@ -5831,6 +6889,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Ingenia Group",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Insurance_Aus_Grp_(IAG.AX)",
@@ -5842,6 +6902,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Insurance Australia Group Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Int_Airlines_Group_(IAG.L)",
@@ -5853,6 +6915,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "International  Airlines Group",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Intercont_Hotels_(IHG.L)",
@@ -5864,6 +6928,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Intercontinental Hotels",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Intermediate_Cap_(ICP.L)",
@@ -5875,6 +6941,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Intermediate Cap",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Intertek_Group_(ITRK.L)",
@@ -5886,6 +6954,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Intertek Group",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Investec_PLC_(INVP.L)",
@@ -5897,6 +6967,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Investec PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Invocare_Ltd_(IVC.AX)",
@@ -5908,6 +6980,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Invocare Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "IOOF_Holdings_Ltd_(IFL.AX)",
@@ -5919,6 +6993,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "IOOF Holdings Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "IPH_Ltd_(IPH.AX)",
@@ -5930,6 +7006,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "IPH Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Iress_Ltd_(IRE.AX)",
@@ -5941,6 +7019,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Iress Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "ITV_(ITV.L)",
@@ -5952,6 +7032,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "ITV",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "IWG_PLC_(IWG.L)",
@@ -5963,6 +7045,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "IWG PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "J_D_Wetherspoon_PLC_(JDW.L)",
@@ -5974,6 +7058,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "J D Wetherspoon PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "James_Hardie_(JHX.AX)",
@@ -5985,6 +7071,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "James Hardie Industries Plc",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Janus_Henderson_(JHG.AX)",
@@ -5996,6 +7084,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Janus Henderson",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "JB_Hi-Fi_Limited_(JBH.AX)",
@@ -6007,6 +7097,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "JB Hi-Fi Limited",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "JD_Sports_(JD.L)",
@@ -6018,6 +7110,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "JD Sports",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Jefferies_Financial_(JEF.N)",
@@ -6029,6 +7123,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Jefferies Financial Group Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "John_Wood_Group_PLC_(WG.L)",
@@ -6040,6 +7136,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "John Wood Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Johnson_Matthey_(JMAT.L)",
@@ -6051,6 +7149,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Johnson Matthey",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Jumbo_Interactive_(JIN.AX)",
@@ -6062,6 +7162,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Jumbo Interactive",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Just-Eat_Group_Hldg_(JE.L)",
@@ -6073,6 +7175,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Just-Eat Group Holdings",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "K+S_AG_(SDF.DE)",
@@ -6084,6 +7188,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "K+S AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Kainos_Group_PLC_(KNOS.L)",
@@ -6095,6 +7201,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Kainos Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Kion_Group_AG_(KGXD.DE)",
@@ -6106,6 +7214,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Kion Group AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Knorr-Bremse_AG_(KBXD.DE)",
@@ -6117,6 +7227,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Knorr-Bremse AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Land_Securities_(LAND.L)",
@@ -6128,6 +7240,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Land Securities",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Lanxess_AG_(LXS.DE)",
@@ -6139,6 +7253,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Lanxess AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "LEG_Immobilien_AG_(LEG.DE)",
@@ -6150,6 +7266,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "LEG Immobilien AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Legal_&_General_(LGEN.L)",
@@ -6161,6 +7279,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Legal & General",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Lendlease_Group_(LLC.AX)",
@@ -6172,6 +7292,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Lendlease Group",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Linde_(LIN.DE)",
@@ -6183,6 +7305,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Linde",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Link_Admin_HLDG_(LNK.AX)",
@@ -6194,6 +7318,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Link Admin HLDG",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Li-S_Energy_(LIS.AX)",
@@ -6205,6 +7331,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Li-S Energy Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Lloyds_Banking_(LLOY.L)",
@@ -6216,6 +7344,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Lloyds Banking",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Logitech_Int_(LOGI.O)",
@@ -6227,6 +7357,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Logitech International SA",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "London_Stock_Exch_(LSE.L)",
@@ -6238,6 +7370,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "London Stock Exchange",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "LondonMetric_Prop_(LMP.L)",
@@ -6249,6 +7383,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "LondonMetric Property PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Lufthansa_(LHA.DE)",
@@ -6260,6 +7396,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Lufthansa",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Lululemon_Athletica_(LULU.O)",
@@ -6271,6 +7409,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Lululemon Athletica Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Lynas_Corporation_(LYC.AX)",
@@ -6282,6 +7422,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Lynas Corporation",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "M&G_(MNG.L)",
@@ -6293,6 +7435,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "M&G",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Macquarie_Grp_Ltd_(MQG.AX)",
@@ -6304,6 +7448,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Macquarie Group Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Magellan_Fin._Grp._(MFG.AX)",
@@ -6315,6 +7461,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Magellan Fin Group Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Marks_and_Spencer__(MKS.L)",
@@ -6326,6 +7474,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Marks and Spencer Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Marriott_Vacations_(VAC.N)",
@@ -6337,6 +7487,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Marriott Vacations Worldwide Corp",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Marshalls_PLC_(MSLH.L)",
@@ -6348,6 +7500,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Marshalls PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Mattel_Inc._(MAT.O)",
@@ -6359,6 +7513,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Mattel Inc.",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Mayne_Pharma_Ltd_(MYX.AX)",
@@ -6370,6 +7526,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Mayne Pharma Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "McmillanShakespeare_(MMS.AX)",
@@ -6381,6 +7539,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Mcmillan Shakespeare",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Medibank_Private_(MPL.AX)",
@@ -6392,6 +7552,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Medibank Private Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Mediclinic_Int._(MDC.L)",
@@ -6403,6 +7565,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Mediclinic International PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Meggitt_(MGGT.L)",
@@ -6414,6 +7578,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Meggitt",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Melrose_(MRO.L)",
@@ -6425,6 +7591,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Melrose",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "MercadoLibre_Inc_(MELI.O)",
@@ -6436,6 +7604,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "MercadoLibre Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Mercantile_Inv_Trst_(MRC.L)",
@@ -6447,6 +7617,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "The Mercantile Investment Trust PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Merck_(MRK.DE)",
@@ -6458,6 +7630,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Merck",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Metcash_Ltd_(MTS.AX)",
@@ -6469,6 +7643,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Metcash Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Metro_AG_(B4BD.DE)",
@@ -6480,6 +7656,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Metro AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "MicroStrategy_(MSTR.O)",
@@ -6491,6 +7669,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "MicroStrategy Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Mineral_Resources_(MIN.AX)",
@@ -6502,6 +7682,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Mineral Resources",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Mirvac_Group_(MGR.AX)",
@@ -6513,6 +7695,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Mirvac Group",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Monadelphous_Group_(MND.AX)",
@@ -6524,6 +7708,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Monadelphous Group",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Mondi_(MNDI.L)",
@@ -6535,6 +7721,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Mondi",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Moneysupermarket_(MONY.L)",
@@ -6546,6 +7734,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Moneysupermarket.com Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Morningstar_Inc._(MORN.O)",
@@ -6557,6 +7747,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Morningstar Inc.",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Morphosys_AG_(MOR.DE)",
@@ -6568,6 +7760,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Morphosys AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Morrisons_(MRW.L)",
@@ -6579,6 +7773,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Morrisons",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "MTU_Aero_(MTX.DE)",
@@ -6590,6 +7786,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "MTU Aero",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Muenchen_Rueck_(MUV.DE)",
@@ -6601,6 +7799,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Muenchen Rueck",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Nano_X_Imaging_(NNOX.O)",
@@ -6612,6 +7812,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Nano X Imaging Limited",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Nanosonics_Ltd_(NAN.AX)",
@@ -6623,6 +7825,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Nanosonics Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Nat_Australia_Bank_(NAB.AX)",
@@ -6634,6 +7838,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "National Australia Bank Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "National_Express_(NEX.L)",
@@ -6645,6 +7851,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "National Express Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "National_Grid_(NG.L)",
@@ -6656,6 +7864,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "National Grid",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "National_Storage_(NSR.AX)",
@@ -6667,6 +7877,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "National Storage",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Natwest_Group_(NWG.L)",
@@ -6678,6 +7890,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Royal Bank of Scotland",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Nearmap_Ltd_(NEA.AX)",
@@ -6689,6 +7903,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Nearmap Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Nemetschek_SE_(NEM.DE)",
@@ -6700,6 +7916,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Nemetschek SE",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Netwealth_Group_(NWL.AX)",
@@ -6711,6 +7929,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Netwealth Group",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "New_Hope_Corp._(NHC.AX)",
@@ -6722,6 +7942,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "New Hope Corporation",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Newcrest_Mining_(NCM.AX)",
@@ -6733,6 +7955,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Newcrest Mining Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "News_Corp_Class_B_(NWS.AX)",
@@ -6744,6 +7968,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "News Corp Class B",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Next_(NXT.L)",
@@ -6755,6 +7981,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Next",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "NEXTDC_Ltd_(NXT.AX)",
@@ -6766,6 +7994,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "NEXTDC Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Nib_Holdings_Ltd_(NHF.AX)",
@@ -6777,6 +8007,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Nib Holdings Limited",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Nine_Entertainment_(NEC.AX)",
@@ -6788,6 +8020,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Nine Entertainment",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Northern_Star_(NST.AX)",
@@ -6799,6 +8033,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Northern Star",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Novavax_(NVAX.O)",
@@ -6810,6 +8046,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Novavax Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "NRW_Holdings_Ltd_(NWH.AX)",
@@ -6821,6 +8059,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "NRW Holdings Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Nufarm_(NUF.AX)",
@@ -6832,6 +8072,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Nufarm",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Ocado_Group_(OCDO.L)",
@@ -6843,6 +8085,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Ocado Group",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Oil_Search_Ltd_(OSH.AX)",
@@ -6854,6 +8098,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Oil Search Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Ooh!Media_Ltd_(OML.AX)",
@@ -6865,6 +8111,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Ooh!Media Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Orica_Ltd_(ORI.AX)",
@@ -6876,6 +8124,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Orica Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Origin_Energy_Ltd_(ORG.AX)",
@@ -6887,6 +8137,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Origin Energy Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Orocobre_Ltd_(ORE.AX)",
@@ -6898,6 +8150,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Orocobre Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Orora_Ltd_(ORA.AX)",
@@ -6909,6 +8163,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Orora Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "OSRAM_Licht_AG_(OSR.DE)",
@@ -6920,6 +8176,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "OSRAM Licht AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "OZ_Minerals_(OZL.AX)",
@@ -6931,6 +8189,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "OZ Minerals",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Pearson_(PSON.L)",
@@ -6942,6 +8202,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Pearson",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Pendal_Group_Ltd_(PDL.AX)",
@@ -6953,6 +8215,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Pendal Group Limited",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Pennon_Group_(PNN.L)",
@@ -6964,6 +8228,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Pennon Group",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Perenti_Global_Ltd_(PRN.AX)",
@@ -6975,6 +8241,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Perenti Global Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Perpetual_Ltd_(PPT.AX)",
@@ -6986,6 +8254,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Perpetual Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Persimmon_(PSN.L)",
@@ -6997,6 +8267,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Persimmon",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Pets_at_Home_Grp_(PETS.L)",
@@ -7008,6 +8280,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Pets at Home Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Phoenix_Grp_Hldg_(PHNX.L)",
@@ -7019,6 +8293,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Phoenix Group Holdings",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Pilbara_Min_Limited_(PLS.AX)",
@@ -7030,6 +8306,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Pilbara Min Limited",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Platinum_Asset_Mgt_(PTM.AX)",
@@ -7041,6 +8319,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Platinum Asset Management",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Plus500_Ltd_(PLUS.L)",
@@ -7052,6 +8332,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Plus500 Ltd",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Polar_Cap_Tech_Trst__(PCT.L)",
@@ -7063,6 +8345,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Polar Capital Technology Trust PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Polymetal_(POLY.L)",
@@ -7074,6 +8358,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Polymetal",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Polynovo_Ltd_(PNV.AX)",
@@ -7085,6 +8371,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Polynovo Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "PPK_Group_Limited_(PPK.AX)",
@@ -7096,6 +8384,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "PPK Group Limited",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Premier_Investments_(PMV.AX)",
@@ -7107,6 +8397,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Premier Investments",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Pro_Medicus_Ltd_(PME.AX)",
@@ -7118,6 +8410,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Pro Medicus Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "ProSiebenSat1_Media_(PSM.DE)",
@@ -7129,6 +8423,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "ProSiebenSat.1 Media SE",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Prudential_(PRU.L)",
@@ -7140,6 +8436,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Prudential",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Puma_SE_(PUM.DE)",
@@ -7151,6 +8449,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Puma SE",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Qantas_Airways_Ltd_(QAN.AX)",
@@ -7162,6 +8462,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Qantas Airways Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "QBE_Insurance_Grp_(QBE.AX)",
@@ -7173,6 +8475,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "QBE Insurance Group Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Qiagen_N.V._(QIAD.DE)",
@@ -7184,6 +8488,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Qiagen N.V.",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "QinetiQ_Group_PLC_(QQ.L)",
@@ -7195,6 +8501,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "QinetiQ Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "QUBE_Holdings_Ltd_(QUB.AX)",
@@ -7206,6 +8514,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "QUBE Holdings Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Quilter_PLC_(QLT.L)",
@@ -7217,6 +8527,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Quilter PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Ramsay_Health_Care_(RHC.AX)",
@@ -7228,6 +8540,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Ramsay Health Care Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Rational_AG_(RAA.DE)",
@@ -7239,6 +8553,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Rational AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "REA_Group_(REA.AX)",
@@ -7250,6 +8566,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "REA Group",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Reckitt_Benckiser_(RB.L)",
@@ -7261,6 +8579,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Reckitt Benckiser",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Regis_Resources_(RRL.AX)",
@@ -7272,6 +8592,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Regis Resources",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Reliance_Worldwide_(RWC.AX)",
@@ -7283,6 +8605,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Reliance Worldwide",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "RELX_PLC_(REL.L)",
@@ -7294,6 +8618,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "RELX PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Renewables_Infras_(TRIG.L)",
@@ -7305,6 +8631,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "The Renewables Infrastructure Group Limited",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Rentokil_Initial_(RTO.L)",
@@ -7316,6 +8644,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Rentokil Initial",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Resmed_Inc_(RMD.AX)",
@@ -7327,6 +8657,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Resmed Inc",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Resolute_Mining_(RSG.AX)",
@@ -7338,6 +8670,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Resolute Mining",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Rheinmetall_AG_(RHM.DE)",
@@ -7349,6 +8683,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Rheinmetall AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Rightmove_(RMV.L)",
@@ -7360,6 +8696,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Rightmove",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Rio_Tinto_Ltd_(RIO.AX)",
@@ -7371,6 +8709,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "RIO Tinto Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Rio_Tinto_PLC_(RIO.L)",
@@ -7382,6 +8722,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Rio Tinto PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "RIT_Capital_Prtnrs__(RCP.L)",
@@ -7393,6 +8735,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "RIT Capital Partners PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Rivian_(RIVN.O)",
@@ -7404,6 +8748,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Rivian Automotive Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Rocket_Lab_(RKLB.O)",
@@ -7415,6 +8761,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Rocket Lab USA Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Roku_(ROKU.O)",
@@ -7426,6 +8774,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Roku Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Rolls-Royce_(RR.L)",
@@ -7437,6 +8787,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Rolls-Royce",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Rotork_PLC_(ROR.L)",
@@ -7448,6 +8800,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Rotork PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Royal_Dutch_Shell_(RDSA.L)",
@@ -7459,6 +8813,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Royal Dutch Shell",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Royal_Mail_PLC_(RMG.L)",
@@ -7470,6 +8826,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Royal Mail PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "RTL_Group_SA_(RTL.DE)",
@@ -7481,6 +8839,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "RTL Group SA",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "RWE_AG_(RWE.DE)",
@@ -7492,6 +8852,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "RWE AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Safestore_Holdings_(SAFE.L)",
@@ -7503,6 +8865,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Safestore Holdings PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Sage_Group_(SGE.L)",
@@ -7514,6 +8878,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Sage Group",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Sainsbury_(SBRY.L)",
@@ -7525,6 +8891,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Sainsbury",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Sandfire_Resources_(SFR.AX)",
@@ -7536,6 +8904,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Sandfire Resources",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Santos_Ltd_(STO.AX)",
@@ -7547,6 +8917,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Santos Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "SAP_(SAP.DE)",
@@ -7558,6 +8930,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "SAP",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Sartorius_AG_(SRT.DE)",
@@ -7569,6 +8943,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Sartorius AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Savills_PLC_(SVS.L)",
@@ -7580,6 +8956,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Savills PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "SCA_Property_Group_(SCP.AX)",
@@ -7591,6 +8969,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "SCA Property Group",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Scentre_Group_(SCG.AX)",
@@ -7602,6 +8982,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Scentre Group",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Schroders_(SDR.L)",
@@ -7613,6 +8995,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Schroders",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Scottish_Mtge_IT_(SMT.L)",
@@ -7624,6 +9008,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Scottish Mortgage IT",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Scottish_South_Nrg_(SSE.L)",
@@ -7635,6 +9021,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Scottish Southern Energy",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Scout24_AG_(G24.DE)",
@@ -7646,6 +9034,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Scout24 AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Sea_Limited_(SE.N)",
@@ -7657,6 +9047,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Sea Limited",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Seek_Ltd_(SEK.AX)",
@@ -7668,6 +9060,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Seek Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "SEGRO_(SGRO.L)",
@@ -7679,6 +9073,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "SEGRO",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Sequoia_Economic_IF_(SEQI.L)",
@@ -7690,6 +9086,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Sequoia Economic Infrastructure Income Fund Limited",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Serco_Group_PLC_(SRP.L)",
@@ -7701,6 +9099,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Serco Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Service_Stream_(SSM.AX)",
@@ -7712,6 +9112,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Service Stream",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Seven_Group_Hldgs_(SVW.AX)",
@@ -7723,6 +9125,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Seven Group Holdings",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Severn_Trent_(SVT.L)",
@@ -7734,6 +9138,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Severn Trent",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Shaftesbury_PLC_(SHB.L)",
@@ -7745,6 +9151,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Shaftesbury PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Siemens_AG_(SIE.DE)",
@@ -7756,6 +9164,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Siemens AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Siemens_Hlthnrs_(SHL.DE)",
@@ -7767,6 +9177,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Siemens Healthineers AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Siltronic_AG_(WAF.DE)",
@@ -7778,6 +9190,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Siltronic AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Silver_Lake_Res_(SLR.AX)",
@@ -7789,6 +9203,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Silver Lake Resource",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Sims_Metal_Mgt_Ltd_(SGM.AX)",
@@ -7800,6 +9216,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Sims Metal Management Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Skycity_Ent_Grp_Ltd_(SKC.AX)",
@@ -7811,6 +9229,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Skycity Entertainment Group Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Smartgroup_Corp._(SIQ.AX)",
@@ -7822,6 +9242,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Smartgroup Corporation",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Smith_&_Nephew_(SN.L)",
@@ -7833,6 +9255,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Smith & Nephew",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Smiths_Group_(SMIN.L)",
@@ -7844,6 +9268,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Smiths Group",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Smithson_Inv._Trust_(SSON.L)",
@@ -7855,6 +9281,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Smithson Investment Trust PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Smurfit_Kappa_Grp_(SKG.L)",
@@ -7866,6 +9294,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Smurfit Kappa Group",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Snowflake_Inc_(SNOW.N)",
@@ -7877,6 +9307,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Snowflake Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Softcat_PLC_(SCT.L)",
@@ -7888,6 +9320,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Softcat PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Software_AG_(SOW.DE)",
@@ -7899,6 +9333,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Software AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Sonic_Healthcare_(SHL.AX)",
@@ -7910,6 +9346,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Sonic Healthcare Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "South32_Ltd_(S32.AX)",
@@ -7921,6 +9359,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "SOUTH32 Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Spark_Infra._(SKI.AX)",
@@ -7932,6 +9372,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Spark Infrastructure",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Spark_New_Zealand_(SPK.AX)",
@@ -7943,6 +9385,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Spark New Zealand",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Spectris_PLC_(SXS.L)",
@@ -7954,6 +9398,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Spectris PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Spirax_Sarco_Eng_(SPX.L)",
@@ -7965,6 +9411,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Spirax Sarco",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Square_Inc_(SQ.N)",
@@ -7976,6 +9424,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Square Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "ST_Barbara_Ltd_(SBM.AX)",
@@ -7987,6 +9437,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "ST Barbara Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "St_James's_Place_(STJ.L)",
@@ -7998,6 +9450,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "St James's Place",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Standard_Chtd_(STAN.L)",
@@ -8009,6 +9463,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Standard Chartered",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Std_Life_Aberdeen_(SLA.L)",
@@ -8020,6 +9476,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Standard Life Aberdeen",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Steadfast_Group_Ltd_(SDF.AX)",
@@ -8031,6 +9489,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Steadfast Group Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "STHN_Cross_Media_(SXL.AX)",
@@ -8042,6 +9502,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Southern Cross Media Group",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Stockland_Corp_Ltd_(SGP.AX)",
@@ -8053,6 +9515,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Stockland",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Stroer_SE_&_Co._(SAX.DE)",
@@ -8064,6 +9528,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Stroeer SE & Co KGaA",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Suncorp_Group_(SUN.AX)",
@@ -8075,6 +9541,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Suncorp Group Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Super_Retail_Group_(SUL.AX)",
@@ -8086,6 +9554,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Super Retail Group Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Sydney_Airport_(SYD.AX)",
@@ -8097,6 +9567,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Sydney Airport",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Symrise_AG_(SY1.DE)",
@@ -8108,6 +9580,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Symrise AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Syncona_Limited_(SYNC.L)",
@@ -8119,6 +9593,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Syncona Limited",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Synthomer_PLC_(SYNT.L)",
@@ -8130,6 +9606,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Synthomer PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Tabcorp_Hldgs_Ltd_(TAH.AX)",
@@ -8141,6 +9619,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Tabcorp Holdings Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "TAG_Immobilien_AG_(TEG.DE)",
@@ -8152,6 +9632,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "TAG Immobilien AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Tassal_Group_Ltd_(TGR.AX)",
@@ -8163,6 +9645,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Tassal Group Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Tate_&_Lyle_PLC_(TATE.L)",
@@ -8174,6 +9658,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Tate & Lyle PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Taylor_Wimpey_(TW.L)",
@@ -8185,6 +9671,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Taylor Wimpey",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "TeamViewer_AG_(TMVD.DE)",
@@ -8196,6 +9684,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "TeamViewer AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Technology_One_(TNE.AX)",
@@ -8207,6 +9697,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Technology One",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Telefonica_DE_HLdgs_(O2D.DE)",
@@ -8218,6 +9710,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Telefonica Deutschland Holding AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Telstra_Corp_Ltd_(TLS.AX)",
@@ -8229,6 +9723,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Telstra Corporation Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Templeton_Emg_Mkt_(TEM.L)",
@@ -8240,6 +9736,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Templeton Emerging Markets Investment Trust PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Tesco_(TSCO.L)",
@@ -8251,6 +9749,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Tesco",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "The_a2_Milk_Company_(A2M.AX)",
@@ -8262,6 +9762,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "The a2 Milk Company",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "The_Monks_Inv_Trust_(MNKS.L)",
@@ -8273,6 +9775,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "The Monks Investment Trust PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "The_Star_Ent_Group_(SGR.AX)",
@@ -8284,6 +9788,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "The Star Entertainment Group",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "The_Unite_Group_PLC_(UTG.L)",
@@ -8295,6 +9801,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "The Unite Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Thyssenkrupp_AG_(TKA.DE)",
@@ -8306,6 +9814,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Thyssenkrupp AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "TI_Fluid_Systems_(TIFS.L)",
@@ -8317,6 +9827,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "TI Fluid Systems PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "TP_ICAP_Group_plc_(TCAP.L)",
@@ -8328,6 +9840,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "TP ICAP Group plc",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "TPG_Telecom_Ltd_(TPG.AX)",
@@ -8339,6 +9853,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "TPG Telecom Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Travis_Perkins_PLC_(TPK.L)",
@@ -8350,6 +9866,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Travis Perkins PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Treasury_Wine_Est_(TWE.AX)",
@@ -8361,6 +9879,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Treasury Wine Estates Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Tupperware_(TUP.N)",
@@ -8372,6 +9892,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Tupperware Brands Corp",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "UDG_Healthcare_PLC_(UDG.L)",
@@ -8383,6 +9905,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "UDG Healthcare PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "UiPath_(PATH.K)",
@@ -8394,6 +9918,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "UiPath Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Ultra_Electronic_(ULE.L)",
@@ -8405,6 +9931,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Ultra Electronic",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Under_Armour_(A)_(UAA.N)",
@@ -8416,6 +9944,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Under Armour (Class A)",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Under_Armour_(C)_(UA.N)",
@@ -8427,6 +9957,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Under Armour (Class C)",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Unilever_PLC_(ULVR.L)",
@@ -8438,6 +9970,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Unilever PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Uniper_SE_(UN01D.DE)",
@@ -8449,6 +9983,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Uniper SE",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Uni-Rod-Westfield_(URW.AX)",
@@ -8460,6 +9996,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Unibail-Rodamco-Westfield",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "United_Internet_AG_(UTDID.DE)",
@@ -8471,6 +10009,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "United Internet AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "United_Utilities_(UU.L)",
@@ -8482,6 +10022,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "United Utilities",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Upstart_(UPST.O)",
@@ -8493,6 +10035,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Upstart Holdings Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Varta_AG_(VAR1D.DE)",
@@ -8504,6 +10048,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Varta AG",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Vicinity_Centres_(VCX.AX)",
@@ -8515,6 +10061,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Vicinity Centres",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Virgin_Money_UK_PLC_(VMUK.L)",
@@ -8526,6 +10074,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Virgin Money UK PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Virgin_Money_UK_PLC_(VUK.AX)",
@@ -8537,6 +10087,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Virgin Money UK PLC",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Vistry_Group_PLC_(VTY.L)",
@@ -8548,6 +10100,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Vistry Group PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Viva_Energy_Group_(VEA.AX)",
@@ -8559,6 +10113,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Viva Energy Group",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Vocus_Group_Ltd_(VOC.AX)",
@@ -8570,6 +10126,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Vocus Group Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Vodafone_(VOD.L)",
@@ -8581,6 +10139,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Vodafone",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Volkswagen_(VOW.DE)",
@@ -8592,6 +10152,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Volkswagen",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Vonovia_SE_(VNA.DE)",
@@ -8603,6 +10165,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Vonovia SE",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "W.H_Soul_Pattinson_(SOL.AX)",
@@ -8614,6 +10178,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Washington H. Soul Pattinson",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Waypoint_(WPR.AX)",
@@ -8625,6 +10191,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Waypoint",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Webjet_Ltd_(WEB.AX)",
@@ -8636,6 +10204,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Webjet Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Wesfarmers_Ltd_(WES.AX)",
@@ -8647,6 +10217,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Wesfarmers Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Western_Areas_Ltd_(WSA.AX)",
@@ -8658,6 +10230,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Western Areas Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Westpac_Banking_(WBC.AX)",
@@ -8669,6 +10243,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Westpac Banking Corporation",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "WH_Smith_PLC_(SMWH.L)",
@@ -8680,6 +10256,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "WH Smith PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Whitbread_(WTB.L)",
@@ -8691,6 +10269,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Whitbread",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Whitehaven_Coal_(WHC.AX)",
@@ -8702,6 +10282,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Whitehaven Coal",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Wisetech_Global_Ltd_(WTC.AX)",
@@ -8713,6 +10295,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Wisetech Global Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Wix.com_Ltd_(WIX.O)",
@@ -8724,6 +10308,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Wix.com Ltd",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Wizz_Air_Holdings_(WIZZ.L)",
@@ -8735,6 +10321,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Wizz Air Holdings PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Woodside_Petroleum_(WPL.AX)",
@@ -8746,6 +10334,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Woodside Petroleum Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Woolworths_Group_(WOW.AX)",
@@ -8757,6 +10347,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Woolworths Group Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Worldwide_Healthcare_(WWH.L)",
@@ -8768,6 +10360,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Worldwide Healthcare Trust PLC",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Worleyparsons_Ltd_(WOR.AX)",
@@ -8779,6 +10373,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Worleyparsons Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "WPP_(WPP.L)",
@@ -8790,6 +10386,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "WPP",
             digits: 4,
             pip: 3,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Xero_Ltd_(XRO.AX)",
@@ -8801,6 +10399,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Xero Ltd",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Xerox_(XRX.N)",
@@ -8812,6 +10412,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Xerox Holdings Corp",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "XPeng_Inc_(XPEV.K)",
@@ -8823,6 +10425,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "XPeng Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Yelp_(YELP.N)",
@@ -8834,6 +10438,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Yelp Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Yum_Brands_Inc_(YUM.N)",
@@ -8845,6 +10451,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Yum Brands Inc",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "Zalando_SE_(ZAL.DE)",
@@ -8856,6 +10464,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "Zalando SE",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "ZipMoney_Limited_(Z1P.AX)",
@@ -8867,6 +10477,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "ZipMoney Limited",
             digits: 3,
             pip: 2,
+            lot: 1.0,
+            min_vol: 0.1,
         },
         TSymbol {
             name: "ZoomInfo_Technologies_(ZI.O)",
@@ -8878,6 +10490,8 @@ pub fn get_symbols_list() -> Vec<TSymbol> {
             description: "ZoomInfo Technologies",
             digits: 2,
             pip: 1,
+            lot: 1.0,
+            min_vol: 0.1,
         },
     ]
 }

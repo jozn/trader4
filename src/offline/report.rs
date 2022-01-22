@@ -15,7 +15,6 @@ pub struct Report {
     pub sub_folder: String,
     pub base_time: u64,
     pub rnd_num: u16,
-    pub acted: Vec<u64>,
     pub balance: Vec<f64>,
     pub middles: Vec<MiddleStatic>,
 }
@@ -33,7 +32,6 @@ impl Report {
             sub_folder: cfg.report_sub_folder.clone(),
             base_time: get_time_sec(),
             rnd_num: rand::thread_rng().gen_range(1..1000),
-            acted: vec![],
             balance: vec![],
             middles: vec![],
         }
@@ -320,10 +318,6 @@ pub fn get_all_postions(port: &BackendEngine) -> Vec<Position> {
 }
 
 fn write_pos(name: &str, rnd_num: u16, arr: Vec<Position>) {
-    // let os = to_csv_out(&arr, false);
-    let os = serialize_position_v1(&arr); // ignore for now
-    let os = serialize_position_v2(&arr);
-    // let os = serialize_position_v3(&arr);
     let os = serialize_position_v4(&arr);
     let txt = format!("{}", os);
     std::fs::write(format!("{}_{}.csv", name, rnd_num), txt);

@@ -1,14 +1,14 @@
 use super::*;
 use crate::candle::{Tick, TA1};
+use crate::collector::row_data::BTickData;
+use crate::configs::assets;
 use crate::configs::assets::Pair;
 use crate::gate_api::{NewPos, PosRes};
 use crate::helper;
+use crate::ta::round;
 use chrono::*;
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
-use crate::collector::row_data::BTickData;
-use crate::configs::assets;
-use crate::ta::round;
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Position {
@@ -16,6 +16,7 @@ pub struct Position {
     pub fid: u64,
     pub won: i64,
     pub symbol_id: i64,
+    pub pair: Pair,
     pub direction: PosDir,
     pub pos_size_usd: f64,
     pub got_assets: f64,
@@ -42,8 +43,6 @@ pub struct Position {
     pub touch_high_pip: f64,
     pub locked: f64,
 
-    #[serde(skip_serializing)]
-    pub ta: PositionTA,
     #[serde(skip)]
     pub new_pos: NewPos,
 }
@@ -68,7 +67,7 @@ pub struct CloseParm {
 }
 
 impl Position {
-    pub fn new(p: &NewPos, tick: &BTickData , locked: f64) -> Self {
+    pub fn new(p: &NewPos, tick: &BTickData, locked: f64) -> Self {
         assert!(p.size_base > 5);
         let dir = if p.is_short {
             PosDir::Short
@@ -77,9 +76,9 @@ impl Position {
         };
 
         let at_price = if p.is_short {
-            tick.bid_price
+            tick.bid_price // buyers of assets
         } else {
-            tick.ask_price
+            tick.ask_price // seller of assets
         };
 
         let (high, low) = if p.is_short {
@@ -89,18 +88,13 @@ impl Position {
         };
         assert!(high > low);
 
-        let got_assets = p.size_base as f64 * at_price;
-        let pair = assets::Pair::id_to_symbol(p.symbol_id);
-        let spreed_open = tick.get_spread_pip(&pair) ;
-        // let got_assets = if p.is_short {
-        //     p.size_base as f64 * at_price
-        // } else {
-        //     p.size_base as f64 * at_price
-        // };
+        let got_assets = p.size_base as f64 / at_price;
+        let pair = assets::Pair::id_to_symbol(p.symbol_id_dep);
+        let spreed_open = tick.get_spread_pip(&pair);
 
         let mut res = Self {
             pos_id: 0,
-            symbol_id: p.symbol_id,
+            symbol_id: p.symbol_id_dep,
             direction: dir,
             pos_size_usd: p.size_base as f64,
             got_assets,
@@ -125,19 +119,17 @@ impl Position {
 
             ..Default::default()
         };
-        // res.set_techichal_anylse(p);
-        res.ta.set_start_ta(p);
         res
     }
 
-    pub fn close_pos(&mut self, param: &CloseParm ,tick: &BTickData) {
+    pub fn close_pos(&mut self, param: &CloseParm, tick: &BTickData) {
         let pair = assets::Pair::id_to_symbol(self.symbol_id);
         let close_price = if self.is_short() {
             tick.ask_price
         } else {
             tick.bid_price
         };
-        let spreed_close = tick.get_spread_pip(&pair) ;
+        let spreed_close = tick.get_spread_pip(&pair);
         self.close_time_str = helper::to_date(param.time);
         self.duration = helper::to_duration(self.open_time as i64 - param.time as i64);
         self.close_price = close_price;
@@ -145,8 +137,15 @@ impl Position {
         // let spread_fees = ((self.spread_open + self.spread_close) / 2.) * ((self.open_price + self.close_price) / 2.) ;
         let spread_fees = ((self.spread_open + self.spread_close) / 2.);
         let spread_fees = round(spread_fees);
-        let price_diff_percentage = (self.close_price - self.open_price) / self.open_price;
-        let mut pl = price_diff_percentage * self.pos_size_usd;
+
+        // old cal: correct in many parts
+        // let price_diff_percentage = (self.close_price - self.open_price) / self.open_price;
+        // let mut pl = price_diff_percentage / self.pos_size_usd;
+
+        // new test cal
+        let price_diff_percentage = (self.close_price - self.open_price) * self.got_assets;
+        let mut pl = price_diff_percentage / self.close_price;
+
         if self.is_short() {
             pl = -pl;
         }
@@ -183,5 +182,9 @@ impl Position {
 
     pub fn is_short(&self) -> bool {
         self.direction == PosDir::Short
+    }
+
+    pub fn is_long(&self) -> bool {
+        self.direction == PosDir::Long
     }
 }

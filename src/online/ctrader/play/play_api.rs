@@ -158,6 +158,7 @@ impl Builder {
             let symbol = self.get_symbol(s.symbol_id);
             let cat = self.get_category(s.symbol_category_id.unwrap());
             let class = self.get_class(s.symbol_category_id.unwrap());
+            // symbol.min_volume
             let o = TSymbol {
                 name: s.symbol_name.unwrap(),
                 symbol_id: s.symbol_id,
@@ -168,6 +169,8 @@ impl Builder {
                 description: s.description.unwrap(),
                 digits: symbol.digits,
                 pip: symbol.pip_position,
+                lot: symbol.lot_size.unwrap() as f64 / 100.,
+                min_vol: symbol.min_volume.unwrap() as f64 / 100.,
             };
             sym_arr.push(o);
         }
@@ -261,4 +264,6 @@ struct TSymbol {
     description: String,
     digits: i32,
     pip: i32,
+    lot: f64,
+    min_vol: f64,
 }

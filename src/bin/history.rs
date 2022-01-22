@@ -25,7 +25,7 @@ fn run() {
         client_secret: "geDkrRiRyfbanU6OUwZMXKIjr4vKQyfs1Ete0unffXtS8Ah14o".to_string(),
         client_token: "lcd2-Q0fEVUMMILzkyjwcG1YKmj1vsI1HFRZJx5ETCw".to_string(),
         ctid: 23382349, // pepperstone
-        // ctid: 22851452, // ctrader demo account data
+                        // ctid: 22851452, // ctrader demo account data
     };
 
     // 5 is the limit of cTrader concurrent histroical data call.
@@ -34,8 +34,8 @@ fn run() {
 
     let mut pair_ids = assets::get_all_symbols_ids();
     pair_ids.reverse(); // TEMP: first stocks
-    // let pair_ids = vec![43];// todo: remove
-    // let pair_ids = vec![10099,10096,10011,41];// gold
+                        // let pair_ids = vec![43];// todo: remove
+                        // let pair_ids = vec![10099,10096,10011,41];// gold
     for pair_id in pair_ids {
         let pair = assets::Pair::id_to_symbol(pair_id);
         let cfg = cfg.clone();
@@ -98,13 +98,13 @@ fn get_weeks_times(weed_id: i64) -> (i64, i64) {
 
 fn get_file_path(pair: &Pair, weeks_num: i64) -> String {
     let cat = pair.to_category();
-    let s = format!("./data/{}/{:?}/{}.tsv",cat, pair, weeks_num);
+    let s = format!("./data/{}/{:?}/{}.tsv", cat, pair, weeks_num);
     s
 }
 
 fn get_folder_path(pair: &Pair) -> String {
     let cat = pair.to_category();
-    let s = format!("./data/{}/{:?}",cat, pair);
+    let s = format!("./data/{}/{:?}", cat, pair);
     s
 }
 

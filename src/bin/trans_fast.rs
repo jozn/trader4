@@ -1,4 +1,5 @@
 use chrono::prelude::*;
+use serde::{Deserialize, Serialize};
 use trader3;
 use trader3::candle::{
     CandleConfig, CandleSeriesTA, Kline, KlineHolderFrameTA, KlineTA, TimeSerVec, TA2,
@@ -8,7 +9,6 @@ use trader3::collector::row_data::BTickData;
 use trader3::configs::assets::Pair;
 use trader3::offline::num5_dep;
 use trader3::ta::{DCRes, VelRes};
-use serde::{Serialize, Deserialize};
 
 // Note: we do not generate binary for daily now.
 
@@ -31,7 +31,7 @@ pub fn main() {
                 let ticks = trader3::collector::loader::load_rows(&path_tsv);
 
                 // Fast weekly data
-                write_week_fast(&ticks,&pair,week_id);
+                write_week_fast(&ticks, &pair, week_id);
 
                 if DAILY_DATA {
                     let mut day_ticks = vec![];
@@ -62,7 +62,13 @@ pub fn write_single_daily(ticks: Vec<BTickData>, pair: &Pair, week_id: u64, day_
 
     // Write to file
     let dir = format!("{}{}", OUT_FOLDER, pair.folder_path());
-    let out_file_path = format!("{}{}/{:}_{}.tsv", OUT_FOLDER, &pair.folder_path(), week_id, day_num);
+    let out_file_path = format!(
+        "{}{}/{:}_{}.tsv",
+        OUT_FOLDER,
+        &pair.folder_path(),
+        week_id,
+        day_num
+    );
 
     use std::fs;
     fs::create_dir_all(&dir);
@@ -76,7 +82,7 @@ pub fn write_week_fast(ticks: &Vec<BTickData>, pair: &Pair, week_id: u64) {
         arr_fast.push(t.to_fast_bin());
     }
 
-    let encoded= bincode::serialize(&arr_fast).unwrap();
+    let encoded = bincode::serialize(&arr_fast).unwrap();
     // Write to file
     let dir = format!("{}{}", OUT_FOLDER, pair.folder_path());
     let out_file_path = format!("{}{}/{}.bin", OUT_FOLDER, &pair.folder_path(), week_id);
@@ -86,4 +92,3 @@ pub fn write_week_fast(ticks: &Vec<BTickData>, pair: &Pair, week_id: u64) {
     fs::write(&out_file_path, encoded);
     println!("{}", &out_file_path);
 }
-

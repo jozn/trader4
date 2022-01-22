@@ -65,7 +65,7 @@ pub fn load_all_pair(pair: &Pair, rng: Range<u16>) -> Vec<BTickData> {
     let mut arr = vec![];
     let cat = pair.to_category();
     for i in rng {
-        let path = format!("/mnt/t/trader/data_fast/{}/{:?}/{}.bin",cat, pair, i);
+        let path = format!("/mnt/t/trader/data_fast/{}/{:?}/{}.bin", cat, pair, i);
         if std::path::Path::new(&path).exists() {
             let ticks = load_rows_fast(&path);
             for t in ticks {
@@ -104,7 +104,7 @@ pub fn load_ticks_fast(file_path: &str) -> Vec<Tick> {
 pub fn load_rows_fast(file_path: &str) -> Vec<BTickData> {
     let file = std::fs::read(file_path).unwrap();
 
-    let arr_bins :Vec<TickBinFast> = bincode::deserialize(&file).unwrap();
+    let arr_bins: Vec<TickBinFast> = bincode::deserialize(&file).unwrap();
 
     let mut i = 0;
     let mut out_arr = Vec::with_capacity(arr_bins.len());

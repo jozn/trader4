@@ -15,11 +15,12 @@ pub struct BTickData {
     pub date_str: String,
     pub timestamp_sec: i64,
     pub timestamp: i64,
-    pub bid_price: f64,
-    pub ask_price: f64,
+    pub bid_price: f64, // low price
+    pub ask_price: f64, // high price - for long buy erntry -
 }
 
 impl BTickData {
+    // dep
     pub fn get_price(&self) -> f64 {
         self.bid_price
     }
@@ -46,12 +47,12 @@ impl BTickData {
         TickBinFast {
             timestamp: self.timestamp,
             bid_price: self.bid_price,
-            ask_price: self.ask_price
+            ask_price: self.ask_price,
         }
     }
 }
 
-#[derive( serde::Serialize,  serde::Deserialize, PartialEq, Debug)]
+#[derive(serde::Serialize, serde::Deserialize, PartialEq, Debug)]
 pub struct TickBinFast {
     pub timestamp: i64,
     pub bid_price: f64,

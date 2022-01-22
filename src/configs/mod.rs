@@ -23,4 +23,6 @@ pub struct TSymbol {
     pub description: &'static str,
     pub digits: i32,
     pub pip: i32,
+    pub lot: f64,
+    pub min_vol: f64,
 }

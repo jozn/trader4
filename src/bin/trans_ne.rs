@@ -18,7 +18,11 @@ pub fn main() {
 
     for pair in pairs {
         for week_id in 25..=60 {
-            let path = format!("/mnt/t/trader/data_fast/{}/{}.bin", pair.folder_path(), week_id);
+            let path = format!(
+                "/mnt/t/trader/data_fast/{}/{}.bin",
+                pair.folder_path(),
+                week_id
+            );
             if std::path::Path::new(&path).exists() {
                 let ticks = trader3::collector::loader::load_rows_fast(&path);
                 // println!("len {}  {}", ticks.len(), &path);

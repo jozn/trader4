@@ -11,7 +11,7 @@ pub fn main() {
 
     for pair in pairs {
         for i in 1..=60 {
-            let cat  = pair.to_category();
+            let cat = pair.to_category();
             let path = format!("/mnt/t/trader/data_fast/{}/{}.bin", pair.folder_path(), i);
 
             // println!("> {}", &path);
@@ -28,7 +28,7 @@ pub fn main() {
                 // println!("{}", &path);
 
                 let ticks = trader3::collector::loader::load_rows_fast(&path);
-                assert!(ticks.len() > 0 );
+                assert!(ticks.len() > 0);
                 let mut arr = TimeSerVec::new();
 
                 for t in ticks {
@@ -57,11 +57,11 @@ fn write_output(khf: &KlineHolderFrameTA, pair: &Pair, week_id: i64, time_frame_
     // let s  = trader3::offline::kline_ta_csv::to_csv_out(&vec_candles);
 
     // Write to file
-    let cat  = pair.to_category();
-    let dir = format!("/mnt/t/trader/data_ohlc/{}/{:?}",cat ,pair);
+    let cat = pair.to_category();
+    let dir = format!("/mnt/t/trader/data_ohlc/{}/{:?}", cat, pair);
     let out_file_path = format!(
         "/mnt/t/trader/data_ohlc/{}/{:?}/{}_{}.tsv",
-        cat,pair, week_id, time_frame_str
+        cat, pair, week_id, time_frame_str
     );
 
     use std::fs;

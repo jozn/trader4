@@ -1,13 +1,15 @@
-use super::*;
+use std::borrow::BorrowMut;
+use std::cell::RefCell;
+use std::sync::{Arc, Mutex};
+
 use crate::collector::row_data::BTickData;
 use crate::configs::assets;
 use crate::configs::assets::Pair;
 use crate::core::gate_api::{NewPos, UpdatePos};
 use crate::gate_api::{GateWay, PosRes};
 use crate::offline::report::{Report, ReportSummery};
-use std::borrow::BorrowMut;
-use std::cell::RefCell;
-use std::sync::{Arc, Mutex};
+
+use super::*;
 
 type PricePair = (Pair, BTickData);
 #[derive(Debug)]
@@ -74,7 +76,7 @@ impl BackendEngine {
                         time: self.las_time_ms,
                         ta: Default::default(),
                     };
-                    pos.close_pos(&close_par,&tick);
+                    pos.close_pos(&close_par, &tick);
                     self._remove_open_pos(pos.pos_id as u64);
                     // self.opens.push(pos);
                     self.notify.push(pos.to_notify());
@@ -129,6 +131,15 @@ impl BackendEngine {
         self.close_stasfied_poss(symbol_id, false);
     }
 
+    fn get_symbol_tick_v2(&self, pair: &Pair) -> Option<BTickData> {
+        for r in self.price.iter() {
+            if &r.0 == pair {
+                return Some(r.1.clone());
+            }
+        }
+        None
+    }
+
     fn get_symbol_tick(&self, symbol_id: i64) -> Option<BTickData> {
         for r in self.price.iter() {
             if r.0.to_symbol_id() == symbol_id {
@@ -147,14 +158,18 @@ impl BackendEngine {
 
             let mutl = pair.get_pip_multi();
 
-            let high = (btick.ask_price - pos.open_price) * mutl;
-            if pos.touch_high_pip < high {
-                pos.touch_high_pip = high;
-            }
+            if pos.is_short() {
+            } else {
+                // long
+                let high = (btick.bid_price - pos.open_price) * mutl;
+                if pos.touch_high_pip < high {
+                    pos.touch_high_pip = high;
+                }
 
-            let low = (btick.bid_price - pos.open_price) * mutl;
-            if pos.touch_low_pip > low {
-                pos.touch_low_pip = low;
+                let low = (btick.bid_price - pos.open_price) * mutl;
+                if pos.touch_low_pip > low {
+                    pos.touch_low_pip = low;
+                }
             }
         }
     }
@@ -173,33 +188,42 @@ impl BackendEngine {
                 continue;
             }
 
-            let price = btick.ask_price;
-            // println!("+++++++++++++++++++ >> : {:#?}, {:?}", pos, btick);
-            if btick.ask_price >= pos.high_exit_price || btick.bid_price <= pos.low_exit_price || force {
-                let p = CloseParm {
-                    at_price_dep: price,
-                    time: btick.timestamp_sec as u64,
-                    ta: Default::default(),
-                };
-                pos.close_pos(&p, &btick);
-                closed_some = true;
+            if pos.is_long() {
+                let price = btick.bid_price;
+                // println!("+++++++++++++++++++ >> : {:#?}, {:?}", pos, btick);
+                if btick.bid_price >= pos.high_exit_price
+                    || btick.bid_price <= pos.low_exit_price
+                    || force
+                {
+                    let p = CloseParm {
+                        at_price_dep: price,
+                        time: btick.timestamp_sec as u64,
+                        ta: Default::default(),
+                    };
+                    pos.close_pos(&p, &btick);
+                    closed_some = true;
 
-                // println!("+++++++++++++++++++ closding pos : {:#?}", pos);
+                    // println!("+++++++++++++++++++ closding pos : {:#?}", pos);
 
-                remove_pos_ids.push(pos.pos_id);
+                    remove_pos_ids.push(pos.pos_id);
 
-                if pos.is_short() {
-                    self.free_usd += pos.profit;
-                } else {
                     self.free_usd += pos.pos_size_usd;
                     self.free_usd += pos.profit;
+
+                    // if pos.is_short() {
+                    //     self.free_usd += pos.profit;
+                    // } else {
+                    //     self.free_usd += pos.pos_size_usd;
+                    //     self.free_usd += pos.profit;
+                    // }
+
+                    // self.report.on_close_trade(&pos,self.get_free_balance());
+
+                    // self._remove_pos(pos.pos_id);
+                    self.closed.push(pos.clone());
+                    self.notify.push(pos.to_notify());
                 }
-
-                // self.report.on_close_trade(&pos,self.get_free_balance());
-
-                // self._remove_pos(pos.pos_id);
-                self.closed.push(pos.clone());
-                self.notify.push(pos.to_notify());
+            } else {
             }
         }
 
@@ -218,8 +242,8 @@ impl BackendEngine {
             return;
         }
         // println!("buy long long");
-        let tick = self.get_symbol_tick(param.symbol_id).unwrap();
-        let mut pos = Position::new(param, &tick,self.get_locked_money());
+        let tick = self.get_symbol_tick(param.symbol_id_dep).unwrap();
+        let mut pos = Position::new(param, &tick, self.get_locked_money());
         self.free_usd -= param.size_base as f64;
         pos.pos_id = self._next_pos_id();
         self.notify.push(pos.to_notify());
@@ -230,7 +254,7 @@ impl BackendEngine {
         if !self.has_enough_balance(param.size_base) {
             return;
         }
-        let tick = self.get_symbol_tick(param.symbol_id).unwrap();
+        let tick = self.get_symbol_tick(param.symbol_id_dep).unwrap();
         let mut pos = Position::new(param, &tick, self.get_locked_money());
         pos.pos_id = self._next_pos_id();
         self.notify.push(pos.to_notify());
@@ -263,7 +287,7 @@ impl BackendEngine {
                 time: btick.timestamp_sec as u64,
                 ta: Default::default(),
             };
-            pos_cp.close_pos(&p,&btick);
+            pos_cp.close_pos(&p, &btick);
 
             if pos_cp.is_short() {
                 locked_usd += pos_cp.profit;

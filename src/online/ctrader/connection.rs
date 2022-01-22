@@ -308,7 +308,7 @@ impl CTrader {
         let req_pb = pb::NewOrderReq {
             payload_type: None,
             ctid_trader_account_id: self.cfg.ctid,
-            symbol_id: np.symbol_id,
+            symbol_id: np.symbol_id_dep,
             order_type: pb::OrderType::Market as i32,
             trade_side: dir as i32,
             volume: np.size_base * 100, // 1000$

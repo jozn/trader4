@@ -15,7 +15,8 @@ pub trait GateWay: Debug {
 
 #[derive(Debug, Clone, Default)]
 pub struct NewPos {
-    pub symbol_id: i64,
+    pub pair: Pair,
+    pub symbol_id_dep: i64, // todo remove
     pub is_short: bool,
     // Base currency - USD, Euro, typical higher valued (BTC vs USD) ( Euro vs USD)
     //  -- as the cTrader works this way we do not use XLot
@@ -26,8 +27,8 @@ pub struct NewPos {
     // Informative
     pub at_price: f64,
     pub time_s: u64, // Brain time
-    pub ta_med: TA1,
-    pub ta_big: TA1,
+    // pub ta_med: TA1,
+    // pub ta_big: TA1,
     // pub frame: FrameMem,
     pub frame_ne2: NEFrame,
     // add comment, label too

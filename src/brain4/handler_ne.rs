@@ -76,7 +76,7 @@ impl Brain4 {
                 // if dc.low_sig  {
                 if dc.buy2 {
                     let np = NewPos {
-                        symbol_id: symbol_id,
+                        symbol_id_dep: symbol_id,
                         is_short: false,
                         size_base: 10000,
                         // take_profit_price: profit, // 10 pip
@@ -96,7 +96,7 @@ impl Brain4 {
                     };
 
                     let np = NewPos {
-                        symbol_id: symbol_id,
+                        symbol_id_dep: symbol_id,
                         is_short: false,
                         size_base: 10000,
                         // take_profit_price: cal_price(tick.price_raw, 4.7 ), // 10 pip
