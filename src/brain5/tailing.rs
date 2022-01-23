@@ -15,7 +15,6 @@ impl Brain5 {
 
     pub fn update_all_tailing_pos2(&mut self) {
         // simple tailing
-        // for (_, ph) in self.open_pos.clone() {
         for (_, ph) in self.open_pos.iter() {
             let pm = self.read_pair_meta(ph.pos_res.pair.to_symbol_id());
             let tick = pm.last_tick.clone().unwrap();
@@ -25,7 +24,6 @@ impl Brain5 {
             let new_sl = pair.cal_price(tick.price_raw, -4.5);
             if p.exit_low_price < new_sl {
                 // println!(">>> update new sl {} -- {} {:?}", p.pos_id, new_sl,p);
-
                 let up = UpdatePos {
                     pos_id: p.pos_id,
                     close: false,

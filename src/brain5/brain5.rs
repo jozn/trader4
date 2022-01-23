@@ -1,5 +1,5 @@
 use std::borrow::BorrowMut;
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeMap, HashMap, HashSet};
 use std::sync::Arc;
 
 use crate::base::SignalsRes;
@@ -20,15 +20,9 @@ pub type PairCandleCfg = (Pair, CandleConfig);
 pub struct Brain5 {
     pub con: Box<Arc<dyn GateWay>>,
     pub acted: HashSet<String>,
-    pub db: Vec<PairMemory>,
-    // pub open_pos: HashMap<u64, PosRes>,
+    pub db: BTreeMap<i64, PairMemory>,
     pub open_pos: HashMap<u64, PosHolder>,
-    // From PairMemo
-    // pub pair: Pair,
-    // pub last_tick: Option<Tick>,
     pub last_trade_time: u64, // used in Acted filter
-                              // pub ticks_arr: TimeSerVec<Tick>,
-                              // pub ne: NERoot,
 }
 
 impl Brain5 {
@@ -36,16 +30,10 @@ impl Brain5 {
         let mut brain = Self {
             con: Box::new(backend),
             last_trade_time: 0,
-            // ticks_arr: Default::default(),
             acted: Default::default(),
-            db: vec![],
+            db: Default::default(),
             open_pos: Default::default(),
-            // pair: Pair::EURUSD,
-            // last_tick: None,
-            // dc_intl: DCParent::new(),
-            // ne: NERoot::new(),
         };
-
         brain
     }
 

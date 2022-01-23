@@ -23,7 +23,7 @@ pub struct BackRunRes {
 }
 
 impl BackRunConfig {
-    pub fn run_brain4(mut self) -> BackRunRes {
+    pub fn run_brain5(mut self) -> BackRunRes {
         let backend = BackendEngineOuter::new(self.balance, &self.report_cfg);
         let mut back_arc = Arc::new(backend);
         let mut brain = Brain5::new(back_arc.clone(), self.pairs_conf.first().unwrap().clone());
@@ -52,7 +52,11 @@ impl BackRunConfig {
         }
 
         if self.report {
-            x.report_to_folder(&format!("_week_{}_{}", self.week_id, self.pair.to_string()));
+            x.report_to_folder(&format!(
+                "_v2_week_{}_{}",
+                self.week_id,
+                self.pair.to_string()
+            ));
         }
         BackRunRes {
             free_usd: x.balance,

@@ -29,11 +29,6 @@ pub fn run_pair(pair: &Pair) {
         // Pair::EURUSD,
         pair.clone(),
         CandleConfig {
-            // small_tick: 30,
-            // medium_tick: 10,
-            // big_tick: 50,
-            // vel1_period: 20,
-            // vel2_period: 50,
             small_tick: 30,
             medium_tick: 10,
             big_tick: 120,
@@ -41,21 +36,11 @@ pub fn run_pair(pair: &Pair) {
             vel2_period: 50,
         },
     );
-    let week_id = 25;
     let week_id = 49;
-    // let ticks = collector::loader::load_rows("/mnt/c/me/data/EURUSD/1.tsv");
-    // let ticks = collector::loader::load_all_pair(&Pair::USDCAD, 25..50);
+
     let ticks = collector::loader::load_weeks(&pair, 25..50);
-    // let ticks = collector::loader::load_all_pair(&pair, 25..26);
-    // let ticks = collector::loader::load_all_pair(&Pair::NZDUSD, 25..50);
-    // let ticks = collector::loader::load_all_pair(&Pair::USDCHF, 25..50);
-    // let ticks = collector::loader::load_week(&Pair::USDCHF, 25);
-    // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 25..50);
-    // let ticks = collector::loader::load_week(&Pair::EURUSD, 49);
-    // let ticks = collector::loader::load_week(&Pair::EURUSD, week_id);
-    // let ticks = collector::loader::load_day(&Pair::EURUSD, week_id, 3);
-    // let ticks = collector::loader::load_all_pair(&Pair::EURUSD, 44..45);
-    println!("loaded... {:?}", &pair);
+
+    println!("loaded... {:?}  ({})", &pair, ticks.len());
     let mut run_cfg = BackRunConfig {
         balance: 100_000.,
         pairs_conf: vec![pair_cfg],
@@ -65,12 +50,12 @@ pub fn run_pair(pair: &Pair) {
         print: true,
         report: true,
         report_cfg: BackReportConf {
-            report_folder: "../trader5_out/".to_string(),
+            report_folder: "../trader6_out/".to_string(),
             report_sub_folder: "".to_string(),
         },
     };
 
-    run_cfg.run_brain4();
+    run_cfg.run_brain5();
 }
 
 pub fn run_optimized() {
@@ -108,11 +93,11 @@ pub fn run_optimized() {
                 print: false,
                 report: true,
                 report_cfg: BackReportConf {
-                    report_folder: "../trader5_out/".to_string(),
+                    report_folder: "../trader6_out/".to_string(),
                     report_sub_folder: format!("{}", sub_folder_time),
                 },
             };
-            let x = run_cfg.run_brain4();
+            let x = run_cfg.run_brain5();
 
             // collect balance
             bal.push(x.free_usd);
