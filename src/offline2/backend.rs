@@ -188,7 +188,7 @@ impl BackendEngine {
         self.report_balance();
     }
 
-    fn get_money(&self) -> Money {
+    pub fn get_money(&self) -> Money {
         let mut long_debt = 0.0;
         let mut long_pl = 0.0;
         let mut _short_debt = 0.0;

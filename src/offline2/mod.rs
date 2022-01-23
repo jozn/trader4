@@ -2,6 +2,7 @@ pub mod backend;
 pub mod position;
 pub mod position_ser;
 pub mod report;
+pub mod run;
 
 pub use backend::*;
 pub use position::*;
