@@ -4,7 +4,7 @@ use crate::candle;
 use crate::candle::{CandleConfig, CandleSeriesTA, Tick, TimeSerVec, TA1};
 use crate::configs::assets;
 use crate::configs::assets::*;
-use crate::gate_api::{GateWay, NewPos, PosRes, UpdatePos};
+use crate::gate_api::{GateWay, NewPosDep, PosResDep, UpdatePos};
 use crate::ta::Vel;
 use std::borrow::BorrowMut;
 use std::collections::{HashMap, HashSet};

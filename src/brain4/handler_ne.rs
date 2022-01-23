@@ -5,7 +5,7 @@ use crate::candle::{CandleConfig, CandleSeriesTA, Tick, TimeSerVec};
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::*;
 // use crate::dc_intel::FrameMem;
-use crate::gate_api::{GateWay, NewPos};
+use crate::gate_api::{GateWay, NewPosDep};
 use crate::{candle, helper};
 
 impl Brain4 {
@@ -75,7 +75,7 @@ impl Brain4 {
                 // if dc.low_sig && dc.rti > 30. {
                 // if dc.low_sig  {
                 if dc.buy2 {
-                    let np = NewPos {
+                    let np = NewPosDep {
                         symbol_id_dep: symbol_id,
                         is_short: false,
                         size_base: 10000,
@@ -95,7 +95,7 @@ impl Brain4 {
                         ..Default::default()
                     };
 
-                    let np = NewPos {
+                    let np = NewPosDep {
                         symbol_id_dep: symbol_id,
                         is_short: false,
                         size_base: 10000,

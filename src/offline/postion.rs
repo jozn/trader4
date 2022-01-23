@@ -3,7 +3,7 @@ use crate::candle::{Tick, TA1};
 use crate::collector::row_data::BTickData;
 use crate::configs::assets;
 use crate::configs::assets::Pair;
-use crate::gate_api::{NewPos, PosRes};
+use crate::gate_api::{NewPosDep, PosResDep};
 use crate::helper;
 use crate::ta::round;
 use chrono::*;
@@ -44,7 +44,7 @@ pub struct Position {
     pub locked: f64,
 
     #[serde(skip)]
-    pub new_pos: NewPos,
+    pub new_pos: NewPosDep,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -67,7 +67,7 @@ pub struct CloseParm {
 }
 
 impl Position {
-    pub fn new(p: &NewPos, tick: &BTickData, locked: f64) -> Self {
+    pub fn new(p: &NewPosDep, tick: &BTickData, locked: f64) -> Self {
         assert!(p.size_base > 5);
         let dir = if p.is_short {
             PosDir::Short
@@ -165,9 +165,9 @@ impl Position {
         self.final_balance = self.pos_size_usd + pl;
     }
 
-    pub fn to_notify(&self) -> PosRes {
+    pub fn to_notify(&self) -> PosResDep {
         let s = self;
-        PosRes {
+        PosResDep {
             pos_id: s.pos_id,
             symbol_id: s.symbol_id,
             is_closed: s.finished,

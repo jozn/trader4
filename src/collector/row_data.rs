@@ -10,8 +10,10 @@ pub struct TransTickData {
     pub ask_price: i64,
 }
 
-#[derive(Debug, serde::Serialize, serde::Deserialize, Clone)]
+#[derive(Debug, Default, serde::Serialize, serde::Deserialize, Clone)]
 pub struct BTickData {
+    #[serde(skip)]
+    pub pair: Pair,
     pub date_str: String,
     pub timestamp_sec: i64,
     pub timestamp: i64,
@@ -62,6 +64,7 @@ pub struct TickBinFast {
 impl TickBinFast {
     pub fn to_tick(&self) -> BTickData {
         BTickData {
+            pair: Default::default(),
             date_str: "".to_string(),
             timestamp_sec: self.timestamp / 1000,
             timestamp: self.timestamp,

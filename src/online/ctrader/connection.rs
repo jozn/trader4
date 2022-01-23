@@ -284,7 +284,7 @@ impl CTrader {
         self.send(req_pb, api_id)
     }
 
-    pub fn open_postion_req_new(&self, np: &NewPos) {
+    pub fn open_postion_req_new(&self, np: &NewPosDep) {
         let api_id = pb::PayloadType::OaNewOrderReq as u32;
 
         let dir = if np.is_short {

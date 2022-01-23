@@ -8,7 +8,7 @@ use crate::candle::{CandleConfig, CandleSeriesTA, Tick, TimeSerVec, TA1};
 use crate::configs::assets;
 use crate::configs::assets::*;
 // use crate::dc_intel::{DCParent, FrameMem};
-use crate::gate_api::{GateWay, NewPos, PosRes, UpdatePos};
+use crate::gate_api::{GateWay, NewPosDep, PosResDep, UpdatePos};
 // use crate::ne::{NEFrame, NERoot};
 use crate::ne3::NERoot;
 
@@ -54,7 +54,7 @@ impl Brain4 {
         println!("on_connect Brain2");
     }
 
-    pub fn on_notify_position(&mut self, pos: PosRes) {
+    pub fn on_notify_position(&mut self, pos: PosResDep) {
         // println!(">>> {:?}", pos);
         if pos.is_closed {
             self.open_pos.remove(&pos.pos_id);
@@ -94,6 +94,6 @@ impl Brain4 {
 
 #[derive(Debug, Clone, Default)]
 pub struct PosHolder {
-    pub pos_res: PosRes,
+    pub pos_res: PosResDep,
     pub profit_level: i32,
 }

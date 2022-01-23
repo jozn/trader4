@@ -106,6 +106,7 @@ impl Collector {
         let mut arr_res = vec![];
         for t in tdt_arr2.iter() {
             let bt = BTickData {
+                pair: Default::default(), // ignored
                 date_str: helper::to_time_string(t.timestamp / 1000),
                 // timestamp: format!("{}_{:0<3}", t.timestamp / 1000, t.timestamp % 1000),
                 timestamp_sec: t.timestamp / 1000,

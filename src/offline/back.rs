@@ -5,8 +5,8 @@ use std::sync::{Arc, Mutex};
 use crate::collector::row_data::BTickData;
 use crate::configs::assets;
 use crate::configs::assets::Pair;
-use crate::core::gate_api::{NewPos, UpdatePos};
-use crate::gate_api::{GateWay, PosRes};
+use crate::core::gate_api::{NewPosDep, UpdatePos};
+use crate::gate_api::{GateWay, PosResDep};
 use crate::offline::report::{Report, ReportSummery};
 
 use super::*;
@@ -22,7 +22,7 @@ pub struct BackendEngine {
     pub free_usd: f64,
     pub opens: Vec<Position>,
     pub closed: Vec<Position>,
-    pub notify: Vec<PosRes>,
+    pub notify: Vec<PosResDep>,
     pub report: Report,
 }
 
@@ -46,7 +46,7 @@ impl BackendEngine {
         self.symbols = symbols;
     }
 
-    fn open_position_req_new(&mut self, new_pos: &NewPos) {
+    fn open_position_req_new(&mut self, new_pos: &NewPosDep) {
         self.report_balance();
         self.report
             .on_new_trade(new_pos, self.get_total_balance(), self.get_locked_money());
@@ -237,7 +237,7 @@ impl BackendEngine {
     }
 
     // Privates
-    fn buy_long(&mut self, param: &NewPos) {
+    fn buy_long(&mut self, param: &NewPosDep) {
         if !self.has_enough_balance(param.size_base) {
             return;
         }
@@ -250,7 +250,7 @@ impl BackendEngine {
         self.opens.push(pos);
     }
 
-    fn sell_short(&mut self, param: &NewPos) {
+    fn sell_short(&mut self, param: &NewPosDep) {
         if !self.has_enough_balance(param.size_base) {
             return;
         }
@@ -407,7 +407,7 @@ impl BackendEngineOuter {
         eng.next_tick(pair, btick);
     }
 
-    pub fn take_notify(&self) -> Vec<PosRes> {
+    pub fn take_notify(&self) -> Vec<PosResDep> {
         let mut eng = self.engine.borrow_mut();
         let res = eng.notify.clone();
         eng.notify.clear();
@@ -421,7 +421,7 @@ impl GateWay for BackendEngineOuter {
         x.subscribe_pairs_req(symbols);
     }
 
-    fn open_position_req_new(&self, new_pos: &NewPos) {
+    fn open_position_req_new(&self, new_pos: &NewPosDep) {
         let mut x = self.engine.borrow_mut();
         x.open_position_req_new(new_pos);
     }

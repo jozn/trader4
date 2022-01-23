@@ -24,7 +24,7 @@ pub struct BackReportConf {
     pub report_folder: String,
     pub report_sub_folder: String,
 }
-
+/*
 impl Report {
     pub fn new(cfg: &BackReportConf) -> Self {
         Self {
@@ -268,6 +268,26 @@ impl Report {
     }
 }
 
+
+pub fn get_all_postions(port: &BackendEngine) -> Vec<Position> {
+    let mut all_pos = port.opens.clone();
+    all_pos.append(&mut port.closed.clone());
+
+    all_pos.sort_by(|p1, p2| p1.pos_id.cmp(&p2.pos_id));
+
+    all_pos
+}
+
+fn write_pos(name: &str, rnd_num: u16, arr: Vec<Position>) {
+    let os = serialize_position_v4(&arr);
+    let txt = format!("{}", os);
+    std::fs::write(format!("{}_{}.csv", name, rnd_num), txt);
+
+    let js = to_json_out(&arr);
+    std::fs::write(format!("./json/{}.json", name), format!("{}", js));
+}
+*/
+
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct ReportSummery {
     pub win_cnt: u32,
@@ -306,22 +326,4 @@ pub struct MiddleStatic {
     pub balance: f64,
     pub locked: u64,
     pub profit: f64,
-}
-
-pub fn get_all_postions(port: &BackendEngine) -> Vec<Position> {
-    let mut all_pos = port.opens.clone();
-    all_pos.append(&mut port.closed.clone());
-
-    all_pos.sort_by(|p1, p2| p1.pos_id.cmp(&p2.pos_id));
-
-    all_pos
-}
-
-fn write_pos(name: &str, rnd_num: u16, arr: Vec<Position>) {
-    let os = serialize_position_v4(&arr);
-    let txt = format!("{}", os);
-    std::fs::write(format!("{}_{}.csv", name, rnd_num), txt);
-
-    let js = to_json_out(&arr);
-    std::fs::write(format!("./json/{}.json", name), format!("{}", js));
 }

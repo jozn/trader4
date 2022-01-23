@@ -5,6 +5,7 @@ use csv::{Error, StringRecord};
 use std::io::{BufRead, BufReader, Read, Write};
 use std::ops::Range;
 
+// todo : all functions must imple new Pair in loading
 impl BTickData {
     // Note: probelby manulay of this is unneccessory but as we we alerady implemented this
     //  for other structs it's good. Serde will works prefectely for this type.
@@ -13,6 +14,7 @@ impl BTickData {
         let mut i = csv_row.iter();
 
         Self {
+            pair: Default::default(),
             date_str: i.next().unwrap().to_string(),
             timestamp_sec: i.next().unwrap().parse().unwrap(),
             timestamp: i.next().unwrap().parse().unwrap(),
