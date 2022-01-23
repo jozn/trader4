@@ -45,7 +45,7 @@ pub fn run_pair(pair: &Pair) {
     let week_id = 49;
     // let ticks = collector::loader::load_rows("/mnt/c/me/data/EURUSD/1.tsv");
     // let ticks = collector::loader::load_all_pair(&Pair::USDCAD, 25..50);
-    let ticks = collector::loader::load_all_pair(&pair, 25..50);
+    let ticks = collector::loader_old::load_all_pair_dep(&pair, 25..50);
     // let ticks = collector::loader::load_all_pair(&pair, 25..26);
     // let ticks = collector::loader::load_all_pair(&Pair::NZDUSD, 25..50);
     // let ticks = collector::loader::load_all_pair(&Pair::USDCHF, 25..50);
@@ -96,7 +96,7 @@ pub fn run_optimized() {
                     vel2_period: 200,
                 },
             );
-            let ticks = collector::loader::load_rows(&path);
+            let ticks = collector::loader_old::load_rows_dep(&path);
 
             let mut run_cfg = BackRunConfig {
                 balance: 100_000,

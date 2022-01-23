@@ -10,7 +10,7 @@ impl GateWay for CTrader {
         self.subscribe_spots_req(ids);
     }
 
-    fn open_position_req_new(&self, new_pos: &NewPosDep) {
+    fn open_position_req_new_dep(&self, new_pos: &NewPosDep) {
         self.open_postion_req_new(&new_pos);
     }
 

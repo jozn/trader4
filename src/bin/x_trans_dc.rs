@@ -22,7 +22,7 @@ pub fn main() {
         for week_id in 25..=53 {
             let path = format!("/mnt/c/me/data/{:?}/{}.tsv", pair, week_id);
             if std::path::Path::new(&path).exists() {
-                let ticks = trader3::collector::loader::load_rows(&path);
+                let ticks = trader3::collector::loader_old::load_rows_dep(&path);
                 let mut dc_parent = trader3::dc_intel::DCParent::new();
 
                 for t in ticks.clone() {

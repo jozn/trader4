@@ -24,7 +24,7 @@ pub fn main() {
                 week_id
             );
             if std::path::Path::new(&path).exists() {
-                let ticks = trader3::collector::loader::load_rows_fast(&path);
+                let ticks = trader3::collector::loader::load_rows_fast(&path, &pair);
                 // println!("len {}  {}", ticks.len(), &path);
                 let mut root = trader3::ne3::NERoot::new();
 

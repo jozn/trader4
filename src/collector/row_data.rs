@@ -62,9 +62,9 @@ pub struct TickBinFast {
 }
 
 impl TickBinFast {
-    pub fn to_tick(&self) -> BTickData {
+    pub fn to_tick(&self, pair: &Pair) -> BTickData {
         BTickData {
-            pair: Default::default(),
+            pair: pair.clone(),
             date_str: "".to_string(),
             timestamp_sec: self.timestamp / 1000,
             timestamp: self.timestamp,

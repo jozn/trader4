@@ -10,7 +10,7 @@ pub fn main() {
         for i in 1..=53 {
             let path = format!("/mnt/c/me/data/{:?}/{}.tsv", pair, i);
             if std::path::Path::new(&path).exists() {
-                let ticks = collector::loader::load_rows(&path);
+                let ticks = collector::loader::load_tsv_rows(&path, &pair);
 
                 let first = ticks.first().unwrap();
                 let last = ticks.last().unwrap();

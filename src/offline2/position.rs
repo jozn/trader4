@@ -159,8 +159,15 @@ impl Position {
     }
 
     pub fn should_close(&mut self, btick: &BTickData) -> bool {
-        if self.is_long() {}
-        false
+        if self.is_long() {
+            if btick.bid_price >= self.exit_high_price || btick.bid_price <= self.exit_low_price {
+                true
+            } else {
+                false
+            }
+        } else {
+            false
+        }
     }
 
     pub fn close_pos(&mut self, param: &CloseParm) {

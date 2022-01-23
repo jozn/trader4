@@ -421,7 +421,7 @@ impl GateWay for BackendEngineOuter {
         x.subscribe_pairs_req(symbols);
     }
 
-    fn open_position_req_new(&self, new_pos: &NewPosDep) {
+    fn open_position_req_new_dep(&self, new_pos: &NewPosDep) {
         let mut x = self.engine.borrow_mut();
         x.open_position_req_new(new_pos);
     }

@@ -27,7 +27,7 @@ pub fn main() {
                 let mut candle = CandleSeriesTA::new(&cfg);
                 // println!("{}", &path);
 
-                let ticks = trader3::collector::loader::load_rows_fast(&path);
+                let ticks = trader3::collector::loader::load_rows_fast(&path, &pair);
                 assert!(ticks.len() > 0);
                 let mut arr = TimeSerVec::new();
 

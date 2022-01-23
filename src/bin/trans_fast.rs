@@ -28,7 +28,7 @@ pub fn main() {
                 continue;
             }
             if std::path::Path::new(&path_tsv).exists() {
-                let ticks = trader3::collector::loader::load_rows(&path_tsv);
+                let ticks = trader3::collector::loader::load_tsv_rows(&path_tsv, &pair);
 
                 // Fast weekly data
                 write_week_fast(&ticks, &pair, week_id);

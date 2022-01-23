@@ -4,10 +4,12 @@ use crate::configs::assets::Pair;
 use crate::ne3::NEFrame;
 use std::fmt::Debug;
 
+// todo: clean old and remvoe {}
 pub trait GateWay: Debug {
     // Calls from brain1
     fn subscribe_pairs_req(&self, symbols: Vec<Pair>);
-    fn open_position_req_new(&self, new_pos: &NewPosDep);
+    fn open_position_req_new_dep(&self, new_pos: &NewPosDep) {}
+    fn open_position_req_new(&self, new_pos: &NewPos) {}
     fn update_position(&self, update: &UpdatePos);
     // Others
     fn get_time_ms(&self) -> u64;

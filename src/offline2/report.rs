@@ -5,7 +5,7 @@ use super::*;
 use crate::candle::Tick;
 use crate::core::helper::get_time_sec;
 use crate::core::helper::*;
-use crate::gate_api::NewPosDep;
+use crate::gate_api::*;
 use crate::helper;
 use serde::{Deserialize, Serialize};
 
@@ -24,7 +24,7 @@ pub struct BackReportConf {
     pub report_folder: String,
     pub report_sub_folder: String,
 }
-/*
+
 impl Report {
     pub fn new(cfg: &BackReportConf) -> Self {
         Self {
@@ -37,25 +37,26 @@ impl Report {
         }
     }
 
-    pub fn collect_balance(&mut self, balance: f64) {
-        self.balance.push(balance);
+    // todo all money
+    pub fn collect_balance(&mut self, money: &Money) {
+        self.balance.push(money.balance);
     }
 
-    pub fn on_new_trade(&mut self, t: &NewPosDep, balance: f64, locked_money: f64) {
+    pub fn on_new_trade(&mut self, t: &NewPos, money: &Money) {
         let ms = MiddleStatic {
-            time_str: helper::to_date(t.time_s),
-            balance: balance,
-            locked: locked_money as u64,
+            time_str: helper::to_date(t.time_sec),
+            balance: money.balance,
+            locked: money.locked,
             profit: 0.,
         };
         self.middles.push(ms);
     }
 
-    pub fn on_close_trade(&mut self, t: &Position, balance: f64) {
+    pub fn on_close_trade(&mut self, t: &Position, money: &Money) {
         let ms = MiddleStatic {
             time_str: helper::to_date(t.open_time),
-            balance: balance,
-            locked: 0,
+            balance: money.balance,
+            locked: money.locked,
             profit: t.profit,
         };
         self.middles.push(ms);
@@ -83,18 +84,20 @@ impl Report {
         let dir = std::env::current_dir().unwrap();
         std::env::set_current_dir(&folder);
 
+        let all_pos = get_all_postions(port);
+        let all_closed_pos = get_all_postions(port);
+
         std::fs::write(
             format!("result_{}.txt", self.rnd_num),
-            format!("{:#?}", self.report_summery(port)),
+            format!("{:#?}", self.report_summery(&all_closed_pos)),
         );
 
         self.report_balance();
-        self.report_summery(port);
-        self.report_seq_profit(port);
-        self.report_wins(port);
-        self.report_loose(port);
+        self.report_seq_profit(&all_closed_pos);
+        self.report_wins(&all_closed_pos);
+        self.report_loose(&all_closed_pos);
 
-        write_pos("all", self.rnd_num, port.closed.clone());
+        write_pos("all", self.rnd_num, all_pos);
 
         // println!("balance: {:#?}", self.middles.last());
 
@@ -111,14 +114,19 @@ impl Report {
         std::fs::write("./json/balance.json", format!("{}", js));
     }
 
-    pub fn report_summery(&self, port: &BackendEngine) -> ReportSummery {
+    pub fn get_report_summery(&self, port: &BackendEngine) -> ReportSummery {
+        let all_closed_pos = get_all_postions(port);
+        self.report_summery(&all_closed_pos)
+    }
+
+    pub fn report_summery(&self, all_pos: &Vec<Position>) -> ReportSummery {
         let mut total_time = 0;
         let mut win_cnt = 0;
         let mut win_amount = 0.;
         let mut lose_cnt = 0;
         let mut lose_amount = 0.;
 
-        for p in &port.closed {
+        for p in all_pos {
             total_time += p.close_time - p.open_time;
             if p.profit > 0. {
                 win_cnt += 1;
@@ -146,7 +154,7 @@ impl Report {
         let mut short_lose_cnt = 0;
         let mut short_lose_amount = 0.;
 
-        for p in &port.closed {
+        for p in all_pos {
             match p.direction {
                 PosDir::Long => {
                     long_cnt += 1;
@@ -215,11 +223,10 @@ impl Report {
         report_res
     }
 
-    fn report_seq_profit(&self, port: &BackendEngine) {
-        let all_pos = get_all_postions(port);
+    fn report_seq_profit(&self, all_pos: &Vec<Position>) {
         let mut res = vec![];
 
-        for p in &all_pos {
+        for p in all_pos {
             res.push(p.profit)
         }
 
@@ -229,11 +236,11 @@ impl Report {
         std::fs::write(format!("seq_profit_{}.csv", self.rnd_num), txt);
     }
 
-    fn report_wins(&self, port: &BackendEngine) {
+    fn report_wins(&self, all_pos: &Vec<Position>) {
         let mut all_arr = vec![];
         let mut longs_arr = vec![];
         let mut short_arr = vec![];
-        for p in port.closed.iter() {
+        for p in all_pos {
             if p.profit > 0. {
                 all_arr.push(p.clone());
                 match p.direction {
@@ -248,11 +255,11 @@ impl Report {
         write_pos("wins_short", self.rnd_num, short_arr);
     }
 
-    fn report_loose(&self, port: &BackendEngine) {
+    fn report_loose(&self, all_pos: &Vec<Position>) {
         let mut all_arr = vec![];
         let mut longs_arr = vec![];
         let mut short_arr = vec![];
-        for p in port.closed.iter() {
+        for p in all_pos {
             if p.profit < 0. {
                 all_arr.push(p.clone());
                 match p.direction {
@@ -268,10 +275,25 @@ impl Report {
     }
 }
 
-
 pub fn get_all_postions(port: &BackendEngine) -> Vec<Position> {
-    let mut all_pos = port.opens.clone();
-    all_pos.append(&mut port.closed.clone());
+    let mut all_pos = vec![];
+    for (_, p) in port.opens.iter() {
+        all_pos.push(p.clone());
+    }
+    for (_, p) in port.closed.iter() {
+        all_pos.push(p.clone());
+    }
+
+    all_pos.sort_by(|p1, p2| p1.pos_id.cmp(&p2.pos_id));
+
+    all_pos
+}
+
+pub fn get_all_closed_postions(port: &BackendEngine) -> Vec<Position> {
+    let mut all_pos = vec![];
+    for (_, p) in port.closed.iter() {
+        all_pos.push(p.clone());
+    }
 
     all_pos.sort_by(|p1, p2| p1.pos_id.cmp(&p2.pos_id));
 
@@ -286,7 +308,6 @@ fn write_pos(name: &str, rnd_num: u16, arr: Vec<Position>) {
     let js = to_json_out(&arr);
     std::fs::write(format!("./json/{}.json", name), format!("{}", js));
 }
-*/
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct ReportSummery {
@@ -324,6 +345,6 @@ pub struct ReportSummery {
 pub struct MiddleStatic {
     pub time_str: String,
     pub balance: f64,
-    pub locked: u64,
+    pub locked: f64,
     pub profit: f64,
 }

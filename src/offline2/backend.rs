@@ -4,12 +4,12 @@ use std::cell::RefCell;
 use std::collections::BTreeMap;
 use std::sync::{Arc, Mutex};
 
+use super::report::*;
 use crate::collector::row_data::BTickData;
 use crate::configs::assets;
 use crate::configs::assets::Pair;
 use crate::core::gate_api::*;
 use crate::gate_api::{GateWay, PosResDep};
-use crate::offline::report::{Report, ReportSummery};
 
 use super::*;
 
@@ -40,7 +40,7 @@ pub struct BackendEngine {
     pub opens: BTreeMap<u64, Position>,
     pub closed: BTreeMap<u64, Position>,
     pub events: Vec<EventPosition>,
-    // pub report: Report,
+    pub report: Report,
 }
 
 impl BackendEngine {
@@ -57,6 +57,7 @@ impl BackendEngine {
             opens: Default::default(),
             closed: Default::default(),
             events: vec![],
+            report: Report::new(report_cfg),
         }
     }
 
@@ -65,9 +66,10 @@ impl BackendEngine {
     }
 
     fn open_position_req_new(&mut self, param: &NewPos) {
-        // self.report_balance();
-        // self.report
-        //     .on_new_trade(new_pos, self.get_total_balance(), self.get_locked_money());
+        let money = self.get_money();
+        // self.report.collect_balance(&money);
+        self.report_balance();
+        self.report.on_new_trade(param, &money);
 
         // let quote_asset =
         // if !self.has_enough_balance(param.base_asset_size) {
@@ -113,6 +115,10 @@ impl BackendEngine {
         self.close_stasfied_poss(symbol_id, false);
     }
 
+    fn update_position(&mut self, req: &UpdatePos) {
+        // todo migrate from
+    }
+
     fn close_stasfied_poss(&mut self, symob_id: i64, force: bool) {
         let btick = self.get_symbol_tick(symob_id);
         if btick.is_none() {
@@ -124,7 +130,7 @@ impl BackendEngine {
 
         for (_, pos) in self.opens.iter_mut() {
             if pos.symbol_id == symob_id {
-                if pos.should_close(&btick) {
+                if pos.should_close(&btick) || force {
                     let cp = CloseParm {
                         pair: btick.pair.clone(),
                         tick: btick.clone(),
@@ -150,7 +156,7 @@ impl BackendEngine {
             self.opens.remove(&pid);
         }
         if closed_some {
-            // self.report_balance();
+            self.report_balance();
         }
     }
 
@@ -171,6 +177,15 @@ impl BackendEngine {
         } else {
             false
         }
+    }
+
+    pub fn close_all_positions(&mut self) {
+        self.report_balance();
+        let ids = assets::get_all_symbols_ids();
+        for id in ids {
+            self.close_stasfied_poss(id, true);
+        }
+        self.report_balance();
     }
 
     fn get_money(&self) -> Money {
@@ -211,5 +226,65 @@ impl BackendEngine {
             free_balance,
             net_pl,
         }
+    }
+
+    // Reports
+    fn report_balance(&mut self) {
+        self.report.collect_balance(&self.get_money());
+    }
+
+    pub fn get_report_summery(&self) -> ReportSummery {
+        self.report.get_report_summery(&self)
+    }
+
+    pub fn report_to_folder(&mut self, suffix: &str) {
+        self.report.write_to_folder(&self, suffix);
+    }
+}
+
+#[derive(Debug)]
+pub struct BackendEngineOuter {
+    pub engine: RefCell<BackendEngine>, // Could be Mutex too
+}
+
+impl BackendEngineOuter {
+    pub fn new(fund: f64, cfg: &BackReportConf) -> Self {
+        Self {
+            engine: RefCell::new(BackendEngine::new(fund, cfg)),
+        }
+    }
+
+    pub fn next_tick(&self, btick: BTickData) {
+        let mut eng = self.engine.borrow_mut();
+        eng.next_tick(btick);
+    }
+
+    pub fn take_notify(&self) -> Vec<EventPosition> {
+        let mut eng = self.engine.borrow_mut();
+        let res = eng.events.clone();
+        eng.events.clear();
+        res
+    }
+}
+
+impl GateWay for BackendEngineOuter {
+    fn subscribe_pairs_req(&self, symbols: Vec<Pair>) {
+        let mut x = self.engine.borrow_mut();
+        x.subscribe_pairs_req(symbols);
+    }
+
+    fn open_position_req_new(&self, new_pos: &NewPos) {
+        let mut x = self.engine.borrow_mut();
+        x.open_position_req_new(new_pos);
+    }
+
+    fn update_position(&self, update: &UpdatePos) {
+        let mut x = self.engine.borrow_mut();
+        x.update_position(update);
+    }
+
+    fn get_time_ms(&self) -> u64 {
+        let mut x = self.engine.borrow_mut();
+        x.las_time_ms
     }
 }

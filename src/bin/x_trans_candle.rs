@@ -26,7 +26,7 @@ pub fn main() {
                 };
                 let mut candle = CandleSeriesTA::new(&cfg);
 
-                let ticks = trader3::collector::loader::load_rows(&path);
+                let ticks = trader3::collector::loader_old::load_rows_dep(&path);
                 let mut arr = TimeSerVec::new();
 
                 for t in ticks {

@@ -121,7 +121,7 @@ impl Brain4 {
                     }
 
                     // println!("Open long {:#?}", np);
-                    self.con.open_position_req_new(&np);
+                    self.con.open_position_req_new_dep(&np);
                     // if dc.low_sig {
                     // if dc.low_sig && f.trd_ad >=0. {
                     //     self.go_short2(1, frame.fid, &tick, &frame);
