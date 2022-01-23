@@ -1,3 +1,4 @@
+use chrono::Weekday::Mon;
 use std::borrow::BorrowMut;
 use std::cell::RefCell;
 use std::collections::BTreeMap;
@@ -12,17 +13,30 @@ use crate::offline::report::{Report, ReportSummery};
 
 use super::*;
 
+#[derive(Debug)]
+pub struct Money {
+    pub balance: f64,
+    pub equity: f64,
+    // pub margin: f64,
+    // pub free_margin: f64,
+    pub locked: f64,
+    pub free_balance: f64,
+    pub net_pl: f64,
+}
+
 // todo add a fn to return an struc of availabe money, fee margin,...
 
 // type PricePair = (Pair, BTickData);
 #[derive(Debug)]
 pub struct BackendEngine {
-    pub balance: i64,
+    pub deposit: f64,
+    pub leverage: i64,
+    pub balance: f64,
     pub symbols: Vec<Pair>,
     pub ticks: BTreeMap<i64, BTickData>,
     pub las_time_ms: u64,
     pub pos_id: u64,
-    pub free_usd: f64,
+    // pub free_usd: f64,
     pub opens: BTreeMap<u64, Position>,
     pub closed: BTreeMap<u64, Position>,
     pub events: Vec<EventPosition>,
@@ -30,14 +44,16 @@ pub struct BackendEngine {
 }
 
 impl BackendEngine {
-    pub fn new(fund: i64, report_cfg: &BackReportConf) -> Self {
+    pub fn new(fund: f64, report_cfg: &BackReportConf) -> Self {
         Self {
-            balance: 0,
+            deposit: fund,
+            leverage: 100,
+            balance: fund,
             symbols: vec![],
             ticks: Default::default(),
             las_time_ms: 0,
             pos_id: 0,
-            free_usd: 0.0,
+            // free_usd: 0.0,
             opens: Default::default(),
             closed: Default::default(),
             events: vec![],
@@ -53,24 +69,29 @@ impl BackendEngine {
         // self.report
         //     .on_new_trade(new_pos, self.get_total_balance(), self.get_locked_money());
 
-        if !self.has_enough_balance(param.base_asset_size) {
-            return;
-        }
+        // let quote_asset =
+        // if !self.has_enough_balance(param.base_asset_size) {
+        //     return;
+        // }
         let sid = param.pair.to_symbol_id();
-        self.pos_id += 1;
+        // self.pos_id += 1;
         // println!("buy long long");
         let tick = self.get_symbol_tick(sid).unwrap();
         let new_p = NewPosInter {
             new_pos: param.clone(),
             tick,
-            locked: self.get_locked_money(),
+            locked: self.get_money().locked,
             time: self.las_time_ms,
             pos_id: self.pos_id,
         };
 
         let mut pos = Position::new(new_p);
         if pos.is_long() {
-            self.free_usd -= pos.quote_asset_size as f64;
+            if !self.has_enough_balance(pos.quote_asset_size) {
+                return;
+            }
+            self.pos_id += 1;
+            pos.pos_id = self.pos_id;
         }
         self.events.push(pos.to_event());
         self.opens.insert(pos.pos_id, pos.clone());
@@ -116,8 +137,7 @@ impl BackendEngine {
                     remove_pos_ids.push(pos.pos_id);
 
                     if pos.is_long() {
-                        self.free_usd += pos.quote_asset_size;
-                        self.free_usd += pos.profit;
+                        self.balance += pos.profit;
                     }
 
                     self.closed.insert(pos.pos_id, pos.clone());
@@ -145,30 +165,51 @@ impl BackendEngine {
 
     // Utils
     fn has_enough_balance(&self, usd_vol: f64) -> bool {
-        let free = self.get_free_balance();
-        if free > usd_vol {
+        let money = self.get_money();
+        if money.free_balance > usd_vol {
             true
         } else {
             false
         }
     }
 
-    fn get_free_balance(&self) -> f64 {
-        let mut short_debt = 0.0;
-        // for p in self.opens.iter() {
-        //     if p.is_short() {
-        //         short_debt += p.pos_size_usd;
-        //     }
-        // }
-        self.free_usd - short_debt
-    }
+    fn get_money(&self) -> Money {
+        let mut long_debt = 0.0;
+        let mut long_pl = 0.0;
+        let mut _short_debt = 0.0;
 
-    fn get_locked_money(&self) -> f64 {
-        // let mut locked_money = 0.0;
-        // for p in self.opens.iter() {
-        //     locked_money += p.pos_size_usd as f64
-        // }
-        // locked_money
-        0.
+        for (_, pos) in self.opens.iter() {
+            if pos.is_long() {
+                long_debt = pos.quote_asset_size;
+                let tick = self.get_symbol_tick(pos.symbol_id).unwrap();
+
+                // Close a copy for profit calcualtion
+                let mut pos_cp = pos.clone();
+                let cp = CloseParm {
+                    pair: tick.pair.clone(),
+                    tick: tick.clone(),
+                    locked: 0.,
+                    time_sec: self.las_time_ms / 1000,
+                };
+                pos_cp.close_pos(&cp);
+                long_pl += pos_cp.profit;
+            }
+        }
+
+        // self.free_usd - short_debt;
+
+        let balance = self.balance;
+        let equity = self.balance + long_pl;
+        let net_pl = long_pl;
+        let locked = long_debt;
+        let free_balance = self.balance - locked;
+
+        Money {
+            balance,
+            equity,
+            locked,
+            free_balance,
+            net_pl,
+        }
     }
 }
