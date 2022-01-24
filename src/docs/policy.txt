@@ -1,3 +1,6 @@
+== 4 Bahman 1400
+ + For now have a zero spread in ticks via setting both ask and bid to same (hack), when we found a good strategy then
+   add enable spread. Implement support for spread though in everywhere .
 == 21 Day 1400
  + Have a strategy named with it's own module file.
  + Opeing postions should be defined in each PairMem with retruing and struct about kline_id, ...

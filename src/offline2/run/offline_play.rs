@@ -12,7 +12,8 @@ use super::*;
 
 pub fn run1() {
     // run_pair(&Pair::EURUSD);
-    run_pair(&Pair::EURCHF);
+    run_pair(&Pair::USDCHF);
+    run_pair(&Pair::NZDUSD);
 }
 
 pub fn run12() {
@@ -31,7 +32,7 @@ pub fn run_pair(pair: &Pair) {
         CandleConfig {
             small_tick: 30,
             medium_tick: 10,
-            big_tick: 120,
+            big_tick: 180,
             vel1_period: 20,
             vel2_period: 50,
         },
@@ -70,7 +71,7 @@ pub fn run_optimized() {
     for i in 25..=53 {
         // let tsv = format!("{:?}/{}.tsv", Pair::EURUSD, i);
         let tsv = format!("{:?}/{}.tsv", &pair, i);
-        let path = format!("/mnt/c/me/data/{}", tsv);
+        let path = format!("/mnt/t/trader/data/forex/{}", tsv);
         if std::path::Path::new(&path).exists() {
             let pair_cfg = (
                 Pair::EURUSD,
@@ -88,7 +89,7 @@ pub fn run_optimized() {
                 balance: 100_000.,
                 pairs_conf: vec![pair_cfg],
                 ticks,
-                pair: Pair::EURUSD,
+                pair: pair.clone(),
                 week_id: i,
                 print: false,
                 report: true,

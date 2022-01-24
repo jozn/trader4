@@ -10,7 +10,7 @@ use crate::configs::assets::*;
 // use crate::dc_intel::{DCParent, FrameMem};
 use crate::gate_api::{EventPosition, GateWay, NewPosDep, PosResDep, UpdatePos};
 // use crate::ne::{NEFrame, NERoot};
-use crate::ne3::NERoot;
+use crate::ne4::NERoot;
 
 use super::*;
 

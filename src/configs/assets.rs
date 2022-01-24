@@ -336,3 +336,14 @@ pub fn get_all_symbols() -> Vec<Pair> {
     let pairs: Vec<Pair> = Pair::into_enum_iter().map(|p| p).collect();
     pairs
 }
+
+pub fn get_all_usd_forex_symbols() -> Vec<Pair> {
+    let paris = get_all_symbols();
+    let mut res = vec![];
+    for p in paris {
+        if p.to_category() == "forex" && p.to_string().find("USD").is_some() {
+            res.push(p);
+        }
+    }
+    res
+}

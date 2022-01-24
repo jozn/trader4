@@ -84,7 +84,7 @@ pub fn run_optimized() {
     for i in 25..=53 {
         // let tsv = format!("{:?}/{}.tsv", Pair::EURUSD, i);
         let tsv = format!("{:?}/{}.tsv", Pair::USDCHF, i);
-        let path = format!("/mnt/c/me/data/{}", tsv);
+        let path = format!("/mnt/t/trader/data/forex/{}", tsv);
         if std::path::Path::new(&path).exists() {
             let pair_cfg = (
                 Pair::EURUSD,

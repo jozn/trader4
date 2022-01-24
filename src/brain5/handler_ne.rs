@@ -28,7 +28,7 @@ impl Brain5 {
         let symbol_id = pair.to_symbol_id();
         let mut pari_mem = self.borrow_pair_meta(symbol_id);
         pari_mem.last_tick = Some(tick.clone());
-        let frame_opt = pari_mem.ne3.add_tick(&tick);
+        let frame_opt = pari_mem.ne4.add_tick(&tick);
         self.update_all_tailing_pos();
 
         match frame_opt {
@@ -39,12 +39,13 @@ impl Brain5 {
                 let kline_id = f.fid;
 
                 if dcs.buy2 {
+                    // if dcs.sell2 {
                     let np = NewPos {
                         pair: pair.clone(),
                         is_short: false,
                         base_asset_size: 10_000.0,
-                        exit_high_price: pair.cal_price(tick.price_raw, 7.5),
-                        exit_low_price: pair.cal_price(tick.price_raw, -4.5),
+                        exit_high_price: pair.cal_price(tick.bid_price, 7.5),
+                        exit_low_price: pair.cal_price(tick.bid_price, -7.5),
                         at_price: tick.ask_price,
                         time_sec: tick.time_s,
                         frame: frame.clone(),

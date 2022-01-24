@@ -5,7 +5,7 @@ use crate::candle::{CandleConfig, CandleSeriesTA, Tick, TimeSerVec};
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::*;
 use crate::gate_api::GateWay;
-use crate::ne3::NERoot;
+use crate::ne4::NERoot;
 use crate::{candle, helper};
 
 #[derive(Debug)]
@@ -15,7 +15,7 @@ pub struct PairMemory {
     pub last_trade_time: u64,
     pub ticks_arr: TimeSerVec<Tick>,
     pub candles: CandleSeriesTA,
-    pub ne3: NERoot,
+    pub ne4: NERoot,
 }
 
 impl PairMemory {
@@ -26,7 +26,7 @@ impl PairMemory {
             last_trade_time: 0,
             ticks_arr: Default::default(),
             candles: CandleSeriesTA::new(conf),
-            ne3: NERoot::new(),
+            ne4: NERoot::new(),
         }
     }
 }
