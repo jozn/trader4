@@ -36,6 +36,7 @@ pub mod donchain_channel;
 pub mod ema;
 pub mod fisher;
 pub mod hull;
+mod ma_trend;
 pub mod macd;
 pub mod macd_dep;
 pub mod maximum;
