@@ -2,7 +2,7 @@ use super::*;
 use crate::base::OHLCV;
 use crate::ta;
 use crate::ta::*;
-use crate::ta::{FisherRes, MACDOutput};
+use crate::ta::{FisherRes, MACDOutput_Dep};
 use serde::{Deserialize, Serialize};
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
@@ -27,7 +27,7 @@ pub struct TA1 {
     pub atr: f64,
     pub rsi: f64,
     pub cci: f64,
-    pub macd: MACDOutput,
+    pub macd: MACDOutput_Dep,
     pub fisher: FisherRes,
     // New trending
     pub vel1: VelRes,
@@ -42,7 +42,7 @@ pub struct TAMethods {
     pub atr: ta::ATR,
     pub rsi: ta::RSI,
     pub cci: ta::CCI,
-    pub macd: ta::MACD,
+    pub macd: ta::MACDDep,
     pub fisher: ta::Fisher,
     // For trending
     pub vel1: ta::Vel,
@@ -58,7 +58,7 @@ impl TAMethods {
             atr: ta::ATR::new(14).unwrap(),
             rsi: ta::RSI::new(14).unwrap(),
             cci: ta::CCI::new(14).unwrap(),
-            macd: ta::MACD::new(12, 26, 9).unwrap(),
+            macd: ta::MACDDep::new(12, 26, 9).unwrap(),
             fisher: ta::Fisher::new(9, 6).unwrap(),
             // For trending
             vel1: ta::Vel::new(cfg.vel1_period as usize).unwrap(),

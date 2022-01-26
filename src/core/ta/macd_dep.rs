@@ -3,87 +3,95 @@ use serde::{Deserialize, Serialize};
 use super::*;
 use crate::base::*;
 
-pub type MACD = MovingAverageConvergenceDivergence;
+pub type MACDDep = MovingAverageConvergenceDivergenceDep;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct MovingAverageConvergenceDivergence {
+pub struct MovingAverageConvergenceDivergenceDep {
+    signal_period: usize,
     fast_ma: EMA,
     slow_ma: EMA,
     signal_ma: EMA,
+    prev_val: f64,
+    is_new: bool,
+    diff_window: Window,
     cross: SimpleCross,
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
-pub struct MACDOutput {
-    pub macd: f64, // formula (fast_ma - slow_ma) -- the changing line (blue in TradingView)
-    pub macd_pop: f64, // maybe delete - just for debug
-    pub signal: f64, // EMA of macd
+pub struct MACDOutput_Dep {
+    pub macd: f64,
+    pub macd_pip: f64,
+    pub signal_old: f64,
     pub histogram: f64,
-    pub macd_above: bool, // true when macd crossed above the signal line - bullish
-    pub macd_under: bool, // true when macd crossed under the signal line - bearish
+    pub signal: SignalsRes_Dep,
 }
 
-impl MovingAverageConvergenceDivergence {
+impl MovingAverageConvergenceDivergenceDep {
     pub fn new(fast_period: usize, slow_period: usize, signal_period: usize) -> TAResult<Self> {
         if fast_period == 0 || slow_period == 0 || signal_period == 0 {
             Err(TAErr::WrongArgs)
         } else {
             Ok(Self {
-                fast_ma: EMA::new(fast_period)?,
-                slow_ma: EMA::new(slow_period)?,
-                signal_ma: EMA::new(signal_period)?,
+                signal_period: signal_period,
+                fast_ma: EMA::new(fast_period).unwrap(),
+                slow_ma: EMA::new(slow_period).unwrap(),
+                signal_ma: EMA::new(signal_period).unwrap(),
+                prev_val: 0.0,
+                is_new: true,
+                diff_window: Window::new(signal_period).unwrap(),
                 cross: Default::default(),
             })
         }
     }
 
-    pub fn next(&mut self, next_val: f64) -> MACDOutput {
+    pub fn next(&mut self, next_val: f64) -> MACDOutput_Dep {
         let fast_ma = self.fast_ma.next(next_val);
         let slow_ma = self.slow_ma.next(next_val);
 
         let macd = fast_ma - slow_ma;
+        self.diff_window.push(macd);
         let signal = self.signal_ma.next(macd);
         let histogram = macd - signal;
 
-        let cr = self.cross.next_v2(macd, signal);
+        let s = self.cross.next_v1(macd, signal);
+        // let s = self.cross.next(fast_ma, slow_ma);
 
-        MACDOutput {
+        MACDOutput_Dep {
             macd,
-            macd_pop: macd * 10_000.,
-            signal: signal,
+            macd_pip: macd * 10_000.,
+            signal_old: signal,
             histogram,
-            macd_above: cr.crossed_above,
-            macd_under: cr.crossed_under
+            signal: s,
         }
     }
 }
 
-impl Default for MovingAverageConvergenceDivergence {
+impl Default for MovingAverageConvergenceDivergenceDep {
     fn default() -> Self {
         Self::new(12, 26, 9).unwrap()
     }
 }
 
-impl From<MACDOutput> for (f64, f64, f64) {
-    fn from(mo: MACDOutput) -> Self {
-        (mo.macd, mo.signal, mo.histogram)
+impl From<MACDOutput_Dep> for (f64, f64, f64) {
+    fn from(mo: MACDOutput_Dep) -> Self {
+        (mo.macd, mo.signal_old, mo.histogram)
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::MACDOutput;
+    use super::MACDOutput_Dep;
     use super::*;
 
     #[test]
     fn test_new() {
-        assert!(MACD::new(0, 12, 3).is_err());
-        assert!(MACD::new(1, 1, 1).is_ok());
+        assert!(MACDDep::new(0, 12, 3).is_err());
+        assert!(MACDDep::new(1, 1, 1).is_ok());
     }
 
     #[test]
     fn test_macd() {
-        let mut macd = MACD::new(3, 6, 4).unwrap();
+        let mut macd = MACDDep::new(3, 6, 4).unwrap();
 
         assert_eq!(round(macd.next(2.0).into()), (0.0, 0.0, 0.0));
         assert_eq!(round(macd.next(3.0).into()), (0.21, 0.09, 0.13));
@@ -95,7 +103,7 @@ mod tests {
 
     #[test]
     fn test_default() {
-        MACD::default();
+        MACDDep::default();
     }
 
     fn round(nums: (f64, f64, f64)) -> (f64, f64, f64) {

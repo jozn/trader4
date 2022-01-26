@@ -3,7 +3,7 @@ use crate::base::*;
 use serde::{Deserialize, Serialize};
 
 type DiffParam = (f64, f64);
-pub type SignalsRes = (SimpleCrossEvent, SimpleCrossEvent);
+pub type SignalsRes_Dep = (SimpleCrossEvent, SimpleCrossEvent);
 
 #[derive(Debug, Default, Clone, Copy, Serialize, Deserialize)]
 pub struct CrossRes {
@@ -26,7 +26,7 @@ impl SimpleCross {
     }
 
     // deprecate this, it's unessecory more complicated.
-    pub fn next_v1(&mut self, value1: f64, value2: f64) -> SignalsRes {
+    pub fn next_v1(&mut self, value1: f64, value2: f64) -> SignalsRes_Dep {
         let up = self.up.binary(value1, value2);
         let r_up = SimpleCrossEvent::conv_bull(up);
 

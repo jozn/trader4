@@ -17,7 +17,7 @@ pub struct Fisher {
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct FisherRes {
     pub fisher: f64,
-    pub signal: SignalsRes,
+    pub signal: SignalsRes_Dep,
 }
 
 impl Fisher {
