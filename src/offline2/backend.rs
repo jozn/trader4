@@ -83,7 +83,7 @@ impl BackendEngine {
             new_pos: param.clone(),
             tick,
             locked: self.get_money().locked,
-            time: self.las_time_ms,
+            time_sec: self.las_time_ms / 1000,
             pos_id: self.pos_id,
         };
 
@@ -116,7 +116,37 @@ impl BackendEngine {
     }
 
     fn update_position(&mut self, req: &UpdatePos) {
-        // todo migrate from
+        let pos_opt = self.opens.get(&req.pos_id);
+        match pos_opt {
+            None => {}
+            Some(mut pos) => {
+                let mut pos = pos.clone();
+                pos.updates += 1;
+                if req.close {
+                    let tick = self.get_symbol_tick(pos.symbol_id).unwrap();
+                    let close_par = CloseParm {
+                        pair: tick.pair.clone(),
+                        tick: tick.clone(),
+                        locked: 0.0,
+                        time_sec: self.las_time_ms / 1000,
+                    };
+                    pos.close_pos(&close_par);
+                    self.opens.remove(&pos.pos_id);
+                    self.events.push(pos.to_event());
+                    self.closed.insert(pos.pos_id, pos.clone());
+                } else {
+                    if req.exit_high_price > 0. {
+                        pos.exit_high_price = req.exit_high_price;
+                    }
+                    if req.exit_low_price > 0. {
+                        pos.exit_low_price = req.exit_low_price;
+                    }
+                    // commented to avoid forever loops
+                    self.events.push(pos.to_event());
+                    self.opens.insert(pos.pos_id, pos);
+                }
+            }
+        }
     }
 
     fn close_stasfied_poss(&mut self, symob_id: i64, force: bool) {

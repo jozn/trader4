@@ -37,15 +37,18 @@ impl Brain5 {
                 let dcs = &frame.dcs;
                 let f = &frame;
                 let kline_id = f.fid;
+                let sp = f.big_dc_hl_pip / 1.5;
 
-                if dcs.buy2 {
+                if dcs.buy1 {
                     // if dcs.sell2 {
                     let np = NewPos {
                         pair: pair.clone(),
                         is_short: false,
                         base_asset_size: 10_000.0,
-                        exit_high_price: pair.cal_price(tick.bid_price, 7.5),
-                        exit_low_price: pair.cal_price(tick.bid_price, -7.5),
+                        // exit_high_price: pair.cal_price(tick.bid_price, 12.5),
+                        exit_high_price: pair.cal_price(tick.bid_price, sp),
+                        // exit_low_price: pair.cal_price(tick.bid_price, -12.5),
+                        exit_low_price: pair.cal_price(tick.bid_price, -sp),
                         at_price: tick.ask_price,
                         time_sec: tick.time_s,
                         frame: frame.clone(),

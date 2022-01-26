@@ -83,9 +83,9 @@ impl BackendEngine {
                     self.closed.push(pos);
                 } else {
                     let (high, low) = if pos.is_short() {
-                        (req.stop_loose_price, req.take_profit_price)
+                        (req.exit_low_price, req.exit_high_price)
                     } else {
-                        (req.take_profit_price, req.stop_loose_price)
+                        (req.exit_high_price, req.exit_low_price)
                     };
                     if high > 0. {
                         pos.high_exit_price = high;

@@ -29,8 +29,8 @@ impl Brain4 {
                 let up = UpdatePos {
                     pos_id: p.pos_id,
                     close: false,
-                    take_profit_price: 0.,
-                    stop_loose_price: new_sl,
+                    exit_high_price: 0.,
+                    exit_low_price: new_sl,
                     at_price: tick.price_raw,
                     time_s: self.last_trade_time,
                 };

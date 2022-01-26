@@ -13,13 +13,14 @@ use super::*;
 pub fn run1() {
     // run_pair(&Pair::EURUSD);
     run_pair(&Pair::USDCHF);
-    run_pair(&Pair::NZDUSD);
+    // run_pair(&Pair::NZDUSD);
 }
 
-pub fn run12() {
+pub fn run2() {
+    let pairs = assets::get_all_usd_forex_symbols();
     let pairs = assets::get_all_symbols();
     for p in &pairs {
-        if p.is_forex() {
+        if !p.is_forex() {
             run_pair(p);
         }
     }
@@ -39,7 +40,8 @@ pub fn run_pair(pair: &Pair) {
     );
     let week_id = 49;
 
-    let ticks = collector::loader::load_weeks(&pair, 25..50);
+    let ticks = collector::loader::load_weeks(&pair, 25..55);
+    // let ticks = collector::loader::load_week(&pair, 46);
 
     println!("loaded... {:?}  ({})", &pair, ticks.len());
     let mut run_cfg = BackRunConfig {

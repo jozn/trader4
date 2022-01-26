@@ -35,14 +35,19 @@ pub struct Position {
     pub pos_id: u64,
     pub fid: u64,
     pub won: i64,
+    #[serde(skip)]
     pub symbol_id: i64,
     pub pair: Pair,
+    #[serde(rename="dir")]
     pub direction: PosDir,
+    #[serde(rename="base")]
     pub base_asset_size: f64,
+    #[serde(rename="quote")]
     pub quote_asset_size: f64,
     // pub got_assets: f64,
     #[serde(skip)]
     pub open_time: u64,
+    #[serde(rename="time_o")]
     pub open_time_str: String,
     pub updates: u64,
     pub open_price: f64,
@@ -51,19 +56,20 @@ pub struct Position {
     pub close_price: f64,
     #[serde(skip)]
     pub close_time: u64,
+    #[serde(rename="time_c")]
     pub close_time_str: String,
     #[serde(skip)]
     pub finished: bool, // tod: status
-    pub duration: String,
     pub profit: f64,
-    // #[serde(skip)]
-    pub spread_open: f64,
-    pub spread_close: f64,
-    pub spread_fees: f64,
-    #[serde(skip)]
-    // pub final_balance: f64,
-    pub touch_low_pip: f64,
+    pub duration: String,
     pub touch_high_pip: f64,
+    pub touch_low_pop: f64,
+    #[serde(skip)]
+    pub spread_open: f64,
+    #[serde(skip)]
+    pub spread_close: f64,
+    #[serde(rename="sprd")]
+    pub spread_fees: f64,
     pub locked: f64,
 
     #[serde(skip)]
@@ -75,7 +81,7 @@ pub struct NewPosInter {
     pub new_pos: NewPos,
     pub tick: BTickData,
     pub locked: f64,
-    pub time: u64,
+    pub time_sec: u64,
     pub pos_id: u64,
 }
 
@@ -105,8 +111,8 @@ impl Position {
             direction: dir,
             base_asset_size: p.base_asset_size,
             quote_asset_size: 0.0, // Dependent
-            open_time: npi.time,
-            open_time_str: helper::to_date(npi.time),
+            open_time: npi.time_sec,
+            open_time_str: helper::to_date(npi.time_sec),
             updates: 0,
             open_price: 0.0, // Dependent
             exit_high_price: p.exit_high_price,
@@ -117,11 +123,11 @@ impl Position {
             finished: false,
             duration: "".to_string(),
             profit: 0.0,
+            touch_low_pop: 0.0,
+            touch_high_pip: 0.0,
             spread_open: spreed_open,
             spread_close: 0.0,
             spread_fees: 0.0,
-            touch_low_pip: 0.0,
-            touch_high_pip: 0.0,
             locked: npi.locked,
             new_pos: npi.clone(),
         };
@@ -152,8 +158,8 @@ impl Position {
             }
 
             let low = (btick.bid_price - self.open_price) * multi;
-            if self.touch_low_pip > low {
-                self.touch_low_pip = low;
+            if self.touch_low_pop > low {
+                self.touch_low_pop = low;
             }
         }
     }
@@ -183,6 +189,12 @@ impl Position {
 
         if self.is_long() {
             self._close_long(param);
+        }
+
+        if self.profit > 0. {
+            self.won = 1;
+        } else {
+            self.won = -1;
         }
     }
 

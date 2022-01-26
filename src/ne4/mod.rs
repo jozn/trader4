@@ -1,12 +1,10 @@
 // Next Engine
-pub mod crossing;
 pub mod dc;
 pub mod frame;
 pub mod parent;
 pub mod rel;
 pub mod strength;
 
-pub use crossing::*;
 pub use dc::*;
 pub use frame::*;
 pub use parent::*;

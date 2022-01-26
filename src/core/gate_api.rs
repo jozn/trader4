@@ -22,7 +22,6 @@ pub struct NewPos {
     pub base_asset_size: f64,
     pub exit_high_price: f64,
     pub exit_low_price: f64,
-
     // Informative
     pub at_price: f64,
     pub time_sec: u64, // Brain time
@@ -48,14 +47,11 @@ pub struct EventPosition {
 pub struct UpdatePos {
     pub pos_id: u64,
     pub close: bool,
-    pub take_profit_price: f64,
-    pub stop_loose_price: f64,
-
+    pub exit_high_price: f64,
+    pub exit_low_price: f64,
     // Informative
     pub at_price: f64,
     pub time_s: u64, // Brain time
-                     // pub ta_med: TA1,
-                     // pub ta_big: TA1,
 }
 
 ///// Deprecated > replace with new one for new engine /////
