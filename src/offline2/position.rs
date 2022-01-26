@@ -38,16 +38,16 @@ pub struct Position {
     #[serde(skip)]
     pub symbol_id: i64,
     pub pair: Pair,
-    #[serde(rename="dir")]
+    #[serde(rename = "dir")]
     pub direction: PosDir,
-    #[serde(rename="base")]
+    #[serde(rename = "base")]
     pub base_asset_size: f64,
-    #[serde(rename="quote")]
+    #[serde(rename = "quote")]
     pub quote_asset_size: f64,
     // pub got_assets: f64,
     #[serde(skip)]
     pub open_time: u64,
-    #[serde(rename="time_o")]
+    #[serde(rename = "time_o")]
     pub open_time_str: String,
     pub updates: u64,
     pub open_price: f64,
@@ -56,7 +56,7 @@ pub struct Position {
     pub close_price: f64,
     #[serde(skip)]
     pub close_time: u64,
-    #[serde(rename="time_c")]
+    #[serde(rename = "time_c")]
     pub close_time_str: String,
     #[serde(skip)]
     pub finished: bool, // tod: status
@@ -68,7 +68,7 @@ pub struct Position {
     pub spread_open: f64,
     #[serde(skip)]
     pub spread_close: f64,
-    #[serde(rename="sprd")]
+    #[serde(rename = "sprd")]
     pub spread_fees: f64,
     pub locked: f64,
 

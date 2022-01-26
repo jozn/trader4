@@ -19,7 +19,7 @@ pub fn main() {
 
     for pair in pairs {
         if pair.is_forex() {
-            continue
+            continue;
         }
         for week_id in 25..=60 {
             let path = format!(

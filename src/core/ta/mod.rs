@@ -31,6 +31,7 @@ pub mod average_true_range;
 pub mod cci;
 pub mod dcs;
 pub mod dcs2;
+mod dmi;
 pub mod donchain_channel;
 pub mod ema;
 pub mod fisher;

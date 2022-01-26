@@ -53,7 +53,7 @@ impl MovingAverageConvergenceDivergence {
             signal: signal,
             histogram,
             macd_above: cr.crossed_above,
-            macd_under: cr.crossed_under
+            macd_under: cr.crossed_under,
         }
     }
 }
