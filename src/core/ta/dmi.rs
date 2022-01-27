@@ -35,7 +35,7 @@ impl DMI {
             Err(TAErr::WrongArgs)
         } else {
             Ok(Self {
-                is_new: false,
+                is_new: true,
                 pre_high: 0.0,
                 pre_low: 0.0,
                 tr: Default::default(),
@@ -64,7 +64,8 @@ impl DMI {
 
         let minus_dm = if down > up && down > 0. { down } else { 0. };
 
-        let tr = self.tr.next(candle);
+        // this is ATR - todo chagne to  ATR iteslef
+        let tr = self.tr.next(&candle);
         let trur = self.tr_ma.next(tr);
 
         let plus = 100. * self.plus_ma.next(plus_dm) / trur;
@@ -74,6 +75,9 @@ impl DMI {
         let adx = self.adx_ma.next(dx);
 
         let cr = self.cross.next_v2(plus, minus);
+
+        self.pre_high = candle.high();
+        self.pre_low = candle.low();
 
         DMIOutput {
             adx,

@@ -16,10 +16,10 @@ impl TrueRange {
     pub fn next(&mut self, candle: impl OHLCV) -> f64 {
         let dis = match self.prev_close {
             None => candle.high() - candle.low(),
-            Some(prev) => {
+            Some(prev_close) => {
                 let dist1 = candle.high() - candle.low();
-                let dist2 = (candle.high() - prev).abs();
-                let dist3 = (candle.low() - prev).abs();
+                let dist2 = (candle.high() - prev_close).abs();
+                let dist3 = (candle.low() - prev_close).abs();
                 dist1.max(dist2).max(dist3)
             }
         };
