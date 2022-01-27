@@ -30,6 +30,13 @@ impl ExponentialMovingAverage {
     }
 
     pub fn next(&mut self, next_val: f64) -> f64 {
+        if next_val.is_nan() || next_val.is_infinite() {
+            // we could fix it this way: store last none nan and if nex_val is nan
+            //  set it to last (tradingview uses this way). for now print it to avoid it
+            //  in development time.
+            println!("nan");
+            return 0.;
+        }
         if self.is_new {
             self.is_new = false;
             self.current = next_val;

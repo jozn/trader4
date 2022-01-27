@@ -42,7 +42,7 @@ pub struct TAMethods {
     pub atr: ta::ATR,
     pub rsi: ta::RSI,
     pub cci: ta::CCI,
-    pub macd: ta::MACDDep,
+    pub macd_dep: ta::MACDDep,
     pub fisher: ta::Fisher,
     // For trending
     pub vel1: ta::Vel,
@@ -58,7 +58,7 @@ impl TAMethods {
             atr: ta::ATR::new(14).unwrap(),
             rsi: ta::RSI::new(14).unwrap(),
             cci: ta::CCI::new(14).unwrap(),
-            macd: ta::MACDDep::new(12, 26, 9).unwrap(),
+            macd_dep: ta::MACDDep::new(12, 26, 9).unwrap(),
             fisher: ta::Fisher::new(9, 6).unwrap(),
             // For trending
             vel1: ta::Vel::new(cfg.vel1_period as usize).unwrap(),
@@ -91,13 +91,17 @@ pub fn cal_indicators(tam: &mut TAMethods, kline: &Kline) -> KlineTA {
             atr: tam.atr.next(&kl),
             rsi: tam.rsi.next(kl.close),
             cci: tam.cci.next(&kl),
-            macd: tam.macd.next(kl.close),
+            macd: tam.macd_dep.next(kl.close),
             fisher: tam.fisher.next(&kl),
             // For trending
             vel1: tam.vel1.next(kl.hlc3()),
             vel2: tam.vel2.next(kl.hlc3()),
             ta2: TA2 {
                 atr: tam2.atr.next(&kl),
+                macd: tam2.macd.next(kl.close),
+                dmi: tam2.dmi.next(&kl),
+                trend: tam2.trend.next(&kl),
+
                 dc: tam2.dc.next(&kl),
                 dcs: tam2.dcs.next(&kl),
                 vel1: tam2.vel1.next(kl.hlc3()),
@@ -116,6 +120,10 @@ pub fn cal_indicators(tam: &mut TAMethods, kline: &Kline) -> KlineTA {
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct TA2 {
     pub atr: f64,
+    pub macd: MACDOutput,
+    pub dmi: DMIOutput,
+    pub trend: MATrendOut,
+
     pub dc: DCRes,
     pub dcs: DCSRes,
     pub vel1: VelRes,
@@ -127,6 +135,10 @@ pub struct TA2 {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TA2Methods {
     pub atr: ta::ATR,
+    pub macd: ta::MACD,
+    pub dmi: ta::DMI,
+    pub trend: ta::MATrend,
+
     pub dc: ta::DC,
     pub dcs: ta::DCS,
     pub vel1: ta::Vel,
@@ -139,6 +151,10 @@ impl TA2Methods {
     pub fn new(cfg: &CandleConfig) -> Self {
         Self {
             atr: ta::ATR::new(14).unwrap(),
+            macd: ta::MACD::new(12, 26, 9).unwrap(),
+            dmi: ta::DMI::new(14, 14).unwrap(),
+            trend: ta::MATrend::new(10).unwrap(),
+
             dc: ta::DC::new(20).unwrap(),
             // dcs: ta::DCS::new(80).unwrap(),
             dcs: ta::DCS::new(50).unwrap(),

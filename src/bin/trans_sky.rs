@@ -13,6 +13,7 @@ const OUT_FOLDER: &'static str = "/mnt/t/trader/data_sky/";
 
 pub fn main() {
     let pairs = trader3::configs::assets::get_all_symbols();
+    let pairs = vec![trader3::configs::assets::Pair::USDCHF];
 
     for pair in pairs {
         if pair.is_forex() {

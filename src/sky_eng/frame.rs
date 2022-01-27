@@ -38,16 +38,44 @@ pub struct SFrame {
     // pub ticks_ohlc: [f64; 4], // open, high, low, close of frame ticks
     #[serde(skip)]
     pub ohlc: SCandle,
+    #[serde(skip)]
+    pub macd: MACDOutput,
+    #[serde(skip)]
+    pub dmi: DMIOutput,
+    #[serde(skip)]
+    pub trend: MATrendOut,
+
+    // big
+    #[serde(skip)]
+    pub b_trend: MATrendOut,
 }
 
-pub type FrameCsv = (SCandle, SFrame);
+// pub type FrameCsv = (SCandle, MACDOutput,  DMIOutput, MATrendOut, String , MATrendOut , SFrame);
+// pub type FrameCsv = (SCandle, MACDOutput,  DMIOutput, MATrendOut , SFrame);
+pub type FrameCsv = (
+    SCandle,
+    MACDOutput,
+    DMIOutput,
+    MATrendOut,
+    SFrame,
+    MATrendOut,
+);
 
 impl SFrame {
     pub fn to_csv(&self) -> FrameCsv {
-        (self.ohlc.clone(), self.clone())
+        (
+            self.ohlc.clone(),
+            self.macd.clone(),
+            self.dmi.clone(),
+            self.trend.clone(),
+            // "BIG".to_string(),
+            self.clone(),
+            self.b_trend.clone(),
+        )
     }
 
     pub fn set_spread(&mut self, ticks: &TimeSerVec<Tick>) {
+        // println!("se {}", ticks.len());
         self.spreed_min = f64::MAX;
         for t in ticks.get_vec() {
             let spread = (t.ask_price - t.bid_price).abs() * 10_000.;
@@ -92,6 +120,14 @@ pub fn new_frame(k_med: &KlineTA, k_big: &KlineTA) -> SFrame {
         rsi_sth: big_ta.rsi_sth.clone(),
         vel2: med_ta.vel2.clone(),
         ohlc: SCandle::new(med_k),
+
+        macd: med_ta.macd.clone(),
+        dmi: med_ta.dmi.clone(),
+        trend: med_ta.trend.clone(),
+
+        //big
+        b_trend: big_ta.trend.clone(),
+
         ..Default::default()
     };
 
