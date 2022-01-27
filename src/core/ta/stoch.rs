@@ -1,4 +1,4 @@
-use crate::base::SimpleCross;
+use crate::base::{OHLCV, SimpleCross};
 use serde::{Deserialize, Serialize};
 
 use super::*;
@@ -39,9 +39,13 @@ impl Stoch {
         }
     }
 
-    pub fn next(&mut self, next_val: f64) -> StochRes {
-        let min = self.min.next(next_val);
-        let max = self.max.next(next_val);
+    pub fn next(&mut self, candle: impl OHLCV) -> StochRes {
+        self._next_raw(candle.close(),candle.high(),candle.low())
+    }
+
+    pub fn _next_raw(&mut self, next_val: f64, high: f64, low: f64) -> StochRes {
+        let max = self.max.next(high);
+        let min = self.min.next(low);
 
         let stoch = if max == min {
             50.
@@ -50,7 +54,7 @@ impl Stoch {
         };
 
         let ema_k = self.ema_k.next(stoch);
-        let ema_d = self.ema_d.next(stoch);
+        let ema_d = self.ema_d.next(ema_k);
         let cross = self.cross.next_v2(ema_k, ema_d);
 
         StochRes {
