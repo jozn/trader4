@@ -11,6 +11,7 @@ pub struct MovingAverageConvergenceDivergence {
     slow_ma: EMA,
     signal_ma: EMA,
     cross: SimpleCross,
+    vel: Vel,
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -21,6 +22,7 @@ pub struct MACDOutput {
     pub histogram: f64,
     pub macd_above: bool, // true when macd crossed above the signal line - bullish
     pub macd_under: bool, // true when macd crossed under the signal line - bearish
+    pub dir: f64,
 }
 
 impl MovingAverageConvergenceDivergence {
@@ -33,6 +35,7 @@ impl MovingAverageConvergenceDivergence {
                 slow_ma: EMA::new(slow_period)?,
                 signal_ma: EMA::new(signal_period)?,
                 cross: Default::default(),
+                vel: Vel::new(signal_period)?,
             })
         }
     }
@@ -46,6 +49,8 @@ impl MovingAverageConvergenceDivergence {
         let histogram = macd - signal;
 
         let cr = self.cross.next_v2(macd, signal);
+        let vel = self.vel.next(macd);
+        let dir = if vel.avg_vel_pip > 0. { 1. } else { -1. };
 
         MACDOutput {
             macd,
@@ -54,6 +59,7 @@ impl MovingAverageConvergenceDivergence {
             histogram,
             macd_above: cr.crossed_above,
             macd_under: cr.crossed_under,
+            dir,
         }
     }
 }

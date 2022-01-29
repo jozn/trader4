@@ -43,19 +43,29 @@ pub struct SFrame {
     #[serde(skip)]
     pub dmi: DMIOutput,
     #[serde(skip)]
+    pub stoch: StochRes,
+    #[serde(skip)]
     pub trend: MATrendOut,
 
     // big
     #[serde(skip)]
     pub b_trend: MATrendOut,
+
+    #[serde(skip)]
+    pub score: Score,
+
+    pub roc_macd: f64,
+    pub roc_dmi_up: f64,
+    pub roc_dmi_down: f64,
+    pub roc_stoch: f64,
 }
 
-// pub type FrameCsv = (SCandle, MACDOutput,  DMIOutput, MATrendOut, String , MATrendOut , SFrame);
-// pub type FrameCsv = (SCandle, MACDOutput,  DMIOutput, MATrendOut , SFrame);
 pub type FrameCsv = (
     SCandle,
+    Score,
     MACDOutput,
     DMIOutput,
+    StochRes,
     MATrendOut,
     SFrame,
     MATrendOut,
@@ -65,8 +75,10 @@ impl SFrame {
     pub fn to_csv(&self) -> FrameCsv {
         (
             self.ohlc.clone(),
+            self.score.clone(),
             self.macd.clone(),
             self.dmi.clone(),
+            self.stoch.clone(),
             self.trend.clone(),
             // "BIG".to_string(),
             self.clone(),
@@ -123,13 +135,21 @@ pub fn new_frame(k_med: &KlineTA, k_big: &KlineTA) -> SFrame {
 
         macd: med_ta.macd.clone(),
         dmi: med_ta.dmi.clone(),
+        stoch: med_ta.stoch.clone(),
         trend: med_ta.trend.clone(),
 
         //big
         b_trend: big_ta.trend.clone(),
 
+        roc_macd: med_ta.roc_macd,
+        roc_dmi_up: med_ta.roc_dmi_up,
+        roc_dmi_down: med_ta.roc_dmi_down,
+        roc_stoch: med_ta.roc_stoch,
+
         ..Default::default()
     };
+
+    frame.score = Score::new(&frame);
 
     frame
 }

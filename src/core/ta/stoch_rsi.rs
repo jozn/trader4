@@ -22,7 +22,7 @@ impl StochRSI {
 
     pub fn next(&mut self, next_val: f64) -> StochRes {
         let rsi = self.rsi.next(next_val);
-        let stoch_rsi = self.stoch._next_raw(rsi,rsi,rsi);
+        let stoch_rsi = self.stoch._next_raw(rsi, rsi, rsi);
 
         stoch_rsi
     }

@@ -1,4 +1,4 @@
-use crate::base::{OHLCV, SimpleCross};
+use crate::base::{SimpleCross, OHLCV};
 use serde::{Deserialize, Serialize};
 
 use super::*;
@@ -40,7 +40,7 @@ impl Stoch {
     }
 
     pub fn next(&mut self, candle: impl OHLCV) -> StochRes {
-        self._next_raw(candle.close(),candle.high(),candle.low())
+        self._next_raw(candle.close(), candle.high(), candle.low())
     }
 
     pub fn _next_raw(&mut self, next_val: f64, high: f64, low: f64) -> StochRes {

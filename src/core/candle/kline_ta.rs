@@ -82,7 +82,7 @@ pub fn cal_indicators(tam: &mut TAMethods, kline: &Kline) -> KlineTA {
     let price = kl.hlc3();
     let mut tam2 = &mut tam.ta2;
 
-    let kta = KlineTA {
+    let mut kta = KlineTA {
         kline: kline.clone(),
         is_completed: false,
         ta1: TA1 {
@@ -100,18 +100,26 @@ pub fn cal_indicators(tam: &mut TAMethods, kline: &Kline) -> KlineTA {
                 atr: tam2.atr.next(&kl),
                 macd: tam2.macd.next(kl.close),
                 dmi: tam2.dmi.next(&kl),
+                stoch: tam2.stoch.next(&kl),
                 trend: tam2.trend.next(&kl),
-
+                // roc_macd: tam2.roc_macd.next(price),
                 dc: tam2.dc.next(&kl),
                 dcs: tam2.dcs.next(&kl),
                 vel1: tam2.vel1.next(kl.hlc3()),
                 vel2: tam2.vel2.next(kl.hlc3()),
                 rsi: tam2.rsi.next(kl.hlc3()),
                 rsi_sth: tam2.rsi_stoch.next(kl.hlc3()),
+                ..Default::default()
             },
             // ..Default::default() // All comment above indicarors
         },
     };
+    let ta2 = kta.ta1.ta2.clone();
+    kta.ta1.ta2.roc_macd = tam2.roc_macd.next(ta2.macd.macd);
+    kta.ta1.ta2.roc_dmi_up = tam2.roc_dmi_up.next(ta2.dmi.plus);
+    kta.ta1.ta2.roc_dmi_down = tam2.roc_dmi_down.next(ta2.dmi.minus);
+    kta.ta1.ta2.roc_stoch = tam2.roc_stoch.next(ta2.stoch.main_k);
+
     kta
 }
 
@@ -122,7 +130,12 @@ pub struct TA2 {
     pub atr: f64,
     pub macd: MACDOutput,
     pub dmi: DMIOutput,
+    pub stoch: StochRes,
     pub trend: MATrendOut,
+    pub roc_macd: f64,
+    pub roc_dmi_up: f64,
+    pub roc_dmi_down: f64,
+    pub roc_stoch: f64,
 
     pub dc: DCRes,
     pub dcs: DCSRes,
@@ -137,7 +150,12 @@ pub struct TA2Methods {
     pub atr: ta::ATR,
     pub macd: ta::MACD,
     pub dmi: ta::DMI,
+    pub stoch: ta::Stoch,
     pub trend: ta::MATrend,
+    pub roc_macd: ROC,
+    pub roc_dmi_up: ROC,
+    pub roc_dmi_down: ROC,
+    pub roc_stoch: ROC,
 
     pub dc: ta::DC,
     pub dcs: ta::DCS,
@@ -153,7 +171,12 @@ impl TA2Methods {
             atr: ta::ATR::new(14).unwrap(),
             macd: ta::MACD::new(12, 26, 9).unwrap(),
             dmi: ta::DMI::new(14, 14).unwrap(),
+            stoch: ta::Stoch::new(14, 3, 5).unwrap(),
             trend: ta::MATrend::new(10).unwrap(),
+            roc_macd: ta::ROC::new(3).unwrap(),
+            roc_dmi_up: ta::ROC::new(3).unwrap(),
+            roc_dmi_down: ta::ROC::new(3).unwrap(),
+            roc_stoch: ta::ROC::new(3).unwrap(),
 
             dc: ta::DC::new(20).unwrap(),
             // dcs: ta::DCS::new(80).unwrap(),
