@@ -24,7 +24,7 @@ pub struct BTickData {
 impl BTickData {
     // dep
     pub fn get_price(&self) -> f64 {
-        self.bid_price
+        (self.bid_price + self.ask_price) / 2.
     }
 
     pub fn get_spread_pip(&self, pair: &Pair) -> f64 {
