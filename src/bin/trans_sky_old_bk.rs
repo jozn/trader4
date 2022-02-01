@@ -1,15 +1,15 @@
 use chrono::prelude::*;
 use trader3;
-// use trader3::candle::{
-//     CandleConfig, CandleSeriesTA, Kline, KlineHolderFrameTA, KlineTA, TimeSerVec, TA2,
-// };
+use trader3::candle::{
+    CandleConfig, CandleSeriesTA, Kline, KlineHolderFrameTA, KlineTA, TimeSerVec, TA2,
+};
 use trader3::collector;
 use trader3::collector::row_data::BTickData;
 use trader3::configs::assets::Pair;
-use trader3::sky_eng2::*;
+use trader3::sky_eng::*;
 use trader3::ta::{DCRes, VelRes};
 
-const OUT_FOLDER: &'static str = "/mnt/t/trader/data_sky2/";
+const OUT_FOLDER: &'static str = "/mnt/t/trader/data_sky/";
 
 pub fn main() {
     let pairs = trader3::configs::assets::get_all_symbols();
@@ -24,10 +24,10 @@ pub fn main() {
             if ticks.len() == 0 {
                 continue;
             }
-            let mut sky_eng = trader3::sky_eng2::SkyEng::new();
+            let mut sky_eng = trader3::sky_eng::SkyEng::new();
 
             for t in ticks.clone() {
-                sky_eng.add_tick(&t);
+                sky_eng.add_tick(&t.to_tick());
             }
 
             let frames = to_frame_csv(sky_eng.frames.clone());
@@ -46,15 +46,15 @@ pub fn main() {
             // Write frames for each day
             if sky_eng.frames.len() > 0 {
                 let mut day_frames = vec![];
-                let mut start = sky_eng.frames.first().unwrap().bar.primary.open_time;
+                let mut start = sky_eng.frames.first().unwrap().ohlc.open_time;
                 let mut day_num = 1;
                 for frame in sky_eng.frames {
-                    if frame.bar.primary.open_time < start + 86_400_000 {
+                    if frame.ohlc.open_time < start + 86_400 {
                         day_frames.push(frame);
                     } else {
                         write_single_day_frames(day_frames.clone(), &pair, week_id, day_num);
                         day_num += 1;
-                        start = frame.bar.primary.open_time;
+                        start = frame.ohlc.open_time;
                         day_frames.clear();
                         day_frames.push(frame);
                     }

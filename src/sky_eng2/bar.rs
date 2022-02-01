@@ -114,7 +114,7 @@ pub struct BarConfig {
     pub big_ticks: u64, // big must be multiple of primary
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct PrimaryHolder {
     pub primary: Bar,
     pub big: Bar,
