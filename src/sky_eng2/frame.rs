@@ -20,8 +20,6 @@ pub struct SFrame {
     #[serde(skip)]
     pub big_mid: f64,
 
-    pub spreed_min: f64,
-    pub spreed_max: f64,
     pub med_dc_hl_pip: f64,
     pub big_dc_hl_pip: f64,
 
@@ -34,20 +32,20 @@ pub struct SFrame {
 
 pub fn new_frame(ph: &PrimaryHolder) -> SFrame {
     let p = &ph.primary;
+    let pta = &ph.primary.ta;
     let b = &ph.big;
+    let bta = &ph.big.ta;
 
     let mut f = SFrame {
         fid: p.seq,
-        med_low: 0.0,
-        med_high: 0.0,
-        med_mid: 0.0,
-        big_low: 0.0,
-        big_high: 0.0,
-        big_mid: 0.0,
-        spreed_min: 0.0,
-        spreed_max: 0.0,
-        med_dc_hl_pip: 0.0,
-        big_dc_hl_pip: 0.0,
+        med_low: pta.dc.low,
+        med_high: pta.dc.high,
+        med_mid: pta.dc.middle,
+        big_low: bta.dc.low,
+        big_high: bta.dc.high,
+        big_mid: bta.dc.middle,
+        med_dc_hl_pip: (pta.dc.high - pta.dc.low) * 10_000.,
+        big_dc_hl_pip: (bta.dc.high - bta.dc.low) * 10_000.,
         score: Default::default(),
         bar: ph.clone(),
     };
@@ -57,43 +55,34 @@ pub fn new_frame(ph: &PrimaryHolder) -> SFrame {
 }
 
 pub type FrameCsv = (
-    // SCandle,
+    Bar,
+    SFrame,
     Score,
-    // MACDOutput,
-    // DMIOutput,
-    // StochRes,
-    // MATrendOut,
+    MACDOutput,
+    DMIOutput,
+    StochRes,
+    MATrendOut,
+    // For big
+    Bar,
     // SFrame_Dep,
     // MATrendOut,
 );
 
 impl SFrame {
     pub fn to_csv(&self) -> FrameCsv {
+        let pta = &self.bar.primary.ta;
         (
-            // self.ohlc.clone(),
+            self.bar.primary.clone(),
+            self.clone(),
             self.score.clone(),
-            // self.macd.clone(),
-            // self.dmi.clone(),
-            // self.stoch.clone(),
-            // self.trend.clone(),
-            // "BIG".to_string(),
-            // self.clone(),
-            // self.b_trend.clone(),
-        )
-    }
+            // self.bar.big.clone(),
+            pta.macd.clone(),
+            pta.dmi.clone(),
+            pta.stoch.clone(),
+            pta.trend.clone(),
 
-    // pub fn set_spread(&mut self, ticks: &TimeSerVec<Tick>) {
-    pub fn set_spread(&mut self, ticks: &Vec<BTickData>) {
-        // println!("se {}", ticks.len());
-        self.spreed_min = f64::MAX;
-        for t in ticks {
-            let spread = (t.ask_price - t.bid_price).abs() * 10_000.;
-            if spread > self.spreed_max {
-                self.spreed_max = spread;
-            }
-            if spread < self.spreed_min {
-                self.spreed_min = spread;
-            }
-        }
+            // big time frame
+            self.bar.big.clone(),
+        )
     }
 }

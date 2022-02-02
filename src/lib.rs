@@ -21,7 +21,7 @@ pub mod brain4;
 pub mod brain5;
 pub mod ne4;
 pub mod offline2;
-pub mod sky_eng;
+// pub mod sky_eng;
 pub mod sky_eng2;
 
 pub use crate::core::*;

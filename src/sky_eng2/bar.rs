@@ -4,21 +4,33 @@ use serde::{Deserialize, Serialize};
 use super::*;
 use crate::base::OHLCV;
 use crate::collector::row_data::BTickData;
-use crate::ta;
+use crate::{helper, ta};
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct Bar {
     pub seq: i32,
+    #[serde(skip)]
     pub open_time: i64, // in mill seconds
+    #[serde(skip)]
     pub close_time: i64,
-    pub bucket: i64,
-    pub tick_count: u32,
-    pub kline_num: i32, // -1: from trades sums >0 sums of klines
     pub open: f64,
     pub high: f64,
     pub low: f64,
     pub close: f64,
+    #[serde(skip)]
     pub volume: f64,
+    pub ticks: u32,
+
+    #[serde(rename = "open_time")]
+    pub open_time_str: String,
+    pub duration: String,
+
+    pub pip_hl: f64,
+    pub pip_co: f64,
+
+    pub spreed_min: f64,
+    pub spreed_max: f64,
+
     #[serde(skip)]
     pub ta: BarTA,
 }
@@ -27,7 +39,6 @@ impl Bar {
     pub fn new(ticks: &Vec<BTickData>) -> Bar {
         let counts = ticks.len() as u32;
         assert!(counts > 0);
-        let bucket_id = 0;
 
         let first = ticks.first().unwrap().clone();
         let last = ticks.last().unwrap().clone();
@@ -49,20 +60,40 @@ impl Bar {
             // volume += trade.;
         }
 
-        let bar = Bar {
+        let open = first.get_price();
+        let close =  last.get_price();
+
+        let mut bar = Bar {
             seq: 0,
             open_time: first.timestamp,
             close_time: last.timestamp,
-            bucket: bucket_id, // this should be override in codes who calls this
-            tick_count: counts,
-            kline_num: -1, // -1 shows kline is build from ticks - just in samll
-            open: first.get_price(),
-            high: high,
-            low: low,
-            close: last.get_price(),
-            volume: volume,
+            open,
+            high,
+            low,
+            close,
+            volume,
+            ticks: counts,
+
+            open_time_str:  helper::to_time_string(first.timestamp_sec),
+            duration: helper::to_duration(first.timestamp_sec - last.timestamp_sec),
+            pip_hl: (high - low) * 10_000.,
+            pip_co: (close - open).abs() * 10_000.,
+            spreed_min: 0.0,
+            spreed_max: 0.0,
+
             ta: Default::default(),
         };
+
+        bar.spreed_min = f64::MAX;
+        for t in ticks {
+            let spread = (t.ask_price - t.bid_price).abs() * 10_000.;
+            if spread > bar.spreed_max {
+                bar.spreed_max = spread;
+            }
+            if spread < bar.spreed_min {
+                bar.spreed_min = spread;
+            }
+        }
         bar
     }
 
@@ -100,14 +131,6 @@ impl OHLCV for Bar {
     }
 }
 
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct BarTA {
-    pub atr: f64,
-    pub macd: ta::MACDOutput,
-    pub dmi: ta::DMIOutput,
-    pub stoch: ta::StochRes,
-    pub trend: ta::MATrendOut,
-}
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct BarConfig {
     pub primary_ticks: u64,
@@ -137,16 +160,26 @@ pub struct BarSeries {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TAMethods {
     pub atr: ta::ATR,
+    pub dc: ta::DC,
     pub macd: ta::MACD,
     pub dmi: ta::DMI,
     pub stoch: ta::Stoch,
     pub trend: ta::MATrend,
 }
-
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct BarTA {
+    pub atr: f64,
+    pub dc: ta::DCRes,
+    pub macd: ta::MACDOutput,
+    pub dmi: ta::DMIOutput,
+    pub stoch: ta::StochRes,
+    pub trend: ta::MATrendOut,
+}
 impl TAMethods {
     pub fn new(cfg: &BarConfig) -> Self {
         Self {
             atr: ta::ATR::new(14).unwrap(),
+            dc: ta::DC::new(12).unwrap(),
             macd: ta::MACD::new(12, 26, 9).unwrap(),
             dmi: ta::DMI::new(14, 14).unwrap(),
             stoch: ta::Stoch::new(14, 3, 5).unwrap(),
@@ -162,8 +195,8 @@ impl BarSeries {
 
         BarSeries {
             cfg: cfg.clone(),
-            primary_seq: 0,
-            big_seq: 0,
+            primary_seq: 1,
+            big_seq: 1,
             ticks_primary: vec![],
             ticks_big: vec![],
             bars_primary: vec![],
@@ -200,21 +233,22 @@ impl BarSeries {
 
         if self.ticks_primary.len() == self.cfg.primary_ticks as usize {
             let mut finish_big = false;
-            self.primary_seq += 1;
             let mut bar_prim = Bar::new(&self.ticks_primary);
             bar_prim.seq = self.primary_seq;
             bar_prim.ta = cal_indicators(&mut self.primary_ta, &bar_prim);
 
             let mut bar_big = Bar::new(&self.ticks_big);
             bar_big.seq = self.big_seq;
-            bar_big.ta = cal_indicators(&mut self.primary_ta, &bar_big);
 
             if self.ticks_big.len() == self.cfg.big_ticks as usize {
-                self.big_seq += 1;
-                bar_big.seq = self.big_seq;
-                self.ticks_big.clear();
+                bar_big.ta = cal_indicators(&mut self.big_ta, &bar_big);
                 self.bars_big.push(bar_big.clone());
                 finish_big = true;
+                self.ticks_big.clear();
+                self.big_seq += 1;
+            } else {
+                // IMPORTANT: Clone methods
+                bar_big.ta = cal_indicators(&mut self.big_ta.clone(), &bar_big);
             }
 
             self.ticks_primary.clear();
@@ -225,6 +259,7 @@ impl BarSeries {
                 finish_big,
             };
             self.bars_primary.push(ph.clone());
+            self.primary_seq += 1;
 
             Some(ph)
         } else {
@@ -238,6 +273,7 @@ pub fn cal_indicators(tam: &mut TAMethods, bar: &Bar) -> BarTA {
     let _price = bar.hlc3();
     BarTA {
         atr: tam.atr.next(&bar),
+        dc: tam.dc.next(&bar),
         macd: tam.macd.next(bar.close),
         dmi: tam.dmi.next(&bar),
         stoch: tam.stoch.next(&bar),

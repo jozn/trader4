@@ -12,47 +12,50 @@ impl Score {
     pub fn new(f: &SFrame) -> Score {
         let mut bull = 0;
         let mut bear = 0;
+        let pta = &f.bar.primary.ta;
+        let bta = &f.bar.big.ta;
 
-        /*if f.macd.histogram > 0. {
+        if pta.macd.histogram > 0. {
             bull += 1;
         }
         // if f.roc_macd > 0. {
-        if f.macd.dir > 0. {
+        if pta.macd.dir > 0. {
             bull += 1;
         }
 
-        if f.macd.histogram < 0. {
+        if pta.macd.histogram < 0. {
             bear += 1;
         }
         // if f.roc_macd < 0. {
-        if f.macd.dir < 0. {
+        if pta.macd.dir < 0. {
             bear += 1;
         }
 
         // DMI +5
-        if f.dmi.plus > f.dmi.minus {
+        if pta.dmi.plus > pta.dmi.minus {
             bull += 2;
-            if f.dmi.adx > f.dmi.plus {
+            if pta.dmi.adx > pta.dmi.plus {
                 bull += 2;
             }
         }
 
         // DMI - bear +5
-        if f.dmi.plus < f.dmi.minus {
+        if pta.dmi.plus < pta.dmi.minus {
             bear += 2;
-            if f.dmi.adx > f.dmi.minus {
+            if pta.dmi.adx > pta.dmi.minus {
                 bear += 2;
             }
         }
 
+
         // trend big
-        if f.b_trend.is_bullish() {
+        if bta.trend.is_bullish() {
             bull += 3;
         }
 
-        if f.b_trend.is_bearish() {
+        if bta.trend.is_bearish() {
             bear += 3;
-        }*/
+        }
 
         let diff = bull - bear;
 

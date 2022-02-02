@@ -162,8 +162,8 @@ impl BarSeries {
 
         BarSeries {
             cfg: cfg.clone(),
-            primary_seq: 0,
-            big_seq: 0,
+            primary_seq: 1,
+            big_seq: 1,
             ticks_primary: vec![],
             ticks_big: vec![],
             bars_primary: vec![],
@@ -200,7 +200,6 @@ impl BarSeries {
 
         if self.ticks_primary.len() == self.cfg.primary_ticks as usize {
             let mut finish_big = false;
-            self.primary_seq += 1;
             let mut bar_prim = Bar::new(&self.ticks_primary);
             bar_prim.seq = self.primary_seq;
             bar_prim.ta = cal_indicators(&mut self.primary_ta, &bar_prim);
@@ -210,11 +209,11 @@ impl BarSeries {
             bar_big.ta = cal_indicators(&mut self.primary_ta, &bar_big);
 
             if self.ticks_big.len() == self.cfg.big_ticks as usize {
-                self.big_seq += 1;
-                bar_big.seq = self.big_seq;
+                // bar_big.seq = self.big_seq;
                 self.ticks_big.clear();
                 self.bars_big.push(bar_big.clone());
                 finish_big = true;
+                self.big_seq += 1;
             }
 
             self.ticks_primary.clear();
@@ -225,6 +224,7 @@ impl BarSeries {
                 finish_big,
             };
             self.bars_primary.push(ph.clone());
+            self.primary_seq += 1;
 
             Some(ph)
         } else {

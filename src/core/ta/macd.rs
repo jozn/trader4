@@ -17,6 +17,7 @@ pub struct MovingAverageConvergenceDivergence {
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct MACDOutput {
     pub macd: f64, // formula (fast_ma - slow_ma) -- the changing line (blue in TradingView)
+    #[serde(skip)]
     pub macd_pop: f64, // maybe delete - just for debug
     pub signal: f64, // EMA of macd
     pub histogram: f64,
