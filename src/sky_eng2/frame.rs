@@ -58,12 +58,14 @@ pub type FrameCsv = (
     Bar,
     SFrame,
     Score,
+    RPCRes,
     MACDOutput,
     DMIOutput,
     StochRes,
     MATrendOut,
     // For big
     Bar,
+    MATrendOut,
     // SFrame_Dep,
     // MATrendOut,
 );
@@ -71,18 +73,20 @@ pub type FrameCsv = (
 impl SFrame {
     pub fn to_csv(&self) -> FrameCsv {
         let pta = &self.bar.primary.ta;
+        let bta = &self.bar.big.ta;
         (
             self.bar.primary.clone(),
             self.clone(),
             self.score.clone(),
             // self.bar.big.clone(),
+            pta.rpc.clone(),
             pta.macd.clone(),
             pta.dmi.clone(),
             pta.stoch.clone(),
             pta.trend.clone(),
-
             // big time frame
             self.bar.big.clone(),
+            bta.trend.clone(),
         )
     }
 }

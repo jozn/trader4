@@ -17,6 +17,7 @@ pub use maximum::*;
 pub use minimum::*;
 pub use momentum::*;
 pub use roc::*;
+pub use rpc::*;
 pub use rsi::*;
 pub use rti::*;
 pub use sma::*;
@@ -27,7 +28,6 @@ pub use vel::*;
 pub use vel2::*;
 pub use window::*;
 pub use wma::*;
-pub use rpc::*;
 
 pub mod average_absolute_deviation;
 pub mod average_true_range;
@@ -46,6 +46,7 @@ pub mod maximum;
 pub mod minimum;
 pub mod momentum;
 pub mod roc;
+pub mod rpc;
 pub mod rsi;
 pub mod rti;
 pub mod sma;
@@ -56,7 +57,6 @@ pub mod vel;
 pub mod vel2;
 pub mod window;
 pub mod wma;
-pub mod rpc;
 
 ////////// Some other shared types //////////
 

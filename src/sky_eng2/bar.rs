@@ -61,7 +61,7 @@ impl Bar {
         }
 
         let open = first.get_price();
-        let close =  last.get_price();
+        let close = last.get_price();
 
         let mut bar = Bar {
             seq: 0,
@@ -74,7 +74,7 @@ impl Bar {
             volume,
             ticks: counts,
 
-            open_time_str:  helper::to_time_string(first.timestamp_sec),
+            open_time_str: helper::to_time_string(first.timestamp_sec),
             duration: helper::to_duration(first.timestamp_sec - last.timestamp_sec),
             pip_hl: (high - low) * 10_000.,
             pip_co: (close - open).abs() * 10_000.,
@@ -160,6 +160,7 @@ pub struct BarSeries {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TAMethods {
     pub atr: ta::ATR,
+    pub rpc: ta::RPC,
     pub dc: ta::DC,
     pub macd: ta::MACD,
     pub dmi: ta::DMI,
@@ -169,6 +170,7 @@ pub struct TAMethods {
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct BarTA {
     pub atr: f64,
+    pub rpc: ta::RPCRes,
     pub dc: ta::DCRes,
     pub macd: ta::MACDOutput,
     pub dmi: ta::DMIOutput,
@@ -179,6 +181,7 @@ impl TAMethods {
     pub fn new(cfg: &BarConfig) -> Self {
         Self {
             atr: ta::ATR::new(14).unwrap(),
+            rpc: ta::RPC::new(10, 0.5).unwrap(),
             dc: ta::DC::new(12).unwrap(),
             macd: ta::MACD::new(12, 26, 9).unwrap(),
             dmi: ta::DMI::new(14, 14).unwrap(),
@@ -273,6 +276,7 @@ pub fn cal_indicators(tam: &mut TAMethods, bar: &Bar) -> BarTA {
     let _price = bar.hlc3();
     BarTA {
         atr: tam.atr.next(&bar),
+        rpc: tam.rpc.next(&bar),
         dc: tam.dc.next(&bar),
         macd: tam.macd.next(bar.close),
         dmi: tam.dmi.next(&bar),

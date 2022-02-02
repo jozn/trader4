@@ -47,7 +47,6 @@ impl Score {
             }
         }
 
-
         // trend big
         if bta.trend.is_bullish() {
             bull += 3;
