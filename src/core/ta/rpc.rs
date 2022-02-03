@@ -38,7 +38,7 @@ impl RPC {
         }
     }
 
-    pub fn next_bk(&mut self, candle: impl OHLCV) -> RPCRes {
+    pub fn next(&mut self, candle: impl OHLCV) -> RPCRes {
         let atr = self.atr.next(&candle);
         let min = self.min_ma.next(candle.low());
         let max = self.max_ma.next(candle.high());
@@ -55,7 +55,7 @@ impl RPC {
         }
     }
 
-    pub fn next(&mut self, candle: impl OHLCV) -> RPCRes {
+    pub fn next_bk_rpi(&mut self, candle: impl OHLCV) -> RPCRes {
         let atr = self.atr.next(&candle);
         let min = self.min_ma.next(candle.low());
         let max = self.max_ma.next(candle.high());

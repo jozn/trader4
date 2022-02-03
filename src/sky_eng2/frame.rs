@@ -6,7 +6,7 @@ use crate::helper;
 use crate::ta::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct SFrame {
     pub fid: i32, // frame_id
 
@@ -22,6 +22,10 @@ pub struct SFrame {
 
     pub med_dc_hl_pip: f64,
     pub big_dc_hl_pip: f64,
+
+    pub trend: f64,
+    pub buy1: bool,
+    pub sell1: bool,
 
     #[serde(skip)]
     pub score: Score,
@@ -48,8 +52,22 @@ pub fn new_frame(ph: &PrimaryHolder) -> SFrame {
         big_dc_hl_pip: (bta.dc.high - bta.dc.low) * 10_000.,
         score: Default::default(),
         bar: ph.clone(),
+        ..Default::default()
     };
     f.score = Score::new(&f);
+
+    if bta.trend.is_bullish() {
+        f.trend = 1.;
+    } else {
+        f.trend = -1.;
+    }
+    // set sell buy signals
+    if bta.trend.is_bullish() && pta.rpi.buy_low {
+        f.buy1 = true;
+    }
+    if bta.trend.is_bearish() && pta.rpi.buy_high {
+        f.sell1 = true;
+    }
 
     f
 }
@@ -57,6 +75,7 @@ pub fn new_frame(ph: &PrimaryHolder) -> SFrame {
 pub type FrameCsv = (
     Bar,
     SFrame,
+    RPIRes,
     Score,
     RPCRes,
     MACDOutput,
@@ -77,6 +96,7 @@ impl SFrame {
         (
             self.bar.primary.clone(),
             self.clone(),
+            pta.rpi.clone(),
             self.score.clone(),
             // self.bar.big.clone(),
             pta.rpc.clone(),

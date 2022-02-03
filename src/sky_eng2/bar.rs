@@ -160,6 +160,7 @@ pub struct BarSeries {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TAMethods {
     pub atr: ta::ATR,
+    pub rpi: ta::RPI,
     pub rpc: ta::RPC,
     pub dc: ta::DC,
     pub macd: ta::MACD,
@@ -170,6 +171,7 @@ pub struct TAMethods {
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct BarTA {
     pub atr: f64,
+    pub rpi: ta::RPIRes,
     pub rpc: ta::RPCRes,
     pub dc: ta::DCRes,
     pub macd: ta::MACDOutput,
@@ -181,6 +183,7 @@ impl TAMethods {
     pub fn new(cfg: &BarConfig) -> Self {
         Self {
             atr: ta::ATR::new(14).unwrap(),
+            rpi: ta::RPI::new(10, 5, 0.5).unwrap(),
             rpc: ta::RPC::new(10, 0.5).unwrap(),
             dc: ta::DC::new(12).unwrap(),
             macd: ta::MACD::new(12, 26, 9).unwrap(),
@@ -276,6 +279,7 @@ pub fn cal_indicators(tam: &mut TAMethods, bar: &Bar) -> BarTA {
     let _price = bar.hlc3();
     BarTA {
         atr: tam.atr.next(&bar),
+        rpi: tam.rpi.next(&bar),
         rpc: tam.rpc.next(&bar),
         dc: tam.dc.next(&bar),
         macd: tam.macd.next(bar.close),
