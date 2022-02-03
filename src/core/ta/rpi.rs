@@ -63,8 +63,10 @@ impl RPI {
         let min_sig = self.min_sig.next(p_low);
         let max_sig = self.max_sig.next(p_high);
 
-        let cr_high = self.cross_high.next_v2(p_high, max_sig);
-        let cr_low = self.cross_low.next_v2(p_low, min_sig);
+        let cr_high = self.cross_high.next_v2(p_high, max);
+        let cr_low = self.cross_low.next_v2(p_low, min);
+        // let cr_high = self.cross_high.next_v2(p_high, max_sig);
+        // let cr_low = self.cross_low.next_v2(p_low, min_sig);
 
         RPIRes {
             high: high_ch,

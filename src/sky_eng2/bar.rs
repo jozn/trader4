@@ -107,6 +107,15 @@ impl Bar {
 
         assert!(self.open_time <= self.close_time);
     }
+    pub fn to_json_out(&self) -> JsonOHLC {
+        JsonOHLC {
+            date: self.open_time / 1000,
+            open: self.open,
+            high: self.high,
+            low: self.low,
+            close: self.close,
+        }
+    }
 }
 
 impl OHLCV for Bar {

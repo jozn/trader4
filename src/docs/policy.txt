@@ -1,3 +1,5 @@
+== 14 Bahman 1400
+   +todo probeblic sar formual and review
 == 4 Bahman 1400
  + For now have a zero spread in ticks via setting both ask and bid to same (hack), when we found a good strategy then
    add enable spread. Implement support for spread though in everywhere .

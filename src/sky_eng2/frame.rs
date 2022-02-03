@@ -109,4 +109,26 @@ impl SFrame {
             bta.trend.clone(),
         )
     }
+
+    pub fn to_json(&self) -> FrameJsonOut {
+        let pta = &self.bar.primary.ta;
+        let bta = &self.bar.big.ta;
+        FrameJsonOut {
+            ohlc: self.bar.primary.to_json_out(),
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+pub struct FrameJsonOut {
+    pub ohlc: JsonOHLC,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+pub struct JsonOHLC {
+    pub date: i64,
+    pub open: f64,
+    pub high: f64,
+    pub low: f64,
+    pub close: f64,
 }
