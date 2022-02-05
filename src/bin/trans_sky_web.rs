@@ -1,6 +1,7 @@
 use chrono::prelude::*;
 use std::os::unix::raw::off_t;
 use trader3;
+use trader3::base::OHLCV;
 // use trader3::candle::{
 //     CandleConfig, CandleSeriesTA, Kline, KlineHolderFrameTA, KlineTA, TimeSerVec, TA2,
 // };
@@ -36,7 +37,10 @@ pub fn main() {
             let json_data = serde_json::to_string_pretty(&frames).unwrap();
 
             let html_tmpl = std::fs::read_to_string("./src/web/tmpl/ui2.html").unwrap();
-            let html = html_tmpl.replace("{{JSON_DATA}}", &json_data);
+            let title = format!("{:?}/{}", &pair, week_id);
+            let html = html_tmpl.replace("{{TITLE}}", &title);
+            let html = html.replace("{{JSON_DATA}}", &json_data);
+
 
             // Write to file
             let dir = format!("{}{}", OUT_FOLDER, pair.folder_path());
@@ -72,10 +76,13 @@ pub fn main() {
 }
 
 pub fn write_single_day_frames(frames_arr: Vec<SFrame>, pair: &Pair, week_id: u16, day_num: u64) {
+    let title = format!("{:?}/{}_{}", &pair, week_id, day_num);
+
     let json_data = to_json_out(frames_arr);
     let json_text = serde_json::to_string_pretty(&json_data).unwrap();
     let html_tmpl = std::fs::read_to_string("./src/web/tmpl/ui2.html").unwrap();
-    let html = html_tmpl.replace("{{JSON_DATA}}", &json_text);
+    let html = html_tmpl.replace("{{TITLE}}", &title);
+    let html = html.replace("{{JSON_DATA}}", &json_text);
 
     // Write to file
     let dir = format!("{}{}", OUT_FOLDER, pair.folder_path());
@@ -97,6 +104,54 @@ fn to_json_out(frames: Vec<SFrame>) -> JsonOut {
     let mut out = JsonOut::default();
     for fm in frames.iter() {
         out.ohlc.push(JsonRowOHLC::new(&fm.bar.primary));
+
+        // Set high/low lines
+        let bar = &fm.bar.primary;
+        let ta = &bar.ta;
+        let bta = &fm.bar.big.ta;
+        let time = bar.open_time / 1000;
+        out.high_line.push(RowJson{
+            time: bar.open_time / 1000 ,
+            value:ta.rpi.high
+        });
+        out.low_line.push(RowJson{
+            time: bar.open_time / 1000 ,
+            value:ta.rpi.low
+        });
+
+        // Trend line
+        out.bull_line.push(RowJson{
+            time ,
+            value:bta.trend.bull_line // green
+        });
+        out.bear_line.push(RowJson{
+            time,
+            value:bta.trend.bear_line
+        });
+
+        // Set buy/sell markers
+        if fm.buy1 {
+            out.markers.push(MarkerJson {
+                time,
+                position: "belowBar".to_string(),
+                color: "#2196F3".to_string(),
+                shape: "arrowUp".to_string(),
+                text: format!("")
+                // text: format!("Buy @")
+                // text: format!("Buy @ {}", bar.hlc3())
+            })
+        }
+        if fm.sell1 {
+            out.markers.push(MarkerJson {
+                time,
+                position: "aboveBar".to_string(),
+                color: "#e91e63".to_string(),
+                shape: "arrowDown".to_string(),
+                text: format!("")
+                // text: format!("Sell @")
+                // text: format!("Sell @ {}", bar.hlc3())
+            })
+        }
     }
     out
 }
@@ -107,6 +162,12 @@ fn to_json_out(frames: Vec<SFrame>) -> JsonOut {
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct JsonOut {
     pub ohlc: Vec<JsonRowOHLC>,
+    pub high_line: Vec<RowJson>,
+    pub low_line: Vec<RowJson>,
+    pub markers: Vec<MarkerJson>,
+
+    pub bull_line: Vec<RowJson>,
+    pub bear_line: Vec<RowJson>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
@@ -128,4 +189,17 @@ impl JsonRowOHLC {
             close: b.close,
         }
     }
+}
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+pub struct RowJson {
+    pub time: i64,
+    pub value: f64,
+}
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+pub struct MarkerJson {
+    pub time: i64,
+    pub position: String,
+    pub color: String,
+    pub shape: String,
+    pub text: String,
 }

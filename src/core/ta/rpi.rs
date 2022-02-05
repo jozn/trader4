@@ -47,8 +47,68 @@ impl RPI {
             }),
         }
     }
-    // simple - no trans
     pub fn next(&mut self, candle: impl OHLCV) -> RPIRes {
+        let atr = self.atr.next(&candle);
+        let max = self.max_ma.next(candle.high());
+        let min = self.min_ma.next(candle.low());
+
+        let high_ch = max + self.atr_per * atr;
+        let low_ch = min - self.atr_per * atr;
+
+        let p_high = candle.high();
+        let p_low = candle.low();
+        let p_close = candle.close();
+
+        let max_sig = self.max_sig.next(p_high);
+        let min_sig = self.min_sig.next(p_low);
+
+        let buy_high = p_high > high_ch;
+        let buy_low = p_low < low_ch;
+
+        RPIRes {
+            high: high_ch,
+            high_sig: max_sig,
+            low: low_ch,
+            low_sig: min_sig,
+            p_high,
+            p_low,
+            p_close,
+            buy_low,
+            buy_high,
+        }
+    }
+    pub fn next_cross(&mut self, candle: impl OHLCV) -> RPIRes {
+        let atr = self.atr.next(&candle);
+        let max = self.max_ma.next(candle.high());
+        let min = self.min_ma.next(candle.low());
+
+        let high_ch = max + self.atr_per * atr;
+        let low_ch = min - self.atr_per * atr;
+
+        let p_high = candle.high();
+        let p_low = candle.low();
+        let p_close = candle.close();
+
+        let max_sig = self.max_sig.next(p_high);
+        let min_sig = self.min_sig.next(p_low);
+
+        let cr_high = self.cross_high.next_v2(p_high, high_ch);
+        let cr_low = self.cross_low.next_v2(p_low, low_ch);
+
+        RPIRes {
+            high: high_ch,
+            high_sig: max_sig,
+            low: low_ch,
+            low_sig: min_sig,
+            p_high,
+            p_low,
+            p_close,
+            buy_low: cr_low.crossed_under,
+            buy_high: cr_high.crossed_above,
+        }
+    }
+    // simple - no trans
+    pub fn next_bk_dely_signal(&mut self, candle: impl OHLCV) -> RPIRes {
         let atr = self.atr.next(&candle);
         let min = self.min_ma.next(candle.low());
         let max = self.max_ma.next(candle.high());

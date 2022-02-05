@@ -12,6 +12,7 @@
             margin: 35px auto;
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" ></script>
     <script src="https://unpkg.com/lightweight-charts@3.7.0/dist/lightweight-charts.standalone.production.js" ></script>
 </head>
 
@@ -91,6 +92,35 @@
         var jsonData = JSON.parse(jsonText);
 
         barSeries.setData(jsonData.ohlc);
+
+        // Add high/low lines
+        var highLine = chart.addLineSeries({
+            color: 'rgba(4, 111, 232, 1)',
+            lineWidth: 1,
+        });
+        highLine.setData(jsonData.high_line);
+
+        var lowLine = chart.addLineSeries({
+            color: 'rgba(4, 111, 232, 1)',
+            lineWidth: 1,
+        });
+        lowLine.setData(jsonData.low_line);
+
+        // Add bull bear lines
+        var bullLine = chart.addLineSeries({
+            color: 'rgb(34,215,104)',
+            lineWidth: 1,
+        });
+        bullLine.setData(jsonData.bull_line);
+
+        var bearLine = chart.addLineSeries({
+            color: 'rgb(215,49,68)',
+            lineWidth: 1,
+        });
+        bearLine.setData(jsonData.bear_line);
+
+        // Set markers
+        barSeries.setMarkers(jsonData.markers);
     }
 
 </script>
