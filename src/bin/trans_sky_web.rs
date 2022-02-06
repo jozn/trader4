@@ -41,7 +41,6 @@ pub fn main() {
             let html = html_tmpl.replace("{{TITLE}}", &title);
             let html = html.replace("{{JSON_DATA}}", &json_data);
 
-
             // Write to file
             let dir = format!("{}{}", OUT_FOLDER, pair.folder_path());
             let out_file_path = format!("{}{}/{}.html", OUT_FOLDER, &pair.folder_path(), week_id);
@@ -110,23 +109,23 @@ fn to_json_out(frames: Vec<SFrame>) -> JsonOut {
         let ta = &bar.ta;
         let bta = &fm.bar.big.ta;
         let time = bar.open_time / 1000;
-        out.high_line.push(RowJson{
-            time: bar.open_time / 1000 ,
-            value:ta.rpi.high
+        out.high_line.push(RowJson {
+            time: bar.open_time / 1000,
+            value: ta.rpi.high,
         });
-        out.low_line.push(RowJson{
-            time: bar.open_time / 1000 ,
-            value:ta.rpi.low
+        out.low_line.push(RowJson {
+            time: bar.open_time / 1000,
+            value: ta.rpi.low,
         });
 
         // Trend line
-        out.bull_line.push(RowJson{
-            time ,
-            value:bta.trend.bull_line // green
-        });
-        out.bear_line.push(RowJson{
+        out.bull_line.push(RowJson {
             time,
-            value:bta.trend.bear_line
+            value: bta.trend.bull_line, // green
+        });
+        out.bear_line.push(RowJson {
+            time,
+            value: bta.trend.bear_line,
         });
 
         // Set buy/sell markers
@@ -136,9 +135,8 @@ fn to_json_out(frames: Vec<SFrame>) -> JsonOut {
                 position: "belowBar".to_string(),
                 color: "#2196F3".to_string(),
                 shape: "arrowUp".to_string(),
-                text: format!("")
-                // text: format!("Buy @")
-                // text: format!("Buy @ {}", bar.hlc3())
+                text: format!(""), // text: format!("Buy @")
+                                   // text: format!("Buy @ {}", bar.hlc3())
             })
         }
         if fm.sell1 {
@@ -147,11 +145,25 @@ fn to_json_out(frames: Vec<SFrame>) -> JsonOut {
                 position: "aboveBar".to_string(),
                 color: "#e91e63".to_string(),
                 shape: "arrowDown".to_string(),
-                text: format!("")
-                // text: format!("Sell @")
-                // text: format!("Sell @ {}", bar.hlc3())
+                text: format!(""), // text: format!("Sell @")
+                                   // text: format!("Sell @ {}", bar.hlc3())
             })
         }
+
+        // Add scores
+        let score = &fm.score;
+        out.score_bull.push(RowJson {
+            time,
+            value: score.bull as f64,
+        });
+        out.score_bear.push(RowJson {
+            time,
+            value: -score.bear as f64,
+        });
+        out.score_diff.push(RowJson {
+            time,
+            value: score.diff as f64,
+        });
     }
     out
 }
@@ -168,6 +180,10 @@ pub struct JsonOut {
 
     pub bull_line: Vec<RowJson>,
     pub bear_line: Vec<RowJson>,
+
+    pub score_bull: Vec<RowJson>,
+    pub score_bear: Vec<RowJson>,
+    pub score_diff: Vec<RowJson>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]

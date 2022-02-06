@@ -21,6 +21,7 @@
 <div id="synced-charts">
     <div id="chart1"  style="margin-left: 5px;"></div>
     <div id="chart2"></div>
+    <div id="chart3" style="display:none;"></div>
 </div>
 
 <div id="json_data" style="display: none">{{JSON_DATA}}</div>
@@ -44,10 +45,14 @@
     }
 
     function makeBarChart() {
-        var width =  window.innerWidth * 0.95;
-        var chart = LightweightCharts.createChart(document.getElementById("chart1"), {
+        var chart1El = document.getElementById("chart1");
+        var chart2El = document.getElementById("chart2");
+        var chart3El = document.getElementById("chart3");
+        var width =  window.innerWidth * 0.98;
+
+        var chart = LightweightCharts.createChart(chart1El, {
             width: width,
-            height: width / 2,
+            height: width / 3,
             layout: {
                 backgroundColor: '#ffffff',
                 textColor: 'rgba(33, 56, 77, 1)',
@@ -121,6 +126,137 @@
 
         // Set markers
         barSeries.setMarkers(jsonData.markers);
+
+        // Chart 2 - Scores
+        var axis = LightweightCharts.createChart(chart2El, {
+            width: width,
+            height: width/10,
+            crosshair: {
+                mode: 0
+            },
+            rightPriceScale: {
+                width: 60
+            },
+        });
+
+        var scoreBull = axis.addHistogramSeries({
+            color: 'rgba(34,140,74,0.69)',
+            lineWidth: 1,
+        });
+        scoreBull.setData(jsonData.score_bull);
+
+        var scoreBear = axis.addHistogramSeries({
+            color: 'rgba(224,49,68,0.68)',
+            lineWidth: 1,
+        });
+        scoreBear.setData(jsonData.score_bear);
+
+        var scoreDiff = axis.addLineSeries({
+            color: 'rgb(1,5,2)',
+            lineWidth: 2,
+        });
+        scoreDiff.setData(jsonData.score_diff);
+
+        // Chart 3 - sample
+        // Chart 2 - Scores
+/*        var chart3TV = LightweightCharts.createChart(chart2El, {
+            width: width,
+            height: width/14,
+            crosshair: {
+                mode: 0
+            },
+            rightPriceScale: {
+                width: 60
+            },
+        });
+
+        var cahrt3Diff = chart3TV.addLineSeries({
+            color: 'rgb(103,100,100)',
+            lineWidth: 1,
+        });
+        cahrt3Diff.setData(jsonData.score_diff);*/
+
+        // Pair charts events
+        pariTVCharts(chart,axis, chart1El,chart2El);
+        // pariTVCharts(chart,chart3TV, chart1El,chart3El);
+    }
+
+    // code: https://jsfiddle.net/h0wXD/g75Lmady/
+    function pariTVCharts(chart, axis, chartEl, axisEl){
+        let isCrossHairMoving = false;
+        chart.subscribeCrosshairMove(param => {
+            if (!param.point) return;
+            if (!param.time) return;
+            if (isCrossHairMoving) return;
+
+            isCrossHairMoving = true;
+            axis.moveCrosshair(param.point);
+            isCrossHairMoving = false;
+        });
+
+        axis.subscribeCrosshairMove(param => {
+            if (!param.point) return;
+            if (!param.time) return;
+            if (isCrossHairMoving) return;
+
+            isCrossHairMoving = true;
+            chart.moveCrosshair(param.point);
+            isCrossHairMoving = false;
+        });
+
+        var isChartActive = false;
+        var isAxisActive = false;
+        chartEl.addEventListener("mousemove", () => {
+            if (isChartActive) return;
+            isChartActive = true;
+            isAxisActive = false;
+            chart.applyOptions({
+                crosshair: {
+                    horzLine: {
+                        visible: true,
+                        labelVisible: true
+                    }
+                }
+            });
+            axis.applyOptions({
+                crosshair: {
+                    horzLine: {
+                        visible: false,
+                        labelVisible: false
+                    }
+                }
+            });
+        });
+
+        axisEl.addEventListener("mousemove", () => {
+            if (isAxisActive) return;
+            isAxisActive = true;
+            isChartActive = false;
+            axis.applyOptions({
+                crosshair: {
+                    horzLine: {
+                        visible: true,
+                        labelVisible: true
+                    }
+                }
+            });
+            chart.applyOptions({
+                crosshair: {
+                    horzLine: {
+                        visible: false,
+                        labelVisible: false
+                    }
+                }
+            });
+        });
+
+        chart.timeScale().subscribeVisibleLogicalRangeChange(range => {
+            axis.timeScale().setVisibleLogicalRange(range)
+        })
+        axis.timeScale().subscribeVisibleLogicalRangeChange(range => {
+            chart.timeScale().setVisibleLogicalRange(range)
+        })
+
     }
 
 </script>

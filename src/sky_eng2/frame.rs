@@ -85,6 +85,7 @@ pub type FrameCsv = (
     // For big
     Bar,
     MATrendOut,
+    MACDOutput,
     // SFrame_Dep,
     // MATrendOut,
 );
@@ -107,6 +108,7 @@ impl SFrame {
             // big time frame
             self.bar.big.clone(),
             bta.trend.clone(),
+            bta.macd.clone(),
         )
     }
 

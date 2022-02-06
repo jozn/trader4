@@ -12,6 +12,7 @@ pub struct MovingAverageConvergenceDivergence {
     signal_ma: EMA,
     cross: SimpleCross,
     vel: Vel,
+    last: Option<MACDOutput>,
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -24,6 +25,7 @@ pub struct MACDOutput {
     pub macd_above: bool, // true when macd crossed above the signal line - bullish
     pub macd_under: bool, // true when macd crossed under the signal line - bearish
     pub dir: f64,
+    pub color: f64, // -2: red and decresing , -1: red but increasing(+) , +1: blue but decresing, 2: blue and increains
 }
 
 impl MovingAverageConvergenceDivergence {
@@ -37,6 +39,7 @@ impl MovingAverageConvergenceDivergence {
                 signal_ma: EMA::new(signal_period)?,
                 cross: Default::default(),
                 vel: Vel::new(signal_period)?,
+                last: None,
             })
         }
     }
@@ -52,8 +55,28 @@ impl MovingAverageConvergenceDivergence {
         let cr = self.cross.next_v2(macd, signal);
         let vel = self.vel.next(macd);
         let dir = if vel.avg_vel_pip > 0. { 1. } else { -1. };
+        let color = match &self.last {
+            None => 0.,
+            Some(lo) => {
+                if histogram > 0. {
+                    if histogram > lo.histogram {
+                        2.
+                    } else {
+                        1.
+                    }
+                } else if histogram < 0. {
+                    if histogram < lo.histogram {
+                        -2.
+                    } else {
+                        -1.
+                    }
+                } else {
+                    0.
+                }
+            }
+        };
 
-        MACDOutput {
+        let out = MACDOutput {
             macd,
             macd_pop: macd * 10_000.,
             signal: signal,
@@ -61,7 +84,12 @@ impl MovingAverageConvergenceDivergence {
             macd_above: cr.crossed_above,
             macd_under: cr.crossed_under,
             dir,
-        }
+            color,
+        };
+
+        self.last = Some(out.clone());
+
+        out
     }
 }
 
