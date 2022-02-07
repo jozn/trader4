@@ -16,7 +16,7 @@ pub struct SkyEng {
 
 impl SkyEng {
     pub fn new() -> Self {
-        let primary_ticks = 15;
+        let primary_ticks = 200;
         let cfg = BarConfig {
             primary_ticks,
             big_ticks: primary_ticks * 3,
@@ -30,13 +30,14 @@ impl SkyEng {
         }
     }
 
-    pub fn add_tick(&mut self, tick: &BTickData) {
+    pub fn add_tick(&mut self, tick: &BTickData) -> Option<SFrame> {
         let ph = self.bars.add_tick_mut(tick);
         match ph {
-            None => {}
+            None => None,
             Some(r) => {
                 let mut frame = new_frame(&r);
-                self.frames.push(frame);
+                self.frames.push(frame.clone());
+                Some(frame)
             }
         }
     }

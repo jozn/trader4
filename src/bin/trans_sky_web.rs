@@ -11,11 +11,12 @@ use trader3::configs::assets::Pair;
 use trader3::sky_eng2::*;
 use trader3::ta::{DCRes, VelRes};
 
-const OUT_FOLDER: &'static str = "/mnt/t/trader/data_sky_web_small2/";
+const OUT_FOLDER: &'static str = "/mnt/t/trader/data_sky_web/";
 
 pub fn main() {
     let pairs = trader3::configs::assets::get_all_symbols();
     let pairs = vec![trader3::configs::assets::Pair::USDCHF];
+    let pairs = vec![trader3::configs::assets::Pair::EURUSD];
 
     for pair in pairs {
         if pair.is_forex() {
@@ -239,7 +240,6 @@ pub struct JsonOut {
 
     pub dmmd_1: Vec<RowJson>,
     pub dmmd_2: Vec<RowJson>,
-
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]

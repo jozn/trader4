@@ -11,8 +11,8 @@ use crate::offline2::*;
 use super::*;
 
 pub fn run1() {
-    run_pair(&Pair::EURUSD);
-    // run_pair(&Pair::USDCHF);
+    // run_pair(&Pair::EURUSD);
+    run_pair(&Pair::USDCHF);
     // run_pair(&Pair::NZDUSD);
 }
 
@@ -58,7 +58,7 @@ pub fn run_pair(pair: &Pair) {
         },
     };
 
-    run_cfg.run_brain6();
+    run_cfg.run_brain5();
 }
 
 pub fn run_optimized() {
@@ -70,14 +70,13 @@ pub fn run_optimized() {
 
     let mut sub_folder_time = get_time_sec();
     let pair = Pair::USDCHF;
-    let pair = Pair::EURUSD;
     for i in 25..=53 {
         // let tsv = format!("{:?}/{}.tsv", Pair::EURUSD, i);
         let tsv = format!("{:?}/{}.tsv", &pair, i);
         let path = format!("/mnt/t/trader/data/forex/{}", tsv);
         if std::path::Path::new(&path).exists() {
             let pair_cfg = (
-                pair.clone(),
+                Pair::EURUSD,
                 CandleConfig {
                     small_tick: 30,
                     medium_tick: 10,
@@ -101,7 +100,7 @@ pub fn run_optimized() {
                     report_sub_folder: format!("{}", sub_folder_time),
                 },
             };
-            let x = run_cfg.run_brain6();
+            let x = run_cfg.run_brain5();
 
             // collect balance
             bal.push(x.free_usd);

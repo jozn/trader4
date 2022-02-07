@@ -12,7 +12,7 @@ use super::*;
 
 pub fn run1() {
     // run_pair(&Pair::EURUSD);
-    run_pair(&Pair::EURCHF);
+    run_pair(&Pair::USDCHF);
 }
 
 pub fn run12() {
@@ -70,7 +70,7 @@ pub fn run_pair(pair: &Pair) {
         },
     };
 
-    run_cfg.run_brain4();
+    run_cfg.run_brain6();
 }
 
 pub fn run_optimized() {
@@ -111,7 +111,7 @@ pub fn run_optimized() {
                     report_sub_folder: format!("{}", sub_folder_time),
                 },
             };
-            let x = run_cfg.run_brain4();
+            let x = run_cfg.run_brain6();
 
             // collect balance
             bal.push(x.free_usd);

@@ -65,7 +65,6 @@
             rightPriceScale: {
                 borderColor: 'rgba(197, 203, 206, 1)',
             },
-
             timeScale: {
                 borderColor: 'rgba(197, 203, 206, 1)',
                 secondsVisible: true,
@@ -74,11 +73,13 @@
                     // console.log(time, tickMarkType, locale);
                     // const year = LightweightCharts.isBusinessDay(time) ? time.year : new Date(time * 1000).getUTCFullYear();
                     // return String(year);
+                    // var tz = new Date(); // a work around timezone offset
+                    // time  = time + tz.getTimezoneOffset() * 60; // -12060 sec
                     var d = new Date(time * 1000);
-                    let day = d.getDate();
-                    let hour = d.getHours();
-                    let min = d.getMinutes();
-                    let sec = d.getSeconds();
+                    let day = d.getUTCDate();
+                    let hour = d.getUTCHours();
+                    let min = d.getUTCMinutes();
+                    let sec = d.getUTCSeconds();
                     var str =  "" + day  + "  " + hour+":"+min+":"+sec ;
                     return str
                 },

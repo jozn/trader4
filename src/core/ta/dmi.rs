@@ -24,7 +24,7 @@ pub struct DMIOutput {
     pub plus: f64,
     pub minus: f64,
     pub adx: f64,
-    pub dmx: f64, // My me: Dim Move Index -- see below for formula
+    pub dmx: f64,         // My me: Dim Move Index -- see below for formula
     pub plus_above: bool, // true when plus crossed above the minus line - bullish
     pub plus_under: bool, // true when plus crossed under the minus line - bearish
 }
@@ -74,7 +74,7 @@ impl DMI {
         let dx = 100. * ((plus - minus).abs() / sum);
         let adx = self.adx_ma.next(dx);
 
-        let dmx = 100. * (plus - minus)/ sum;
+        let dmx = 100. * (plus - minus) / sum;
         // let dmx =(plus - minus)/ sum;
 
         let cr = self.cross.next_v2(plus, minus);
