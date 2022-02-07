@@ -1,7 +1,5 @@
 use super::*;
 use crate::base::CrossRes;
-use crate::candle;
-use crate::candle::{CandleConfig, CandleSeriesTA, Tick, TimeSerVec, TA1};
 use crate::configs::assets;
 use crate::configs::assets::*;
 use crate::gate_api::*;
@@ -10,7 +8,7 @@ use std::borrow::BorrowMut;
 use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
 
-impl Brain6 {
+impl Brain {
     pub fn update_all_tailing_pos(&mut self) {}
 
     pub fn update_all_tailing_pos2(&mut self) {

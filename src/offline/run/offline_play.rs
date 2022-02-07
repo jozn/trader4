@@ -1,12 +1,12 @@
 use std::sync::Arc;
 
-use crate::candle::CandleConfig;
 use crate::collector;
 use crate::configs::assets;
 use crate::configs::assets::Pair;
 use crate::gate_api::GateWay;
 use crate::helper::get_time_sec;
-use crate::offline2::*;
+use crate::offline::*;
+use crate::sky_eng::BarConfig;
 
 use super::*;
 
@@ -27,15 +27,13 @@ pub fn run2() {
 }
 
 pub fn run_pair(pair: &Pair) {
+    let primary_ticks = 150;
     let pair_cfg = (
         // Pair::EURUSD,
         pair.clone(),
-        CandleConfig {
-            small_tick: 30,
-            medium_tick: 10,
-            big_tick: 180,
-            vel1_period: 20,
-            vel2_period: 50,
+        BarConfig {
+            primary_ticks,
+            big_ticks: primary_ticks * 3,
         },
     );
     let week_id = 49;
@@ -78,12 +76,9 @@ pub fn run_optimized() {
         if std::path::Path::new(&path).exists() {
             let pair_cfg = (
                 pair.clone(),
-                CandleConfig {
-                    small_tick: 30,
-                    medium_tick: 10,
-                    big_tick: 120,
-                    vel1_period: 20,
-                    vel2_period: 200,
+                BarConfig {
+                    primary_ticks: 150,
+                    big_ticks: 450,
                 },
             );
             let ticks = collector::loader::load_week(&pair, i);

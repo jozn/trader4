@@ -1,14 +1,13 @@
 use super::*;
 use super::*;
 use crate::base::SimpleCrossEvent;
-use crate::candle::{CandleConfig, CandleSeriesTA, Tick, TimeSerVec};
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::*;
 use crate::gate_api::*;
-use crate::{candle, helper};
-// use crate::sky_eng2::SFrame;
+use crate::helper;
+// use crate::sky_eng::SFrame;
 
-impl Brain6 {
+impl Brain {
     // todo fix panic
     pub fn read_pair_meta(&self, si: i64) -> &PairMemory {
         self.db.get(&si).unwrap()

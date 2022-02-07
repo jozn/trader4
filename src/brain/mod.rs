@@ -1,9 +1,9 @@
-pub mod brain6;
+pub mod brain;
 pub mod handler_ne;
 pub mod pair_mem;
 pub mod tailing;
 
-pub use brain6::*;
+pub use brain::*;
 // pub use dc_strategy::*;
 // pub use handler::*;
 pub use pair_mem::*;

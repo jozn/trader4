@@ -1,21 +1,18 @@
+use crate::base::CrossRes;
+use crate::configs::assets;
+use crate::configs::assets::*;
+use crate::gate_api::*;
+use crate::sky_eng::BarConfig;
 use std::borrow::BorrowMut;
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::sync::Arc;
 
-use crate::base::CrossRes;
-use crate::candle;
-use crate::candle::{CandleConfig, CandleSeriesTA, Tick, TimeSerVec, TA1};
-use crate::configs::assets;
-use crate::configs::assets::*;
-// use crate::dc_intel::{DCParent, FrameMem};
-use crate::gate_api::*;
-
 use super::*;
 
-pub type PairCandleCfg = (Pair, CandleConfig);
+pub type PairBarCfg = (Pair, BarConfig);
 
 #[derive(Debug)]
-pub struct Brain6 {
+pub struct Brain {
     pub con: Box<Arc<dyn GateWay>>,
     pub acted: HashSet<String>,
     pub db: BTreeMap<i64, PairMemory>,
@@ -23,8 +20,8 @@ pub struct Brain6 {
     pub last_trade_time: u64, // used in Acted filter
 }
 
-impl Brain6 {
-    pub fn new(backend: Arc<impl GateWay + 'static>, pair_conf: (Pair, CandleConfig)) -> Self {
+impl Brain {
+    pub fn new(backend: Arc<impl GateWay + 'static>, pair_conf: PairBarCfg) -> Self {
         let mut brain = Self {
             con: Box::new(backend),
             last_trade_time: 0,

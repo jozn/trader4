@@ -1,4 +1,3 @@
-use crate::candle::Tick;
 use crate::collector::row_data::{BTickData, TickBinFast};
 use crate::configs::assets::Pair;
 use csv::{Error, StringRecord};
@@ -53,12 +52,6 @@ pub fn load_rows_dep(file_path: &str) -> Vec<BTickData> {
     arr
 }
 
-pub fn load_ticks(file_path: &str) -> Vec<Tick> {
-    let arr = load_rows_dep(file_path);
-    let res = arr.iter().map(|v| v.to_tick()).collect();
-    res
-}
-
 pub fn load_week(pair: &Pair, week_id: u16) -> Vec<BTickData> {
     load_all_pair_dep(pair, week_id..(week_id + 1))
 }
@@ -97,12 +90,6 @@ pub fn load_days_pair(pair: &Pair, week_id: u16, rng: Range<u16>) -> Vec<BTickDa
 }
 
 // Fast fns
-pub fn load_ticks_fast(file_path: &str) -> Vec<Tick> {
-    let arr = load_rows_fast(file_path);
-    let res = arr.iter().map(|v| v.to_tick()).collect();
-    res
-}
-
 pub fn load_rows_fast(file_path: &str) -> Vec<BTickData> {
     let file = std::fs::read(file_path).unwrap();
 

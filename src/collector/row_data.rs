@@ -1,6 +1,3 @@
-// use super::loader::*;
-
-use crate::candle::Tick;
 use crate::configs::assets::Pair;
 
 #[derive(Debug)]
@@ -29,20 +26,6 @@ impl BTickData {
 
     pub fn get_spread_pip(&self, pair: &Pair) -> f64 {
         (self.ask_price - self.bid_price) * pair.get_pip_multi()
-    }
-
-    pub fn to_tick(&self) -> Tick {
-        let multi = 100_000.;
-        Tick {
-            time_s: self.timestamp_sec as u64,
-            // price_raw: self.bid_price * multi,
-            price_raw: self.bid_price,
-            multi: 1.,
-            qty: 0.0,
-            timestamp: self.timestamp,
-            bid_price: self.bid_price,
-            ask_price: self.ask_price,
-        }
     }
 
     pub fn to_fast_bin(&self) -> TickBinFast {

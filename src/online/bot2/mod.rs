@@ -1,6 +1,5 @@
 use super::*;
 // use crate::brain1::Brain1;
-use crate::candle::Tick;
 use crate::helper;
 // use crate::online::bot::bot::Bot;
 

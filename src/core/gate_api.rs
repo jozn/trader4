@@ -20,7 +20,7 @@ pub struct NewPos {
     // Informative
     pub at_price: f64,
     pub time_sec: u64, // Brain time
-    pub frame: crate::sky_eng2::SFrame,
+    pub frame: crate::sky_eng::SFrame,
 }
 
 // Send from backend, cTrader to Brain

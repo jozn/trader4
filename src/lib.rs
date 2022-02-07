@@ -9,8 +9,8 @@ pub mod configs;
 pub mod core;
 pub mod online;
 // pub mod optimizer; // commented for migraion
-pub mod brain6;
-pub mod offline2;
-pub mod sky_eng2;
+pub mod brain;
+pub mod offline;
+pub mod sky_eng;
 
 pub use crate::core::*;

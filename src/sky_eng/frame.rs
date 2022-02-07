@@ -1,6 +1,5 @@
 use super::*;
 use crate::base::*;
-use crate::candle::{Kline, KlineTA, Tick, TimeSerVec};
 use crate::collector::row_data::BTickData;
 use crate::helper;
 use crate::ta::*;

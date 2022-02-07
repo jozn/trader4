@@ -1,5 +1,4 @@
 use super::*;
-use crate::candle::{Tick, TA1};
 use crate::collector::row_data::BTickData;
 use crate::configs::assets;
 use crate::configs::assets::Pair;

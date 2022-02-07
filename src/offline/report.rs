@@ -2,7 +2,6 @@ use rand::Rng;
 // use super::portfolio::*;
 // use super::offline_helper::*;
 use super::*;
-use crate::candle::Tick;
 use crate::core::helper::get_time_sec;
 use crate::core::helper::*;
 use crate::gate_api::*;

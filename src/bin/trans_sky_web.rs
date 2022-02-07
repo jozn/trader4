@@ -4,7 +4,7 @@ use trader4::base::OHLCV;
 use trader4::collector;
 use trader4::collector::row_data::BTickData;
 use trader4::configs::assets::Pair;
-use trader4::sky_eng2::*;
+use trader4::sky_eng::*;
 use trader4::ta::{DCRes, VelRes};
 
 const OUT_FOLDER: &'static str = "/mnt/t/trader/data_sky_web/";
@@ -23,7 +23,7 @@ pub fn main() {
             if ticks.len() == 0 {
                 continue;
             }
-            let mut sky_eng = trader4::sky_eng2::SkyEng::new();
+            let mut sky_eng = trader4::sky_eng::SkyEng::new();
 
             for t in ticks.clone() {
                 sky_eng.add_tick(&t);
