@@ -8,7 +8,7 @@ use crate::candle::{CandleConfig, CandleSeriesTA, Tick, TimeSerVec, TA1};
 use crate::configs::assets;
 use crate::configs::assets::*;
 // use crate::dc_intel::{DCParent, FrameMem};
-use crate::gate_api::{EventPosition, GateWay, NewPosDep, PosResDep, UpdatePos};
+use crate::gate_api::*;
 
 use super::*;
 

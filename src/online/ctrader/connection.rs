@@ -284,7 +284,7 @@ impl CTrader {
         self.send(req_pb, api_id)
     }
 
-    pub fn open_postion_req_new(&self, np: &NewPosDep) {
+    /*pub fn open_postion_req_new(&self, np: &NewPos) {
         let api_id = pb::PayloadType::OaNewOrderReq as u32;
 
         let dir = if np.is_short {
@@ -293,14 +293,14 @@ impl CTrader {
             pb::TradeSide::Buy
         };
 
-        let take_profit = if np.take_profit_price > 0. {
-            Some(np.take_profit_price)
+        let take_profit = if np.exit_high_price > 0. {
+            Some(np.exit_high_price) // todo
         } else {
             None
         };
 
-        let stop_loose = if np.stop_loose_price > 0. {
-            Some(np.stop_loose_price)
+        let stop_loose = if np.exit_low_price > 0. {
+            Some(np.exit_low_price)
         } else {
             None
         };
@@ -308,7 +308,7 @@ impl CTrader {
         let req_pb = pb::NewOrderReq {
             payload_type: None,
             ctid_trader_account_id: self.cfg.ctid,
-            symbol_id: np.symbol_id_dep,
+            symbol_id: np.pair.to_symbol_id(),
             order_type: pb::OrderType::Market as i32,
             trade_side: dir as i32,
             volume: np.size_base * 100, // 1000$
@@ -334,7 +334,7 @@ impl CTrader {
         };
 
         self.send(req_pb, api_id)
-    }
+    }*/
 
     pub fn open_postion_req(&self, symbol_id: i64) {
         let api_id = pb::PayloadType::OaNewOrderReq as u32;

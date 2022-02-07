@@ -9,7 +9,7 @@ use crate::collector::row_data::BTickData;
 use crate::configs::assets;
 use crate::configs::assets::Pair;
 use crate::core::gate_api::*;
-use crate::gate_api::{GateWay, PosResDep};
+use crate::gate_api::*;
 
 use super::*;
 

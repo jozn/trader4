@@ -1,13 +1,13 @@
 use std::thread;
 use std::time::Duration;
 use threadpool::ThreadPool;
-use trader3;
-use trader3::collector::downloader::Downloader;
-use trader3::configs::assets;
-use trader3::configs::assets::Pair;
-use trader3::core::helper;
-use trader3::online;
-use trader3::online::ctrader::{CTrader, Config};
+use trader4;
+use trader4::collector::downloader::Downloader;
+use trader4::configs::assets;
+use trader4::configs::assets::Pair;
+use trader4::core::helper;
+use trader4::online;
+use trader4::online::ctrader::{CTrader, Config};
 
 fn main() {
     run();

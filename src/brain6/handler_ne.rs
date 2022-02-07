@@ -5,7 +5,6 @@ use crate::candle::{CandleConfig, CandleSeriesTA, Tick, TimeSerVec};
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::*;
 use crate::gate_api::*;
-use crate::ne4::NEFrame;
 use crate::{candle, helper};
 // use crate::sky_eng2::SFrame;
 
@@ -55,8 +54,7 @@ impl Brain6 {
                         exit_low_price: pair.cal_price(tick.bid_price, -sp / 2.),
                         at_price: tick.ask_price,
                         time_sec: tick.timestamp_sec as u64,
-                        frame: NEFrame::default(),
-                        // frame: frame.clone(),
+                        frame: frame.clone(),
                     };
 
                     if self.already_acted(symbol_id, kline_id) {

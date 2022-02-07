@@ -1,5 +1,5 @@
-use trader3;
+use trader4;
 
 fn main() {
-    trader3::online::bot2::run_bot();
+    trader4::online::bot2::run_bot();
 }

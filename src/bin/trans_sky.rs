@@ -1,30 +1,27 @@
 use chrono::prelude::*;
-use trader3;
-// use trader3::candle::{
-//     CandleConfig, CandleSeriesTA, Kline, KlineHolderFrameTA, KlineTA, TimeSerVec, TA2,
-// };
-use trader3::collector;
-use trader3::collector::row_data::BTickData;
-use trader3::configs::assets::Pair;
-use trader3::sky_eng2::*;
-use trader3::ta::{DCRes, VelRes};
+use trader4;
+use trader4::collector;
+use trader4::collector::row_data::BTickData;
+use trader4::configs::assets::Pair;
+use trader4::sky_eng2::*;
+use trader4::ta::{DCRes, VelRes};
 
 const OUT_FOLDER: &'static str = "/mnt/t/trader/data_sky2/";
 
 pub fn main() {
-    let pairs = trader3::configs::assets::get_all_symbols();
-    let pairs = vec![trader3::configs::assets::Pair::USDCHF];
+    let pairs = trader4::configs::assets::get_all_symbols();
+    let pairs = vec![trader4::configs::assets::Pair::USDCHF];
 
     for pair in pairs {
         if pair.is_forex() {
             // continue;
         }
         for week_id in 25..=60 {
-            let ticks = trader3::collector::loader::load_week(&pair, week_id);
+            let ticks = trader4::collector::loader::load_week(&pair, week_id);
             if ticks.len() == 0 {
                 continue;
             }
-            let mut sky_eng = trader3::sky_eng2::SkyEng::new();
+            let mut sky_eng = trader4::sky_eng2::SkyEng::new();
 
             for t in ticks.clone() {
                 sky_eng.add_tick(&t);
@@ -32,7 +29,7 @@ pub fn main() {
 
             let frames = to_frame_csv(sky_eng.frames.clone());
 
-            let s = trader3::core::helper::to_csv_out(&frames, false);
+            let s = trader4::core::helper::to_csv_out(&frames, false);
 
             // Write to file
             let dir = format!("{}{}", OUT_FOLDER, pair.folder_path());
@@ -70,7 +67,7 @@ pub fn main() {
 pub fn write_single_day_frames(frames_arr: Vec<SFrame>, pair: &Pair, week_id: u16, day_num: u64) {
     let frames = to_frame_csv(frames_arr);
 
-    let s = trader3::core::helper::to_csv_out(&frames, false);
+    let s = trader4::core::helper::to_csv_out(&frames, false);
 
     // Write to file
     let dir = format!("{}{}", OUT_FOLDER, pair.folder_path());

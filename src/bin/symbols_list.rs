@@ -1,9 +1,9 @@
 use std::collections::{HashMap, HashSet};
-use trader3;
+use trader4;
 
 // This simple scrip automate extracting names of symbols to be used in Pair enum.
 fn main() {
-    let symbols = trader3::configs::gen::pepperstone::get_symbols_list();
+    let symbols = trader4::configs::gen::pepperstone::get_symbols_list();
     // let mut mp = HashMap::new();
     let mut cats = HashSet::new();
     let mut class_list = HashSet::new();

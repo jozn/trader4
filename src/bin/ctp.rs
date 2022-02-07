@@ -1,5 +1,5 @@
-use trader3;
+use trader4;
 
 fn main() {
-    trader3::online::ctrader::play::run_play_api();
+    trader4::online::ctrader::play::run_play_api();
 }

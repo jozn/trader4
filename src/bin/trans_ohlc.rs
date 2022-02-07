@@ -1,13 +1,13 @@
 use chrono::prelude::*;
-use trader3;
-use trader3::candle::{CandleConfig, CandleSeriesTA, Kline, KlineHolderFrameTA, TimeSerVec};
-use trader3::configs::assets::Pair;
-use trader3::offline::num5_dep;
-use trader3::{collector, helper};
+use trader4;
+use trader4::candle::{CandleConfig, CandleSeriesTA, Kline, KlineHolderFrameTA, TimeSerVec};
+use trader4::configs::assets::Pair;
+use trader4::offline::num5_dep;
+use trader4::{collector, helper};
 
 pub fn main() {
-    let pairs = trader3::configs::assets::get_all_symbols();
-    // let pairs = trader3::configs::assets::get_all_symbols();
+    let pairs = trader4::configs::assets::get_all_symbols();
+    // let pairs = trader4::configs::assets::get_all_symbols();
 
     for pair in pairs {
         for i in 1..=60 {
@@ -27,7 +27,7 @@ pub fn main() {
                 let mut candle = CandleSeriesTA::new(&cfg);
                 // println!("{}", &path);
 
-                let ticks = trader3::collector::loader::load_rows_fast(&path, &pair);
+                let ticks = trader4::collector::loader::load_rows_fast(&path, &pair);
                 assert!(ticks.len() > 0);
                 let mut arr = TimeSerVec::new();
 
@@ -53,8 +53,8 @@ fn write_output(khf: &KlineHolderFrameTA, pair: &Pair, week_id: i64, time_frame_
         vec_candles.push(kline_to_kline_out(&k.kline));
     }
 
-    let s = trader3::core::helper::to_csv_out(&vec_candles, true);
-    // let s  = trader3::offline::kline_ta_csv::to_csv_out(&vec_candles);
+    let s = trader4::core::helper::to_csv_out(&vec_candles, true);
+    // let s  = trader4::offline::kline_ta_csv::to_csv_out(&vec_candles);
 
     // Write to file
     let cat = pair.to_category();

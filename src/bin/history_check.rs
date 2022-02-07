@@ -1,10 +1,8 @@
-mod x_trans_dc;
-
 use std::path::Path;
-use trader3::collector;
+use trader4::collector;
 
 pub fn main() {
-    let pairs = trader3::configs::assets::get_all_symbols();
+    let pairs = trader4::configs::assets::get_all_symbols();
 
     for pair in pairs {
         for i in 1..=53 {
