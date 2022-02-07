@@ -21,7 +21,8 @@
 <div id="synced-charts">
     <div id="chart1"  style="margin-left: 5px;"></div>
     <div id="chart2"></div>
-    <div id="chart3" style="display:none;"></div>
+    <div id="chart3" style="display:block;"></div>
+    <div id="chart4" style="display:block;"></div>
 </div>
 
 <div id="json_data" style="display: none">{{JSON_DATA}}</div>
@@ -48,11 +49,12 @@
         var chart1El = document.getElementById("chart1");
         var chart2El = document.getElementById("chart2");
         var chart3El = document.getElementById("chart3");
+        var chart4El = document.getElementById("chart4");
         var width =  window.innerWidth * 0.98;
 
         var chart = LightweightCharts.createChart(chart1El, {
             width: width,
-            height: width / 3,
+            height: width / 4,
             layout: {
                 backgroundColor: '#ffffff',
                 textColor: 'rgba(33, 56, 77, 1)',
@@ -128,38 +130,7 @@
         barSeries.setMarkers(jsonData.markers);
 
         // Chart 2 - Scores
-        var axis = LightweightCharts.createChart(chart2El, {
-            width: width,
-            height: width/10,
-            crosshair: {
-                mode: 0
-            },
-            rightPriceScale: {
-                width: 60
-            },
-        });
-
-        var scoreBull = axis.addHistogramSeries({
-            color: 'rgba(34,140,74,0.69)',
-            lineWidth: 1,
-        });
-        scoreBull.setData(jsonData.score_bull);
-
-        var scoreBear = axis.addHistogramSeries({
-            color: 'rgba(224,49,68,0.68)',
-            lineWidth: 1,
-        });
-        scoreBear.setData(jsonData.score_bear);
-
-        var scoreDiff = axis.addLineSeries({
-            color: 'rgb(1,5,2)',
-            lineWidth: 2,
-        });
-        scoreDiff.setData(jsonData.score_diff);
-
-        // Chart 3 - sample
-        // Chart 2 - Scores
-/*        var chart3TV = LightweightCharts.createChart(chart2El, {
+        var chart2TV = LightweightCharts.createChart(chart2El, {
             width: width,
             height: width/14,
             crosshair: {
@@ -170,15 +141,78 @@
             },
         });
 
-        var cahrt3Diff = chart3TV.addLineSeries({
-            color: 'rgb(103,100,100)',
+        var scoreBull = chart2TV.addHistogramSeries({
+            color: 'rgba(34,140,74,0.69)',
             lineWidth: 1,
         });
-        cahrt3Diff.setData(jsonData.score_diff);*/
+        scoreBull.setData(jsonData.score_bull);
+
+        var scoreBear = chart2TV.addHistogramSeries({
+            color: 'rgba(224,49,68,0.68)',
+            lineWidth: 1,
+        });
+        scoreBear.setData(jsonData.score_bear);
+
+        var scoreDiff = chart2TV.addLineSeries({
+            color: 'rgb(1,5,2)',
+            lineWidth: 2,
+        });
+        scoreDiff.setData(jsonData.score_diff);
+
+        // Chart 3 - sample
+       var chart3TV = LightweightCharts.createChart(chart3El, {
+            width: width,
+            height: width/14,
+            crosshair: {
+                mode: 0
+            },
+            rightPriceScale: {
+                width: 60
+            },
+        });
+        var cahrt3Line1 = chart3TV.addLineSeries({
+            color: 'rgb(39,145,77)',
+            lineWidth: 1,
+        });
+        cahrt3Line1.setData(jsonData.sample_1);
+        var cahrt3Line2 = chart3TV.addLineSeries({
+            color: 'rgb(203,66,66)',
+            lineWidth: 1,
+        });
+        cahrt3Line2.setData(jsonData.sample_2);
+        var cahrt3Line3 = chart3TV.addLineSeries({
+            color: 'rgb(105,102,102)',
+            lineWidth: 2,
+            // priceScaleId: 'left',
+        });
+        cahrt3Line3.setData(jsonData.sample_3);
+
+        // Chart 4 - sample
+        var chart4TV = LightweightCharts.createChart(chart4El, {
+            width: width,
+            height: width/14,
+            crosshair: {
+                mode: 0
+            },
+            rightPriceScale: {
+                width: 60
+            },
+        });
+        var cahrt4Line1 = chart4TV.addLineSeries({
+            color: 'rgb(39,145,77)',
+            lineWidth: 1,
+        });
+        // cahrt4Line1.setData(jsonData.dmmd_1);
+        var cahrt4Line2 = chart4TV.addLineSeries({
+            color: 'rgb(39,97,145)',
+            lineWidth: 1,
+        });
+        cahrt4Line2.setData(jsonData.dmmd_2);
 
         // Pair charts events
-        pariTVCharts(chart,axis, chart1El,chart2El);
-        // pariTVCharts(chart,chart3TV, chart1El,chart3El);
+        pariTVCharts(chart,chart2TV, chart1El,chart2El);
+        pariTVCharts(chart,chart3TV, chart1El,chart3El);
+        pariTVCharts(chart,chart4TV, chart1El,chart4El);
     }
 
     // code: https://jsfiddle.net/h0wXD/g75Lmady/

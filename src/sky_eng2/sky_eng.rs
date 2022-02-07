@@ -16,7 +16,7 @@ pub struct SkyEng {
 
 impl SkyEng {
     pub fn new() -> Self {
-        let primary_ticks = 150;
+        let primary_ticks = 15;
         let cfg = BarConfig {
             primary_ticks,
             big_ticks: primary_ticks * 3,

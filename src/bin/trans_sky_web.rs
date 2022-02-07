@@ -11,7 +11,7 @@ use trader3::configs::assets::Pair;
 use trader3::sky_eng2::*;
 use trader3::ta::{DCRes, VelRes};
 
-const OUT_FOLDER: &'static str = "/mnt/t/trader/data_sky_web/";
+const OUT_FOLDER: &'static str = "/mnt/t/trader/data_sky_web_small2/";
 
 pub fn main() {
     let pairs = trader3::configs::assets::get_all_symbols();
@@ -107,6 +107,7 @@ fn to_json_out(frames: Vec<SFrame>) -> JsonOut {
         // Set high/low lines
         let bar = &fm.bar.primary;
         let ta = &bar.ta;
+        let pta = &fm.bar.primary.ta;
         let bta = &fm.bar.big.ta;
         let time = bar.open_time / 1000;
         out.high_line.push(RowJson {
@@ -164,6 +165,52 @@ fn to_json_out(frames: Vec<SFrame>) -> JsonOut {
             time,
             value: score.diff as f64,
         });
+
+        // Add sample
+        let dmi = &pta.dmi;
+        // let dmi = &bta.dmi;
+        out.sample_1.push(RowJson {
+            time,
+            value: dmi.plus as f64,
+        });
+        out.sample_2.push(RowJson {
+            time,
+            value: dmi.minus as f64,
+        });
+        out.sample_3.push(RowJson {
+            time,
+            value: dmi.dmx,
+            // value: dmi.adx,
+        });
+
+        // DMMD
+        let dmmd = &bta.dmmd;
+        // let dmmd = &pta.dmmd;
+        out.dmmd_1.push(RowJson {
+            time,
+            // value: dmmd.ma_fast,
+            value: dmmd.diff,
+        });
+        out.dmmd_2.push(RowJson {
+            time,
+            // value: dmmd.ma_slow,
+            value: dmmd.color,
+        });
+
+        // Sample 2 - DMMD
+        // let dmmd = &bta.dmmd;
+        // out.sample_1.push(RowJson {
+        //     time,
+        //     value: dmmd.ma_fast as f64,
+        // });
+        // out.sample_2.push(RowJson {
+        //     time,
+        //     value: dmmd.ma_slow as f64,
+        // });
+        // out.sample_3.push(RowJson {
+        //     time,
+        //     value: dmmd.histogram,
+        // });
     }
     out
 }
@@ -184,6 +231,15 @@ pub struct JsonOut {
     pub score_bull: Vec<RowJson>,
     pub score_bear: Vec<RowJson>,
     pub score_diff: Vec<RowJson>,
+
+    // samples
+    pub sample_1: Vec<RowJson>,
+    pub sample_2: Vec<RowJson>,
+    pub sample_3: Vec<RowJson>,
+
+    pub dmmd_1: Vec<RowJson>,
+    pub dmmd_2: Vec<RowJson>,
+
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]

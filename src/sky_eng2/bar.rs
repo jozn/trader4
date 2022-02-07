@@ -174,6 +174,7 @@ pub struct TAMethods {
     pub dc: ta::DC,
     pub macd: ta::MACD,
     pub dmi: ta::DMI,
+    pub dmmd: ta::DMMD,
     pub stoch: ta::Stoch,
     pub trend: ta::MATrend,
 }
@@ -185,6 +186,7 @@ pub struct BarTA {
     pub dc: ta::DCRes,
     pub macd: ta::MACDOutput,
     pub dmi: ta::DMIOutput,
+    pub dmmd: ta::DMMDOutput,
     pub stoch: ta::StochRes,
     pub trend: ta::MATrendOut,
 }
@@ -197,6 +199,7 @@ impl TAMethods {
             dc: ta::DC::new(12).unwrap(),
             macd: ta::MACD::new(12, 26, 9).unwrap(),
             dmi: ta::DMI::new(14, 14).unwrap(),
+            dmmd: ta::DMMD::new(14, 14).unwrap(),
             stoch: ta::Stoch::new(14, 3, 5).unwrap(),
             trend: ta::MATrend::new(10).unwrap(),
         }
@@ -293,6 +296,7 @@ pub fn cal_indicators(tam: &mut TAMethods, bar: &Bar) -> BarTA {
         dc: tam.dc.next(&bar),
         macd: tam.macd.next(bar.close),
         dmi: tam.dmi.next(&bar),
+        dmmd: tam.dmmd.next(&bar),
         stoch: tam.stoch.next(&bar),
         trend: tam.trend.next(&bar),
     }
