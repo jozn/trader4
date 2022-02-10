@@ -285,17 +285,6 @@ impl BarSeries {
             None
         }
     }
-
-    pub fn get_primary_bars(&self, start: i64, end: i64) -> Vec<Bar> {
-        let mut out = vec![];
-        for ph in &self.bars_primary {
-            let b = &ph.primary;
-            if b.open_time >= start && b.open_time <= end {
-                out.push(b.clone())
-            }
-        }
-        out
-    }
 }
 
 pub fn cal_indicators(tam: &mut TAMethods, bar: &Bar) -> BarTA {

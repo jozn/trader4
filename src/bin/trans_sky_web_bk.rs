@@ -101,9 +101,6 @@ fn to_json_out(frames: Vec<SFrame>) -> JsonOut {
     for fm in frames.iter() {
         out.ohlc.push(JsonRowOHLC::new(&fm.bar.primary));
 
-        // Major OHLC
-        out.major_ohlc.push(JsonRowOHLC::new(&fm.bar.primary));
-
         // Set high/low lines
         let bar = &fm.bar.primary;
         let ta = &bar.ta;
@@ -244,7 +241,7 @@ pub struct JsonOut {
     pub major_ohlc: Vec<JsonRowOHLC>,
 
     // Primary timeline
-    pub medium_ohlc: Vec<JsonRowOHLC>,
+    pub prime_ohlc: Vec<JsonRowOHLC>,
 
     // Small timeline
     pub small_ohlc: Vec<JsonRowOHLC>,
