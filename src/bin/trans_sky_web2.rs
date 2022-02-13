@@ -35,7 +35,7 @@ pub fn main() {
             week_data.push(WeekData {
                 week_id,
                 start: ticks.first().unwrap().timestamp,
-                end: ticks.last().unwrap().timestamp
+                end: ticks.last().unwrap().timestamp,
             });
             for t in ticks {
                 all_ticks.push(t);
@@ -50,28 +50,29 @@ pub fn main() {
         println!("Sky Eng Completed.");
 
         for wd in week_data {
-            let jo = sky_eng.to_json(wd.start,wd.end);
-            println!("week m: {}", jo.major_ohlc.len());
-            println!("week s: {}", jo.small_ohlc.len());
-            write_json(&jo,&pair,wd.week_id,0);
+            let jo = sky_eng.to_json(wd.start, wd.end);
+            // println!("week m: {}", jo.major_ohlc.len());
+            // println!("week s: {}", jo.small_ohlc.len());
+            write_json(&jo, &pair, wd.week_id, 0);
 
             let mut start = wd.start;
-            let mut end = start +86_400_000 ;
+            let mut end = start + 86_400_000;
             let mut day_num = 1;
             while end < wd.end {
-                println!("day m: {}", jo.major_ohlc.len());
-                println!("day s: {}", jo.small_ohlc.len());
-                let jo = sky_eng.to_json(start,end);
-                write_json(&jo,&pair,wd.week_id,day_num);
+                // println!("day m: {}", jo.major_ohlc.len());
+                // println!("day s: {}", jo.small_ohlc.len());
+                let jo = sky_eng.to_json(start, end);
+                write_json(&jo, &pair, wd.week_id, day_num);
                 start = end;
                 end = start + 86_400_000;
-                day_num +=1;
+                day_num += 1;
                 break; // todo remove
             }
         }
     }
 }
 
+// pub fn write_json(jo: &SkyJsonOutDep, pair: &Pair, week_id: u16, day_num: u64) {
 pub fn write_json(jo: &SkyJsonOut, pair: &Pair, week_id: u16, day_num: u64) {
     let title = if day_num == 0 {
         format!("{:?}/{}", &pair, week_id)

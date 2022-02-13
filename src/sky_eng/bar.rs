@@ -169,6 +169,7 @@ pub struct BarSeries {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TAMethods {
     pub atr: ta::ATR,
+    pub ma1: ta::EMA,
     pub rpi: ta::RPI,
     pub rpc: ta::RPC,
     pub dc: ta::DC,
@@ -181,6 +182,7 @@ pub struct TAMethods {
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct BarTA {
     pub atr: f64,
+    pub ma1: f64,
     pub rpi: ta::RPIRes,
     pub rpc: ta::RPCRes,
     pub dc: ta::DCRes,
@@ -194,6 +196,7 @@ impl TAMethods {
     pub fn new(cfg: &BarConfig) -> Self {
         Self {
             atr: ta::ATR::new(14).unwrap(),
+            ma1: ta::EMA::new(40).unwrap(),
             rpi: ta::RPI::new(10, 5, 0.5).unwrap(),
             rpc: ta::RPC::new(10, 0.5).unwrap(),
             dc: ta::DC::new(12).unwrap(),
@@ -208,7 +211,7 @@ impl TAMethods {
 
 impl BarSeries {
     pub fn new(cfg: &BarConfig) -> BarSeries {
-        assert!(cfg.big_ticks > cfg.primary_ticks);
+        assert!(cfg.big_ticks >= cfg.primary_ticks);
         assert!(cfg.big_ticks % cfg.primary_ticks == 0);
 
         BarSeries {
@@ -296,12 +299,24 @@ impl BarSeries {
         }
         out
     }
+
+    pub fn get_bars_ph(&self, start: i64, end: i64) -> Vec<PrimaryHolder> {
+        let mut out = vec![];
+        for ph in &self.bars_primary {
+            let b = &ph.primary;
+            if b.open_time >= start && b.open_time <= end {
+                out.push(ph.clone())
+            }
+        }
+        out
+    }
 }
 
 pub fn cal_indicators(tam: &mut TAMethods, bar: &Bar) -> BarTA {
-    let _price = bar.hlc3();
+    let price = bar.hlc3();
     BarTA {
         atr: tam.atr.next(&bar),
+        ma1: tam.ma1.next(price),
         rpi: tam.rpi.next(&bar),
         rpc: tam.rpc.next(&bar),
         dc: tam.dc.next(&bar),

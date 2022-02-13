@@ -1,7 +1,33 @@
 use super::*;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
+pub struct TimeFrameJson {
+    pub ohlc: Vec<JsonRowOHLC>,
+
+    pub high_line: Vec<RowJson>,
+    pub low_line: Vec<RowJson>,
+    pub markers: Vec<MarkerJson>,
+
+    pub ma1: Vec<RowJson>,
+
+    pub bull_line: Vec<RowJson>,
+    pub bear_line: Vec<RowJson>,
+
+    // Dmi
+    pub dmi_plus: Vec<RowJson>,
+    pub dmi_minus: Vec<RowJson>,
+    pub dmi_diff: Vec<RowJson>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct SkyJsonOut {
+    pub major: TimeFrameJson,
+    pub medium: TimeFrameJson,
+    pub small: TimeFrameJson,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+pub struct SkyJsonOutDep {
     pub ohlc: Vec<JsonRowOHLC>,
     pub high_line: Vec<RowJson>,
     pub low_line: Vec<RowJson>,
@@ -66,7 +92,74 @@ pub struct MarkerJson {
     pub text: String,
 }
 
-fn bars_to_json_raw(bars: Vec<Bar>) -> Vec<JsonRowOHLC>{
+fn bars_to_json(bars: Vec<PrimaryHolder>) -> TimeFrameJson {
+    let mut out = TimeFrameJson::default();
+    for ph in &bars {
+        out.ohlc.push(JsonRowOHLC::new(&ph.primary));
+
+        let bar = &ph.primary;
+        let ta = &ph.primary.ta;
+        let pta = &ph.primary.ta;
+        let bta = &ph.big.ta;
+        let time = bar.open_time / 1000;
+
+        // Set high/low lines
+        out.high_line.push(RowJson {
+            time: time,
+            value: ta.rpi.high,
+        });
+        out.low_line.push(RowJson {
+            time: time,
+            value: ta.rpi.low,
+        });
+
+        // MA1
+        out.ma1.push(RowJson {
+            time,
+            value: bta.ma1, // green
+        });
+
+        // Trend line
+        out.bull_line.push(RowJson {
+            time,
+            value: bta.trend.bull_line, // green
+        });
+        out.bear_line.push(RowJson {
+            time,
+            value: bta.trend.bear_line,
+        });
+
+        // DMI
+        out.dmi_plus.push(RowJson {
+            time,
+            value: bta.dmi.plus, // green
+        });
+        out.dmi_minus.push(RowJson {
+            time,
+            value: bta.dmi.minus,
+        });
+        out.dmi_diff.push(RowJson {
+            time,
+            value: bta.dmi.adx,
+        });
+
+        /*        out.dmi_plus.push(RowJson {
+            time,
+            value: bta.dmmd.ma_fast, // green
+        });
+        out.dmi_minus.push(RowJson {
+            time,
+            value: bta.dmmd.ma_slow,
+        });
+        out.dmi_diff.push(RowJson {
+            time,
+            value: bta.dmmd.color,
+        });*/
+    }
+    out
+}
+
+fn bars_to_json_raw_dep(bars: Vec<Bar>) -> Vec<JsonRowOHLC> {
     let mut out = vec![];
     for b in bars {
         out.push(JsonRowOHLC::new(&b))
@@ -78,16 +171,26 @@ impl SkyEng {
     pub fn to_json(&self, start: i64, end: i64) -> SkyJsonOut {
         let s = self;
         let mut out = SkyJsonOut::default();
-        out.major_ohlc = bars_to_json_raw(s.major_bars.get_primary_bars(start,end));
-        out.medium_ohlc = bars_to_json_raw(s.medium_bars.get_primary_bars(start,end));
-        out.ohlc = bars_to_json_raw(s.medium_bars.get_primary_bars(start,end));
-        out.small_ohlc = bars_to_json_raw(s.small_bars.get_primary_bars(start,end));
+        out.major = bars_to_json(s.major_bars.get_bars_ph(start, end));
+        out.medium = bars_to_json(s.medium_bars.get_bars_ph(start, end));
+        out.small = bars_to_json(s.small_bars.get_bars_ph(start, end));
+
+        out
+    }
+
+    pub fn to_json_dep(&self, start: i64, end: i64) -> SkyJsonOutDep {
+        let s = self;
+        let mut out = SkyJsonOutDep::default();
+        out.major_ohlc = bars_to_json_raw_dep(s.major_bars.get_primary_bars(start, end));
+        out.medium_ohlc = bars_to_json_raw_dep(s.medium_bars.get_primary_bars(start, end));
+        out.ohlc = bars_to_json_raw_dep(s.medium_bars.get_primary_bars(start, end));
+        out.small_ohlc = bars_to_json_raw_dep(s.small_bars.get_primary_bars(start, end));
 
         for fm in s.frames.iter() {
             // out.ohlc.push(JsonRowOHLC::new(&fm.bar.primary));
             let b = &fm.bar.primary;
             if !(b.open_time >= start && b.open_time <= end) {
-               continue
+                continue;
             }
             // Set high/low lines
             let bar = &fm.bar.primary;
@@ -122,7 +225,7 @@ impl SkyEng {
                     color: "#2196F3".to_string(),
                     shape: "arrowUp".to_string(),
                     text: format!(""), // text: format!("Buy @")
-                    // text: format!("Buy @ {}", bar.hlc3())
+                                       // text: format!("Buy @ {}", bar.hlc3())
                 })
             }
             if fm.sell1 {
@@ -132,7 +235,7 @@ impl SkyEng {
                     color: "#e91e63".to_string(),
                     shape: "arrowDown".to_string(),
                     text: format!(""), // text: format!("Sell @")
-                    // text: format!("Sell @ {}", bar.hlc3())
+                                       // text: format!("Sell @ {}", bar.hlc3())
                 })
             }
 
@@ -200,4 +303,3 @@ impl SkyEng {
         out
     }
 }
-

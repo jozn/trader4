@@ -52,7 +52,7 @@ impl MATrend {
         let high_ma = self.high_ma.next(candle.high());
         let low_ma = self.low_ma.next(candle.low());
 
-        let close = candle.close();
+        let close = candle.hlc3();
 
         let dir = if close > high_ma {
             1
@@ -65,7 +65,6 @@ impl MATrend {
 
         // Code below orgonized in a manner to start with bull in first candles.
         let bull_line = if dir > 0 { high_ma } else { low_ma };
-
         let bear_line = if dir > 0 { low_ma } else { high_ma };
 
         let cr = self.cross.next_v2(bull_line, bear_line);

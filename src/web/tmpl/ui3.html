@@ -25,14 +25,17 @@
 <div id="synced-charts">
     <div>
         <form>
-            <input type="checkbox" id="major_check_btn" onchange="checkboxChange(this)" class="checkbox" checked > Major </input>
-            <input type="checkbox" id="medium_check_btn" onchange="checkboxChange(this)" class="checkbox" checked > Medium </input>
-            <input type="checkbox" id="small_check_btn" onchange="checkboxChange(this)" class="checkbox" checked > Small </input>
+            <input type="checkbox" checked id="major_check_btn" onchange="checkboxChange(this)" class="checkbox"  > Major </input>
+            <input type="checkbox" checked id="medium_check_btn" onchange="checkboxChange(this)" class="checkbox"  > Medium </input>
+            <input type="checkbox" checked1 id="small_check_btn" onchange="checkboxChange(this)" class="checkbox"  > Small </input>
         </form>
     </div>
     <div id="chart_medium" class="chart"></div>
     <div id="chart_small" class="chart"></div>
     <div id="chart_major" class="chart"></div>
+
+    <div id="major_dmi" class="chart"></div>
+    <div id="medium_dmi" class="chart"></div>
 
     <div id="chart2"></div>
     <div id="chart3" style="display:block;"></div>
@@ -95,9 +98,9 @@
         }
     }
 
+    // width =  window.innerWidth * 0.98;
     function makeBarChart() {
-        var width =  window.innerWidth * 0.98;
-
+        width =  window.innerWidth * 0.98;
         chartMajorEl = document.getElementById("chart_major");
         chartMediumEL = document.getElementById("chart_medium");
         chartSmallEL = document.getElementById("chart_small");
@@ -114,7 +117,7 @@
         var jsonData = JSON.parse(jsonText);
         var jd = jsonData;
 
-        // Major Chart
+        ///////////////////////// Major Chart ////////////////////////
         chartMajor = LightweightCharts.createChart(chartMajorEl, getChartCfg(width, width/8));
         majorBarSeries = chartMajor.addBarSeries({
             thinBars: false,
@@ -125,9 +128,30 @@
                 precision: 5,
             },
         });
-        majorBarSeries.setData(jd.major_ohlc);
+        majorBarSeries.setData(jd.major.ohlc);
 
-        // Medium Chart
+        // Add bull bear lines
+        var majorBullLine = chartMajor.addLineSeries({
+            color: 'rgb(34,215,104)',
+            lineWidth: 1,
+        });
+        majorBullLine.setData(jd.major.bull_line);
+
+        var majorBearLine = chartMajor.addLineSeries({
+            color: 'rgb(215,49,68)',
+            lineWidth: 1,
+        });
+        majorBearLine.setData(jd.major.bear_line);
+
+        // add major ma1 to major chart
+        var ma1MajBearLine = chartMajor.addLineSeries({
+            color: 'rgb(0,43,131)',
+            lineWidth: 1,
+        });
+        ma1MajBearLine.setData(jd.major.ma1);
+
+
+        ///////////////////////// Medium Chart /////////////////////////
         chartMedium = LightweightCharts.createChart(chartMediumEL, getChartCfg(width, width/5));
         mediumBarSeries = chartMedium.addBarSeries({
             thinBars: false,
@@ -138,10 +162,30 @@
                 precision: 5,
             },
         });
-        mediumBarSeries.setData(jd.medium_ohlc);
+        mediumBarSeries.setData(jd.medium.ohlc);
 
-        // Medium Chart
-        chartSmall = LightweightCharts.createChart(chartSmallEL, getChartCfg(width, width/8));
+        // Add bull bear lines
+        var mediumBullLine = chartMedium.addLineSeries({
+            color: 'rgb(34,215,104)',
+            lineWidth: 1,
+        });
+        mediumBullLine.setData(jd.medium.bull_line);
+
+        var mediumBearLine = chartMedium.addLineSeries({
+            color: 'rgb(215,49,68)',
+            lineWidth: 1,
+        });
+        mediumBearLine.setData(jd.medium.bear_line);
+
+        // add major ma1 to medium chart
+        var ma1MedBearLine = chartMedium.addLineSeries({
+            color: 'rgb(0,43,131)',
+            lineWidth: 1,
+        });
+        ma1MedBearLine.setData(jd.major.ma1);
+
+        ///////////////////////// Small Chart /////////////////////////
+        chartSmall = LightweightCharts.createChart(chartSmallEL, getChartCfg(width, width/6));
         smallBarSeries = chartSmall.addBarSeries({
             thinBars: false,
             // downColor: '#000',
@@ -151,22 +195,35 @@
                 precision: 5,
             },
         });
-        smallBarSeries.setData(jd.small_ohlc);
+        smallBarSeries.setData(jd.small.ohlc);
 
+        ////////////////////////////////////////////////////////////////
 
         // medium
         midTS = chartMedium.timeScale();
         var vr = midTS.getVisibleRange();
 
-        majorTS = chartMedium.timeScale();
+        majorTS = chartMajor.timeScale();
         // majorTS.setVisibleRange(vr);
 
         smallTS = chartSmall.timeScale();
         smallTS.setVisibleRange(vr);
 
         midTS.subscribeVisibleTimeRangeChange((t) => smallTS.setVisibleRange(t));
+        majorTS.subscribeVisibleTimeRangeChange((t) => midTS.setVisibleRange(t));
 
+        // MDI
+        major_dmi_el = document.getElementById("major_dmi");
+        medium_dmi_el = document.getElementById("medium_dmi");
+        var jdm = jd.major;
+        var jdd = jd.medium;
+        major_dmi = mdi(major_dmi_el,jdm.dmi_plus,jdm.dmi_minus,jdm.dmi_diff);
+        medium_dmi = mdi(medium_dmi_el,jdd.dmi_plus,jdd.dmi_minus,jdd.dmi_diff);
 
+        majorTS.subscribeVisibleTimeRangeChange((t) => major_dmi.timeScale().setVisibleRange(t));
+        midTS.subscribeVisibleTimeRangeChange((t) => medium_dmi.timeScale().setVisibleRange(t));
+
+        checkboxChange();
 
         // Pair charts events
         // pariTVCharts(chart,chart2TV, chartMediumEL,chart2El);
@@ -192,6 +249,40 @@
         } else {
             chartSmallEL.style.display = "none";
         }
+    }
+
+    function mdi(el,d1,d2,d3) {
+        // Chart 3 - sample
+        var chart3TV = LightweightCharts.createChart(el, {
+            width: width,
+            height: width/14,
+            crosshair: {
+                mode: 0
+            },
+            rightPriceScale: {
+                width: 60
+            },
+            timeScale: {
+                visible: false,
+            }
+        });
+        var cahrt3Line1 = chart3TV.addLineSeries({
+            color: 'rgb(39,145,77)',
+            lineWidth: 1,
+        });
+        cahrt3Line1.setData(d1);
+        var cahrt3Line2 = chart3TV.addLineSeries({
+            color: 'rgb(203,66,66)',
+            lineWidth: 1,
+        });
+        cahrt3Line2.setData(d2);
+        var cahrt3Line3 = chart3TV.addLineSeries({
+            color: 'rgb(105,102,102)',
+            lineWidth: 2,
+            // priceScaleId: 'left',
+        });
+        cahrt3Line3.setData(d3);
+        return chart3TV;
     }
 
     // code: https://jsfiddle.net/h0wXD/g75Lmady/
