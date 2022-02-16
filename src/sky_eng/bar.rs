@@ -196,7 +196,7 @@ impl TAMethods {
     pub fn new(cfg: &BarConfig) -> Self {
         Self {
             atr: ta::ATR::new(14).unwrap(),
-            ma1: ta::EMA::new(40).unwrap(),
+            ma1: ta::EMA::new(25).unwrap(),
             rpi: ta::RPI::new(10, 5, 0.5).unwrap(),
             rpc: ta::RPC::new(10, 0.5).unwrap(),
             dc: ta::DC::new(12).unwrap(),
@@ -286,6 +286,33 @@ impl BarSeries {
         } else {
             // in here we could also build new Bars without changing states
             None
+        }
+    }
+
+    // build PH for not filled ticks bars.
+    pub fn build_ph_tip(&self) -> PrimaryHolder {
+        if self.ticks_primary.len() == 0 {
+            if self.bars_primary.len() == 0 {
+                // we should never be in here
+                println!("warning! empty bars in build_ph");
+                return PrimaryHolder::default();
+            }
+            self.bars_primary.last().unwrap().clone()
+        } else {
+            let mut bar_prim = Bar::new(&self.ticks_primary);
+            bar_prim.seq = self.primary_seq;
+            bar_prim.ta = cal_indicators(&mut self.primary_ta.clone(), &bar_prim); // note: clone
+
+            let mut bar_big = Bar::new(&self.ticks_big);
+            bar_big.seq = self.big_seq;
+            bar_big.ta = cal_indicators(&mut self.big_ta.clone(), &bar_big); // note: clone
+            let ph = PrimaryHolder {
+                primary: bar_prim.clone(),
+                big: bar_big.clone(),
+                finish_primary: false,
+                finish_big: false,
+            };
+            ph
         }
     }
 

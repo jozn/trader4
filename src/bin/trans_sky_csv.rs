@@ -43,15 +43,15 @@ pub fn main() {
             // Write frames for each day
             if sky_eng.frames.len() > 0 {
                 let mut day_frames = vec![];
-                let mut start = sky_eng.frames.first().unwrap().bar.primary.open_time;
+                let mut start = sky_eng.frames.first().unwrap().bar_medium.primary.open_time;
                 let mut day_num = 1;
                 for frame in sky_eng.frames {
-                    if frame.bar.primary.open_time < start + 86_400_000 {
+                    if frame.bar_medium.primary.open_time < start + 86_400_000 {
                         day_frames.push(frame);
                     } else {
                         write_single_day_frames(day_frames.clone(), &pair, week_id, day_num);
                         day_num += 1;
-                        start = frame.bar.primary.open_time;
+                        start = frame.bar_medium.primary.open_time;
                         day_frames.clear();
                         day_frames.push(frame);
                     }

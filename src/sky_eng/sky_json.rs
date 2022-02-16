@@ -24,6 +24,10 @@ pub struct SkyJsonOut {
     pub major: TimeFrameJson,
     pub medium: TimeFrameJson,
     pub small: TimeFrameJson,
+
+    pub score_bull: Vec<RowJson>,
+    pub score_bear: Vec<RowJson>,
+    pub score_diff: Vec<RowJson>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
@@ -175,6 +179,25 @@ impl SkyEng {
         out.medium = bars_to_json(s.medium_bars.get_bars_ph(start, end));
         out.small = bars_to_json(s.small_bars.get_bars_ph(start, end));
 
+        for fm in s.frames.iter() {
+            let bar = &fm.bar_medium.primary;
+            let time = bar.open_time / 1000;
+
+            // Add scores
+            let score = &fm.tscore;
+            out.score_bull.push(RowJson {
+                time,
+                value: score.bull as f64,
+            });
+            out.score_bear.push(RowJson {
+                time,
+                value: -score.bear as f64,
+            });
+            out.score_diff.push(RowJson {
+                time,
+                value: score.diff as f64,
+            });
+        }
         out
     }
 
@@ -188,15 +211,15 @@ impl SkyEng {
 
         for fm in s.frames.iter() {
             // out.ohlc.push(JsonRowOHLC::new(&fm.bar.primary));
-            let b = &fm.bar.primary;
+            let b = &fm.bar_medium.primary;
             if !(b.open_time >= start && b.open_time <= end) {
                 continue;
             }
             // Set high/low lines
-            let bar = &fm.bar.primary;
+            let bar = &fm.bar_medium.primary;
             let ta = &bar.ta;
-            let pta = &fm.bar.primary.ta;
-            let bta = &fm.bar.big.ta;
+            let pta = &fm.bar_medium.primary.ta;
+            let bta = &fm.bar_medium.big.ta;
             let time = bar.open_time / 1000;
             out.high_line.push(RowJson {
                 time: bar.open_time / 1000,

@@ -23,7 +23,7 @@ impl SkyEng {
         let major_ticks = 600;
         let major_cfg = BarConfig {
             primary_ticks: major_ticks,
-            big_ticks: major_ticks * 1,
+            big_ticks: major_ticks * 2,
         };
 
         let primary_ticks = 150;
@@ -56,8 +56,9 @@ impl SkyEng {
         let ph_small = self.small_bars.add_tick_mut(tick);
         match ph_medium {
             None => None,
-            Some(r) => {
-                let mut frame = new_frame(&r);
+            Some(ph_med) => {
+                let ph_major = self.major_bars.build_ph_tip();
+                let mut frame = new_frame(&ph_med, &ph_major);
                 self.frames.push(frame.clone());
                 Some(frame)
             }

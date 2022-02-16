@@ -34,6 +34,7 @@
     <div id="chart_small" class="chart"></div>
     <div id="chart_major" class="chart"></div>
 
+    <div id="tscore" class="chart"></div>
     <div id="major_dmi" class="chart"></div>
     <div id="medium_dmi" class="chart"></div>
 
@@ -212,6 +213,10 @@
         midTS.subscribeVisibleTimeRangeChange((t) => smallTS.setVisibleRange(t));
         majorTS.subscribeVisibleTimeRangeChange((t) => midTS.setVisibleRange(t));
 
+        // Score
+        tscore_el = document.getElementById("tscore");
+        tscore_chart = scoreChart(tscore_el,jd);
+        midTS.subscribeVisibleTimeRangeChange((t) => tscore_chart.timeScale().setVisibleRange(t));
         // MDI
         major_dmi_el = document.getElementById("major_dmi");
         medium_dmi_el = document.getElementById("medium_dmi");
@@ -249,6 +254,38 @@
         } else {
             chartSmallEL.style.display = "none";
         }
+    }
+    function scoreChart(el,d) {
+        // Chart 2 - Scores
+        var chart2TV = LightweightCharts.createChart(el, {
+            width: width,
+            height: width/14,
+            crosshair: {
+                mode: 0
+            },
+            rightPriceScale: {
+                width: 60
+            },
+        });
+
+        var scoreBull = chart2TV.addHistogramSeries({
+            color: 'rgba(34,140,74,0.69)',
+            lineWidth: 1,
+        });
+        scoreBull.setData(d.score_bull);
+
+        var scoreBear = chart2TV.addHistogramSeries({
+            color: 'rgba(224,49,68,0.68)',
+            lineWidth: 1,
+        });
+        scoreBear.setData(d.score_bear);
+
+        var scoreDiff = chart2TV.addLineSeries({
+            color: 'rgb(1,5,2)',
+            lineWidth: 2,
+        });
+        scoreDiff.setData(d.score_diff);
+        return chart2TV;
     }
 
     function mdi(el,d1,d2,d3) {

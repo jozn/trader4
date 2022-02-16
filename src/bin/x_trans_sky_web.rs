@@ -50,15 +50,15 @@ pub fn main() {
             // Write frames for each day
             if sky_eng.frames.len() > 0 {
                 let mut day_frames = vec![];
-                let mut start = sky_eng.frames.first().unwrap().bar.primary.open_time;
+                let mut start = sky_eng.frames.first().unwrap().bar_medium.primary.open_time;
                 let mut day_num = 1;
                 for frame in sky_eng.frames {
-                    if frame.bar.primary.open_time < start + 86_400_000 {
+                    if frame.bar_medium.primary.open_time < start + 86_400_000 {
                         day_frames.push(frame);
                     } else {
                         write_single_day_frames(day_frames.clone(), &pair, week_id, day_num);
                         day_num += 1;
-                        start = frame.bar.primary.open_time;
+                        start = frame.bar_medium.primary.open_time;
                         day_frames.clear();
                         day_frames.push(frame);
                     }
@@ -99,16 +99,17 @@ pub fn write_single_day_frames(frames_arr: Vec<SFrame>, pair: &Pair, week_id: u1
 fn to_json_out(frames: Vec<SFrame>) -> JsonOut {
     let mut out = JsonOut::default();
     for fm in frames.iter() {
-        out.ohlc.push(JsonRowOHLC::new(&fm.bar.primary));
+        out.ohlc.push(JsonRowOHLC::new(&fm.bar_medium.primary));
 
         // Major OHLC
-        out.major_ohlc.push(JsonRowOHLC::new(&fm.bar.primary));
+        out.major_ohlc
+            .push(JsonRowOHLC::new(&fm.bar_medium.primary));
 
         // Set high/low lines
-        let bar = &fm.bar.primary;
+        let bar = &fm.bar_medium.primary;
         let ta = &bar.ta;
-        let pta = &fm.bar.primary.ta;
-        let bta = &fm.bar.big.ta;
+        let pta = &fm.bar_medium.primary.ta;
+        let bta = &fm.bar_medium.big.ta;
         let time = bar.open_time / 1000;
         out.high_line.push(RowJson {
             time: bar.open_time / 1000,

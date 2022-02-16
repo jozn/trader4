@@ -28,16 +28,20 @@ pub struct SFrame {
 
     #[serde(skip)]
     pub score: Score,
+    #[serde(skip)]
+    pub tscore: TScore,
 
     #[serde(skip)]
-    pub bar: PrimaryHolder,
+    pub bar_major: PrimaryHolder,
+    #[serde(skip)]
+    pub bar_medium: PrimaryHolder,
 }
 
-pub fn new_frame(ph: &PrimaryHolder) -> SFrame {
-    let p = &ph.primary;
-    let pta = &ph.primary.ta;
-    let b = &ph.big;
-    let bta = &ph.big.ta;
+pub fn new_frame(ph_medium: &PrimaryHolder, ph_major: &PrimaryHolder) -> SFrame {
+    let p = &ph_medium.primary;
+    let pta = &ph_medium.primary.ta;
+    let b = &ph_medium.big;
+    let bta = &ph_medium.big.ta;
 
     let mut f = SFrame {
         fid: p.seq,
@@ -50,10 +54,12 @@ pub fn new_frame(ph: &PrimaryHolder) -> SFrame {
         med_dc_hl_pip: (pta.dc.high - pta.dc.low) * 10_000.,
         big_dc_hl_pip: (bta.dc.high - bta.dc.low) * 10_000.,
         score: Default::default(),
-        bar: ph.clone(),
+        bar_major: ph_major.clone(),
+        bar_medium: ph_medium.clone(),
         ..Default::default()
     };
     f.score = Score::new(&f);
+    f.tscore = TScore::new(&f);
 
     if bta.trend.is_bullish() {
         f.trend = 1.;
@@ -91,10 +97,10 @@ pub type FrameCsv = (
 
 impl SFrame {
     pub fn to_csv(&self) -> FrameCsv {
-        let pta = &self.bar.primary.ta;
-        let bta = &self.bar.big.ta;
+        let pta = &self.bar_medium.primary.ta;
+        let bta = &self.bar_medium.big.ta;
         (
-            self.bar.primary.clone(),
+            self.bar_medium.primary.clone(),
             self.clone(),
             pta.rpi.clone(),
             self.score.clone(),
@@ -105,17 +111,17 @@ impl SFrame {
             pta.stoch.clone(),
             pta.trend.clone(),
             // big time frame
-            self.bar.big.clone(),
+            self.bar_medium.big.clone(),
             bta.trend.clone(),
             bta.macd.clone(),
         )
     }
 
     pub fn to_json(&self) -> FrameJsonOut {
-        let pta = &self.bar.primary.ta;
-        let bta = &self.bar.big.ta;
+        let pta = &self.bar_medium.primary.ta;
+        let bta = &self.bar_medium.big.ta;
         FrameJsonOut {
-            ohlc: self.bar.primary.to_json_out(),
+            ohlc: self.bar_medium.primary.to_json_out(),
         }
     }
 }
