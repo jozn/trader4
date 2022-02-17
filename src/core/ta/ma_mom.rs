@@ -27,7 +27,7 @@ impl MAMom {
         let _last = self.window.push(ma);
         let tail = self.window.tail().unwrap();
 
-        ma - tail
+        (ma - tail) * 10_000.
     }
 }
 

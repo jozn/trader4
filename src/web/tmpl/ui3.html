@@ -275,14 +275,24 @@
         });
 
         var scoreBull = chart2TV.addHistogramSeries({
+        // var scoreBull = chart2TV.addLineSeries({
             color: 'rgba(21,71,166,0.69)',
             lineWidth: 1,
+            priceFormat: {
+                minMove: 0.00001,
+                precision: 5,
+            },
         });
-        scoreBull.setData(d.major.ma_mom);
+        // scoreBull.setData(d.major.ma_mom);
+        scoreBull.setData(d.major_ma_mom);
 
         var scoreBear = chart2TV.addHistogramSeries({
             color: 'rgba(255,19,19,0.68)',
             lineWidth: 1,
+            priceFormat: {
+                minMove: 0.00001,
+                precision: 5,
+            },
         });
         scoreBear.setData(d.medium.ma_mom);
 
