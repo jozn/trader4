@@ -170,6 +170,7 @@ pub struct BarSeries {
 pub struct TAMethods {
     pub atr: ta::ATR,
     pub ma1: ta::EMA,
+    pub ma_mom: ta::MAMom,
     pub rpi: ta::RPI,
     pub rpc: ta::RPC,
     pub dc: ta::DC,
@@ -183,6 +184,7 @@ pub struct TAMethods {
 pub struct BarTA {
     pub atr: f64,
     pub ma1: f64,
+    pub ma_mom: f64,
     pub rpi: ta::RPIRes,
     pub rpc: ta::RPCRes,
     pub dc: ta::DCRes,
@@ -197,6 +199,7 @@ impl TAMethods {
         Self {
             atr: ta::ATR::new(14).unwrap(),
             ma1: ta::EMA::new(25).unwrap(),
+            ma_mom: ta::MAMom::new(9,3).unwrap(),
             rpi: ta::RPI::new(10, 5, 0.5).unwrap(),
             rpc: ta::RPC::new(10, 0.5).unwrap(),
             dc: ta::DC::new(12).unwrap(),
@@ -344,6 +347,7 @@ pub fn cal_indicators(tam: &mut TAMethods, bar: &Bar) -> BarTA {
     BarTA {
         atr: tam.atr.next(&bar),
         ma1: tam.ma1.next(price),
+        ma_mom: tam.ma_mom.next(price),
         rpi: tam.rpi.next(&bar),
         rpc: tam.rpc.next(&bar),
         dc: tam.dc.next(&bar),

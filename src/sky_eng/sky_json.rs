@@ -9,6 +9,7 @@ pub struct TimeFrameJson {
     pub markers: Vec<MarkerJson>,
 
     pub ma1: Vec<RowJson>,
+    pub ma_mom: Vec<RowJson>,
 
     pub bull_line: Vec<RowJson>,
     pub bear_line: Vec<RowJson>,
@@ -121,6 +122,12 @@ fn bars_to_json(bars: Vec<PrimaryHolder>) -> TimeFrameJson {
         out.ma1.push(RowJson {
             time,
             value: bta.ma1, // green
+        });
+
+        // MA Mom
+        out.ma_mom.push(RowJson {
+            time,
+            value: bta.ma_mom,
         });
 
         // Trend line

@@ -30,6 +30,7 @@ pub use vel::*;
 pub use vel2::*;
 pub use window::*;
 pub use wma::*;
+pub use ma_mom::*;
 
 pub mod average_absolute_deviation;
 pub mod average_true_range;
@@ -61,6 +62,7 @@ pub mod vel;
 pub mod vel2;
 pub mod window;
 pub mod wma;
+pub mod ma_mom;
 
 ////////// Some other shared types //////////
 
