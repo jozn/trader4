@@ -35,6 +35,17 @@ pub struct SFrame {
     pub bar_major: PrimaryHolder,
     #[serde(skip)]
     pub bar_medium: PrimaryHolder,
+    #[serde(skip)]
+    pub bars_small: Vec<PrimaryHolder>,
+
+    // signals
+    pub buy2: bool,
+    pub sell2: bool,
+
+    #[serde(skip)]
+    pub buys: Vec<i64>,
+    #[serde(skip)]
+    pub sells: Vec<i64>,
 }
 
 pub fn new_frame(ph_medium: &PrimaryHolder, ph_major: &PrimaryHolder) -> SFrame {

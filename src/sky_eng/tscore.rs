@@ -32,13 +32,13 @@ impl TScore {
             self.bull += cal_dmi_score(mbta.dmi.plus);
             self.bear += cal_dmi_score(mbta.dmi.minus);
         } else {
-            let up_major =  cal_dmi_score(mbta.dmi.plus);
-            let up_med =  cal_dmi_score(mpta.dmi.plus);
-            let down_major =  cal_dmi_score(mbta.dmi.minus);
-            let down_med =  cal_dmi_score(mpta.dmi.minus);
+            let up_major = cal_dmi_score(mbta.dmi.plus);
+            let up_med = cal_dmi_score(mpta.dmi.plus);
+            let down_major = cal_dmi_score(mbta.dmi.minus);
+            let down_med = cal_dmi_score(mpta.dmi.minus);
 
             let diff = up_major + up_med - down_major - down_med;
-            let diff = diff/4.;
+            let diff = diff / 4.;
             if false {
                 self.bull += up_major + up_med;
                 self.bear += down_major + down_med;
@@ -79,7 +79,6 @@ impl TScore {
             }
         }
     }
-
 }
 
 fn cal_dmi_score(num: f64) -> f64 {

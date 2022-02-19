@@ -11,6 +11,7 @@ pub use donchain_channel::*;
 pub use ema::*;
 pub use fisher::*;
 pub use hull::*;
+pub use ma_mom::*;
 pub use ma_trend::*;
 pub use macd::*;
 pub use macd_dep::*;
@@ -30,7 +31,6 @@ pub use vel::*;
 pub use vel2::*;
 pub use window::*;
 pub use wma::*;
-pub use ma_mom::*;
 
 pub mod average_absolute_deviation;
 pub mod average_true_range;
@@ -43,6 +43,7 @@ pub mod donchain_channel;
 pub mod ema;
 pub mod fisher;
 pub mod hull;
+pub mod ma_mom;
 pub mod ma_trend;
 pub mod macd;
 pub mod macd_dep;
@@ -62,7 +63,6 @@ pub mod vel;
 pub mod vel2;
 pub mod window;
 pub mod wma;
-pub mod ma_mom;
 
 ////////// Some other shared types //////////
 

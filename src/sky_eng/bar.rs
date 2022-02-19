@@ -199,7 +199,7 @@ impl TAMethods {
         Self {
             atr: ta::ATR::new(14).unwrap(),
             ma1: ta::EMA::new(25).unwrap(),
-            ma_mom: ta::MAMom::new(9,3).unwrap(),
+            ma_mom: ta::MAMom::new(9, 3).unwrap(),
             rpi: ta::RPI::new(10, 5, 0.5).unwrap(),
             rpc: ta::RPC::new(10, 0.5).unwrap(),
             dc: ta::DC::new(12).unwrap(),
@@ -332,12 +332,21 @@ impl BarSeries {
 
     pub fn get_bars_ph(&self, start: i64, end: i64) -> Vec<PrimaryHolder> {
         let mut out = vec![];
-        for ph in &self.bars_primary {
+        let niddle_opt = self
+            .bars_primary
+            .binary_search_by(|o| o.primary.open_time.cmp(&start));
+        let idx = match niddle_opt {
+            Ok(i) => i,
+            Err(i) => i,
+        };
+        let idx = (idx as i64 - 2).max(0) as usize; // go 2 index before
+        for ph in self.bars_primary.iter().skip(idx) {
             let b = &ph.primary;
             if b.open_time >= start && b.open_time <= end {
                 out.push(ph.clone())
             }
         }
+
         out
     }
 }

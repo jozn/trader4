@@ -32,6 +32,7 @@
     </div>
     <div id="chart_medium" class="chart"></div>
     <div id="chart_small" class="chart"></div>
+    <div id="macd1" class="chart"></div>
     <div id="chart_major" class="chart"></div>
 
     <div id="tscore" class="chart"></div>
@@ -116,8 +117,8 @@
         var chart4El = document.getElementById("chart4");
 
         var jsonText = document.getElementById("json_data").innerText;
-        var jsonData = JSON.parse(jsonText);
-        var jd = jsonData;
+        jsonData = JSON.parse(jsonText);
+        jd = jsonData;
 
         ///////////////////////// Major Chart ////////////////////////
         chartMajor = LightweightCharts.createChart(chartMajorEl, getChartCfg(width, width/8));
@@ -165,6 +166,8 @@
             },
         });
         mediumBarSeries.setData(jd.medium.ohlc);
+        // Set markers
+        mediumBarSeries.setMarkers(jd.markers);
 
         // Add bull bear lines
         var mediumBullLine = chartMedium.addLineSeries({
@@ -198,6 +201,8 @@
             },
         });
         smallBarSeries.setData(jd.small.ohlc);
+        // Set markers
+        smallBarSeries.setMarkers(jd.markers);
 
         ////////////////////////////////////////////////////////////////
 
@@ -223,6 +228,11 @@
         ma_mom_el = document.getElementById("ma_mom");
         ma_mom_chart = maMomChart(ma_mom_el,jd);
         midTS.subscribeVisibleTimeRangeChange((t) => ma_mom_chart.timeScale().setVisibleRange(t));
+
+        // MACD
+        macd1_el = document.getElementById("macd1");
+        macd_chart1 = macdChart(macd1_el,jd.medium);
+        midTS.subscribeVisibleTimeRangeChange((t) => macd_chart1.timeScale().setVisibleRange(t));
 
         // MDI
         major_dmi_el = document.getElementById("major_dmi");
@@ -371,6 +381,39 @@
         return chart3TV;
     }
 
+    function macdChart(el,d,d2,d3) {
+        var chart3TV = LightweightCharts.createChart(el, {
+            width: width,
+            height: width/14,
+            crosshair: {
+                mode: 0
+            },
+            rightPriceScale: {
+                width: 60
+            },
+            timeScale: {
+                visible: false,
+            }
+        });
+        var cahrt3Line1 = chart3TV.addLineSeries({
+            color: 'rgb(17,66,148)',
+            lineWidth: 1,
+        });
+        cahrt3Line1.setData(d.macd_macd);
+        var cahrt3Line2 = chart3TV.addLineSeries({
+            color: 'rgb(203,66,66)',
+            lineWidth: 1,
+        });
+        cahrt3Line2.setData(d.macd_signal);
+        var cahrt3Line3 = chart3TV.addHistogramSeries({
+            color: 'rgb(105,102,102)',
+            lineWidth: 2,
+            // priceScaleId: 'left',
+        });
+        cahrt3Line3.setData(d.macd_histogram);
+        return chart3TV;
+    }
+
     // code: https://jsfiddle.net/h0wXD/g75Lmady/
     function pariTVCharts(chart, axis, chartEl, axisEl){
         let isCrossHairMoving = false;
@@ -397,7 +440,7 @@
         var isChartActive = false;
         var isAxisActive = false;
         chartEl.addEventListener("mousemove", () => {
-            if (isChartActive) return;
+            if (isChart1Active) return;
             isChartActive = true;
             isAxisActive = false;
             chart.applyOptions({

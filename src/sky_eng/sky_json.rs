@@ -18,6 +18,11 @@ pub struct TimeFrameJson {
     pub dmi_plus: Vec<RowJson>,
     pub dmi_minus: Vec<RowJson>,
     pub dmi_diff: Vec<RowJson>,
+
+    // MACD
+    pub macd_macd: Vec<RowJson>,
+    pub macd_signal: Vec<RowJson>,
+    pub macd_histogram: Vec<RowJson>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
@@ -25,6 +30,8 @@ pub struct SkyJsonOut {
     pub major: TimeFrameJson,
     pub medium: TimeFrameJson,
     pub small: TimeFrameJson,
+
+    pub markers: Vec<MarkerJson>,
 
     pub score_bull: Vec<RowJson>,
     pub score_bear: Vec<RowJson>,
@@ -125,6 +132,19 @@ fn bars_to_json(bars: Vec<PrimaryHolder>) -> TimeFrameJson {
             value: bta.dmi.adx,
         });
 
+        // MACD
+        out.macd_macd.push(RowJson {
+            time,
+            value: pta.macd.macd,
+        });
+        out.macd_signal.push(RowJson {
+            time,
+            value: pta.macd.signal,
+        });
+        out.macd_histogram.push(RowJson {
+            time,
+            value: pta.macd.histogram,
+        });
     }
     out
 }
@@ -140,9 +160,8 @@ impl SkyEng {
         for fm in s.frames.iter() {
             let bar = &fm.bar_medium.primary;
             if !(bar.open_time >= start && bar.open_time <= end) {
-                continue
+                continue;
             }
-
             let time = bar.open_time / 1000;
 
             // Add scores
@@ -166,7 +185,36 @@ impl SkyEng {
             });
 
             // todo migrate markers from x_**
+            // Markers
+            if fm.buy2 {
+                for s in fm.buys.clone() {
+                    out.markers.push(MarkerJson {
+                        time: s / 1000,
+                        position: "belowBar".to_string(),
+                        color: "#2196F3".to_string(),
+                        shape: "arrowUp".to_string(),
+                        text: format!(""), // text: format!("Sell @")
+                                           // text: format!("Sell @ {}", bar.hlc3())
+                    })
+                }
+            }
+            if fm.sell2 {
+                for s in fm.sells.clone() {
+                    out.markers.push(MarkerJson {
+                        time: s / 1000,
+                        position: "aboveBar".to_string(),
+                        color: "#e91e63".to_string(),
+                        shape: "arrowDown".to_string(),
+                        text: format!(""), // text: format!("Sell @")
+                                           // text: format!("Sell @ {}", bar.hlc3())
+                    })
+                }
+            }
         }
+
+        // Sort markets asending
+        out.markers.sort_by(|o1, o2| o1.time.cmp(&o2.time));
+
         out
     }
 }

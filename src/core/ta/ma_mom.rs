@@ -43,14 +43,12 @@ mod tests {
 
     #[test]
     fn test_new() {
-        assert!(MAMom::new(0,0).is_err());
-        assert!(MAMom::new(1,1).is_ok());
+        assert!(MAMom::new(0, 0).is_err());
+        assert!(MAMom::new(1, 1).is_ok());
     }
 
     #[test]
-    fn test_next() {
-
-    }
+    fn test_next() {}
 
     #[test]
     fn test_default() {

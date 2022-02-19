@@ -32,7 +32,7 @@ impl SkyEng {
             big_ticks: primary_ticks * 3,
         };
 
-        let small_ticks = 15;
+        let small_ticks = 50;
         let small_cfg = BarConfig {
             primary_ticks: small_ticks,
             big_ticks: small_ticks * 3,
@@ -57,8 +57,15 @@ impl SkyEng {
         match ph_medium {
             None => None,
             Some(ph_med) => {
+                let smalls = self
+                    .small_bars
+                    .get_bars_ph(ph_med.primary.open_time - 1, i64::MAX);
+                // println!("len >>> {}", smalls.len());
                 let ph_major = self.major_bars.build_ph_tip();
+
                 let mut frame = new_frame(&ph_med, &ph_major);
+                frame.bars_small = smalls;
+                frame.set_signals();
                 self.frames.push(frame.clone());
                 Some(frame)
             }
