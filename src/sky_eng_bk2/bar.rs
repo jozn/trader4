@@ -200,7 +200,7 @@ impl TAMethods {
             atr: ta::ATR::new(14).unwrap(),
             ma1: ta::EMA::new(25).unwrap(),
             ma_mom: ta::MAMom::new(9, 3).unwrap(),
-            rpi: ta::RPI::new(10, 5, 0.3).unwrap(),
+            rpi: ta::RPI::new(10, 5, 0.5).unwrap(),
             rpc: ta::RPC::new(10, 0.5).unwrap(),
             dc: ta::DC::new(12).unwrap(),
             macd: ta::MACD::new(12, 26, 9).unwrap(),

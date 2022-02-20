@@ -32,7 +32,7 @@ impl SkyEng {
             big_ticks: primary_ticks * 3,
         };
 
-        let small_ticks = 10;
+        let small_ticks = 50;
         let small_cfg = BarConfig {
             primary_ticks: small_ticks,
             big_ticks: small_ticks * 3,

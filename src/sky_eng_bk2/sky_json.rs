@@ -14,10 +14,6 @@ pub struct TimeFrameJson {
     pub bull_line: Vec<RowJson>,
     pub bear_line: Vec<RowJson>,
 
-    // RPI
-    pub rpi_high: Vec<RowJson>,
-    pub rpi_low: Vec<RowJson>,
-
     // Dmi
     pub dmi_plus: Vec<RowJson>,
     pub dmi_minus: Vec<RowJson>,
@@ -122,16 +118,6 @@ fn bars_to_json(bars: Vec<PrimaryHolder>) -> TimeFrameJson {
             value: bta.trend.bear_line,
         });
 
-        // RPI
-        out.rpi_high.push(RowJson {
-            time,
-            value: pta.rpi.high,
-        });
-        out.rpi_low.push(RowJson {
-            time,
-            value: pta.rpi.low,
-        });
-
         // DMI
         out.dmi_plus.push(RowJson {
             time,
@@ -228,7 +214,7 @@ impl SkyEng {
 
         // Sort markets asending
         out.markers.sort_by(|o1, o2| o1.time.cmp(&o2.time));
-        // out.markers.clear();
+
         out
     }
 }

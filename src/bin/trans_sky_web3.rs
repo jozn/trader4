@@ -7,7 +7,7 @@ use trader4::configs::assets::Pair;
 use trader4::sky_eng::*;
 use trader4::ta::{DCRes, VelRes};
 
-const OUT_FOLDER: &'static str = "/mnt/t/trader/data_sky_web_v2/";
+const OUT_FOLDER: &'static str = "/mnt/t/trader/data_sky_web_v3/";
 
 struct WeekData {
     week_id: u16,
@@ -66,7 +66,7 @@ pub fn main() {
                 start = end;
                 end = start + 86_400_000;
                 day_num += 1;
-                break; // todo remove
+                // break; // todo remove
             }
         }
     }

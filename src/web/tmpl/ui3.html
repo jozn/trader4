@@ -32,11 +32,11 @@
     </div>
     <div id="chart_medium" class="chart"></div>
     <div id="chart_small" class="chart"></div>
+    <div id="ma_mom" class="chart"></div>
     <div id="macd1" class="chart"></div>
     <div id="chart_major" class="chart"></div>
 
     <div id="tscore" class="chart"></div>
-    <div id="ma_mom" class="chart"></div>
     <div id="major_dmi" class="chart"></div>
     <div id="medium_dmi" class="chart"></div>
 
@@ -134,17 +134,9 @@
         majorBarSeries.setData(jd.major.ohlc);
 
         // Add bull bear lines
-        var majorBullLine = chartMajor.addLineSeries({
-            color: 'rgb(34,215,104)',
-            lineWidth: 1,
-        });
-        majorBullLine.setData(jd.major.bull_line);
-
-        var majorBearLine = chartMajor.addLineSeries({
-            color: 'rgb(215,49,68)',
-            lineWidth: 1,
-        });
-        majorBearLine.setData(jd.major.bear_line);
+        trendChannelChart(chartMajor,jd.major);
+        // Add rpi
+        rpiChart(chartMajor,jd.major);
 
         // add major ma1 to major chart
         var ma1MajBearLine = chartMajor.addLineSeries({
@@ -170,17 +162,9 @@
         mediumBarSeries.setMarkers(jd.markers);
 
         // Add bull bear lines
-        var mediumBullLine = chartMedium.addLineSeries({
-            color: 'rgb(34,215,104)',
-            lineWidth: 1,
-        });
-        mediumBullLine.setData(jd.medium.bull_line);
-
-        var mediumBearLine = chartMedium.addLineSeries({
-            color: 'rgb(215,49,68)',
-            lineWidth: 1,
-        });
-        mediumBearLine.setData(jd.medium.bear_line);
+        trendChannelChart(chartMedium,jd.medium);
+        // Add rpi
+        rpiChart(chartMedium,jd.medium);
 
         // add major ma1 to medium chart
         var ma1MedBearLine = chartMedium.addLineSeries({
@@ -203,6 +187,10 @@
         smallBarSeries.setData(jd.small.ohlc);
         // Set markers
         smallBarSeries.setMarkers(jd.markers);
+
+        // Add rpi
+        rpiChart(chartSmall,jd.major);
+        rpiChart(chartSmall,jd.medium);
 
         ////////////////////////////////////////////////////////////////
 
@@ -231,7 +219,8 @@
 
         // MACD
         macd1_el = document.getElementById("macd1");
-        macd_chart1 = macdChart(macd1_el,jd.medium);
+        // macd_chart1 = macdChart(macd1_el,jd.medium);
+        macd_chart1 = macdChart(macd1_el,jd.small);
         midTS.subscribeVisibleTimeRangeChange((t) => macd_chart1.timeScale().setVisibleRange(t));
 
         // MDI
@@ -412,6 +401,34 @@
         });
         cahrt3Line3.setData(d.macd_histogram);
         return chart3TV;
+    }
+
+    function rpiChart(chart, d) {
+        var majorBullLine = chart.addLineSeries({
+            color: 'rgb(11,77,229)',
+            lineWidth: 1,
+        });
+        majorBullLine.setData(d.rpi_high);
+
+        var majorBearLine = chart.addLineSeries({
+            color: 'rgb(11,77,229)',
+            lineWidth: 1,
+        });
+        majorBearLine.setData(d.rpi_low);
+    }
+
+    function trendChannelChart(chart, d) {
+        var majorBullLine = chart.addLineSeries({
+            color: 'rgb(34,215,104)',
+            lineWidth: 1,
+        });
+        majorBullLine.setData(d.bull_line);
+
+        var majorBearLine = chart.addLineSeries({
+            color: 'rgb(215,49,68)',
+            lineWidth: 1,
+        });
+        majorBearLine.setData(d.bear_line);
     }
 
     // code: https://jsfiddle.net/h0wXD/g75Lmady/

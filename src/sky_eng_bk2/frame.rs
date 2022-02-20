@@ -39,8 +39,6 @@ pub struct SFrame {
     pub bars_small: Vec<PrimaryHolder>,
 
     // signals
-    pub sign_buy: bool,
-    pub sign_sell: bool,
     pub buy2: bool,
     pub sell2: bool,
 
