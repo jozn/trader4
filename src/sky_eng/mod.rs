@@ -1,5 +1,6 @@
 pub mod bar;
 pub mod frame;
+pub mod scalper;
 pub mod score;
 pub mod signals;
 pub mod sky_eng;

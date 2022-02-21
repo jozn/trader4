@@ -11,7 +11,7 @@ pub fn set_signals_v5(sf: &mut SFrame) {
     let bigta = &bigb.ta;
 
     // if sf.tscore.diff >= 1. {
-    if bigta.trend.is_bullish(){
+    if bigta.trend.is_bullish() {
         sf.sign_sell = false;
 
         let pb = &sf.bar_medium.primary;
@@ -22,7 +22,7 @@ pub fn set_signals_v5(sf: &mut SFrame) {
             let tas = &spb.primary.ta;
             let m = &tas.macd;
             // if m.macd_above && m.macd < 0. {
-            if m.macd_above  {
+            if m.macd_above {
                 sf.buys.push(sb.open_time);
             }
         }
@@ -37,7 +37,6 @@ pub fn set_signals_v5(sf: &mut SFrame) {
     // if sf.tscore.diff <= -1. {
     if bigta.trend.is_bearish() {
         sf.sign_buy = false;
-
 
         let pb = &sf.bar_medium.primary;
         let ta = &pb.ta;
@@ -58,9 +57,7 @@ pub fn set_signals_v5(sf: &mut SFrame) {
             sf.sell2 = true;
             // sf.sells.push(pb.open_time);
         }
-
     }
-
 }
 pub fn set_signals_v4(sf: &mut SFrame) {
     if sf.tscore.diff >= 1. {

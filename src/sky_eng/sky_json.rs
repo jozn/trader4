@@ -90,7 +90,7 @@ fn bars_to_json(bars: Vec<PrimaryHolder>) -> TimeFrameJson {
         let bta = &ph.big.ta;
         let time = bar.open_time / 1000;
 
-        // Set high/low lines
+        /*// Set high/low lines
         out.high_line.push(RowJson {
             time: time,
             value: ta.rpi.high,
@@ -98,7 +98,7 @@ fn bars_to_json(bars: Vec<PrimaryHolder>) -> TimeFrameJson {
         out.low_line.push(RowJson {
             time: time,
             value: ta.rpi.low,
-        });
+        });*/
 
         // MA1
         out.ma1.push(RowJson {
@@ -123,13 +123,22 @@ fn bars_to_json(bars: Vec<PrimaryHolder>) -> TimeFrameJson {
         });
 
         // RPI
+        // out.rpi_high.push(RowJson {
+        //     time,
+        //     value: pta.rpi.high,
+        // });
+        // out.rpi_low.push(RowJson {
+        //     time,
+        //     value: pta.rpi.low,
+        // });
+        // Bollinger Bands
         out.rpi_high.push(RowJson {
-            time,
-            value: pta.rpi.high,
+            time: time,
+            value: ta.bb.high_band,
         });
         out.rpi_low.push(RowJson {
-            time,
-            value: pta.rpi.low,
+            time: time,
+            value: ta.bb.low_band,
         });
 
         // DMI
@@ -228,7 +237,7 @@ impl SkyEng {
 
         // Sort markets asending
         out.markers.sort_by(|o1, o2| o1.time.cmp(&o2.time));
-        // out.markers.clear();
+        out.markers.clear();
         out
     }
 }

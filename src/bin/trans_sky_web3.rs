@@ -68,6 +68,8 @@ pub fn main() {
                 day_num += 1;
                 // break; // todo remove
             }
+            // last day
+            write_json(&jo, &pair, wd.week_id, day_num);
         }
     }
 }
