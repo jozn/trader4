@@ -131,14 +131,25 @@ fn bars_to_json(bars: Vec<PrimaryHolder>) -> TimeFrameJson {
         //     time,
         //     value: pta.rpi.low,
         // });
-        // Bollinger Bands
+
+        // // Bollinger Bands
+        // out.rpi_high.push(RowJson {
+        //     time: time,
+        //     value: ta.bb.high_band,
+        // });
+        // out.rpi_low.push(RowJson {
+        //     time: time,
+        //     value: ta.bb.low_band,
+        // });
+
+        // Gorilla Bands
         out.rpi_high.push(RowJson {
             time: time,
-            value: ta.bb.high_band,
+            value: ta.sb.high_band,
         });
         out.rpi_low.push(RowJson {
             time: time,
-            value: ta.bb.low_band,
+            value: ta.sb.low_band,
         });
 
         // DMI

@@ -63,14 +63,12 @@ mod tests {
 
     #[test]
     fn test_new() {
-        assert!(BollingerBand::new(0).is_err());
-        assert!(BollingerBand::new(1).is_ok());
+        assert!(BollingerBand::new(0, 2.).is_err());
+        assert!(BollingerBand::new(12, 2.).is_ok());
     }
 
     #[test]
-    fn test_next() {
-        let mut _cci = BollingerBand::new(3).unwrap();
-    }
+    fn test_next() {}
 
     #[test]
     fn test_default() {

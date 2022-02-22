@@ -69,6 +69,7 @@ pub fn main() {
                 // break; // todo remove
             }
             // last day
+            let jo = sky_eng.to_json(start, end);
             write_json(&jo, &pair, wd.week_id, day_num);
         }
     }

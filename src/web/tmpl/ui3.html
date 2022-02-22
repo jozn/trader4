@@ -162,7 +162,7 @@
         mediumBarSeries.setMarkers(jd.markers);
 
         // Add bull bear lines
-        trendChannelChart(chartMedium,jd.medium);
+        // trendChannelChart(chartMedium,jd.medium);
         // Add rpi
         rpiChart(chartMedium,jd.medium);
 
@@ -188,6 +188,8 @@
         // Set markers
         smallBarSeries.setMarkers(jd.markers);
 
+        // Add bull bear lines
+        trendChannelChart(chartSmall,jd.small);
         // Add rpi
         rpiChart(chartSmall,jd.major);
         rpiChart(chartSmall,jd.medium);
@@ -411,7 +413,7 @@
         majorBullLine.setData(d.rpi_high);
 
         var majorBearLine = chart.addLineSeries({
-            color: 'rgb(11,77,229)',
+            color: 'rgb(103,100,100)',
             lineWidth: 1,
         });
         majorBearLine.setData(d.rpi_low);

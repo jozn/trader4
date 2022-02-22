@@ -35,7 +35,7 @@ impl BackRunConfig {
             // brain.on_price_tick_NE(1, t.to_tick());
             // brain.on_price_tick(1, t.to_tick());
             // brain.on_price_tick_ne_dc_v3(1, t.to_tick());
-            brain.on_price_tick_ne_dc_v4(&pair, t.clone());
+            brain.on_price_tick(&pair, t.clone());
             let notifys = back_arc.take_notify();
             for not in notifys {
                 brain.on_notify_position(not);

@@ -24,7 +24,7 @@ impl Brain {
     }
 
     // new engine
-    pub fn on_price_tick_ne_dc_v4(&mut self, pair: &Pair, tick: BTickData) {
+    pub fn on_price_tick(&mut self, pair: &Pair, tick: BTickData) {
         let symbol_id = pair.to_symbol_id();
         let mut pari_mem = self.borrow_pair_meta(symbol_id);
         pari_mem.last_tick = Some(tick.clone());
