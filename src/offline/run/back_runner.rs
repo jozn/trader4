@@ -51,7 +51,7 @@ impl BackRunConfig {
         }
 
         if self.report {
-            x.report_to_folder(&format!(
+            x.report_to_folder_dep(&format!(
                 "_v2_week_{}_{}",
                 self.week_id,
                 self.pair.to_string()

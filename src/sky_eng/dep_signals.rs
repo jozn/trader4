@@ -1,7 +1,7 @@
 use super::*;
 
 impl SFrame {
-    pub fn set_signals(&mut self) {
+    pub fn set_signals_dep(&mut self) {
         set_signals_v5(self);
     }
 }

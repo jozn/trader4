@@ -40,7 +40,7 @@ impl Brain {
                 let sp = f.big_dc_hl_pip / 1.5;
                 let sp = 6.;
 
-                if f.buy1 {
+                if f.buy2 {
                     // if f.sell1 {
                     // if dcs.sell2 {
                     let np = NewPos {

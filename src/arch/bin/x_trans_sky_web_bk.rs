@@ -33,7 +33,7 @@ pub fn main() {
 
             let json_data = serde_json::to_string_pretty(&frames).unwrap();
 
-            let html_tmpl = std::fs::read_to_string("./src/web/tmpl/ui2.html").unwrap();
+            let html_tmpl = std::fs::read_to_string("../../web/tmpl/ui2.html").unwrap();
             let title = format!("{:?}/{}", &pair, week_id);
             let html = html_tmpl.replace("{{TITLE}}", &title);
             let html = html.replace("{{JSON_DATA}}", &json_data);
@@ -76,7 +76,7 @@ pub fn write_single_day_frames(frames_arr: Vec<SFrame>, pair: &Pair, week_id: u1
 
     let json_data = to_json_out(frames_arr);
     let json_text = serde_json::to_string_pretty(&json_data).unwrap();
-    let html_tmpl = std::fs::read_to_string("./src/web/tmpl/ui2.html").unwrap();
+    let html_tmpl = std::fs::read_to_string("../../web/tmpl/ui2.html").unwrap();
     let html = html_tmpl.replace("{{TITLE}}", &title);
     let html = html.replace("{{JSON_DATA}}", &json_text);
 

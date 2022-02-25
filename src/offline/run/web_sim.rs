@@ -5,6 +5,7 @@ use crate::configs::assets::Pair;
 use crate::gate_api::GateWay;
 use crate::offline::*;
 use crate::sky_eng::{SkyEng, SkyJsonOut};
+use crate::types::WeekData;
 use std::ops::Range;
 use std::sync::Arc;
 
@@ -25,12 +26,6 @@ pub struct WebBackRunConfig {
 
 pub struct WebBackRunRes {
     pub free_usd: f64,
-}
-
-pub struct WeekData {
-    week_id: u16,
-    start: i64,
-    end: i64,
 }
 
 impl WebBackRunConfig {
@@ -94,11 +89,12 @@ impl WebBackRunConfig {
 
         // todo - get report by date range
         if self.report {
-            back_ref.report_to_folder(&format!(
-                "_v2_week_{}_{}",
-                self.week_id,
-                self.pair.to_string()
-            ));
+            back_ref.report_to_folder(&self.week_data, &self.pair);
+            // back_ref.report_to_folder_dep(&format!(
+            //     "_v2_week_{}_{}",
+            //     self.week_id,
+            //     self.pair.to_string()
+            // ));
         }
         WebBackRunRes {
             free_usd: back_ref.balance,

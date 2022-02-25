@@ -1,7 +1,8 @@
 use chrono::Weekday::Mon;
 use std::borrow::BorrowMut;
 use std::cell::RefCell;
-use std::collections::BTreeMap;
+use std::collections::btree_map::BTreeMap;
+// use std::collections::BTreeMap;
 use std::sync::{Arc, Mutex};
 
 use super::report::*;
@@ -10,6 +11,7 @@ use crate::configs::assets;
 use crate::configs::assets::Pair;
 use crate::core::gate_api::*;
 use crate::gate_api::*;
+use crate::types::WeekData;
 
 use super::*;
 
@@ -260,15 +262,20 @@ impl BackendEngine {
 
     // Reports
     fn report_balance(&mut self) {
-        self.report.collect_balance(&self.get_money());
+        self.report
+            .collect_balance(self.las_time_ms / 1000, &self.get_money());
     }
 
     pub fn get_report_summery(&self) -> ReportSummery {
         self.report.get_report_summery(&self)
     }
 
-    pub fn report_to_folder(&mut self, suffix: &str) {
+    pub fn report_to_folder_dep(&mut self, suffix: &str) {
         self.report.write_to_folder(&self, suffix);
+    }
+
+    pub fn report_to_folder(&mut self, week_data: &Vec<WeekData>, pair: &Pair) {
+        self.report.write_to_folder_weeks(&self, week_data, pair);
     }
 }
 

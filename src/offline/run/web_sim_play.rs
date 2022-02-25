@@ -49,7 +49,7 @@ pub fn run_pair(pair: &Pair) {
         report: true,
         web: true,
         report_cfg: BackReportConf {
-            report_folder: "../trader6_out/".to_string(),
+            report_folder: "".to_string(),
             report_sub_folder: "".to_string(),
         },
     };

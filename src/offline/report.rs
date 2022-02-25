@@ -2,11 +2,15 @@ use rand::Rng;
 // use super::portfolio::*;
 // use super::offline_helper::*;
 use super::*;
+use crate::configs::assets::Pair;
 use crate::core::helper::get_time_sec;
 use crate::core::helper::*;
 use crate::gate_api::*;
 use crate::helper;
+use crate::types::WeekData;
 use serde::{Deserialize, Serialize};
+
+static OUTPUT_FOLDER: &str = "/mnt/t/trader/trades_res/";
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Report {
@@ -14,8 +18,13 @@ pub struct Report {
     pub sub_folder: String,
     pub base_time: u64,
     pub rnd_num: u16,
-    pub balance: Vec<f64>,
+    // pub balance: Vec<BalanceTag>,
     pub middles: Vec<MiddleStatic>,
+}
+
+pub struct BalanceTag {
+    pub time: u64,
+    pub balance: f64,
 }
 
 #[derive(Debug)]
@@ -31,18 +40,34 @@ impl Report {
             sub_folder: cfg.report_sub_folder.clone(),
             base_time: get_time_sec(),
             rnd_num: rand::thread_rng().gen_range(1..1000),
-            balance: vec![],
+            // balance: vec![],
             middles: vec![],
         }
     }
 
     // todo all money
-    pub fn collect_balance(&mut self, money: &Money) {
-        self.balance.push(money.balance);
+    pub fn collect_balance(&mut self, time_sec: u64, money: &Money) {
+        // self.balance.push(money.balance);
+        let ms = MiddleStatic {
+            time_sec: time_sec,
+            time_str: helper::to_date(time_sec),
+            balance: money.balance,
+            locked: money.locked,
+            profit: 0.,
+        };
+        self.middles.push(ms);
     }
+
+    // pub fn collect_balance2_no(&mut self, time_sec:u64, money: &Money) {
+    //     self.balance.push(BalanceTag{
+    //         time: time_sec,
+    //         balance: money.balance
+    //     });
+    // }
 
     pub fn on_new_trade(&mut self, t: &NewPos, money: &Money) {
         let ms = MiddleStatic {
+            time_sec: t.time_sec,
             time_str: helper::to_date(t.time_sec),
             balance: money.balance,
             locked: money.locked,
@@ -53,12 +78,79 @@ impl Report {
 
     pub fn on_close_trade(&mut self, t: &Position, money: &Money) {
         let ms = MiddleStatic {
+            time_sec: t.open_time,
             time_str: helper::to_date(t.open_time),
             balance: money.balance,
             locked: money.locked,
             profit: t.profit,
         };
         self.middles.push(ms);
+    }
+
+    pub fn write_to_folder_weeks(
+        &self,
+        port: &BackendEngine,
+        week_data: &Vec<WeekData>,
+        pair: &Pair,
+    ) {
+        let time = get_time_sec();
+        let folder_base = if self.folder.is_empty() {
+            OUTPUT_FOLDER.to_string()
+        } else {
+            self.folder.clone()
+        };
+
+        let w_first = week_data.first().unwrap().week_id;
+        let w_last = week_data.last().unwrap().week_id;
+        let main_folder = format!("{}{}_{:?}_{}_{}/", folder_base, time, pair, w_first, w_last);
+
+        // All trades in main folder
+        let all_closed_pos = get_all_postions_range(port, 0, u64::MAX);
+        let rnd = helper::get_rand(1000);
+        write_reports(&main_folder, rnd, &all_closed_pos);
+        write_reports_middles(&main_folder, rnd, &self.middles);
+
+        // Weeks reports
+        for wd in week_data {
+            let week_closed_pos =
+                get_all_postions_range(port, wd.start as u64 / 1000, wd.end as u64 / 1000);
+            let week_folder = format!("{}weeks/{}/", main_folder, wd.week_id);
+            let rnd = helper::get_rand(1000);
+            write_reports(&week_folder, rnd, &week_closed_pos);
+
+            let mids = self.get_all_middles_range(wd.start / 1000, wd.end / 1000);
+            write_reports_middles(&week_folder, rnd, &mids);
+        }
+    }
+
+    fn get_all_middles_range(&self, start_sec: i64, end_sec: i64) -> Vec<MiddleStatic> {
+        let mut out = vec![];
+        for p in &self.middles {
+            if p.time_sec >= start_sec as u64 && p.time_sec < end_sec as u64 {
+                out.push(p.clone());
+            }
+        }
+        out
+    }
+
+    pub fn write_to_folder_weeks_bk(
+        &self,
+        port: &BackendEngine,
+        week_data: Vec<WeekData>,
+        name: &str,
+    ) {
+        let time = get_time_sec();
+
+        let folder_base = if self.folder.is_empty() {
+            OUTPUT_FOLDER.to_string()
+        } else {
+            self.folder.clone()
+        };
+        let folder = if self.sub_folder.is_empty() {
+            format!("{}{}_{}", OUTPUT_FOLDER, time, name)
+        } else {
+            format!("{}{}_SUB/{}_{}", OUTPUT_FOLDER, self.sub_folder, time, name)
+        };
     }
 
     pub fn write_to_folder(&self, port: &BackendEngine, name: &str) {
@@ -88,13 +180,13 @@ impl Report {
 
         std::fs::write(
             format!("result_{}.txt", self.rnd_num),
-            format!("{:#?}", self.report_summery(&all_closed_pos)),
+            format!("{:#?}", report_summery(&all_closed_pos)),
         );
 
         self.report_balance();
-        self.report_seq_profit(&all_closed_pos);
-        self.report_wins(&all_closed_pos);
-        self.report_loose(&all_closed_pos);
+        report_seq_profit(&all_closed_pos, self.rnd_num);
+        report_wins(&all_closed_pos, self.rnd_num);
+        report_loose(&all_closed_pos, self.rnd_num);
 
         write_pos("all", self.rnd_num, all_pos);
 
@@ -115,166 +207,61 @@ impl Report {
 
     pub fn get_report_summery(&self, port: &BackendEngine) -> ReportSummery {
         let all_closed_pos = get_all_postions(port);
-        self.report_summery(&all_closed_pos)
-    }
-
-    pub fn report_summery(&self, all_pos: &Vec<Position>) -> ReportSummery {
-        let mut total_time = 0;
-        let mut win_cnt = 0;
-        let mut win_amount = 0.;
-        let mut lose_cnt = 0;
-        let mut lose_amount = 0.;
-
-        for p in all_pos {
-            total_time += p.close_time - p.open_time;
-            if p.profit > 0. {
-                win_cnt += 1;
-                win_amount += p.profit;
-            } else {
-                lose_cnt += 1;
-                lose_amount += p.profit;
-            }
-        }
-
-        let win_ratio = win_cnt as f32 / (win_cnt + lose_cnt) as f32;
-        let pl_ratio = win_amount / lose_amount.abs();
-        let net_profit = win_amount - lose_amount.abs();
-        let total_time_str = helper::to_duration(total_time as i64);
-
-        // short/long state
-        let mut long_cnt = 0;
-        let mut long_win_cnt = 0;
-        let mut long_win_amount = 0.;
-        let mut long_lose_cnt = 0;
-        let mut long_lose_amount = 0.;
-        let mut short_cnt = 0;
-        let mut short_win_cnt = 0;
-        let mut short_win_amount = 0.;
-        let mut short_lose_cnt = 0;
-        let mut short_lose_amount = 0.;
-
-        for p in all_pos {
-            match p.direction {
-                PosDir::Long => {
-                    long_cnt += 1;
-                    if p.profit > 0. {
-                        long_win_cnt += 1;
-                        long_win_amount += p.profit;
-                    } else {
-                        long_lose_cnt += 1;
-                        long_lose_amount += p.profit;
-                    }
-                }
-                PosDir::Short => {
-                    short_cnt += 1;
-                    if p.profit > 0. {
-                        short_win_cnt += 1;
-                        short_win_amount += p.profit;
-                    } else {
-                        short_lose_cnt += 1;
-                        short_lose_amount += p.profit;
-                    }
-                }
-            }
-        }
-
-        let long_short_ratio = long_cnt as f32 / short_cnt as f32 / 2.;
-        let long_pl_ratio = long_win_amount / long_lose_amount.abs();
-        let short_pl_ratio = short_win_amount / short_lose_amount.abs();
-        let long_net_profit = long_win_amount - long_lose_amount.abs();
-        let short_net_profit = short_win_amount - short_lose_amount.abs();
-
-        // Pure profit cal
-        let long_profit_perc = long_net_profit / long_win_amount;
-        let short_profit_perc = short_net_profit / short_win_amount;
-        let all_profit_perc = net_profit / win_amount;
-
-        let report_res = ReportSummery {
-            win_cnt,
-            lose_cnt,
-            win_amount,
-            lose_amount,
-            total_time,
-            total_time_str,
-            win_ratio,
-            pl_ratio,
-            net_profit,
-            long_cnt,
-            long_win_cnt,
-            long_win_amount,
-            long_lose_cnt,
-            long_lose_amount,
-            long_net_profit,
-            short_cnt,
-            short_win_cnt,
-            short_win_amount,
-            short_lose_cnt,
-            short_lose_amount,
-            short_net_profit,
-            long_short_ratio,
-            long_pl_ratio,
-            short_pl_ratio,
-            long_profit_perc,
-            short_profit_perc,
-            all_profit_perc,
-        };
-
-        report_res
-    }
-
-    fn report_seq_profit(&self, all_pos: &Vec<Position>) {
-        let mut res = vec![];
-
-        for p in all_pos {
-            res.push(p.profit)
-        }
-
-        let os = to_csv_out(&res, false);
-        let txt = format!("{}", os);
-
-        std::fs::write(format!("seq_profit_{}.csv", self.rnd_num), txt);
-    }
-
-    fn report_wins(&self, all_pos: &Vec<Position>) {
-        let mut all_arr = vec![];
-        let mut longs_arr = vec![];
-        let mut short_arr = vec![];
-        for p in all_pos {
-            if p.profit > 0. {
-                all_arr.push(p.clone());
-                match p.direction {
-                    PosDir::Long => longs_arr.push(p.clone()),
-                    PosDir::Short => short_arr.push(p.clone()),
-                }
-            }
-        }
-
-        write_pos("wins_all", self.rnd_num, all_arr);
-        write_pos("wins_long", self.rnd_num, longs_arr);
-        write_pos("wins_short", self.rnd_num, short_arr);
-    }
-
-    fn report_loose(&self, all_pos: &Vec<Position>) {
-        let mut all_arr = vec![];
-        let mut longs_arr = vec![];
-        let mut short_arr = vec![];
-        for p in all_pos {
-            if p.profit < 0. {
-                all_arr.push(p.clone());
-                match p.direction {
-                    PosDir::Long => longs_arr.push(p.clone()),
-                    PosDir::Short => short_arr.push(p.clone()),
-                }
-            }
-        }
-
-        write_pos("lose_all", self.rnd_num, all_arr);
-        write_pos("lose_long", self.rnd_num, longs_arr);
-        write_pos("lose_short", self.rnd_num, short_arr);
+        report_summery(&all_closed_pos)
     }
 }
 
-pub fn get_all_postions(port: &BackendEngine) -> Vec<Position> {
+fn write_reports(folder: &str, rnd_num: u64, all_pos: &Vec<Position>) {
+    let rnd_num = rnd_num as u16;
+    let folder_json = format!("{}/json", folder);
+    std::fs::create_dir_all(&folder);
+    std::fs::create_dir_all(&folder_json).unwrap();
+
+    std::env::set_current_dir(&folder);
+    std::fs::write(
+        format!("result_{}.txt", rnd_num),
+        format!("{:#?}", report_summery(&all_pos)),
+    );
+    // self.report_balance(); // todo
+    report_seq_profit(&all_pos, rnd_num);
+    report_wins(&all_pos, rnd_num);
+    report_loose(&all_pos, rnd_num);
+
+    write_pos("all", rnd_num, all_pos.clone());
+}
+
+fn write_reports_middles(folder: &str, rnd_num: u64, middles: &Vec<MiddleStatic>) {
+    std::env::set_current_dir(&folder);
+
+    let os = to_csv_out(&middles, false);
+    let txt = format!("{}", os);
+
+    std::fs::write(format!("balance_{}.csv", rnd_num), txt);
+
+    let js = to_json_out(&middles);
+    std::fs::write("./json/balance.json", format!("{}", js));
+}
+
+fn get_all_postions_range(port: &BackendEngine, start_sec: u64, end_sec: u64) -> Vec<Position> {
+    let mut all_pos = vec![];
+    // todo desing better policy to have forced postions for reporting
+    for (_, p) in port.opens.iter() {
+        if p.open_time >= start_sec && p.open_time < end_sec {
+            all_pos.push(p.clone());
+        }
+    }
+    for (_, p) in port.closed.iter() {
+        if p.open_time >= start_sec && p.open_time < end_sec {
+            all_pos.push(p.clone());
+        }
+    }
+
+    all_pos.sort_by(|p1, p2| p1.pos_id.cmp(&p2.pos_id));
+
+    all_pos
+}
+
+fn get_all_postions(port: &BackendEngine) -> Vec<Position> {
     let mut all_pos = vec![];
     for (_, p) in port.opens.iter() {
         all_pos.push(p.clone());
@@ -288,7 +275,7 @@ pub fn get_all_postions(port: &BackendEngine) -> Vec<Position> {
     all_pos
 }
 
-pub fn get_all_closed_postions(port: &BackendEngine) -> Vec<Position> {
+fn get_all_closed_postions(port: &BackendEngine) -> Vec<Position> {
     let mut all_pos = vec![];
     for (_, p) in port.closed.iter() {
         all_pos.push(p.clone());
@@ -299,13 +286,68 @@ pub fn get_all_closed_postions(port: &BackendEngine) -> Vec<Position> {
     all_pos
 }
 
+fn report_wins(all_pos: &Vec<Position>, rnd_num: u16) {
+    let mut all_arr = vec![];
+    let mut longs_arr = vec![];
+    let mut short_arr = vec![];
+    for p in all_pos {
+        if p.profit > 0. {
+            all_arr.push(p.clone());
+            match p.direction {
+                PosDir::Long => longs_arr.push(p.clone()),
+                PosDir::Short => short_arr.push(p.clone()),
+            }
+        }
+    }
+
+    write_pos("wins_all", rnd_num, all_arr);
+    write_pos("wins_long", rnd_num, longs_arr);
+    write_pos("wins_short", rnd_num, short_arr);
+}
+
+fn report_loose(all_pos: &Vec<Position>, rnd_num: u16) {
+    let mut all_arr = vec![];
+    let mut longs_arr = vec![];
+    let mut short_arr = vec![];
+    for p in all_pos {
+        if p.profit < 0. {
+            all_arr.push(p.clone());
+            match p.direction {
+                PosDir::Long => longs_arr.push(p.clone()),
+                PosDir::Short => short_arr.push(p.clone()),
+            }
+        }
+    }
+
+    write_pos("lose_all", rnd_num, all_arr);
+    write_pos("lose_long", rnd_num, longs_arr);
+    write_pos("lose_short", rnd_num, short_arr);
+}
+
 fn write_pos(name: &str, rnd_num: u16, arr: Vec<Position>) {
     let os = serialize_position_v4(&arr);
     let txt = format!("{}", os);
-    std::fs::write(format!("{}_{}.csv", name, rnd_num), txt);
+    if txt.len() > 0 {
+        std::fs::write(format!("{}_{}.csv", name, rnd_num), txt);
+    }
 
     let js = to_json_out(&arr);
-    std::fs::write(format!("./json/{}.json", name), format!("{}", js));
+    if js.len() > 5 {
+        std::fs::write(format!("./json/{}.json", name), format!("{}", js));
+    }
+}
+
+fn report_seq_profit(all_pos: &Vec<Position>, rnd_num: u16) {
+    let mut res = vec![];
+
+    for p in all_pos {
+        res.push(p.profit)
+    }
+
+    let os = to_csv_out(&res, false);
+    let txt = format!("{}", os);
+
+    std::fs::write(format!("seq_profit_{}.csv", rnd_num), txt);
 }
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
@@ -342,8 +384,113 @@ pub struct ReportSummery {
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct MiddleStatic {
+    pub time_sec: u64,
     pub time_str: String,
     pub balance: f64,
     pub locked: f64,
     pub profit: f64,
+}
+
+fn report_summery(all_pos: &Vec<Position>) -> ReportSummery {
+    let mut total_time = 0;
+    let mut win_cnt = 0;
+    let mut win_amount = 0.;
+    let mut lose_cnt = 0;
+    let mut lose_amount = 0.;
+
+    for p in all_pos {
+        total_time += p.close_time - p.open_time;
+        if p.profit > 0. {
+            win_cnt += 1;
+            win_amount += p.profit;
+        } else {
+            lose_cnt += 1;
+            lose_amount += p.profit;
+        }
+    }
+
+    let win_ratio = win_cnt as f32 / (win_cnt + lose_cnt) as f32;
+    let pl_ratio = win_amount / lose_amount.abs();
+    let net_profit = win_amount - lose_amount.abs();
+    let total_time_str = helper::to_duration(total_time as i64);
+
+    // short/long state
+    let mut long_cnt = 0;
+    let mut long_win_cnt = 0;
+    let mut long_win_amount = 0.;
+    let mut long_lose_cnt = 0;
+    let mut long_lose_amount = 0.;
+    let mut short_cnt = 0;
+    let mut short_win_cnt = 0;
+    let mut short_win_amount = 0.;
+    let mut short_lose_cnt = 0;
+    let mut short_lose_amount = 0.;
+
+    for p in all_pos {
+        match p.direction {
+            PosDir::Long => {
+                long_cnt += 1;
+                if p.profit > 0. {
+                    long_win_cnt += 1;
+                    long_win_amount += p.profit;
+                } else {
+                    long_lose_cnt += 1;
+                    long_lose_amount += p.profit;
+                }
+            }
+            PosDir::Short => {
+                short_cnt += 1;
+                if p.profit > 0. {
+                    short_win_cnt += 1;
+                    short_win_amount += p.profit;
+                } else {
+                    short_lose_cnt += 1;
+                    short_lose_amount += p.profit;
+                }
+            }
+        }
+    }
+
+    let long_short_ratio = long_cnt as f32 / short_cnt as f32 / 2.;
+    let long_pl_ratio = long_win_amount / long_lose_amount.abs();
+    let short_pl_ratio = short_win_amount / short_lose_amount.abs();
+    let long_net_profit = long_win_amount - long_lose_amount.abs();
+    let short_net_profit = short_win_amount - short_lose_amount.abs();
+
+    // Pure profit cal
+    let long_profit_perc = long_net_profit / long_win_amount;
+    let short_profit_perc = short_net_profit / short_win_amount;
+    let all_profit_perc = net_profit / win_amount;
+
+    let report_res = ReportSummery {
+        win_cnt,
+        lose_cnt,
+        win_amount,
+        lose_amount,
+        total_time,
+        total_time_str,
+        win_ratio,
+        pl_ratio,
+        net_profit,
+        long_cnt,
+        long_win_cnt,
+        long_win_amount,
+        long_lose_cnt,
+        long_lose_amount,
+        long_net_profit,
+        short_cnt,
+        short_win_cnt,
+        short_win_amount,
+        short_lose_cnt,
+        short_lose_amount,
+        short_net_profit,
+        long_short_ratio,
+        long_pl_ratio,
+        short_pl_ratio,
+        long_profit_perc,
+        short_profit_perc,
+        all_profit_perc,
+    };
+
+    report_res
 }

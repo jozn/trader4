@@ -65,7 +65,7 @@ impl SkyEng {
 
                 let mut frame = new_frame(&ph_med, &ph_major);
                 frame.bars_small = smalls;
-                frame.set_signals();
+                frame.set_signals_dep();
                 self.frames.push(frame.clone());
                 Some(frame)
             }

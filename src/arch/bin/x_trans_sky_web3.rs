@@ -96,7 +96,7 @@ pub fn write_json(jo: &SkyJsonOut, pair: &Pair, week_id: u16, day_num: u64) {
     };
 
     let json_text = serde_json::to_string_pretty(&jo).unwrap();
-    let html_tmpl = std::fs::read_to_string("./src/web/tmpl/ui3.html").unwrap();
+    let html_tmpl = std::fs::read_to_string("../../web/tmpl/ui3.html").unwrap();
     let html = html_tmpl.replace("{{TITLE}}", &title);
     let html = html.replace("{{JSON_DATA}}", &json_text);
 
