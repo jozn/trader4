@@ -271,7 +271,7 @@ impl BackendEngine {
     }
 
     pub fn report_to_folder_dep(&mut self, suffix: &str) {
-        self.report.write_to_folder(&self, suffix);
+        // self.report.write_to_folder(&self, suffix);
     }
 
     pub fn report_to_folder(&mut self, week_data: &Vec<WeekData>, pair: &Pair) {

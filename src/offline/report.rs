@@ -1,6 +1,4 @@
 use rand::Rng;
-// use super::portfolio::*;
-// use super::offline_helper::*;
 use super::*;
 use crate::configs::assets::Pair;
 use crate::core::helper::get_time_sec;
@@ -18,7 +16,6 @@ pub struct Report {
     pub sub_folder: String,
     pub base_time: u64,
     pub rnd_num: u16,
-    // pub balance: Vec<BalanceTag>,
     pub middles: Vec<MiddleStatic>,
 }
 
@@ -40,12 +37,10 @@ impl Report {
             sub_folder: cfg.report_sub_folder.clone(),
             base_time: get_time_sec(),
             rnd_num: rand::thread_rng().gen_range(1..1000),
-            // balance: vec![],
             middles: vec![],
         }
     }
 
-    // todo all money
     pub fn collect_balance(&mut self, time_sec: u64, money: &Money) {
         // self.balance.push(money.balance);
         let ms = MiddleStatic {
@@ -57,13 +52,6 @@ impl Report {
         };
         self.middles.push(ms);
     }
-
-    // pub fn collect_balance2_no(&mut self, time_sec:u64, money: &Money) {
-    //     self.balance.push(BalanceTag{
-    //         time: time_sec,
-    //         balance: money.balance
-    //     });
-    // }
 
     pub fn on_new_trade(&mut self, t: &NewPos, money: &Money) {
         let ms = MiddleStatic {
@@ -133,80 +121,8 @@ impl Report {
         out
     }
 
-    pub fn write_to_folder_weeks_bk(
-        &self,
-        port: &BackendEngine,
-        week_data: Vec<WeekData>,
-        name: &str,
-    ) {
-        let time = get_time_sec();
-
-        let folder_base = if self.folder.is_empty() {
-            OUTPUT_FOLDER.to_string()
-        } else {
-            self.folder.clone()
-        };
-        let folder = if self.sub_folder.is_empty() {
-            format!("{}{}_{}", OUTPUT_FOLDER, time, name)
-        } else {
-            format!("{}{}_SUB/{}_{}", OUTPUT_FOLDER, self.sub_folder, time, name)
-        };
-    }
-
-    pub fn write_to_folder(&self, port: &BackendEngine, name: &str) {
-        let time = get_time_sec();
-
-        // Build folder out
-        // let folder = format!("../trader6_out/{}_{}", time, name);
-        let folder_base = if self.folder.is_empty() {
-            "../trader6_out/".to_string()
-        } else {
-            self.folder.clone()
-        };
-        let folder = if self.sub_folder.is_empty() {
-            format!("../trader6_out/{}_{}", time, name)
-        } else {
-            format!("../trader6_out/{}_SUB/{}_{}", self.sub_folder, time, name)
-        };
-
-        let folder_json = format!("{}/json", folder);
-        std::fs::create_dir_all(&folder);
-        std::fs::create_dir_all(&folder_json).unwrap();
-        let dir = std::env::current_dir().unwrap();
-        std::env::set_current_dir(&folder);
-
-        let all_pos = get_all_postions(port);
-        let all_closed_pos = get_all_postions(port);
-
-        std::fs::write(
-            format!("result_{}.txt", self.rnd_num),
-            format!("{:#?}", report_summery(&all_closed_pos)),
-        );
-
-        self.report_balance();
-        report_seq_profit(&all_closed_pos, self.rnd_num);
-        report_wins(&all_closed_pos, self.rnd_num);
-        report_loose(&all_closed_pos, self.rnd_num);
-
-        write_pos("all", self.rnd_num, all_pos);
-
-        // println!("balance: {:#?}", self.middles.last());
-
-        std::env::set_current_dir(dir);
-    }
-
-    fn report_balance(&self) {
-        let os = to_csv_out(&self.middles, false);
-        let txt = format!("{}", os);
-
-        std::fs::write(format!("balance_{}.csv", self.rnd_num), txt);
-
-        let js = to_json_out(&self.middles);
-        std::fs::write("./json/balance.json", format!("{}", js));
-    }
-
     pub fn get_report_summery(&self, port: &BackendEngine) -> ReportSummery {
-        let all_closed_pos = get_all_postions(port);
+        let all_closed_pos = get_all_postions_range(port,0,u64::MAX);
         report_summery(&all_closed_pos)
     }
 }
@@ -222,7 +138,6 @@ fn write_reports(folder: &str, rnd_num: u64, all_pos: &Vec<Position>) {
         format!("result_{}.txt", rnd_num),
         format!("{:#?}", report_summery(&all_pos)),
     );
-    // self.report_balance(); // todo
     report_seq_profit(&all_pos, rnd_num);
     report_wins(&all_pos, rnd_num);
     report_loose(&all_pos, rnd_num);
@@ -254,31 +169,6 @@ fn get_all_postions_range(port: &BackendEngine, start_sec: u64, end_sec: u64) ->
         if p.open_time >= start_sec && p.open_time < end_sec {
             all_pos.push(p.clone());
         }
-    }
-
-    all_pos.sort_by(|p1, p2| p1.pos_id.cmp(&p2.pos_id));
-
-    all_pos
-}
-
-fn get_all_postions(port: &BackendEngine) -> Vec<Position> {
-    let mut all_pos = vec![];
-    for (_, p) in port.opens.iter() {
-        all_pos.push(p.clone());
-    }
-    for (_, p) in port.closed.iter() {
-        all_pos.push(p.clone());
-    }
-
-    all_pos.sort_by(|p1, p2| p1.pos_id.cmp(&p2.pos_id));
-
-    all_pos
-}
-
-fn get_all_closed_postions(port: &BackendEngine) -> Vec<Position> {
-    let mut all_pos = vec![];
-    for (_, p) in port.closed.iter() {
-        all_pos.push(p.clone());
     }
 
     all_pos.sort_by(|p1, p2| p1.pos_id.cmp(&p2.pos_id));
