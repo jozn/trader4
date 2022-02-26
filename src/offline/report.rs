@@ -10,6 +10,8 @@ use serde::{Deserialize, Serialize};
 
 static OUTPUT_FOLDER: &str = "/mnt/t/trader/trades_res/";
 
+// todo: add week numbers to near rnd in file names
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Report {
     pub folder: String,

@@ -22,7 +22,7 @@ pub fn set_scalpe_signals_v1(sf: &mut SFrame, tick: &BTickData) {
     if bigta.ma_mom > 3. {
         if medbta.ma_mom > 0. {
             if medbta.ma_mom {
-
+                
             }
         }
     }
