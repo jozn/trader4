@@ -1,5 +1,6 @@
 use super::*;
-use crate::base::*;
+// use crate::base::*;
+use crate::bar::*;
 use crate::collector::row_data::BTickData;
 use crate::helper;
 use crate::ta::*;
@@ -142,13 +143,4 @@ impl SFrame {
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct FrameJsonOut {
     pub ohlc: JsonOHLC,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct JsonOHLC {
-    pub date: i64,
-    pub open: f64,
-    pub high: f64,
-    pub low: f64,
-    pub close: f64,
 }

@@ -1,4 +1,5 @@
 use super::*;
+use crate::bar::*;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct TimeFrameJson {

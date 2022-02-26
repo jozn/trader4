@@ -1,4 +1,5 @@
 use super::*;
+use crate::bar::*;
 use crate::base::*;
 use crate::collector::import_all::BTickData;
 use crate::helper;

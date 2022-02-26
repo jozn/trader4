@@ -1,4 +1,3 @@
-use rand::Rng;
 use super::*;
 use crate::configs::assets::Pair;
 use crate::core::helper::get_time_sec;
@@ -6,6 +5,7 @@ use crate::core::helper::*;
 use crate::gate_api::*;
 use crate::helper;
 use crate::types::WeekData;
+use rand::Rng;
 use serde::{Deserialize, Serialize};
 
 static OUTPUT_FOLDER: &str = "/mnt/t/trader/trades_res/";
@@ -124,7 +124,7 @@ impl Report {
     }
 
     pub fn get_report_summery(&self, port: &BackendEngine) -> ReportSummery {
-        let all_closed_pos = get_all_postions_range(port,0,u64::MAX);
+        let all_closed_pos = get_all_postions_range(port, 0, u64::MAX);
         report_summery(&all_closed_pos)
     }
 }

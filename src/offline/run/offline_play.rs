@@ -1,12 +1,12 @@
 use std::sync::Arc;
 
+use crate::bar::BarConfig;
 use crate::collector;
 use crate::configs::assets;
 use crate::configs::assets::Pair;
 use crate::gate_api::GateWay;
 use crate::helper::get_time_sec;
 use crate::offline::*;
-use crate::sky_eng::BarConfig;
 
 use super::*;
 

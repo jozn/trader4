@@ -1,8 +1,8 @@
+use crate::bar::*;
 use crate::base::CrossRes;
 use crate::configs::assets;
 use crate::configs::assets::*;
 use crate::gate_api::*;
-use crate::sky_eng::BarConfig;
 use std::borrow::BorrowMut;
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::sync::Arc;
