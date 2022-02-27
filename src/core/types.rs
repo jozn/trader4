@@ -13,3 +13,13 @@ pub struct ActionSignal {
     pub profit: f64,
     pub loss: f64,
 }
+
+// ps_ : primary_signal
+// fs_ : final_signal
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct SignalMem{
+    pub ps_buy: bool,
+    pub ps_small_bar_id: i32,
+    pub fs_buy: bool,
+    pub fs_small_bar_id: i32,
+}

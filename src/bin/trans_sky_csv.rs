@@ -24,7 +24,7 @@ pub fn main() {
             let mut sky_eng = trader4::sky_eng::SkyEng::new();
 
             for t in ticks.clone() {
-                sky_eng.add_tick(&t);
+                sky_eng.add_tick_dep(&t);
             }
 
             let frames = to_frame_csv(sky_eng.frames.clone());

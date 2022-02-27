@@ -50,61 +50,12 @@ impl Brain {
                     };
 
                     if self.already_acted(symbol_id, kline_id) {
-                        // return;
-                    }
-
-                    // println!("Open long {:#?}", np);
-                    self.con.open_position_req_new(&np);
-                }
-            }
-        }
-    }
-
-    // new engine
-    pub fn on_price_tick_bk(&mut self, pair: &Pair, tick: BTickData) {
-        let symbol_id = pair.to_symbol_id();
-        let mut pari_mem = self.borrow_pair_meta(symbol_id);
-        pari_mem.last_tick = Some(tick.clone());
-        let frame_opt = pari_mem
-            .sky_eng
-            .add_tick_bk(&tick, &mut pari_mem.signals_db);
-        self.update_all_tailing_pos();
-
-        match frame_opt {
-            None => {}
-            Some(frame) => {
-                // let dcs = &frame.dcs;
-                let f = &frame;
-                let kline_id = f.fid;
-                let sp = f.big_dc_hl_pip / 1.5;
-                let sp = 6.;
-
-                if f.buy2 {
-                    // if f.sell1 {
-                    // if dcs.sell2 {
-                    let np = NewPos {
-                        pair: pair.clone(),
-                        is_short: false,
-                        base_asset_size: 10_000.0,
-                        // exit_high_price: pair.cal_price(tick.bid_price, 12.5),
-                        exit_high_price: pair.cal_price(tick.bid_price, sp),
-                        // exit_low_price: pair.cal_price(tick.bid_price, -12.5),
-                        // exit_low_price: pair.cal_price(tick.bid_price, -sp / 2.),
-                        exit_low_price: pair.cal_price(tick.bid_price, -sp / 1.6),
-                        at_price: tick.ask_price,
-                        time_sec: tick.timestamp_sec as u64,
-                        frame: frame.clone(),
-                    };
-
-                    if self.already_acted(symbol_id, kline_id) {
                         return;
                     }
 
                     // println!("Open long {:#?}", np);
                     self.con.open_position_req_new(&np);
                 }
-
-                if f.sell1 {}
             }
         }
     }

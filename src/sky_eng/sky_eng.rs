@@ -5,15 +5,13 @@ use crate::brain::{PairMemory, SignalsDB};
 use crate::collector::import_all::BTickData;
 use crate::helper;
 use crate::ta::*;
-use crate::types::ActionSignal;
+use crate::types::{ActionSignal, SignalMem};
 use serde::{Deserialize, Serialize};
 
 // Sky Engine
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct SkyEng {
-    pub frame_id: u64, // For next frame id
-    pub buy_sign: bool,
-    pub buy_full: bool,
+    pub signal_mem: Option<SignalMem>,
     pub frames: Vec<SFrame>,
     pub major_cfg: BarConfig,
     pub major_bars: BarSeries,
@@ -44,9 +42,7 @@ impl SkyEng {
         };
 
         Self {
-            frame_id: 0,
-            buy_sign: false,
-            buy_full: false,
+            signal_mem:None,
             frames: vec![],
             major_cfg: major_cfg.clone(),
             major_bars: BarSeries::new(&major_cfg),
@@ -78,21 +74,22 @@ impl SkyEng {
                 let mut frame = new_frame(&ph_med, &ph_major);
                 frame.bars_small = smalls;
                 frame.bar_small_tip = ph_small;
-                let act = frame.set_scalper(tick, mem);
+                let act = self.set_signals(tick, &mut frame);
+                // let act = frame.set_scalper_dep(tick, mem);
                 // self.add_signs(&frame);
                 if ph_medium.is_some() {
+                    if self.signal_mem.is_some() {
+                        // frame.
+                    }
+                    frame.signal_mem = self.signal_mem.clone();
                     self.frames.push(frame.clone());
-                    // act
-                    // None // todo
                 };
                 act
             }
         }
     }
 
-    ///////////////////////// Dep///////////
-
-    pub fn add_tick2(&mut self, tick: &BTickData) -> Option<SFrame> {
+    /*pub fn add_tick_dep(&mut self, tick: &BTickData, mem: &mut SignalsDB) -> Option<ActionSignal> {
         let ph_big = self.major_bars.add_tick_mut(tick);
         let ph_medium = self.medium_bars.add_tick_mut(tick);
         let ph_small = self.small_bars.add_tick_mut(tick);
@@ -113,48 +110,28 @@ impl SkyEng {
                 let mut frame = new_frame(&ph_med, &ph_major);
                 frame.bars_small = smalls;
                 frame.bar_small_tip = ph_small;
-                frame.set_scalper_bk(tick);
-                self.add_signs(&frame);
+                let act = frame.set_scalper_dep(tick, mem);
+                // self.add_signs(&frame);
                 if ph_medium.is_some() {
+                    let sig =mem.get_signal("sky1");
+                    if sig.is_some() {
+                        let sig = sig.unwrap();
+                        if sig.final_buy {
+                            frame.buy2_dep = true;
+                            mem.get_signal("sky1");
+                        }
+                    }
+                    frame.buy2_dep = true;
+                    // frame.buy1 = true;
+                    frame.sell2_dep = true;
+                    // frame.sell1 = true;
                     self.frames.push(frame.clone());
-                    Some(frame)
-                } else {
-                    None
-                }
+                    // act
+                    // None // todo
+                };
+                act
             }
         }
     }
-
-    pub fn add_signs(&mut self, sf: &SFrame) {
-        if sf.sign_buy {
-            self.buy_sign = true;
-        }
-        if sf.buy2 {
-            self.buy_sign = false;
-            let mut sf = sf.clone();
-        }
-    }
-
-    pub fn add_tick_bk(&mut self, tick: &BTickData, mem: &mut SignalsDB) -> Option<SFrame> {
-        let ph_big = self.major_bars.add_tick_mut(tick);
-        let ph_medium = self.medium_bars.add_tick_mut(tick);
-        let ph_small = self.small_bars.add_tick_mut(tick);
-        match ph_medium {
-            None => None,
-            Some(ph_med) => {
-                let smalls = self
-                    .small_bars
-                    .get_bars_ph(ph_med.primary.open_time - 1, i64::MAX);
-                // println!("len >>> {}", smalls.len());
-                let ph_major = self.major_bars.build_ph_tip();
-
-                let mut frame = new_frame(&ph_med, &ph_major);
-                frame.bars_small = smalls;
-                // frame.set_signals_dep();
-                frame.set_scalper_bk(tick);
-                self.frames.push(frame.clone());
-                Some(frame)
-            }
-        }
-    }
+*/
 }

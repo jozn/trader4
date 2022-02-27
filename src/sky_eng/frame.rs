@@ -5,6 +5,7 @@ use crate::collector::row_data::BTickData;
 use crate::helper;
 use crate::ta::*;
 use serde::{Deserialize, Serialize};
+use crate::types::SignalMem;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct SFrame {
@@ -41,14 +42,16 @@ pub struct SFrame {
     #[serde(skip)]
     pub bar_small_tip: PrimaryHolder,
 
+    #[serde(skip)]
+    pub signal_mem: Option<SignalMem>,
     // signals
-    pub sign_buy: bool,
-    pub sign_sell: bool,
-    pub buy2: bool,
-    pub sell2: bool,
+    pub sign_buy_dep: bool,
+    pub sign_sell_dep: bool,
+    pub buy2_dep: bool,
+    pub sell2_dep: bool,
 
     #[serde(skip)]
-    pub buys: Vec<i64>,
+    pub buys_dep: Vec<i64>,
     #[serde(skip)]
     pub sells: Vec<i64>,
 }
@@ -84,10 +87,10 @@ pub fn new_frame(ph_medium: &PrimaryHolder, ph_major: &PrimaryHolder) -> SFrame 
     }
     // set sell buy signals
     if bta.trend.is_bullish() && pta.rpi.buy_low {
-        f.buy1 = true;
+        // f.buy1 = true;
     }
     if bta.trend.is_bearish() && pta.rpi.buy_high {
-        f.sell1 = true;
+        // f.sell1 = true;
     }
 
     f

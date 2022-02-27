@@ -221,8 +221,8 @@ impl SkyEng {
 
             // todo migrate markers from x_**
             // Markers
-            if fm.buy2 {
-                for s in fm.buys.clone() {
+            if fm.buy2_dep {
+                for s in fm.buys_dep.clone() {
                     out.markers.push(MarkerJson {
                         time: s / 1000,
                         position: "belowBar".to_string(),
@@ -233,7 +233,7 @@ impl SkyEng {
                     })
                 }
             }
-            if fm.sell2 {
+            if fm.sell2_dep {
                 for s in fm.sells.clone() {
                     out.markers.push(MarkerJson {
                         time: s / 1000,

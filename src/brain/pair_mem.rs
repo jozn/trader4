@@ -48,12 +48,15 @@ impl SignalsDB {
             Some(sig) => Some(sig.clone()),
         }
     }
+    pub fn remove_signal(&mut self, key: &str)  {
+        let res = self.signals_db.remove(key);
+    }
 }
 #[derive(Debug, Clone)]
 pub struct PairSignalsMemory {
     pub key: String,
     pub primary_signal: bool,
-    pub ps_small_bar_id: u32,
+    pub ps_small_bar_id: i32,
     pub final_buy: bool,
-    pub fb_small_bar_id: u32,
+    pub fb_small_bar_id: i32,
 }
