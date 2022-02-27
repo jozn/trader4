@@ -100,6 +100,7 @@ impl Report {
         write_reports(&main_folder, rnd, &all_closed_pos);
         write_reports_middles(&main_folder, rnd, &self.middles);
 
+        let mut reports = vec![];
         // Weeks reports
         for wd in week_data {
             let week_closed_pos =
@@ -107,10 +108,29 @@ impl Report {
             let week_folder = format!("{}weeks/{}/", main_folder, wd.week_id);
             let rnd = helper::get_rand(1000);
             write_reports(&week_folder, rnd, &week_closed_pos);
+            reports.push((wd.week_id,report_summery(&week_closed_pos)));
 
             let mids = self.get_all_middles_range(wd.start / 1000, wd.end / 1000);
             write_reports_middles(&week_folder, rnd, &mids);
         }
+
+        // Weeks collective summery
+        let mut weeks_up = 0;
+        let mut weeks_down = 0;
+        let mut cs_txt = String::new();
+        for (w,r) in &reports {
+            let s = format!("{}   {:>5.2} - wr:{:.2}   w:{}  l:{} \n",w,r.all_profit_perc,r.win_ratio,r.win_cnt,r.lose_cnt);
+            cs_txt.push_str(&s);
+            if r.all_profit_perc > 0. {
+                weeks_up +=1;
+            } else {
+                weeks_down +=1;
+            }
+        }
+        let s = format!("up: {}   down: {}  all {}",weeks_up,weeks_down,reports.len());
+        cs_txt.push_str(&s);
+        println!("{}",cs_txt);
+        std::fs::write(format!("weeks_{}.txt", rnd), cs_txt);
     }
 
     fn get_all_middles_range(&self, start_sec: i64, end_sec: i64) -> Vec<MiddleStatic> {

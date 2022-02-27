@@ -249,7 +249,7 @@ impl SkyEng {
 
         // Sort markets asending
         out.markers.sort_by(|o1, o2| o1.time.cmp(&o2.time));
-        out.markers.clear();
+        // out.markers.clear();
         out
     }
 }

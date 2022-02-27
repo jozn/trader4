@@ -6,25 +6,41 @@ pub struct ScalpConf {
 }
 
 impl SFrame {
-    pub fn set_scalper(&mut self) {
-        set_scalpe_signals_v1(self);
+    pub fn set_scalper(&mut self, tick: &BTickData) {
+        set_scalpe_signals_v1(self, tick);
     }
 }
 
-// pub fn set_scalpe_signals_v1(sf: &mut SFrame, tick: &BTickData) {
-pub fn set_scalpe_signals_v1(sf: &mut SFrame) {
+pub fn set_scalpe_signals_v1(sf: &mut SFrame, tick: &BTickData) {
     let bigb = &sf.bar_major.big;
     let bigta = &bigb.ta;
 
     let medbb = &sf.bar_medium.big;
     let medbta = &medbb.ta;
-    let medpta = &&sf.bar_medium.big.ta;
+    let medpta = &sf.bar_medium.big.ta;
 
-    if bigta.ma_mom > 3. {
-        if medbta.ma_mom > 0. {}
+    let snake = &medpta.sb;
+    let price = tick.bid_price;
+
+    let small_bar_big = &sf.bar_small_tip.big.ta;
+
+    if bigta.ma_mom > 0. {
+        if medpta.ma_mom > 0. {
+            if snake.low_band > price {
+                // sf.buy2 = true;
+                sf.sign_buy = true;
+            }
+        }
     }
 
-    if bigta.trend.is_bullish() {
+    if sf.sign_buy {
+
+    }
+    if small_bar_big.trend.is_bullish() {
+
+    }
+
+    if bigta.trend.is_bullish() || false {
         sf.sign_sell = false;
 
         let pb = &sf.bar_medium.primary;

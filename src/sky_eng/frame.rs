@@ -38,6 +38,8 @@ pub struct SFrame {
     pub bar_medium: PrimaryHolder,
     #[serde(skip)]
     pub bars_small: Vec<PrimaryHolder>,
+    #[serde(skip)]
+    pub bar_small_tip: PrimaryHolder,
 
     // signals
     pub sign_buy: bool,
