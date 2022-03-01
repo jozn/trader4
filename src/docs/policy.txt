@@ -1,3 +1,22 @@
+== 10 Esfnad 1400
+    +New design:
+    + Brain respoiboity:
+        + api calls
+        + many signals engine monitores and processing
+        + tailing/traking of each signal engine profitalbity
+        + traking actula trades
+        + dynamic stop loos
+        + virtual trades for signals to see profitablity
+    + SkyEng:
+        + An impl of signal generating
+        + web ui based on this for now
+        + frame based storage
+    + Cortex:
+        + collection of types between Brain and SkyEng
+        + memory of brian should go in here
+        + Brain > SkyEng > Cortex
+        + types: markers, signals, ...
+
 == 14 Bahman 1400
    +todo probeblic sar formual and review
 == 4 Bahman 1400

@@ -1,6 +1,8 @@
 use super::*;
 use crate::bar::*;
 
+// todo: extract json to core
+
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct TimeFrameJson {
     pub ohlc: Vec<JsonRowOHLC>,
@@ -219,9 +221,9 @@ impl SkyEng {
                 value: fm.bar_major.big.ta.ma_mom,
             });
 
-            // todo migrate markers from x_**
+            // todo migrate markers from old frame
             // Markers
-            if fm.buy2_dep {
+            /*if fm.buy2_dep {
                 for s in fm.buys_dep.clone() {
                     out.markers.push(MarkerJson {
                         time: s / 1000,
@@ -244,7 +246,7 @@ impl SkyEng {
                                            // text: format!("Sell @ {}", bar.hlc3())
                     })
                 }
-            }
+            }*/
         }
 
         // Sort markets asending

@@ -113,6 +113,7 @@ impl Report {
             let mids = self.get_all_middles_range(wd.start / 1000, wd.end / 1000);
             write_reports_middles(&week_folder, rnd, &mids);
         }
+        std::env::set_current_dir(&main_folder);
 
         // Weeks collective summery
         let mut weeks_up = 0;
@@ -138,7 +139,7 @@ impl Report {
         );
         cs_txt.push_str(&s);
         println!("{}", cs_txt);
-        std::fs::write(format!("weeks_{}.txt", rnd), cs_txt);
+        std::fs::write(format!("./weeks_{}.txt", rnd), cs_txt);
     }
 
     fn get_all_middles_range(&self, start_sec: i64, end_sec: i64) -> Vec<MiddleStatic> {
@@ -176,6 +177,7 @@ fn write_reports(folder: &str, rnd_num: u64, all_pos: &Vec<Position>) {
 }
 
 fn write_reports_middles(folder: &str, rnd_num: u64, middles: &Vec<MiddleStatic>) {
+    let old_dir = std::env::current_dir().unwrap();
     std::env::set_current_dir(&folder);
 
     let os = to_csv_out(&middles, false);
@@ -185,6 +187,7 @@ fn write_reports_middles(folder: &str, rnd_num: u64, middles: &Vec<MiddleStatic>
 
     let js = to_json_out(&middles);
     std::fs::write("./json/balance.json", format!("{}", js));
+    std::env::set_current_dir(&old_dir);
 }
 
 fn get_all_postions_range(port: &BackendEngine, start_sec: u64, end_sec: u64) -> Vec<Position> {

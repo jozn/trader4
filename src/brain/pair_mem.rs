@@ -48,7 +48,7 @@ impl SignalsDB {
             Some(sig) => Some(sig.clone()),
         }
     }
-    pub fn remove_signal(&mut self, key: &str)  {
+    pub fn remove_signal(&mut self, key: &str) {
         let res = self.signals_db.remove(key);
     }
 }

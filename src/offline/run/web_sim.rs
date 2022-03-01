@@ -76,9 +76,11 @@ impl WebBackRunConfig {
         println!("Completed Brain.");
 
         // Print Sky_Eng outputs
-        for (_, pair_mem) in brain.db.iter() {
-            println!("web {:?} ...", &pair_mem.pair);
-            self.write_web_output(&pair_mem.sky_eng);
+        if self.web {
+            for (_, pair_mem) in brain.db.iter() {
+                println!("web {:?} ...", &pair_mem.pair);
+                self.write_web_output(&pair_mem.sky_eng);
+            }
         }
 
         let money = back_ref.get_money();

@@ -5,13 +5,13 @@ use crate::brain::{PairMemory, SignalsDB};
 use crate::collector::import_all::BTickData;
 use crate::helper;
 use crate::ta::*;
-use crate::types::{ActionSignal, SignalMem};
+use crate::types::{ActionSignalDep, SignalMemDep};
 use serde::{Deserialize, Serialize};
 
 // Sky Engine
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct SkyEng {
-    pub signal_mem: Option<SignalMem>,
+    pub signal_mem: Option<SignalMemDep>,
     pub frames: Vec<SFrame>,
     pub major_cfg: BarConfig,
     pub major_bars: BarSeries,
@@ -42,7 +42,7 @@ impl SkyEng {
         };
 
         Self {
-            signal_mem:None,
+            signal_mem: None,
             frames: vec![],
             major_cfg: major_cfg.clone(),
             major_bars: BarSeries::new(&major_cfg),
@@ -53,7 +53,7 @@ impl SkyEng {
         }
     }
 
-    pub fn add_tick(&mut self, tick: &BTickData, mem: &mut SignalsDB) -> Option<ActionSignal> {
+    pub fn add_tick(&mut self, tick: &BTickData, mem: &mut SignalsDB) -> Option<ActionSignalDep> {
         let ph_big = self.major_bars.add_tick_mut(tick);
         let ph_medium = self.medium_bars.add_tick_mut(tick);
         let ph_small = self.small_bars.add_tick_mut(tick);
@@ -74,7 +74,7 @@ impl SkyEng {
                 let mut frame = new_frame(&ph_med, &ph_major);
                 frame.bars_small = smalls;
                 frame.bar_small_tip = ph_small;
-                let act = self.set_signals(tick, &mut frame);
+                let act = self.set_signals_random(tick, &mut frame);
                 // let act = frame.set_scalper_dep(tick, mem);
                 // self.add_signs(&frame);
                 if ph_medium.is_some() {
@@ -85,53 +85,54 @@ impl SkyEng {
                     self.frames.push(frame.clone());
                 };
                 act
+                // None //todo
             }
         }
     }
 
     /*pub fn add_tick_dep(&mut self, tick: &BTickData, mem: &mut SignalsDB) -> Option<ActionSignal> {
-        let ph_big = self.major_bars.add_tick_mut(tick);
-        let ph_medium = self.medium_bars.add_tick_mut(tick);
-        let ph_small = self.small_bars.add_tick_mut(tick);
+            let ph_big = self.major_bars.add_tick_mut(tick);
+            let ph_medium = self.medium_bars.add_tick_mut(tick);
+            let ph_small = self.small_bars.add_tick_mut(tick);
 
-        match ph_small {
-            None => None,
-            Some(ph_small) => {
-                let ph_med = match ph_medium.clone() {
-                    None => self.medium_bars.build_ph_tip(),
-                    Some(ph_med) => ph_med,
-                };
-                let smalls = self
-                    .small_bars
-                    .get_bars_ph(ph_med.primary.open_time - 1, i64::MAX);
-                // println!("len >>> {}", smalls.len());
-                let ph_major = self.major_bars.build_ph_tip();
+            match ph_small {
+                None => None,
+                Some(ph_small) => {
+                    let ph_med = match ph_medium.clone() {
+                        None => self.medium_bars.build_ph_tip(),
+                        Some(ph_med) => ph_med,
+                    };
+                    let smalls = self
+                        .small_bars
+                        .get_bars_ph(ph_med.primary.open_time - 1, i64::MAX);
+                    // println!("len >>> {}", smalls.len());
+                    let ph_major = self.major_bars.build_ph_tip();
 
-                let mut frame = new_frame(&ph_med, &ph_major);
-                frame.bars_small = smalls;
-                frame.bar_small_tip = ph_small;
-                let act = frame.set_scalper_dep(tick, mem);
-                // self.add_signs(&frame);
-                if ph_medium.is_some() {
-                    let sig =mem.get_signal("sky1");
-                    if sig.is_some() {
-                        let sig = sig.unwrap();
-                        if sig.final_buy {
-                            frame.buy2_dep = true;
-                            mem.get_signal("sky1");
+                    let mut frame = new_frame(&ph_med, &ph_major);
+                    frame.bars_small = smalls;
+                    frame.bar_small_tip = ph_small;
+                    let act = frame.set_scalper_dep(tick, mem);
+                    // self.add_signs(&frame);
+                    if ph_medium.is_some() {
+                        let sig =mem.get_signal("sky1");
+                        if sig.is_some() {
+                            let sig = sig.unwrap();
+                            if sig.final_buy {
+                                frame.buy2_dep = true;
+                                mem.get_signal("sky1");
+                            }
                         }
-                    }
-                    frame.buy2_dep = true;
-                    // frame.buy1 = true;
-                    frame.sell2_dep = true;
-                    // frame.sell1 = true;
-                    self.frames.push(frame.clone());
-                    // act
-                    // None // todo
-                };
-                act
+                        frame.buy2_dep = true;
+                        // frame.buy1 = true;
+                        frame.sell2_dep = true;
+                        // frame.sell1 = true;
+                        self.frames.push(frame.clone());
+                        // act
+                        // None // todo
+                    };
+                    act
+                }
             }
         }
-    }
-*/
+    */
 }

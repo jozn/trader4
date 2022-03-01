@@ -12,9 +12,12 @@ use super::web_sim::*;
 use super::*;
 
 pub fn run1() {
-    run_pair(&Pair::EURUSD);
-    // run_pair(&Pair::USDCHF);
+    // run_pair(&Pair::EURUSD);
+    run_pair(&Pair::USDCHF);
+    // run_pair(&Pair::USDCAD);
     // run_pair(&Pair::NZDUSD);
+    // run_pair(&Pair::GBPUSD);
+    // run_pair(&Pair::ADAUSD);
 }
 
 pub fn run2() {
@@ -47,7 +50,7 @@ pub fn run_pair(pair: &Pair) {
         week_id: 1,
         print: true,
         report: true,
-        web: true,
+        web: false,
         report_cfg: BackReportConf {
             report_folder: "".to_string(),
             report_sub_folder: "".to_string(),
