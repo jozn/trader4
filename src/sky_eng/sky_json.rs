@@ -1,3 +1,4 @@
+use std::os::unix::raw::off_t;
 use super::*;
 use crate::bar::*;
 
@@ -223,6 +224,15 @@ impl SkyEng {
 
             // todo migrate markers from old frame
             // Markers
+            // println!(">{:?}", &fm.signal_action);
+            if fm.get_early_mark().is_some() {
+                // println!("Open long {:?}", fm.get_early_mark());
+                out.markers.push(fm.get_early_mark().unwrap());
+            }
+            if fm.get_long_final_mark().is_some() {
+                out.markers.push(fm.get_long_final_mark().unwrap());
+            }
+
             /*if fm.buy2_dep {
                 for s in fm.buys_dep.clone() {
                     out.markers.push(MarkerJson {

@@ -7,11 +7,14 @@ use crate::helper;
 use crate::ta::*;
 use crate::types::{ActionSignalDep, SignalMemDep};
 use serde::{Deserialize, Serialize};
+use crate::cortex::eng_memory::CortexMem;
+use crate::cortex::types::ActionSignal;
 
 // Sky Engine
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct SkyEng {
     pub signal_mem: Option<SignalMemDep>,
+    pub cortex_mem: CortexMem,
     pub frames: Vec<SFrame>,
     pub major_cfg: BarConfig,
     pub major_bars: BarSeries,
@@ -43,6 +46,7 @@ impl SkyEng {
 
         Self {
             signal_mem: None,
+            cortex_mem: CortexMem::new(),
             frames: vec![],
             major_cfg: major_cfg.clone(),
             major_bars: BarSeries::new(&major_cfg),
@@ -53,7 +57,7 @@ impl SkyEng {
         }
     }
 
-    pub fn add_tick(&mut self, tick: &BTickData, mem: &mut SignalsDB) -> Option<ActionSignalDep> {
+    pub fn add_tick(&mut self, tick: &BTickData, mem: &mut SignalsDB) -> Option<ActionSignal> {
         let ph_big = self.major_bars.add_tick_mut(tick);
         let ph_medium = self.medium_bars.add_tick_mut(tick);
         let ph_small = self.small_bars.add_tick_mut(tick);
@@ -65,6 +69,7 @@ impl SkyEng {
                     None => self.medium_bars.build_ph_tip(),
                     Some(ph_med) => ph_med,
                 };
+                let time_bar_med = ph_med.primary.get_open_time_sec();
                 let smalls = self
                     .small_bars
                     .get_bars_ph(ph_med.primary.open_time - 1, i64::MAX);
@@ -74,18 +79,24 @@ impl SkyEng {
                 let mut frame = new_frame(&ph_med, &ph_major);
                 frame.bars_small = smalls;
                 frame.bar_small_tip = ph_small;
-                let act = self.set_signals_random(tick, &mut frame);
+                let _act = self.set_signals_random(tick, &mut frame);
+                let act = self.cortex_mem.consume_action(time_bar_med);
                 // let act = frame.set_scalper_dep(tick, mem);
                 // self.add_signs(&frame);
                 if ph_medium.is_some() {
-                    if self.signal_mem.is_some() {
-                        // frame.
-                    }
-                    frame.signal_mem = self.signal_mem.clone();
+                    // if self.signal_mem.is_some() {
+                    //     frame.
+                    // }
+                    // println!("ttt");
+                    frame.signal_mem = self.cortex_mem.get_snapshot(time_bar_med);
+                    frame.signal_action = self.cortex_mem.get_action(time_bar_med);
+                    // println!("ttt {:?}", self.cortex_mem.get_action(time_bar_med));
+                    self.cortex_mem.clear_old(time_bar_med);
                     self.frames.push(frame.clone());
                 };
                 act
                 // None //todo
+                // self.cortex_mem.consume_action()
             }
         }
     }

@@ -97,6 +97,9 @@ impl Bar {
         bar
     }
 
+    pub fn get_open_time_sec(&self) -> i64 {
+        self.open_time/1000
+    }
     pub(super) fn validate(&self) {
         assert!(self.high >= self.open);
         assert!(self.high >= self.low);

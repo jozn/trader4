@@ -6,6 +6,7 @@ use crate::helper;
 use crate::ta::*;
 use crate::types::SignalMemDep;
 use serde::{Deserialize, Serialize};
+use crate::cortex::types::{ActionSignal, SignalMem};
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct SFrame {
@@ -43,7 +44,9 @@ pub struct SFrame {
     pub bar_small_tip: PrimaryHolder,
 
     #[serde(skip)]
-    pub signal_mem: Option<SignalMemDep>,
+    pub signal_mem: Option<SignalMem>,
+    #[serde(skip)]
+    pub signal_action: Option<ActionSignal>,
     #[serde(skip)]
     pub signal_store: Option<SignalMemDep>,
     // signals
@@ -143,6 +146,38 @@ impl SFrame {
         let bta = &self.bar_medium.big.ta;
         FrameJsonOut {
             ohlc: self.bar_medium.primary.to_json_out(),
+        }
+    }
+
+    pub fn get_early_mark(&self) -> Option<MarkerJson> {
+        match &self.signal_mem {
+            None => {None}
+            Some(sm) => {
+                //todo short
+                Some(MarkerJson{
+                    time: sm.ps_time_sec,
+                    position: "belowBar".to_string(),
+                    color: "#ffe17d".to_string(),
+                    shape: "arrowUp".to_string(),
+                    text: format!(""),
+                })
+            }
+        }
+    }
+
+    pub fn get_long_final_mark(&self) -> Option<MarkerJson> {
+        match &self.signal_action {
+            None => {None}
+            Some(sm) => {
+                //todo short
+                Some(MarkerJson{
+                    time: sm.time_sec,
+                    position: "belowBar".to_string(),
+                    color: "#2196F3".to_string(),
+                    shape: "arrowUp".to_string(),
+                    text: format!(""),
+                })
+            }
         }
     }
 }

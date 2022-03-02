@@ -1,5 +1,6 @@
 use super::*;
 use crate::collector::import_all::BTickData;
+use crate::cortex::types::ActionSignal;
 use crate::helper;
 use crate::types::*;
 
@@ -23,15 +24,25 @@ impl SkyEng {
         let medpta = &sf.bar_medium.big.ta;
 
         if helper::get_rand(1000) < 11 && bigta.trend.is_bearish() {
-            // if helper::get_rand(1000) < 11 && bigta.trend.is_bullish() &&medbta.trend.is_bullish() {
-            let act = ActionSignalDep {
-                small_kid: kid,
+            self.cortex_mem.mark_long_early(kid_small, tick.timestamp_sec);
+            self.cortex_mem.mark_long_final(kid_small, tick.timestamp_sec);
+            self.cortex_mem.set_action(&ActionSignal{
+                small_kid: kid_small,
+                consumed: false,
                 long: true,
                 profit: 8.0,
                 loss: -8.0,
-            };
-            self.signal_mem = None;
-            return Some(act);
+                time_sec: tick.timestamp_sec
+            });
+            // if helper::get_rand(1000) < 11 && bigta.trend.is_bullish() &&medbta.trend.is_bullish() {
+            // let act = ActionSignalDep {
+            //     small_kid: kid,
+            //     long: true,
+            //     profit: 8.0,
+            //     loss: -8.0,
+            // };
+            // self.signal_mem = None;
+            // return Some(act);
         }
         None
     }

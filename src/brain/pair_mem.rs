@@ -10,7 +10,7 @@ pub struct PairMemory {
     pub pair: Pair,
     pub last_tick: Option<BTickData>,
     pub last_trade_time: u64,
-    pub signals_db: SignalsDB,
+    pub dep_signals_db: SignalsDB, // dep
     pub sky_eng: SkyEng,
 }
 
@@ -20,7 +20,7 @@ impl PairMemory {
             pair: p,
             last_tick: None,
             last_trade_time: 0,
-            signals_db: SignalsDB::new(),
+            dep_signals_db: SignalsDB::new(),
             sky_eng: SkyEng::new(),
         }
     }
