@@ -14,6 +14,29 @@
         .chart {
             margin-left: 5px;
         }
+
+        /*Table of trades*/
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+        tr.won>td {
+
+        }
+        .lost{
+
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" ></script>
 <!--    <script src="https://unpkg.com/lightweight-charts@3.7.0/dist/lightweight-charts.standalone.production.js" ></script>-->
@@ -44,6 +67,7 @@
     <div id="chart3" style="display:block;"></div>
     <div id="chart4" style="display:block;"></div>
 </div>
+<div id="postions" style="">{{TRADE_DATA}}</div>
 
 <div id="json_data" style="display: none">{{JSON_DATA}}</div>
 

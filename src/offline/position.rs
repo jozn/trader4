@@ -45,7 +45,7 @@ pub struct Position {
     pub quote_asset_size: f64,
     // pub got_assets: f64,
     #[serde(skip)]
-    pub open_time: u64,
+    pub open_time: u64, // seconds
     #[serde(rename = "time_o")]
     pub open_time_str: String,
     pub updates: u64,
@@ -54,7 +54,7 @@ pub struct Position {
     pub exit_low_price: f64,
     pub close_price: f64,
     #[serde(skip)]
-    pub close_time: u64,
+    pub close_time: u64, // seconds
     #[serde(rename = "time_c")]
     pub close_time_str: String,
     #[serde(skip)]

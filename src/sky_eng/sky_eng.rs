@@ -3,12 +3,12 @@ use crate::bar::*;
 use crate::base::*;
 use crate::brain::{PairMemory, SignalsDB};
 use crate::collector::import_all::BTickData;
+use crate::cortex::eng_memory::CortexMem;
+use crate::cortex::types::ActionSignal;
 use crate::helper;
 use crate::ta::*;
 use crate::types::{ActionSignalDep, SignalMemDep};
 use serde::{Deserialize, Serialize};
-use crate::cortex::eng_memory::CortexMem;
-use crate::cortex::types::ActionSignal;
 
 // Sky Engine
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -70,6 +70,7 @@ impl SkyEng {
                     Some(ph_med) => ph_med,
                 };
                 let time_bar_med = ph_med.primary.get_open_time_sec();
+                let kid = ph_med.primary.seq;
                 let smalls = self
                     .small_bars
                     .get_bars_ph(ph_med.primary.open_time - 1, i64::MAX);
@@ -88,7 +89,7 @@ impl SkyEng {
                     //     frame.
                     // }
                     // println!("ttt");
-                    frame.signal_mem = self.cortex_mem.get_snapshot(time_bar_med);
+                    frame.signal_mem = self.cortex_mem.get_snapshot(kid);
                     frame.signal_action = self.cortex_mem.get_action(time_bar_med);
                     // println!("ttt {:?}", self.cortex_mem.get_action(time_bar_med));
                     self.cortex_mem.clear_old(time_bar_med);

@@ -1,11 +1,11 @@
 use crate::brain::*;
-use crate::collector;
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
 use crate::gate_api::GateWay;
 use crate::offline::*;
 use crate::sky_eng::{SkyEng, SkyJsonOut};
 use crate::types::WeekData;
+use crate::{collector, offline};
 use std::ops::Range;
 use std::sync::Arc;
 
@@ -77,9 +77,14 @@ impl WebBackRunConfig {
 
         // Print Sky_Eng outputs
         if self.web {
+            let mut postions = vec![];
+            for (_, p) in back_ref.closed.iter() {
+                postions.push(p.clone());
+            }
+
             for (_, pair_mem) in brain.db.iter() {
                 println!("web {:?} ...", &pair_mem.pair);
-                self.write_web_output(&pair_mem.sky_eng);
+                self.write_web_output(&pair_mem.sky_eng, &postions);
             }
         }
 
@@ -104,13 +109,14 @@ impl WebBackRunConfig {
     }
 
     // code copy of trans_wky_web3.rs
-    fn write_web_output(&self, sky_eng: &SkyEng) {
+    fn write_web_output(&self, sky_eng: &SkyEng, pos: &Vec<Position>) {
         let pair = &self.pair;
         for wd in &self.week_data {
             let jo = sky_eng.to_json(wd.start, wd.end);
             // println!("week m: {}", jo.major_ohlc.len());
             // println!("week s: {}", jo.small_ohlc.len());
-            write_json(&jo, &pair, wd.week_id, 0);
+            let poss = get_postions_range(&pos, wd.start, wd.end);
+            write_json(&jo, &poss, &pair, wd.week_id, 0);
 
             let mut start = wd.start;
             let mut end = start + 86_400_000;
@@ -119,7 +125,8 @@ impl WebBackRunConfig {
                 // println!("day m: {}", jo.major_ohlc.len());
                 // println!("day s: {}", jo.small_ohlc.len());
                 let jo = sky_eng.to_json(start, end);
-                write_json(&jo, &pair, wd.week_id, day_num);
+                let poss = get_postions_range(&pos, start, end);
+                write_json(&jo, &poss, &pair, wd.week_id, day_num);
                 start = end;
                 end = start + 86_400_000;
                 day_num += 1;
@@ -127,13 +134,21 @@ impl WebBackRunConfig {
             }
             // last day
             let jo = sky_eng.to_json(start, end);
-            write_json(&jo, &pair, wd.week_id, day_num);
+            let poss = get_postions_range(&pos, start, end);
+            write_json(&jo, &poss, &pair, wd.week_id, day_num);
         }
     }
 }
 
+struct _WriteParam {
+    jo: SkyJsonOut,
+    pair: Pair,
+    week_id: u16,
+    day_num: u64,
+}
+
 // code copy of trans_wky_web3.rs
-pub fn write_json(jo: &SkyJsonOut, pair: &Pair, week_id: u16, day_num: u64) {
+pub fn write_json(jo: &SkyJsonOut, pos: &Vec<Position>, pair: &Pair, week_id: u16, day_num: u64) {
     let title = if day_num == 0 {
         format!("{:?}/{}", &pair, week_id)
     } else {
@@ -153,9 +168,12 @@ pub fn write_json(jo: &SkyJsonOut, pair: &Pair, week_id: u16, day_num: u64) {
     };
 
     let json_text = serde_json::to_string_pretty(&jo).unwrap();
+    let trades_text = offline::position_html::to_html_table(&pos);
+
     let html_tmpl = std::fs::read_to_string("./src/web/tmpl/ui3.html").unwrap();
     let html = html_tmpl.replace("{{TITLE}}", &title);
     let html = html.replace("{{JSON_DATA}}", &json_text);
+    let html = html.replace("{{TRADE_DATA}}", &trades_text);
 
     // Write to file
     let dir = format!("{}{}", OUT_FOLDER, pair.folder_path());
@@ -164,4 +182,16 @@ pub fn write_json(jo: &SkyJsonOut, pair: &Pair, week_id: u16, day_num: u64) {
     fs::create_dir_all(&dir);
     fs::write(&file_path, html);
     println!("{}", &file_path);
+}
+
+fn get_postions_range(pos: &Vec<Position>, time_start: i64, time_end: i64) -> Vec<Position> {
+    let time_start = time_start as u64 / 1000;
+    let time_end = time_end as u64 / 1000;
+    let mut out = vec![];
+    for p in pos {
+        if p.open_time >= time_start && p.close_time <= time_end {
+            out.push(p.clone())
+        }
+    }
+    out
 }

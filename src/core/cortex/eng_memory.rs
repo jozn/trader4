@@ -7,81 +7,72 @@ use std::collections::BTreeMap;
 pub struct CortexMem {
     pub signal_mem: Option<SignalMem>,
     pub action: Option<ActionSignal>,
-    // pub signals_db: BTreeMap<String, PairSignalsMemory>,
 }
 
 impl CortexMem {
     pub fn new() -> Self {
         Self {
             signal_mem: None,
-            // signals_db: Default::default(),
-            action: None
+            action: None,
         }
     }
-    /*
-    // pub fn insert_signal(&mut self, sig: &PairSignalsMemory) {
-    //     self.signals_db.insert(sig.key.clone(), sig.clone());
-    // }
-    //
-    // pub fn get_signal(&self, key: &str) -> Option<PairSignalsMemory> {
-    //     let res = self.signals_db.get(key);
-    //     match res {
-    //         None => None,
-    //         Some(sig) => Some(sig.clone()),
-    //     }
-    // }
-    // pub fn remove_signal(&mut self, key: &str) {
-    //     let res = self.signals_db.remove(key);
-    // }
-*/
-    pub fn mark_long_early(&mut self,kid: i32,time_sec: i64) {
+
+    pub fn mark_long_early(&mut self, kid: i32, time_sec: i64) {
         match self.signal_mem {
             None => {
-                self.signal_mem = Some(SignalMem{
+                self.signal_mem = Some(SignalMem {
                     ps_buy: true,
-                    ps_small_bar_id: kid,
+                    ps_medium_bar_id: kid,
                     ps_time_sec: time_sec,
                     fs_buy: false,
                     fs_small_bar_id: 0,
-                    fs_time_sec: 0
+                    fs_time_sec: 0,
                 });
             }
             Some(_) => {}
         }
     }
-    pub fn mark_long_final(&mut self,kid: i32,time_sec: i64) {
+    pub fn mark_long_final(&mut self, kid: i32, time_sec: i64) {
         let mut mem = match &self.signal_mem {
-            None => {
-                SignalMem{
-                    ps_buy: true,
-                    ps_small_bar_id: kid,
-                    ps_time_sec: time_sec,
-                    fs_buy: false,
-                    fs_small_bar_id: 0,
-                    fs_time_sec: 0
-                }
-            }
-            Some(sm) => {sm.clone()}
+            None => SignalMem {
+                ps_buy: true,
+                ps_medium_bar_id: kid,
+                ps_time_sec: time_sec,
+                fs_buy: false,
+                fs_small_bar_id: 0,
+                fs_time_sec: 0,
+            },
+            Some(sm) => sm.clone(),
         };
         mem.fs_buy = true;
         mem.fs_time_sec = time_sec;
         mem.fs_small_bar_id = kid;
     }
-    pub fn cancel_long_mark(&mut self,kid: i32,time_sec: i64) {
+    pub fn cancel_long_mark(&mut self) {
         self.signal_mem = None
     }
-    pub fn get_snapshot(&self,time_sec: i64) ->Option<SignalMem> {
-        self.signal_mem.clone()
+    pub fn get_snapshot(&self, kid: i32) -> Option<SignalMem> {
+        // self.signal_mem.clone()
+        match &self.signal_mem {
+            None => None,
+            Some(sm) => {
+                if sm.ps_medium_bar_id == kid || kid == 0 {
+                    Some(sm.clone())
+                } else {
+                    None
+                }
+            }
+        }
     }
-    pub fn set_action(&mut self,act: &ActionSignal) {
+    pub fn set_action(&mut self, act: &ActionSignal) {
         let act = act.clone();
         assert_eq!(act.consumed, false);
         self.action = Some(act);
     }
     // only retuned once
-    pub fn consume_action(&mut self,time_sec: i64) -> Option<ActionSignal>  {
+    pub fn consume_action(&mut self, time_sec: i64) -> Option<ActionSignal> {
         match &mut self.action {
-            None => {None}
+            None => None,
             Some(act) => {
                 if act.consumed {
                     None
@@ -93,18 +84,15 @@ impl CortexMem {
         }
     }
 
-    pub fn get_action(&mut self,time_sec: i64) -> Option<ActionSignal>  {
+    pub fn get_action(&mut self, time_sec: i64) -> Option<ActionSignal> {
         match &self.action {
-            None => {None}
-            Some(act) => {
-                Some(act.clone())
-                }
-            }
-
+            None => None,
+            Some(act) => Some(act.clone()),
+        }
     }
 
     // Clear data at the end of medium Bars if action is set (one act per Bar max)
-    pub fn clear_old(&mut self,time_sec: i64) {
+    pub fn clear_old(&mut self, time_sec: i64) {
         match &self.action {
             None => {}
             Some(act) => {
@@ -114,5 +102,4 @@ impl CortexMem {
             }
         };
     }
-
 }

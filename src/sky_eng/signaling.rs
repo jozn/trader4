@@ -1,6 +1,6 @@
 use super::*;
 use crate::collector::import_all::BTickData;
-use crate::cortex::types::ActionSignal;
+use crate::cortex::types::{ActionSignal, SignalMem};
 use crate::helper;
 use crate::types::*;
 
@@ -24,8 +24,8 @@ impl SkyEng {
         let medpta = &sf.bar_medium.big.ta;
 
         if helper::get_rand(1000) < 11 && bigta.trend.is_bearish() {
-            self.cortex_mem.mark_long_early(kid_small, tick.timestamp_sec);
-            self.cortex_mem.mark_long_final(kid_small, tick.timestamp_sec);
+            self.cortex_mem.mark_long_early(kid, tick.timestamp_sec);
+            /*            self.cortex_mem.mark_long_final(kid_small, tick.timestamp_sec);
             self.cortex_mem.set_action(&ActionSignal{
                 small_kid: kid_small,
                 consumed: false,
@@ -33,7 +33,7 @@ impl SkyEng {
                 profit: 8.0,
                 loss: -8.0,
                 time_sec: tick.timestamp_sec
-            });
+            });*/
             // if helper::get_rand(1000) < 11 && bigta.trend.is_bullish() &&medbta.trend.is_bullish() {
             // let act = ActionSignalDep {
             //     small_kid: kid,
@@ -43,6 +43,26 @@ impl SkyEng {
             // };
             // self.signal_mem = None;
             // return Some(act);
+        }
+        match self.cortex_mem.get_snapshot(0) {
+            None => {}
+            Some(m) => {
+                // let mo = helper::get_rand(20) as i32 + 3;
+                if m.ps_buy && kid > m.ps_medium_bar_id + 1 {
+                    self.cortex_mem.mark_long_final(kid, tick.timestamp_sec);
+                    self.cortex_mem.set_action(&ActionSignal {
+                        small_kid: kid_small,
+                        consumed: false,
+                        long: true,
+                        profit: 8.0,
+                        loss: -8.0,
+                        time_sec: tick.timestamp_sec,
+                    });
+                }
+                if m.ps_buy && kid > m.ps_medium_bar_id + 10 {
+                    self.cortex_mem.cancel_long_mark();
+                }
+            }
         }
         None
     }

@@ -2,11 +2,11 @@ use super::*;
 // use crate::base::*;
 use crate::bar::*;
 use crate::collector::row_data::BTickData;
+use crate::cortex::types::{ActionSignal, SignalMem};
 use crate::helper;
 use crate::ta::*;
 use crate::types::SignalMemDep;
 use serde::{Deserialize, Serialize};
-use crate::cortex::types::{ActionSignal, SignalMem};
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct SFrame {
@@ -151,14 +151,14 @@ impl SFrame {
 
     pub fn get_early_mark(&self) -> Option<MarkerJson> {
         match &self.signal_mem {
-            None => {None}
+            None => None,
             Some(sm) => {
                 //todo short
-                Some(MarkerJson{
+                Some(MarkerJson {
                     time: sm.ps_time_sec,
                     position: "belowBar".to_string(),
-                    color: "#ffe17d".to_string(),
-                    shape: "arrowUp".to_string(),
+                    color: "#ae4bd5".to_string(),
+                    shape: "circle".to_string(),
                     text: format!(""),
                 })
             }
@@ -167,13 +167,14 @@ impl SFrame {
 
     pub fn get_long_final_mark(&self) -> Option<MarkerJson> {
         match &self.signal_action {
-            None => {None}
+            None => None,
             Some(sm) => {
                 //todo short
-                Some(MarkerJson{
+                Some(MarkerJson {
                     time: sm.time_sec,
                     position: "belowBar".to_string(),
                     color: "#2196F3".to_string(),
+                    // color: "#14a255".to_string(),
                     shape: "arrowUp".to_string(),
                     text: format!(""),
                 })
