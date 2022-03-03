@@ -26,7 +26,8 @@ pub fn get_rand(max: u64) -> u64 {
 }
 
 pub fn to_csv_out<T: Serialize>(arr: &Vec<T>, tab: bool) -> String {
-    let mut str_out = vec![];
+    to_csv_out_v2(arr,tab,true)
+    /*let mut str_out = vec![];
 
     let mut wtr = if tab {
         csv::WriterBuilder::new()
@@ -48,8 +49,40 @@ pub fn to_csv_out<T: Serialize>(arr: &Vec<T>, tab: bool) -> String {
 
     let s = String::from_utf8(str_out).unwrap();
 
+    format!("{:}", s)*/
+}
+
+// like above but with header
+pub fn to_csv_out_v2<T: Serialize>(arr: &Vec<T>, tab: bool, header: bool) -> String {
+    let mut str_out = vec![];
+
+    let mut wtr = if tab {
+        csv::WriterBuilder::new()
+            .delimiter(b'\t')
+            .quote_style(csv::QuoteStyle::NonNumeric)
+            .has_headers(header)
+            .from_writer(&mut str_out)
+    } else {
+        csv::WriterBuilder::new()
+            // .quote_style(csv::QuoteStyle::NonNumeric)
+            .has_headers(header)
+            .from_writer(&mut str_out)
+        // csv::Writer::from_writer(&mut str_out)
+    };
+    // let mut wtr = csv::Writer::from_writer(&mut str_out);
+
+    for v in arr {
+        wtr.serialize(v);
+    }
+
+    let s = wtr.flush();
+    drop(wtr);
+
+    let s = String::from_utf8(str_out).unwrap();
+
     format!("{:}", s)
 }
+
 
 pub fn to_time_string(time_sec: i64) -> String {
     let open_time = NaiveDateTime::from_timestamp(time_sec, 0);

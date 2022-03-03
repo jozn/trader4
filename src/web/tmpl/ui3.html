@@ -27,15 +27,18 @@
             text-align: left;
             padding: 8px;
         }
+        tr:hover{
+            background-color: #8dd5f8 !important;
+        }
 
         tr:nth-child(even) {
             background-color: #dddddd;
         }
-        tr.won>td {
-
+        tr.won>td:first-child {
+            background-color: #7bff9e;
         }
-        .lost{
-
+        tr.lost>td:first-child {
+            background-color: #ff7676;
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" ></script>
