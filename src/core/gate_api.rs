@@ -21,6 +21,7 @@ pub struct NewPos {
     // Virual: only used for Brain virtual sims not offline sims
     pub virtual_id: u64,
     pub is_virtual: bool, // set when not actual money is being set:
+    pub signal_key: String,
     // Informative
     pub at_price: f64,
     pub time_sec: u64, // Brain time

@@ -42,6 +42,10 @@ impl Brain {
                 let kline_id = f.small_kid;
 
                 if act.long {
+                    if self.already_acted(symbol_id, kline_id) {
+                        return;
+                    }
+
                     let np = NewPos {
                         pair: pair.clone(),
                         is_short: false,
@@ -50,14 +54,11 @@ impl Brain {
                         exit_low_price: pair.cal_price(tick.bid_price, act.loss),
                         virtual_id: self.sim_virtual.next_virtual_id(), // todo
                         is_virtual: false,                              // todo tailing
+                        signal_key: "sky_1".to_string(),
                         at_price: tick.ask_price,
                         time_sec: tick.timestamp_sec as u64,
                         frame: SFrame::default(),
                     };
-
-                    if self.already_acted(symbol_id, kline_id) {
-                        return;
-                    }
 
                     // println!("Open long {:#?}", np);
                     self.sim_virtual.open_position(&np, "sky_1");

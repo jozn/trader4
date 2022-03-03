@@ -40,6 +40,8 @@ pub struct BackendEngine {
     pub closed: BTreeMap<u64, Position>,
     pub events: Vec<EventPosition>,
     pub report: Report,
+    pub vid_keys: BTreeMap<u64, String>,
+    pub tails: BTreeMap<String, TailingWinRate>,
 }
 
 impl BackendEngine {
@@ -57,6 +59,8 @@ impl BackendEngine {
             closed: Default::default(),
             events: vec![],
             report: Report::new(report_cfg),
+            vid_keys: Default::default(),
+            tails: Default::default(),
         }
     }
 
@@ -96,6 +100,11 @@ impl BackendEngine {
             self.pos_id += 1;
             pos.pos_id = self.pos_id;
             pos.virtual_id = param.virtual_id;
+            pos.signal_key = param.signal_key.clone();
+            pos.signal_strength = self.get_signal_power(&param.signal_key);
+            // todo strength
+            self.vid_keys
+                .insert(param.virtual_id, param.signal_key.clone());
         }
         self.events.push(pos.to_event());
         self.opens.insert(pos.pos_id, pos.clone());
@@ -135,6 +144,7 @@ impl BackendEngine {
                     pos.close_pos(&close_par);
                     self.opens.remove(&pos.pos_id);
                     self.events.push(pos.to_event());
+                    self.virtual_on_close_position(&pos);
                     self.closed.insert(pos.pos_id, pos.clone());
                 } else {
                     if req.exit_high_price > 0. {
@@ -159,8 +169,9 @@ impl BackendEngine {
         let btick = btick.unwrap();
         let mut remove_pos_ids = vec![];
         let mut closed_some = false;
+        let mut remove_pos = vec![];
 
-        for (_, pos) in self.opens.iter_mut() {
+        for (_, pos) in self.opens.iter() {
             if pos.symbol_id == symob_id {
                 if pos.should_close(&btick) || force {
                     let cp = CloseParm {
@@ -169,6 +180,7 @@ impl BackendEngine {
                         locked: 0.,
                         time_sec: self.las_time_ms / 1000,
                     };
+                    let mut pos = pos.clone();
                     pos.close_pos(&cp);
 
                     closed_some = true;
@@ -178,15 +190,24 @@ impl BackendEngine {
                         self.balance += pos.profit;
                     }
 
-                    self.closed.insert(pos.pos_id, pos.clone());
-                    self.events.push(pos.to_event());
+                    // self.virtual_on_close_position(&pos);
+                    // self.closed.insert(pos.pos_id, pos.clone());
+                    // self.events.push(pos.to_event());
+                    remove_pos.push(pos);
                 }
             }
         }
 
-        for pid in remove_pos_ids {
-            self.opens.remove(&pid);
+        for pos in remove_pos {
+            self.opens.remove(&pos.pos_id);
+            self.virtual_on_close_position(&pos);
+            self.closed.insert(pos.pos_id, pos.clone());
+            self.events.push(pos.to_event());
         }
+
+        // for pid in remove_pos_ids {
+        //     self.opens.remove(&pid);
+        // }
         if closed_some {
             self.report_balance();
         }

@@ -40,6 +40,9 @@ pub struct Position {
     pub pair: Pair,
     #[serde(rename = "dir")]
     pub direction: PosDir,
+    pub signal_key: String,
+    #[serde(rename = "ssngt")]
+    pub signal_strength: f64,
     #[serde(rename = "base")]
     pub base_asset_size: f64,
     #[serde(rename = "quote")]
@@ -110,6 +113,8 @@ impl Position {
             symbol_id: p.pair.to_symbol_id(),
             pair: p.pair.clone(),
             direction: dir,
+            signal_key: "".to_string(),
+            signal_strength: 0.0,
             base_asset_size: p.base_asset_size,
             quote_asset_size: 0.0, // Dependent
             open_time: npi.time_sec,
@@ -155,17 +160,17 @@ impl Position {
             let multi = btick.pair.get_pip_multi();
             let high = (btick.bid_price - self.open_price) * multi;
             if self.touch_high_pip < high {
-                self.touch_high_pip = high;
+                self.touch_high_pip = helper::rond(high, 5);
             }
 
             let low = (btick.bid_price - self.open_price) * multi;
             if self.touch_low_pop > low {
-                self.touch_low_pop = low;
+                self.touch_low_pop = helper::rond(low, 5);
             }
         }
     }
 
-    pub fn should_close(&mut self, btick: &BTickData) -> bool {
+    pub fn should_close(&self, btick: &BTickData) -> bool {
         if self.is_long() {
             if btick.bid_price >= self.exit_high_price || btick.bid_price <= self.exit_low_price {
                 true
@@ -206,7 +211,7 @@ impl Position {
         self.close_price = tick.bid_price; // lower band of price - sell to buyers
 
         let pl = (self.close_price - self.open_price) * self.base_asset_size;
-        self.profit = pl;
+        self.profit = helper::rond(pl, 2);
     }
 
     pub fn is_short(&self) -> bool {

@@ -25,6 +25,11 @@ pub fn get_rand(max: u64) -> u64 {
     rand::thread_rng().gen_range(0..max)
 }
 
+pub fn rond(num: f64, fract: u32) -> f64 {
+    let frac = 10_u32.pow(fract) as f64;
+    ((num * frac) as i64) as f64 / frac
+}
+
 pub fn to_csv_out<T: Serialize>(arr: &Vec<T>, tab: bool) -> String {
     to_csv_out_v2(arr, tab, true)
     /*let mut str_out = vec![];
