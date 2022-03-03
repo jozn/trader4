@@ -25,6 +25,8 @@ impl Brain {
     }
 
     pub fn on_price_tick(&mut self, pair: &Pair, tick: BTickData) {
+        self.sim_virtual.run_next_tick(tick.clone());
+
         let symbol_id = pair.to_symbol_id();
         let mut pari_mem = self.borrow_pair_meta(symbol_id);
         pari_mem.last_tick = Some(tick.clone());
@@ -46,6 +48,8 @@ impl Brain {
                         base_asset_size: 10_000.0,
                         exit_high_price: pair.cal_price(tick.bid_price, act.profit),
                         exit_low_price: pair.cal_price(tick.bid_price, act.loss),
+                        virtual_id: self.sim_virtual.next_virtual_id(), // todo
+                        is_virtual: false,                              // todo tailing
                         at_price: tick.ask_price,
                         time_sec: tick.timestamp_sec as u64,
                         frame: SFrame::default(),
@@ -56,7 +60,10 @@ impl Brain {
                     }
 
                     // println!("Open long {:#?}", np);
-                    self.con.open_position_req_new(&np);
+                    self.sim_virtual.open_position(&np, "sky_1");
+                    if !np.is_virtual {
+                        self.con.open_position_req_new(&np);
+                    }
                 }
             }
         }

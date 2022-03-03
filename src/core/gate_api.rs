@@ -1,4 +1,5 @@
 use crate::configs::assets::Pair;
+use crate::offline::Position;
 use std::fmt::Debug;
 
 pub trait GateWay: Debug {
@@ -17,6 +18,9 @@ pub struct NewPos {
     pub base_asset_size: f64,
     pub exit_high_price: f64,
     pub exit_low_price: f64,
+    // Virual: only used for Brain virtual sims not offline sims
+    pub virtual_id: u64,
+    pub is_virtual: bool, // set when not actual money is being set:
     // Informative
     pub at_price: f64,
     pub time_sec: u64, // Brain time
@@ -36,6 +40,7 @@ pub struct EventPosition {
     pub exit_low_price: f64,
     pub open_time: u64,
     pub open_price: f64,
+    pub position: Option<Position>,
 }
 
 #[derive(Debug, Clone, Default)]

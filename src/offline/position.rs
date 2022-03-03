@@ -32,6 +32,7 @@ pub struct CloseParm {
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Position {
     pub pos_id: u64,
+    pub virtual_id: u64,
     pub fid: u64,
     pub won: i64,
     #[serde(skip)]
@@ -103,6 +104,7 @@ impl Position {
 
         let mut new_position = Self {
             pos_id: npi.pos_id,
+            virtual_id: 0,
             fid: 0,
             won: 0,
             symbol_id: p.pair.to_symbol_id(),
@@ -228,6 +230,7 @@ impl Position {
             exit_low_price: s.exit_low_price,
             open_time: s.open_time,
             open_price: s.open_price,
+            position: Some(s.clone()),
         }
     }
 }

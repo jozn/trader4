@@ -26,7 +26,7 @@ pub struct BalanceTag {
     pub balance: f64,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct BackReportConf {
     pub report_folder: String,
     pub report_sub_folder: String,

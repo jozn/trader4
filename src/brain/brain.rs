@@ -1,5 +1,6 @@
 use crate::bar::*;
 use crate::base::CrossRes;
+use crate::brain::sim_virtual::SimVirtual;
 use crate::configs::assets;
 use crate::configs::assets::*;
 use crate::gate_api::*;
@@ -15,6 +16,7 @@ pub type PairBarCfg = (Pair, BarConfig);
 pub struct Brain {
     pub con: Box<Arc<dyn GateWay>>,
     pub acted: HashSet<String>,
+    pub sim_virtual: SimVirtual,
     pub db: BTreeMap<i64, PairMemory>,
     pub open_pos: HashMap<u64, PosHolder>,
     pub last_trade_time: u64, // used in Acted filter
@@ -26,6 +28,7 @@ impl Brain {
             con: Box::new(backend),
             last_trade_time: 0,
             acted: Default::default(),
+            sim_virtual: SimVirtual::new(),
             db: Default::default(),
             open_pos: Default::default(),
         };

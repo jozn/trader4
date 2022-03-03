@@ -26,9 +26,6 @@ pub struct Money {
     pub net_pl: f64,
 }
 
-// todo add a fn to return an struc of availabe money, fee margin,...
-
-// type PricePair = (Pair, BTickData);
 #[derive(Debug)]
 pub struct BackendEngine {
     pub deposit: f64,
@@ -67,7 +64,9 @@ impl BackendEngine {
         self.symbols = symbols;
     }
 
-    fn open_position_req_new(&mut self, param: &NewPos) {
+    pub fn open_position_req_new(&mut self, param: &NewPos) {
+        assert!(param.virtual_id > 0);
+
         let money = self.get_money();
         // self.report.collect_balance(&money);
         self.report_balance();
@@ -96,6 +95,7 @@ impl BackendEngine {
             }
             self.pos_id += 1;
             pos.pos_id = self.pos_id;
+            pos.virtual_id = param.virtual_id;
         }
         self.events.push(pos.to_event());
         self.opens.insert(pos.pos_id, pos.clone());

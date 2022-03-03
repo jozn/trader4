@@ -26,7 +26,7 @@ pub fn get_rand(max: u64) -> u64 {
 }
 
 pub fn to_csv_out<T: Serialize>(arr: &Vec<T>, tab: bool) -> String {
-    to_csv_out_v2(arr,tab,true)
+    to_csv_out_v2(arr, tab, true)
     /*let mut str_out = vec![];
 
     let mut wtr = if tab {
@@ -82,7 +82,6 @@ pub fn to_csv_out_v2<T: Serialize>(arr: &Vec<T>, tab: bool, header: bool) -> Str
 
     format!("{:}", s)
 }
-
 
 pub fn to_time_string(time_sec: i64) -> String {
     let open_time = NaiveDateTime::from_timestamp(time_sec, 0);
