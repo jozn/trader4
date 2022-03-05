@@ -112,20 +112,24 @@ impl WebBackRunConfig {
     fn write_web_output(&self, sky_eng: &SkyEng, pos: &Vec<Position>) {
         let pair = &self.pair;
         for wd in &self.week_data {
-            let jo = sky_eng.to_json(wd.start, wd.end);
+            let poss = get_postions_range(&pos, wd.start, wd.end);
+            let jo = sky_eng.to_json(wd.start, wd.end, &poss);
             // println!("week m: {}", jo.major_ohlc.len());
             // println!("week s: {}", jo.small_ohlc.len());
-            let poss = get_postions_range(&pos, wd.start, wd.end);
             write_json(&jo, &poss, &pair, wd.week_id, 0);
 
             let mut start = wd.start;
             let mut end = start + 86_400_000;
             let mut day_num = 1;
-            while end < wd.end {
+            // while end < wd.end {
+            'days: loop {
                 // println!("day m: {}", jo.major_ohlc.len());
                 // println!("day s: {}", jo.small_ohlc.len());
-                let jo = sky_eng.to_json(start, end);
                 let poss = get_postions_range(&pos, start, end);
+                let jo = sky_eng.to_json(start, end, &poss);
+                if jo.medium.ohlc.len() == 0 {
+                    break 'days;
+                }
                 write_json(&jo, &poss, &pair, wd.week_id, day_num);
                 start = end;
                 end = start + 86_400_000;
@@ -133,9 +137,9 @@ impl WebBackRunConfig {
                 // break; // todo remove
             }
             // last day
-            let jo = sky_eng.to_json(start, end);
-            let poss = get_postions_range(&pos, start, end);
-            write_json(&jo, &poss, &pair, wd.week_id, day_num);
+            // let jo = sky_eng.to_json(start, end);
+            // let poss = get_postions_range(&pos, start, end);
+            // write_json(&jo, &poss, &pair, wd.week_id, day_num);
         }
     }
 }
@@ -167,6 +171,9 @@ pub fn write_json(jo: &SkyJsonOut, pos: &Vec<Position>, pair: &Pair, week_id: u1
         )
     };
 
+    // let trade_markers = offline::position_html::to_json_marker(&pos);
+    // let mut jo = jo.clone();
+    // jo.markers.
     let json_text = serde_json::to_string_pretty(&jo).unwrap();
     let trades_text = offline::position_html::to_html_table(&pos);
 

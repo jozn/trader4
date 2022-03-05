@@ -80,7 +80,8 @@ impl SkyEng {
                 let mut frame = new_frame(&ph_med, &ph_major);
                 frame.bars_small = smalls;
                 frame.bar_small_tip = ph_small;
-                let _act = self.set_signals_random(tick, &mut frame);
+                // let _act = self.set_signals_random(tick, &mut frame);
+                let _act = self.set_signals_v3(tick, &mut frame);
                 let act = self.cortex_mem.consume_action(time_bar_med);
                 // let act = frame.set_scalper_dep(tick, mem);
                 // self.add_signs(&frame);

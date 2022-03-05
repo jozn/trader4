@@ -221,6 +221,10 @@ impl Position {
     pub fn is_long(&self) -> bool {
         self.direction == PosDir::Long
     }
+    pub fn is_won(&self) -> bool {
+        assert!(self.finished); // only call when finshed
+        self.profit > 0.
+    }
 
     pub fn to_event(&self) -> EventPosition {
         let s = self;

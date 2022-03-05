@@ -1,5 +1,7 @@
 use super::*;
 use crate::bar::*;
+use crate::offline;
+use crate::offline::Position;
 use std::os::unix::raw::off_t;
 
 // todo: extract json to core
@@ -188,7 +190,7 @@ fn bars_to_json(bars: Vec<PrimaryHolder>) -> TimeFrameJson {
 }
 
 impl SkyEng {
-    pub fn to_json(&self, start: i64, end: i64) -> SkyJsonOut {
+    pub fn to_json(&self, start: i64, end: i64, pos: &Vec<Position>) -> SkyJsonOut {
         let s = self;
         let mut out = SkyJsonOut::default();
         out.major = bars_to_json(s.major_bars.get_bars_ph(start, end));
@@ -224,41 +226,19 @@ impl SkyEng {
 
             // todo migrate markers from old frame
             // Markers
-            // println!(">{:?}", &fm.signal_action);
             if fm.get_early_mark().is_some() {
-                // println!("Open long {:?}", fm.get_early_mark());
                 out.markers.push(fm.get_early_mark().unwrap());
             }
             if fm.get_long_final_mark().is_some() {
                 out.markers.push(fm.get_long_final_mark().unwrap());
             }
-
-            /*if fm.buy2_dep {
-                for s in fm.buys_dep.clone() {
-                    out.markers.push(MarkerJson {
-                        time: s / 1000,
-                        position: "belowBar".to_string(),
-                        color: "#2196F3".to_string(),
-                        shape: "arrowUp".to_string(),
-                        text: format!(""), // text: format!("Sell @")
-                                           // text: format!("Sell @ {}", bar.hlc3())
-                    })
-                }
-            }
-            if fm.sell2_dep {
-                for s in fm.sells.clone() {
-                    out.markers.push(MarkerJson {
-                        time: s / 1000,
-                        position: "aboveBar".to_string(),
-                        color: "#e91e63".to_string(),
-                        shape: "arrowDown".to_string(),
-                        text: format!(""), // text: format!("Sell @")
-                                           // text: format!("Sell @ {}", bar.hlc3())
-                    })
-                }
-            }*/
         }
 
+        // Add trades(postions) to markers
+        let trade_markers = offline::position_html::to_json_marker(&pos);
+        for tm in trade_markers {
+            out.markers.push(tm);
+        }
         // Sort markets asending
         out.markers.sort_by(|o1, o2| o1.time.cmp(&o2.time));
         // out.markers.clear();

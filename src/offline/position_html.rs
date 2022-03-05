@@ -1,5 +1,6 @@
 use super::*;
 use crate::helper::to_csv_out_v2;
+use crate::sky_eng::MarkerJson;
 use std::iter::repeat_with;
 use std::ops::Add;
 
@@ -90,5 +91,26 @@ pub fn to_html_table(pos: &Vec<Position>) -> String {
         out.push_str("</tr>");
     }
 
+    out
+}
+
+pub fn to_json_marker(pos: &Vec<Position>) -> Vec<MarkerJson> {
+    let mut out = vec![];
+    for p in pos {
+        let color = if p.is_won() { "#00ff00" } else { "#ff0000" };
+
+        if p.is_long() {
+            let m = MarkerJson {
+                time: p.open_time as i64,
+                position: "belowBar".to_string(),
+                color: color.to_string(),
+                shape: "arrowUp".to_string(),
+                // text: format!(""),
+                text: format!("{}", p.pos_id),
+                // text: format!("{}   {}",p.pos_id, p.open_time_str),
+            };
+            out.push(m);
+        }
+    }
     out
 }

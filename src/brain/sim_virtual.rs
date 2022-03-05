@@ -10,10 +10,10 @@ use std::collections::BTreeMap;
 pub struct SimVirtual {
     pub backend: BackendEngine,
     pub virtual_id: u64,
-    pub vid_keys: BTreeMap<u64, String>,
-    pub tails: BTreeMap<String, TailingWinRate>,
-    pub opens: BTreeMap<u64, Position>,
-    pub closed: BTreeMap<u64, Position>,
+    pub _vid_keys: BTreeMap<u64, String>,
+    pub _tails: BTreeMap<String, TailingWinRate>,
+    pub _opens: BTreeMap<u64, Position>,
+    pub _closed: BTreeMap<u64, Position>,
 }
 
 impl SimVirtual {
@@ -21,10 +21,10 @@ impl SimVirtual {
         Self {
             backend: BackendEngine::new(100_000., &BackReportConf::default()),
             virtual_id: 0,
-            vid_keys: Default::default(),
-            tails: Default::default(),
-            opens: Default::default(),
-            closed: Default::default(),
+            _vid_keys: Default::default(),
+            _tails: Default::default(),
+            _opens: Default::default(),
+            _closed: Default::default(),
         }
     }
 
@@ -43,7 +43,7 @@ impl SimVirtual {
     }
 
     pub fn open_position(&mut self, param: &NewPos, signal_key: &str) {
-        self.vid_keys
+        self._vid_keys
             .insert(param.virtual_id, signal_key.to_string());
         self.backend.open_position_req_new(param);
     }
