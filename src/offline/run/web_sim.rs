@@ -9,7 +9,7 @@ use crate::{collector, offline};
 use std::ops::Range;
 use std::sync::Arc;
 
-const OUT_FOLDER: &'static str = "/mnt/t/trader/data_sky_web_v4/";
+const OUT_FOLDER: &'static str = "/mnt/t/trader/data_sky_web_v5/";
 
 pub struct WebBackRunConfig {
     pub balance: f64,
@@ -177,10 +177,12 @@ pub fn write_json(jo: &SkyJsonOut, pos: &Vec<Position>, pair: &Pair, week_id: u1
     let json_text = serde_json::to_string_pretty(&jo).unwrap();
     let trades_text = offline::position_html::to_html_table(&pos);
 
-    let html_tmpl = std::fs::read_to_string("./src/web/tmpl/ui3.html").unwrap();
+    let html_tmpl = std::fs::read_to_string("./src/web/html/ui4.html").unwrap();
+    let js_script = std::fs::read_to_string("./src/web/ts/index1.js").unwrap();
     let html = html_tmpl.replace("{{TITLE}}", &title);
     let html = html.replace("{{JSON_DATA}}", &json_text);
     let html = html.replace("{{TRADE_DATA}}", &trades_text);
+    let html = html.replace("{{JS_SCRIPT}}", &js_script);
 
     // Write to file
     let dir = format!("{}{}", OUT_FOLDER, pair.folder_path());
