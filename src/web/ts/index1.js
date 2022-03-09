@@ -53,15 +53,8 @@ function makeBarChart() {
     var chartMajorEl = document.getElementById("chart_major");
     var chartMediumEL = document.getElementById("chart_medium");
     var chartSmallEL = document.getElementById("chart_small");
-    var major_check_btn = document.getElementById("major_check_btn");
-    var medium_check_btn = document.getElementById("medium_check_btn");
-    var small_check_btn = document.getElementById("small_check_btn");
-    var chart2El = document.getElementById("chart2");
-    var chart3El = document.getElementById("chart3");
-    var chart4El = document.getElementById("chart4");
     var jsonText = document.getElementById("json_data").innerText;
-    var jsonData = JSON.parse(jsonText);
-    var jd = jsonData;
+    var jd = JSON.parse(jsonText);
     // Create main Bar charts
     var chart_major = buildBarChart({ black: false, el: chartMajorEl, height: width / 8, ohlc: jd.major.ohlc });
     var chart_medium = buildBarChart({ black: true, el: chartMediumEL, height: width / 5, ohlc: jd.medium.ohlc, markers: jd.markers });
@@ -84,27 +77,18 @@ function makeBarChart() {
     ///////////////////////////  Dynamic Sub Charts ////////////////////////
     // Sub Indicators
     var el_macd = makeNextIndi("macd", true, true);
-    // var macd1_el = document.getElementById("macd1");
-    // macd_chart1 = macdChart(macd1_el,jd.medium);
-    // var macd_chart1 = macdChart(macd1_el,jd.small);
     var macd_chart1 = macdChart(el_macd, jd.small);
     syncCharts(chart_medium, macd_chart1);
     // Score
-    // var tscore_el = document.getElementById("tscore");
     var tscore_el = makeNextIndi("tscore", true, true);
     var tscore_chart = scoreChart(tscore_el, jd);
     syncCharts(chart_medium, tscore_chart);
     // MDI
-    // var medium_dmi_el = document.getElementById("medium_dmi");
-    // var medium_dmi_el = document.getElementById("medium_dmi");
-    var medium_dmi_el = makeNextIndi("medium_dmi", false, false);
-    // var jdm = jd.major;
-    // var jdd = jd.medium;
+    var medium_dmi_el = makeNextIndi("medium_dmi", true, false);
     var medium_dmi = mdi(medium_dmi_el, jd.medium);
     syncCharts(chart_medium, medium_dmi);
     // MA Mom
-    // var ma_mom_el = document.getElementById("ma_mom");
-    var ma_mom_el = makeNextIndi("ma_mom", false, true);
+    var ma_mom_el = makeNextIndi("ma_mom", true, true);
     var ma_mom_chart = maMomChart(ma_mom_el, jd);
     syncCharts(chart_medium, ma_mom_chart);
 }
@@ -289,7 +273,6 @@ function maMomChart(el, d) {
     return chart;
 }
 var takenIds = {};
-var top_indicators = "#top_indicators";
 function makeNextIndi(name, visible, topHolder) {
     if (takenIds === undefined) {
         // takenIds ={};
