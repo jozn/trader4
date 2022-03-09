@@ -5,7 +5,9 @@ import * as LightweightCharts from 'lightweight-charts' ;
 import {BarSeriesPartialOptions, IChartApi, ISeriesApi, SeriesMarker, Time} from "lightweight-charts";
 
 (function() {
-    run();
+    // run();
+    // Some wierd issues without timeout. (some global variables is not set).
+    setTimeout(run,50);
 })();
 
 var width = 900;
@@ -79,6 +81,10 @@ function makeBarChart() {
     var chart_medium = buildBarChart({black: true, el: chartMediumEL, height: width/5, ohlc: jd.medium.ohlc,markers: jd.markers});
     var chart_small = buildBarChart({black: false, el: chartSmallEL, height: width/6, ohlc: jd.small.ohlc,markers: jd.markers});
 
+    // Syncs
+    syncCharts(chart_major,chart_medium);
+    syncCharts(chart_medium,chart_small);
+
     // Add bull/bear channel to main bars
     trendChannelChart(chart_major,jd.major);
     trendChannelChart(chart_medium,jd.medium);
@@ -94,27 +100,38 @@ function makeBarChart() {
     simpleLineOver(chart_medium,jd.major.ma1);
     simpleLineOver(chart_small,jd.major.ma1);
 
-    // Dynamic
-    let el_macd = makeNextIndi("macd",true);
+    ///////////////////////////  Dynamic Sub Charts ////////////////////////
     // Sub Indicators
-    var macd1_el = document.getElementById("macd1");
+    let el_macd = makeNextIndi("macd",true,true);
+    // var macd1_el = document.getElementById("macd1");
     // macd_chart1 = macdChart(macd1_el,jd.medium);
     // var macd_chart1 = macdChart(macd1_el,jd.small);
     var macd_chart1 = macdChart(el_macd,jd.small);
+    syncCharts(chart_medium,macd_chart1);
 
     // Score
-    var tscore_el = document.getElementById("tscore");
+    // var tscore_el = document.getElementById("tscore");
+    var tscore_el = makeNextIndi("tscore",true,true);
     var tscore_chart = scoreChart(tscore_el,jd);
+    syncCharts(chart_medium,tscore_chart);
 
     // MDI
-    var medium_dmi_el = document.getElementById("medium_dmi");
-    var jdm = jd.major;
-    var jdd = jd.medium;
-    var major_dmi = mdi(medium_dmi_el,jd.medium);
+    // var medium_dmi_el = document.getElementById("medium_dmi");
+    // var medium_dmi_el = document.getElementById("medium_dmi");
+    var medium_dmi_el = makeNextIndi("medium_dmi",false,false);
+
+    // var jdm = jd.major;
+    // var jdd = jd.medium;
+    var medium_dmi = mdi(medium_dmi_el,jd.medium);
+    syncCharts(chart_medium,medium_dmi);
+
 
     // MA Mom
-    var ma_mom_el = document.getElementById("ma_mom");
+    // var ma_mom_el = document.getElementById("ma_mom");
+    var ma_mom_el = makeNextIndi("ma_mom",false,true);
     var ma_mom_chart = maMomChart(ma_mom_el,jd);
+    syncCharts(chart_medium,ma_mom_chart);
+
 }
 
 function buildBarChart(p: {el: HTMLElement,height:number,black:boolean,ohlc:any,markers?: SeriesMarker<Time>[]}) :IChartApi {
@@ -317,42 +334,46 @@ function maMomChart(el,d) {
     return chart;
 }
 
-var takenIds:any = {};
+const takenIds:any = {};
 var top_indicators = "#top_indicators";
-function makeNextIndi(name:string,visible:boolean){
-    if (takenIds == undefined){
-        takenIds ={};
+function makeNextIndi(name:string,visible:boolean,topHolder:boolean){
+    if (takenIds === undefined){
+        // takenIds ={};
     }
     if(takenIds[name] != undefined) {
         console.log("indiactor name: {}" + name + " is already taken. abort");
         return
     }
     takenIds[name] = name;
-    var visiblity = "block";
+
     var checked_attr = "checked";
     if(visible == false){
-        visiblity = "none";
         checked_attr = "";
     }
 
-    var txt = `<div id="btnxxxxx_${name}" class="sub_indi" style="visibility: ${visiblity}" ></div>`;
-    console.log(txt);
-    $(top_indicators).append(txt);
-
+    // jQuery
     let check_txt = `<input type="checkbox" ${checked_attr} id="btn_${name}" onchange="checkboxChange(this)" class="checkbox"  > ${name} </input>`;
     $("form").append(check_txt);
 
     var el = document.createElement("div");
     el.id = "chart_" + name;
     el.classList.add("chart");
-
-    // var el = document.createElement("input");
-    // el.classList.add("chart");
+    if(visible == false){
+        el.style.display ="none";
+    }
 
     var par = $$("top_indicators");
+    if(topHolder == false){
+        par = $$("bottom_indicators");
+    }
     par.append(el);
 
     return el ;
+}
+
+// Change chart2 time visible when chart1 moves (major > medium)
+function syncCharts(chart1: IChartApi,chart2: IChartApi){
+    chart1.timeScale().subscribeVisibleTimeRangeChange((t) => chart2.timeScale().setVisibleRange(t))
 }
 
 function checkboxChange(th: HTMLElement){
@@ -391,5 +412,4 @@ function checkboxChange(th: HTMLElement){
             chart_el.style.display = "none";
         }
     }
-
 }
