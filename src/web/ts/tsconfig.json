@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "target": "es2016",
-    "module": "system",
+//    "module": "system",
+    "module": "amd",
     "outFile": "./lib.js"
   },
   "include": [
