@@ -177,7 +177,7 @@ pub fn write_json(jo: &SkyJsonOut, pos: &Vec<Position>, pair: &Pair, week_id: u1
     let json_text = serde_json::to_string_pretty(&jo).unwrap();
     let trades_text = offline::position_html::to_html_table(&pos);
 
-    let html_tmpl = std::fs::read_to_string("./src/web/html/ui4.html").unwrap();
+    let html_tmpl = std::fs::read_to_string("./src/web/html/ui5.html").unwrap();
     let js_script = std::fs::read_to_string("./src/web/ts/index1.js").unwrap();
     // let js_script = std::fs::read_to_string("./src/web/ts/lib.js").unwrap();
     let html = html_tmpl.replace("{{TITLE}}", &title);

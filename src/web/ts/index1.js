@@ -2,8 +2,6 @@
 exports.__esModule = true;
 require("./types");
 var LightweightCharts = require("lightweight-charts");
-// import * as sub from './sub_iindicators' ;
-var sub = require("./sub_iindicators");
 (function () {
     run();
 })();
@@ -12,7 +10,7 @@ function run() {
     console.log("------ hi there ----");
     makeBarChart();
     var c = $$("sdf");
-    sub.scoreChart(1, 2);
+    // sub.scoreChart(1,2);
 }
 function $$(id) {
     return document.getElementById(id);
@@ -78,10 +76,13 @@ function makeBarChart() {
     simpleLineOver(chart_major, jd.major.ma1);
     simpleLineOver(chart_medium, jd.major.ma1);
     simpleLineOver(chart_small, jd.major.ma1);
+    // Dynamic
+    var el_macd = makeNextIndi("macd", true);
     // Sub Indicators
     var macd1_el = document.getElementById("macd1");
     // macd_chart1 = macdChart(macd1_el,jd.medium);
-    var macd_chart1 = macdChart(macd1_el, jd.small);
+    // var macd_chart1 = macdChart(macd1_el,jd.small);
+    var macd_chart1 = macdChart(el_macd, jd.small);
     // Score
     var tscore_el = document.getElementById("tscore");
     var tscore_chart = scoreChart(tscore_el, jd);
@@ -273,4 +274,71 @@ function maMomChart(el, d) {
     });
     scoreBear.setData(d.medium.ma_mom);
     return chart;
+}
+var takenIds = {};
+var top_indicators = "#top_indicators";
+function makeNextIndi(name, visible) {
+    if (takenIds == undefined) {
+        takenIds = {};
+    }
+    if (takenIds[name] != undefined) {
+        console.log("indiactor name: {}" + name + " is already taken. abort");
+        return;
+    }
+    takenIds[name] = name;
+    var visiblity = "block";
+    var checked_attr = "checked";
+    if (visible == false) {
+        visiblity = "none";
+        checked_attr = "";
+    }
+    var txt = "<div id=\"btnxxxxx_" + name + "\" class=\"sub_indi\" style=\"visibility: " + visiblity + "\" ></div>";
+    console.log(txt);
+    $(top_indicators).append(txt);
+    var check_txt = "<input type=\"checkbox\" " + checked_attr + " id=\"btn_" + name + "\" onchange=\"checkboxChange(this)\" class=\"checkbox\"  > " + name + " </input>";
+    $("form").append(check_txt);
+    var el = document.createElement("div");
+    el.id = "chart_" + name;
+    el.classList.add("chart");
+    // var el = document.createElement("input");
+    // el.classList.add("chart");
+    var par = $$("top_indicators");
+    par.append(el);
+    return el;
+}
+function checkboxChange(th) {
+    var chartMajorEl = document.getElementById("chart_major");
+    var chartMediumEL = document.getElementById("chart_medium");
+    var chartSmallEL = document.getElementById("chart_small");
+    var major_check_btn = document.getElementById("major_check_btn");
+    var medium_check_btn = document.getElementById("medium_check_btn");
+    var small_check_btn = document.getElementById("small_check_btn");
+    if (major_check_btn.checked) {
+        chartMajorEl.style.display = "block";
+    }
+    else {
+        chartMajorEl.style.display = "none";
+    }
+    if (medium_check_btn.checked) {
+        chartMediumEL.style.display = "block";
+    }
+    else {
+        chartMediumEL.style.display = "none";
+    }
+    if (small_check_btn.checked) {
+        chartSmallEL.style.display = "block";
+    }
+    else {
+        chartSmallEL.style.display = "none";
+    }
+    for (var name_1 in takenIds) {
+        var el = $$("btn_" + name_1);
+        var chart_el = $$("chart_" + name_1);
+        if (el.checked) {
+            chart_el.style.display = "block";
+        }
+        else {
+            chart_el.style.display = "none";
+        }
+    }
 }

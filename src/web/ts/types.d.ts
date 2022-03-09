@@ -1,3 +1,5 @@
+// https://app.quicktype.io/?l=ts
+
 export interface Pokedex {
     major:        ITimeFrameValues;
     medium:       ITimeFrameValues;
