@@ -13,6 +13,6 @@ o*.json
 *.csv
 nohup.out
 /debug
-/src/web/ts/node_modules/
-/src/web/web/node_modules/
-/src/web/web/dist/
+/src/arch/ts/node_modules/
+/src/web/node_modules/
+/src/web/dist/
