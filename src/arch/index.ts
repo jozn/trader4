@@ -7,6 +7,7 @@ import {sayHi} from "./funcs";
 (function() {
     // run();
     // Some wierd issues without timeout. (some global variables is not set).
+    width =  window.innerWidth * 0.98;
     setTimeout(run,50);
 })();
 
@@ -139,13 +140,13 @@ function buildBarChart(p: {el: HTMLElement,height:number,black:boolean,ohlc:any,
 
 function trendChannelChart(chart: IChartApi, d) {
     var bullLine = chart.addLineSeries({
-        color: 'rgb(34,215,104)',
+        color: 'rgb(0,255,105)',
         lineWidth: 1,
     });
     bullLine.setData(d.bull_line);
 
     var bearLine = chart.addLineSeries({
-        color: 'rgb(215,49,68)',
+        color: 'rgb(255,0,27)',
         lineWidth: 1,
     });
     bearLine.setData(d.bear_line);
@@ -391,94 +392,3 @@ function checkboxChange(th: HTMLElement){
     }
 }
 window.checkboxChange = checkboxChange;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-// https://app.quicktype.io/?l=ts
-
-export interface Pokedex {
-    major:        ITimeFrameValues;
-    medium:       ITimeFrameValues;
-    small:        ITimeFrameValues;
-    markers:      Marker[];
-    score_bull:   ITimeValue[];
-    score_bear:   ITimeValue[];
-    score_diff:   ITimeValue[];
-    major_ma_mom: ITimeValue[];
-}
-
-export interface ITimeFrameValues {
-    ohlc:           Ohlc[];
-    high_line:      any[];
-    low_line:       any[];
-    markers:        any[];
-    ma1:            ITimeValue[];
-    ma_mom:         ITimeValue[];
-    bull_line:      ITimeValue[];
-    bear_line:      ITimeValue[];
-    rpi_high:       ITimeValue[];
-    rpi_low:        ITimeValue[];
-    dmi_plus:       ITimeValue[];
-    dmi_minus:      ITimeValue[];
-    dmi_diff:       ITimeValue[];
-    macd_macd:      ITimeValue[];
-    macd_signal:    ITimeValue[];
-    macd_histogram: ITimeValue[];
-}
-
-export interface ITimeValue {
-    time:  number;
-    value: number;
-}
-
-export interface Ohlc {
-    time:  number;
-    open:  number;
-    high:  number;
-    low:   number;
-    close: number;
-}
-
-export interface Marker {
-    time:     number;
-    position: string; // "belowBar"
-    color:    string;
-    shape:    string; // "arrowUp"
-    text:     string;
-}
-*/
