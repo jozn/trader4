@@ -14,3 +14,5 @@ o*.json
 nohup.out
 /debug
 /src/web/ts/node_modules/
+/src/web/web/node_modules/
+/src/web/web/dist/

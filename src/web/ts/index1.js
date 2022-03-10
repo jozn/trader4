@@ -11,6 +11,7 @@ var width = 900;
 function run() {
     console.log("------ hi there ----");
     makeBarChart();
+    checkboxChange(null);
     var c = $$("sdf");
     // sub.scoreChart(1,2);
 }

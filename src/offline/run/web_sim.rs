@@ -179,6 +179,7 @@ pub fn write_json(jo: &SkyJsonOut, pos: &Vec<Position>, pair: &Pair, week_id: u1
 
     let html_tmpl = std::fs::read_to_string("./src/web/html/ui5.html").unwrap();
     let js_script = std::fs::read_to_string("./src/web/ts/index1.js").unwrap();
+    let js_script = std::fs::read_to_string("./src/web/web/dist/bundle.js").unwrap();
     // let js_script = std::fs::read_to_string("./src/web/ts/lib.js").unwrap();
     let html = html_tmpl.replace("{{TITLE}}", &title);
     let html = html.replace("{{JSON_DATA}}", &json_text);

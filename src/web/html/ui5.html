@@ -7,9 +7,27 @@
     <title>{{TITLE}}</title>
 
     <style>
-        #chart {
-            max-width: 1000px;
-            margin: 35px auto;
+        body {
+            margin-top: 0;
+        }
+        .form_holder {
+            position: fixed;
+            z-index: 999;
+            width: -webkit-fill-available;
+            margin-left: -10px;
+        }
+        .form_block{
+            min-height: 20px;
+            display: block;
+            background: #383838;;
+            padding: 6px;
+            color: #fff;
+            font-size: 18px;
+        }
+        .form_holder input{
+            /*padding-left: 6px;*/
+            /*padding: 4px 2px 0px 4px;*/
+            margin-left: 25px;
         }
         .chart {
             margin-left: 5px;
@@ -50,14 +68,17 @@
 <body style="background-color:white ">
 
 <div id="synced-charts">
-    <div>
-        <form>
-            <input type="checkbox" checked id="major_check_btn" onchange="checkboxChange(this)" class="checkbox"  > Major </input>
-            <input type="checkbox" checked id="medium_check_btn" onchange="checkboxChange(this)" class="checkbox"  > Medium </input>
-            <input type="checkbox" checked1 id="small_check_btn" onchange="checkboxChange(this)" class="checkbox"  > Small </input>
-        </form>
+    <div class="form_holder">
+        <div class="form_block">
+            <form>
+                <input type="checkbox" checked id="major_check_btn" onchange="checkboxChange(this)" class="checkbox"  > Major </input>
+                <input type="checkbox" checked id="medium_check_btn" onchange="checkboxChange(this)" class="checkbox"  > Medium </input>
+                <input type="checkbox" checked1 id="small_check_btn" onchange="checkboxChange(this)" class="checkbox"  > Small </input>
+            </form>
+        </div>
     </div>
-    <div id="chart_medium" class="chart"></div>
+    <div style="height: 45px"></div>
+    <div id="chart_medium" class="chart" style="padding-top: 0px"></div>
     <div id="chart_small" class="chart"></div>
     <div id="top_indicators" class="chart"></div>
     <div id="chart_major" class="chart"></div>
