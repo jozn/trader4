@@ -35,7 +35,7 @@ function makeBarChart() {
     // RPI indicaotr
     fn.rpiOverIndicator(chart_major,jd.major);
     fn.rpiOverIndicator(chart_medium,jd.medium);
-    fn.rpiOverIndicator(chart_small,jd.medium);
+    fn.rpiOverIndicator(chart_small,jd.small);
 
     // MA
     fn.simpleLineOver(chart_major,jd.major.ma1);
@@ -43,15 +43,9 @@ function makeBarChart() {
     fn.simpleLineOver(chart_small,jd.major.ma1);
 
     ///////////////////////////  Dynamic Sub Charts ////////////////////////
-    // new ma mom
-    var ma_mom_el1 = fn.makeNextIndi("ma_mom_new",true,true);
-    var ma_mom_chart1 = fn.onelineSubIndiacor(ma_mom_el1,jd.major.ma_mom);
-    fn.syncCharts(chart_medium,ma_mom_chart1);
-
     // Sub Indicators
     let el_macd = fn.makeNextIndi("macd",true,true);
-    // var macd_chart1 = fn.macdChart(el_macd,jd.medium);
-    var macd_chart1 = fn.macdChart(el_macd,jd.major);
+    var macd_chart1 = fn.macdChart(el_macd,jd.medium);
     fn.syncCharts(chart_medium,macd_chart1);
 
     // Score

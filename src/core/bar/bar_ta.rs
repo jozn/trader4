@@ -47,7 +47,7 @@ impl TAMethods {
         Self {
             atr: ta::ATR::new(14).unwrap(),
             ma1: ta::EMA::new(25).unwrap(),
-            ma_mom: ta::MAMom::new(9, 3).unwrap(),
+            ma_mom: ta::MAMom::new(25, 3).unwrap(),
             bb: ta::BB::new(20, 1.5).unwrap(),
             sb: ta::SB::new(20, 1.4).unwrap(),
             gb: ta::GB::new(20, 2.).unwrap(),

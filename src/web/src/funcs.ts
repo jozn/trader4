@@ -1,6 +1,7 @@
 import "./types";
 import * as LightweightCharts from 'lightweight-charts' ;
-import {BarSeriesPartialOptions, IChartApi, ISeriesApi, SeriesMarker, Time} from "lightweight-charts";
+import {BarSeriesPartialOptions, ChartOptions, IChartApi, ISeriesApi, SeriesMarker, Time} from "lightweight-charts";
+import {ITimeValue} from "./types";
 
 var width = 1600;
 
@@ -12,7 +13,7 @@ function $$(id) {
 }
 
 // Make Bar Chart
-function getChartCfg(width,height) {
+function getChartCfg(width,height): ChartOptions {
     return {
         width: width,
         height: height,
@@ -25,6 +26,7 @@ function getChartCfg(width,height) {
         },
         rightPriceScale: {
             borderColor: 'rgba(197, 203, 206, 1)',
+            drawTicks: false, //dosnet works??
         },
         timeScale: {
             borderColor: 'rgba(197, 203, 206, 1)',
@@ -83,14 +85,14 @@ export function trendChannelChart(chart: IChartApi, d) {
 
 export function rpiOverIndicator(chart: IChartApi, d) {
     var highLine = chart.addLineSeries({
-        color: 'rgb(158,162,129)',
-        lineWidth: 1,
+        color: 'rgb(255,145,0)',
+        lineWidth: 1.5,
     });
     highLine.setData(d.rpi_high);
 
     var lowLine = chart.addLineSeries({
-        color: 'rgb(103,100,100)',
-        lineWidth: 1,
+        color: 'rgb(255,145,0)',
+        lineWidth: 1.5,
     });
     lowLine.setData(d.rpi_low);
 }
@@ -242,6 +244,32 @@ export function maMomChart(el,d) {
 
     return chart;
 }
+
+export function onelineSubIndiacor(el,d :ITimeValue[] ) {
+    var chart = LightweightCharts.createChart(el, {
+        width: width,
+        height: width/14,
+        crosshair: {
+            mode: 0
+        },
+        rightPriceScale: {
+            width: 60
+        },
+    });
+
+    var scoreBull = chart.addHistogramSeries({
+        color: 'rgba(21,71,166,0.69)',
+        lineWidth: 1,
+        priceFormat: {
+            minMove: 0.00001,
+            precision: 5,
+        },
+    });
+    scoreBull.setData(d);
+
+    return chart;
+}
+
 
 const takenIds:any = {};
 export function makeNextIndi(name:string,visible:boolean,topHolder:boolean){
