@@ -10,6 +10,8 @@ function run() {
     fn.checkboxChange(null);
 }
 
+const ORANGE = 'rgb(224,91,0)';
+
 function makeBarChart() {
     var width =  window.innerWidth * 0.98;
     var chartMajorEl = document.getElementById("chart_major");
@@ -29,18 +31,23 @@ function makeBarChart() {
 
     // Add bull/bear channel to main bars
     fn.trendChannelChart(chart_major,jd.major);
-    fn.trendChannelChart(chart_medium,jd.medium);
+    // fn.trendChannelChart(chart_medium,jd.medium);
     fn.trendChannelChart(chart_small,jd.small);
 
     // RPI indicaotr
-    fn.rpiOverIndicator(chart_major,jd.major);
-    fn.rpiOverIndicator(chart_medium,jd.medium);
-    fn.rpiOverIndicator(chart_small,jd.medium);
+    // fn.rpiOverIndicator(chart_major,jd.major);
+    // fn.rpiOverIndicator(chart_medium,jd.medium);
+    // fn.rpiOverIndicator(chart_small,jd.medium);
 
     // MA
     fn.simpleLineOver(chart_major,jd.major.ma1);
     fn.simpleLineOver(chart_medium,jd.major.ma1);
     fn.simpleLineOver(chart_small,jd.major.ma1);
+
+    // DCSnake
+    fn.simpleLineOver(chart_medium,jd.medium.dcs_high);
+    fn.simpleLineOver(chart_medium,jd.medium.dcs_low);
+    fn.simpleLineOver(chart_medium,jd.medium.dcs_oversold,ORANGE,2);
 
     ///////////////////////////  Dynamic Sub Charts ////////////////////////
     // new ma mom

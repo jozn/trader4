@@ -3,6 +3,7 @@ pub mod frame;
 // pub mod scalper;
 pub mod score;
 pub mod signaling;
+pub mod signaling_v2;
 pub mod sky_eng;
 pub mod sky_json;
 pub mod tscore;

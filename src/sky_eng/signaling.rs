@@ -114,14 +114,14 @@ impl SkyEng {
         let snake = &medpta.sb;
         let price = tick.bid_price;
         let low_price = sf.bar_small_tip.primary.low;
-        let low_price = sf.bar_medium.primary.low;
+        // let low_price = sf.bar_medium.primary.low;
 
         let small_bar_big = &sf.bar_small_tip.big.ta;
 
         let act = ActionSignalDep::default();
         // if bigta.ma_mom > 0. {
         //     if medpta.ma_mom > 0. {
-        if snake.low_band > low_price {
+        if snake.low_band > low_price && bigta.ma_mom > 0. {
             self.cortex_mem.mark_long_final(kid, tick.timestamp_sec);
             self.cortex_mem.set_action(&ActionSignal {
                 small_kid: kid_small,

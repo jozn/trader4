@@ -10,6 +10,7 @@ use crate::{helper, ta};
 pub struct TAMethods {
     pub atr: ta::ATR,
     pub ma1: ta::EMA,
+    pub dc_snake: ta::DCSnake,
     pub ma_mom: ta::MAMom,
     pub bb: ta::BB,
     pub sb: ta::SB,
@@ -29,6 +30,7 @@ pub struct BarTA {
     pub atr: f64,
     pub ma1: f64,
     pub ma_mom: f64,
+    pub dc_snake: ta::DCSnakeRes,
     pub bb: ta::BBOut,
     pub sb: ta::SBOut,
     pub gb: ta::GBOut,
@@ -47,9 +49,10 @@ impl TAMethods {
         Self {
             atr: ta::ATR::new(14).unwrap(),
             ma1: ta::EMA::new(25).unwrap(),
+            dc_snake: ta::DCSnake::new(20).unwrap(),
             ma_mom: ta::MAMom::new(25, 3).unwrap(),
             bb: ta::BB::new(20, 1.5).unwrap(),
-            sb: ta::SB::new(20, 1.4).unwrap(),
+            sb: ta::SB::new(20, 2.0).unwrap(),
             gb: ta::GB::new(20, 2.).unwrap(),
             rpi: ta::RPI::new(10, 5, 0.3).unwrap(),
             rpc: ta::RPC::new(10, 0.5).unwrap(),
@@ -68,6 +71,7 @@ pub fn cal_indicators(tam: &mut TAMethods, bar: &Bar) -> BarTA {
     BarTA {
         atr: tam.atr.next(&bar),
         ma1: tam.ma1.next(price),
+        dc_snake: tam.dc_snake.next(&bar),
         ma_mom: tam.ma_mom.next(price),
         bb: tam.bb.next(&bar),
         sb: tam.sb.next(&bar),

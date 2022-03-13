@@ -19,6 +19,7 @@ pub struct BollingerBandOut {
     pub high_band: f64,
     pub low_band: f64,
     pub ma_band: f64,
+    pub sd: f64,
 }
 
 impl BollingerBand {
@@ -47,6 +48,7 @@ impl BollingerBand {
             high_band: ma + self.multi * sd,
             low_band: ma - self.multi * sd,
             ma_band: ma,
+            sd: sd,
         }
     }
 }

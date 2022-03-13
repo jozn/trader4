@@ -33,6 +33,11 @@ pub struct TimeFrameJson {
     pub macd_macd: Vec<RowJson>,
     pub macd_signal: Vec<RowJson>,
     pub macd_histogram: Vec<RowJson>,
+
+    // DCSnake
+    pub dcs_high: Vec<RowJson>,
+    pub dcs_low: Vec<RowJson>,
+    pub dcs_oversold: Vec<RowJson>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
@@ -185,6 +190,20 @@ fn bars_to_json(bars: Vec<PrimaryHolder>) -> TimeFrameJson {
             time,
             value: pta.macd.histogram,
         });
+
+        // DCSnake
+        out.dcs_high.push(RowJson {
+            time,
+            value: pta.dc_snake.x_high,
+        });
+        out.dcs_low.push(RowJson {
+            time,
+            value: pta.dc_snake.x_low,
+        });
+        out.dcs_oversold.push(RowJson {
+            time,
+            value: pta.dc_snake.oversold_line,
+        });
     }
     out
 }
@@ -241,7 +260,7 @@ impl SkyEng {
         }
         // Sort markets asending
         out.markers.sort_by(|o1, o2| o1.time.cmp(&o2.time));
-        // out.markers.clear();
+        out.markers.clear();
         out
     }
 }

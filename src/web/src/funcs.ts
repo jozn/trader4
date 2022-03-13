@@ -98,13 +98,16 @@ export function rpiOverIndicator(chart: IChartApi, d) {
 }
 
 // Simple
-export function simpleLineOver(chart: IChartApi, d, color?: string) {
+export function simpleLineOver(chart: IChartApi, d, color?: string,lineWidth?:number) {
     if (color == undefined){
         color = 'rgb(11,77,229)';
     }
+    if (lineWidth == undefined){
+        lineWidth =1;
+    }
     var line = chart.addLineSeries({
         color: color,
-        lineWidth: 1,
+        lineWidth: lineWidth,
     });
     line.setData(d);
 }

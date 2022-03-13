@@ -8,7 +8,7 @@ pub type DC = DonchainChannel;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DonchainChannel {
     period: usize,
-    window_low: Window,
+    window_low: Window, // todo may change to Max and Min
     window_high: Window,
 }
 
