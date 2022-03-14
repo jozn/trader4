@@ -36,6 +36,7 @@ impl WebBackRunConfig {
         for week_id in week_rng {
             let ticks = collector::loader::load_week(&self.pair, week_id);
             if ticks.len() == 0 {
+                println!("Empty ticks {}", week_id);
                 continue;
             }
             week_data.push(WeekData {

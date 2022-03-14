@@ -89,6 +89,10 @@ impl Report {
         } else {
             self.folder.clone()
         };
+        if week_data.len() == 0 {
+            return;
+        }
+        let start_folder = std::env::current_dir().unwrap();
 
         let w_first = week_data.first().unwrap().week_id;
         let w_last = week_data.last().unwrap().week_id;
@@ -140,6 +144,8 @@ impl Report {
         cs_txt.push_str(&s);
         println!("{}", cs_txt);
         std::fs::write(format!("./weeks_{}.txt", rnd), cs_txt);
+
+        std::env::set_current_dir(&start_folder);
     }
 
     fn get_all_middles_range(&self, start_sec: i64, end_sec: i64) -> Vec<MiddleStatic> {

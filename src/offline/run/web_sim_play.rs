@@ -13,18 +13,28 @@ use super::*;
 
 pub fn run1() {
     // run_pair(&Pair::EURUSD);
-    run_pair(&Pair::USDCHF);
+    // run_pair(&Pair::USDCHF);
     // run_pair(&Pair::USDCAD);
     // run_pair(&Pair::NZDUSD);
     // run_pair(&Pair::GBPUSD);
     // run_pair(&Pair::ADAUSD);
+    // run_pair(&Pair::Oracle);
+    // run_pair(&Pair::XAGUSD);
+    // run_pair(&Pair::BTCUSD);
+    // run_pair(&Pair::US30);
+    // run_pair(&Pair::UK100);
+    // run_pair(&Pair::CN50);
+    // run_pair(&Pair::Apple);
+    run_pair(&Pair::IBM);
+    // run_pair(&Pair::Gasoline);
 }
 
 pub fn run2() {
     let pairs = assets::get_all_usd_forex_symbols();
     let pairs = assets::get_all_symbols();
     for p in &pairs {
-        if !p.is_forex() {
+        // if p.is_us_stocks() || p.is_index(){
+        if p.is_us_stocks() {
             run_pair(p);
         }
     }

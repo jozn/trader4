@@ -141,7 +141,7 @@ fn get_weeks(pair: &Pair) -> Vec<i64> {
         }
 
         // A work around, pepperstone does not have stocks below 42
-        if pair.is_us_forex() {
+        if pair.is_us_stocks() {
             if week_id >= 42 {
                 week_ids.push(week_id)
             }

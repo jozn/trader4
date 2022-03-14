@@ -95,7 +95,7 @@ impl SkyEng {
                 frame.bars_small.push(ph_small.clone());
             }
 
-            let _act = self.set_signals_v4(tick, &mut frame);
+            let _act = self.set_signals_v5(tick, &mut frame);
             let act = self.cortex_mem.consume_action(time_bar_med);
             if ph_medium.is_some() {
                 assert!(small_full);

@@ -251,13 +251,19 @@ impl Pair {
         cat.eq("forex")
     }
 
-    pub fn is_us_forex(&self) -> bool {
+    pub fn is_us_stocks(&self) -> bool {
         let cat = self.to_category();
         cat.eq("us_stocks")
     }
 
+    pub fn is_index(&self) -> bool {
+        let cat = self.to_category();
+        cat.eq("indices")
+    }
+
     pub fn folder_path(&self) -> String {
-        format!("{}/{}", self.to_category(), self.to_string())
+        // format!("{}/{}", self.to_category(), self.to_string())
+        format!("{}/{:?}", self.to_category(), self)
     }
 
     pub fn to_category(&self) -> String {

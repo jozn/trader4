@@ -1,13 +1,12 @@
 use chrono::prelude::*;
 use serde::{Deserialize, Serialize};
 use trader4;
-use trader4::candle::{
-    CandleConfig, CandleSeriesTA, Kline, KlineHolderFrameTA, KlineTA, TimeSerVec, TA2,
-};
+// use trader4::candle::{
+//     CandleConfig, CandleSeriesTA, Kline, KlineHolderFrameTA, KlineTA, TimeSerVec, TA2,
+// };
 use trader4::collector;
 use trader4::collector::row_data::BTickData;
 use trader4::configs::assets::Pair;
-use trader4::offline::num5_dep;
 use trader4::ta::{DCRes, VelRes};
 
 // Note: we do not generate binary for daily now.
@@ -20,9 +19,11 @@ pub fn main() {
     // let pairs = vec![trader4::configs::assets::Pair::EURUSD]; // todo: remove
 
     for pair in pairs {
+        println!(">>>> {:?}", &pair);
         for week_id in 25..=60 {
             // let cat = pair.to_category();
             let path_tsv = format!("/mnt/t/trader/data/{}/{}.tsv", pair.folder_path(), week_id);
+            // println!("{:?}",&path_tsv);
             let path_bin = format!("{}{}/{}.bin", OUT_FOLDER, &pair.folder_path(), week_id);
             if std::path::Path::new(&path_bin).exists() {
                 continue;
