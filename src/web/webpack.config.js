@@ -2,7 +2,8 @@ const path = require('path');
 
 module.exports = {
     // entry: './src/index.ts',
-    entry: './src/command.ts',
+//    entry: './src/command.ts',
+    entry: './src/command_zig.ts',
     mode: 'development', //'production'
     devtool: 'inline-source-map',
     watch: true,

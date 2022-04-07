@@ -3,6 +3,7 @@ use crate::bar::*;
 use crate::offline;
 use crate::offline::Position;
 use std::os::unix::raw::off_t;
+use crate::ta::zigzag::{ZigZag, ZigZagRes};
 
 // todo: extract json to core
 
@@ -47,6 +48,8 @@ pub struct SkyJsonOut {
     pub small: TimeFrameJson,
 
     pub markers: Vec<MarkerJson>,
+    pub zigzag: Vec<RowJson>,
+    pub zigzag2: Vec<ZigZagRes>,
 
     pub score_bull: Vec<RowJson>,
     pub score_bear: Vec<RowJson>,
@@ -216,12 +219,27 @@ impl SkyEng {
         out.medium = bars_to_json(s.medium_bars.get_bars_ph(start, end));
         out.small = bars_to_json(s.small_bars.get_bars_ph(start, end));
 
+        let mut zigzag = ZigZag::default();
+
         for fm in &s.frames {
             let bar = &fm.bar_medium.primary;
             if !(bar.open_time >= start && bar.open_time <= end) {
                 continue;
             }
             let time = bar.open_time / 1000;
+
+            // zigzag
+            let zigr = zigzag.next(bar);
+            match zigr {
+                None => {}
+                Some(z) => {
+                    out.zigzag2.push(z.clone());
+                   // out.zigzag.push(RowJson {
+                   //     time: z.time/1000,
+                   //     value: z.price,
+                   // });
+                }
+            }
 
             // Add scores
             let score = &fm.tscore;
@@ -251,6 +269,13 @@ impl SkyEng {
             if fm.get_long_final_mark().is_some() {
                 out.markers.push(fm.get_long_final_mark().unwrap());
             }
+        }
+
+        for z in &zigzag.store {
+            out.zigzag.push(RowJson {
+                time: z.time/1000,
+                value: z.price,
+            });
         }
 
         // Add trades(postions) to markers

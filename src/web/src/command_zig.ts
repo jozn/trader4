@@ -30,9 +30,9 @@ function makeBarChart() {
     fn.syncCharts(chart_medium,chart_small);
 
     // Add bull/bear channel to main bars
-    fn.trendChannelChart(chart_major,jd.major);
+//     fn.trendChannelChart(chart_major,jd.major);
     // fn.trendChannelChart(chart_medium,jd.medium);
-    fn.trendChannelChart(chart_small,jd.small);
+//     fn.trendChannelChart(chart_small,jd.small);
 
     // RPI indicaotr
     // fn.rpiOverIndicator(chart_major,jd.major);
@@ -40,14 +40,14 @@ function makeBarChart() {
     // fn.rpiOverIndicator(chart_small,jd.medium);
 
     // MA
-    fn.simpleLineOver(chart_major,jd.major.ma1);
-    fn.simpleLineOver(chart_medium,jd.major.ma1);
-    fn.simpleLineOver(chart_small,jd.major.ma1);
+//     fn.simpleLineOver(chart_major,jd.major.ma1);
+//     fn.simpleLineOver(chart_medium,jd.major.ma1);
+//     fn.simpleLineOver(chart_small,jd.major.ma1);
 
     // DCSnake
-    fn.simpleLineOver(chart_medium,jd.medium.dcs_high);
-    fn.simpleLineOver(chart_medium,jd.medium.dcs_low);
-    fn.simpleLineOver(chart_medium,jd.medium.dcs_oversold,ORANGE,2);
+//     fn.simpleLineOver(chart_medium,jd.medium.dcs_high);
+//     fn.simpleLineOver(chart_medium,jd.medium.dcs_low);
+//     fn.simpleLineOver(chart_medium,jd.medium.dcs_oversold,ORANGE,2);
 
     ///////////////////////////  Dynamic Sub Charts ////////////////////////
     // new ma mom
@@ -80,7 +80,7 @@ function makeBarChart() {
         color: 'rgb(255,145,0)',
         lineWidth: 1.5,
     });
-//     lowLine.setData(d.rpi_low);
+    lowLine.setData(jd.zigzag);
 
     // Temp: zigzag
 }

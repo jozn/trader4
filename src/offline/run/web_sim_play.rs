@@ -12,6 +12,7 @@ use super::web_sim::*;
 use super::*;
 
 pub fn run1() {
+    // rstats::MinMax{}
     // run_pair(&Pair::EURUSD);
     // run_pair(&Pair::USDCHF);
     // run_pair(&Pair::USDCAD);
@@ -24,17 +25,19 @@ pub fn run1() {
     // run_pair(&Pair::US30);
     // run_pair(&Pair::UK100);
     // run_pair(&Pair::CN50);
-    // run_pair(&Pair::Apple);
-    run_pair(&Pair::IBM);
+    run_pair(&Pair::Apple);
+    // run_pair(&Pair::IBM);
     // run_pair(&Pair::Gasoline);
 }
 
 pub fn run2() {
+    run_pair(&Pair::USDCNH);
+
     let pairs = assets::get_all_usd_forex_symbols();
     let pairs = assets::get_all_symbols();
     for p in &pairs {
         // if p.is_us_stocks() || p.is_index(){
-        if p.is_us_stocks() {
+        if p.is_forex() {
             run_pair(p);
         }
     }
@@ -68,6 +71,7 @@ pub fn run_pair(pair: &Pair) {
     };
 
     // run_cfg.run_web_sim(25..60);
-    run_cfg.run_web_sim(25..60);
+    // run_cfg.run_web_sim(45..60);
+    run_cfg.run_web_sim(45..47);
     // run_cfg.run_web_sim(25..27);
 }

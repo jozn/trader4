@@ -73,6 +73,7 @@ pub mod vel;
 pub mod vel2;
 pub mod window;
 pub mod wma;
+pub mod zigzag;
 
 ////////// Some other shared types //////////
 

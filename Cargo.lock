@@ -443,6 +443,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "indxvec"
+version = "1.1.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5fd33e0e0b5c7d73805fbed8f6a4db042120c4dd6bc8e00e5c9ca2584f854e1f"
+
+[[package]]
 name = "itertools"
 version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -926,6 +932,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "rstats"
+version = "1.0.13"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "91d3a716446a4ee219a0209529bc51732973b516ba84cf0fe795fa84c90bedf9"
+dependencies = [
+ "anyhow",
+ "indxvec",
+]
+
+[[package]]
 name = "rustc_version"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1230,6 +1246,7 @@ dependencies = [
  "prost-build",
  "rand 0.8.4",
  "regex",
+ "rstats",
  "rustls 0.20.0",
  "serde",
  "serde_derive",

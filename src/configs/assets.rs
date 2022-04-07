@@ -261,6 +261,16 @@ impl Pair {
         cat.eq("indices")
     }
 
+    pub fn is_crypto(&self) -> bool {
+        let cat = self.to_category();
+        cat.eq("crypto")
+    }
+
+    pub fn is_energies(&self) -> bool {
+        let cat = self.to_category();
+        cat.eq("energies")
+    }
+
     pub fn folder_path(&self) -> String {
         // format!("{}/{}", self.to_category(), self.to_string())
         format!("{}/{:?}", self.to_category(), self)
