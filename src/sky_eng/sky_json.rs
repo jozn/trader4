@@ -2,8 +2,8 @@ use super::*;
 use crate::bar::*;
 use crate::offline;
 use crate::offline::Position;
-use std::os::unix::raw::off_t;
 use crate::ta::zigzag::{ZigZag, ZigZagRes};
+use std::os::unix::raw::off_t;
 
 // todo: extract json to core
 
@@ -234,10 +234,10 @@ impl SkyEng {
                 None => {}
                 Some(z) => {
                     out.zigzag2.push(z.clone());
-                   // out.zigzag.push(RowJson {
-                   //     time: z.time/1000,
-                   //     value: z.price,
-                   // });
+                    // out.zigzag.push(RowJson {
+                    //     time: z.time/1000,
+                    //     value: z.price,
+                    // });
                 }
             }
 
@@ -273,7 +273,7 @@ impl SkyEng {
 
         for z in &zigzag.store {
             out.zigzag.push(RowJson {
-                time: z.time/1000,
+                time: z.time / 1000,
                 value: z.price,
             });
         }

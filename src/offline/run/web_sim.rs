@@ -9,7 +9,7 @@ use crate::{collector, offline};
 use std::ops::Range;
 use std::sync::Arc;
 
-const OUT_FOLDER: &'static str = "/mnt/t/trader/data_sky_web_v7/";
+const OUT_FOLDER: &'static str = "/mnt/t/trader/data_sky_web_v8/";
 
 pub struct WebBackRunConfig {
     pub balance: f64,
@@ -124,7 +124,7 @@ impl WebBackRunConfig {
             let mut day_num = 1;
             // while end < wd.end {
             'days: loop {
-                if day_num == 8{
+                if day_num == 8 {
                     break 'days;
                 }
                 // println!("day m: {}", jo.major_ohlc.len());

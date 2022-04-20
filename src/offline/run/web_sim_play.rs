@@ -70,8 +70,8 @@ pub fn run_pair(pair: &Pair) {
         },
     };
 
-    // run_cfg.run_web_sim(25..60);
+    run_cfg.run_web_sim(25..60);
     // run_cfg.run_web_sim(45..60);
-    run_cfg.run_web_sim(45..47);
+    // run_cfg.run_web_sim(45..47);
     // run_cfg.run_web_sim(25..27);
 }
