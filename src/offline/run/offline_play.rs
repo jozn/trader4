@@ -11,8 +11,9 @@ use crate::offline::*;
 use super::*;
 
 pub fn run1() {
-    run_pair(&Pair::EURUSD);
+    // run_pair(&Pair::EURUSD);
     // run_pair(&Pair::USDCHF);
+    run_pair(&Pair::EURUSD);
     // run_pair(&Pair::NZDUSD);
 }
 

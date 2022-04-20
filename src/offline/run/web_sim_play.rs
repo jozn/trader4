@@ -25,9 +25,12 @@ pub fn run1() {
     // run_pair(&Pair::US30);
     // run_pair(&Pair::UK100);
     // run_pair(&Pair::CN50);
-    run_pair(&Pair::Apple);
+    // run_pair(&Pair::Apple);
     // run_pair(&Pair::IBM);
     // run_pair(&Pair::Gasoline);
+
+    // run_pair(&Pair::USDCHF);
+    run_pair(&Pair::EURUSD);
 }
 
 pub fn run2() {
