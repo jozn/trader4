@@ -34,6 +34,7 @@ pub use stoch_rsi::*;
 pub use true_range::*;
 pub use vel::*;
 pub use vel2::*;
+pub use wave::*;
 pub use window::*;
 pub use wma::*;
 
@@ -71,6 +72,7 @@ pub mod stoch_rsi;
 pub mod true_range;
 pub mod vel;
 pub mod vel2;
+pub mod wave;
 pub mod window;
 pub mod wma;
 pub mod zigzag;

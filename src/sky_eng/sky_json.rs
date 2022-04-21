@@ -3,6 +3,7 @@ use crate::bar::*;
 use crate::offline;
 use crate::offline::Position;
 use crate::ta::zigzag::{ZigZag, ZigZagRes};
+use crate::ta::Wave;
 use std::os::unix::raw::off_t;
 
 // todo: extract json to core
@@ -220,6 +221,9 @@ impl SkyEng {
         out.small = bars_to_json(s.small_bars.get_bars_ph(start, end));
 
         let mut zigzag = ZigZag::default();
+        let mut wave = Wave::new(14, 7, 0.01).unwrap();
+        let mut wave = Wave::new(14, 7, 0.05).unwrap();
+        let mut wave = Wave::new(14, 7, 0.1).unwrap();
 
         for fm in &s.frames {
             let bar = &fm.bar_medium.primary;
@@ -227,7 +231,7 @@ impl SkyEng {
                 continue;
             }
             let time = bar.open_time / 1000;
-
+            wave.next(bar);
             // zigzag
             let zigr = zigzag.next(bar);
             match zigr {
@@ -271,7 +275,8 @@ impl SkyEng {
             }
         }
 
-        for z in &zigzag.store {
+        // for z in &zigzag.store {
+        for z in &wave.wave_ress {
             out.zigzag.push(RowJson {
                 time: z.time / 1000,
                 value: z.price,

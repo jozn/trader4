@@ -77,7 +77,7 @@ impl ZigZag {
 
     // pub fn pivot_high(&mut self, high: f64) -> Option<(i64,f64)> {
     pub fn pivot_high(&mut self, high: f64) -> (i64, f64) {
-        let mut found = false;
+        let mut found = true;
         let mut size = 0;
         for bar in self.bars.iter() {
             if size >= self.backstep {
@@ -90,7 +90,7 @@ impl ZigZag {
         }
 
         for bar in self.bars.iter().skip(size) {
-            if size >= self.backstep {
+            if size >= self.depth {
                 break;
             }
             if bar.high >= high {
