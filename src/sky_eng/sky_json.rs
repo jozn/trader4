@@ -49,6 +49,10 @@ pub struct SkyJsonOut {
     pub small: TimeFrameJson,
 
     pub markers: Vec<MarkerJson>,
+    pub wave1: Vec<RowJson>,
+    pub wave2: Vec<RowJson>,
+    pub wave3: Vec<RowJson>,
+
     pub zigzag: Vec<RowJson>,
     pub zigzag2: Vec<ZigZagRes>,
 
@@ -221,9 +225,9 @@ impl SkyEng {
         out.small = bars_to_json(s.small_bars.get_bars_ph(start, end));
 
         let mut zigzag = ZigZag::default();
-        let mut wave = Wave::new(14, 7, 0.01).unwrap();
-        let mut wave = Wave::new(14, 7, 0.05).unwrap();
-        let mut wave = Wave::new(14, 7, 0.1).unwrap();
+        let mut wave1 = Wave::new(14, 7, 0.05).unwrap();
+        let mut wave2 = Wave::new(14, 7, 0.10).unwrap();
+        let mut wave3 = Wave::new(14, 7, 0.20).unwrap();
 
         for fm in &s.frames {
             let bar = &fm.bar_medium.primary;
@@ -231,7 +235,9 @@ impl SkyEng {
                 continue;
             }
             let time = bar.open_time / 1000;
-            wave.next(bar);
+            wave1.next(bar);
+            wave2.next(bar);
+            wave3.next(bar);
             // zigzag
             let zigr = zigzag.next(bar);
             match zigr {
@@ -276,8 +282,28 @@ impl SkyEng {
         }
 
         // for z in &zigzag.store {
-        for z in &wave.wave_ress {
-            out.zigzag.push(RowJson {
+        // for z in &wave1.wave_ress {
+        //     out.zigzag.push(RowJson {
+        //         time: z.time / 1000,
+        //         value: z.price,
+        //     });
+        // }
+
+        // Waves
+        for z in &wave1.wave_ress {
+            out.wave1.push(RowJson {
+                time: z.time / 1000,
+                value: z.price,
+            });
+        }
+        for z in &wave2.wave_ress {
+            out.wave2.push(RowJson {
+                time: z.time / 1000,
+                value: z.price,
+            });
+        }
+        for z in &wave3.wave_ress {
+            out.wave3.push(RowJson {
                 time: z.time / 1000,
                 value: z.price,
             });

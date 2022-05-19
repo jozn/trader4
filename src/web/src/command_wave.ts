@@ -76,6 +76,29 @@ function makeBarChart() {
     var ma_mom_chart = fn.maMomChart(ma_mom_el,jd);
     fn.syncCharts(chart_medium,ma_mom_chart);
 
+    var lowLine = chart_medium.addLineSeries({
+        color: 'rgb(255,145,0)',
+        lineWidth: 1.,
+    });
+//     lowLine.setData(jd.zigzag);
+    
+    // waves
+    var wave1 = chart_medium.addLineSeries({
+        color: 'rgb(255,145,0)',
+        lineWidth: 1.,
+    });
+    wave1.setData(jd.wave1);
 
+    var wave2 = chart_medium.addLineSeries({
+        color: 'rgb(255,0,0)',
+        lineWidth: 0.6,
+    });
+    wave2.setData(jd.wave2);
+
+    var wave3 = chart_medium.addLineSeries({
+        color: 'rgb(0,0,255)',
+        lineWidth: 1.,
+    });
+    wave3.setData(jd.wave3);
     // Temp: zigzag
 }
