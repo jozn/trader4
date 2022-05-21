@@ -21,7 +21,7 @@ pub struct WaveRes {
     pub time: i64,
     pub bar_id: u64,
     pub price: f64,
-    pub post: PointPos, // true: up price, false: down price
+    pub pos: PointPos, // true: up price, false: down price
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -61,7 +61,7 @@ impl Wave {
                 time: bar.open_time,
                 bar_id: 0,
                 price: bar.low,
-                post: PointPos::Down,
+                pos: PointPos::Down,
             };
             self.last = p.clone();
             self.wave_ress.push(p);
@@ -70,13 +70,13 @@ impl Wave {
         // let last = self.wave_ress.last().clone().unwrap();
         let last = &self.last;
 
-        if last.post.is_down() {
+        if last.pos.is_down() {
             if bar.low < last.price {
                 let p = WaveRes {
                     time: bar.open_time,
                     bar_id: 0,
                     price: bar.low,
-                    post: PointPos::Down,
+                    pos: PointPos::Down,
                 };
                 self.last = p;
                 // self.wave_ress.remove(0);
@@ -91,7 +91,7 @@ impl Wave {
                     time: bar.open_time,
                     bar_id: 0,
                     price: bar.high,
-                    post: PointPos::Up,
+                    pos: PointPos::Up,
                 };
                 self.last = p;
                 return;
@@ -103,7 +103,7 @@ impl Wave {
                     time: bar.open_time,
                     bar_id: 0,
                     price: bar.high,
-                    post: PointPos::Up,
+                    pos: PointPos::Up,
                 };
                 self.last = p;
                 return;
@@ -116,7 +116,7 @@ impl Wave {
                     time: bar.open_time,
                     bar_id: 0,
                     price: bar.low,
-                    post: PointPos::Down,
+                    pos: PointPos::Down,
                 };
                 self.last = p;
                 return;

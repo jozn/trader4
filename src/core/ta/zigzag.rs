@@ -7,6 +7,7 @@ use crate::base::*;
 use std::collections::VecDeque;
 
 // ZigZag should not be embeded like other indicators
+// it does not works correctly use wave
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ZigZag {

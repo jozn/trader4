@@ -1,6 +1,6 @@
 use super::*;
 use crate::collector::row_data::BTickData;
-use crate::gate_api::{EventPosition, NewPos};
+use crate::gate_api::{EventPosition, NewPosReq};
 use crate::offline::{BackReportConf, BackendEngine, Position};
 use crate::ta;
 use crate::ta::EMA;
@@ -42,7 +42,7 @@ impl SimVirtual {
         res
     }
 
-    pub fn open_position(&mut self, param: &NewPos, signal_key: &str) {
+    pub fn open_position(&mut self, param: &NewPosReq, signal_key: &str) {
         self._vid_keys
             .insert(param.virtual_id, signal_key.to_string());
         self.backend.open_position_req_new(param);

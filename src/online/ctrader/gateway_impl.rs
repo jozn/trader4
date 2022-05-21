@@ -10,7 +10,7 @@ impl GateWay for CTrader {
         self.subscribe_spots_req(ids);
     }
 
-    fn update_position(&self, update: &UpdatePos) {
+    fn update_position(&self, update: &UpdatePosReq) {
         todo!()
     }
 

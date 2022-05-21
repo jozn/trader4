@@ -8,6 +8,8 @@ use trader4::ta::{DCRes, VelRes};
 
 const OUT_FOLDER: &'static str = "/mnt/t/trader/data_sky2/";
 
+// This scripts translate market data .tsv to a new candle .csv files
+
 pub fn main() {
     let pairs = trader4::configs::assets::get_all_symbols();
     let pairs = vec![trader4::configs::assets::Pair::USDCHF];

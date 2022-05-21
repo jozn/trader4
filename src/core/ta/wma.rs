@@ -29,6 +29,7 @@ impl WeightedMovingAverage {
         }
     }
 
+    // The algoritm for this one is a bit complicated to avoid a loop (faster) - see wiki page
     pub fn next(&mut self, next_val: f64) -> f64 {
         if self.is_new {
             let length = self.period as f64;

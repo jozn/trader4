@@ -2,6 +2,8 @@ use serde::{Deserialize, Serialize};
 
 use super::*;
 
+// Moving Average Momentum
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MAMom {
     period: usize,

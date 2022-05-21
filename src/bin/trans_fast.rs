@@ -14,6 +14,9 @@ use trader4::ta::{DCRes, VelRes};
 const OUT_FOLDER: &'static str = "/mnt/t/trader/data_fast/";
 const DAILY_DATA: bool = false;
 
+// This script builds a new data output based on raw market .tsv prices inot a binary file for
+//  fast loading in simulation
+
 pub fn main() {
     let pairs = trader4::configs::assets::get_all_symbols();
     // let pairs = vec![trader4::configs::assets::Pair::EURUSD]; // todo: remove

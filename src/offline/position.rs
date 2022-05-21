@@ -81,7 +81,7 @@ pub struct Position {
 
 #[derive(Debug, Clone, Default)]
 pub struct NewPosInter {
-    pub new_pos: NewPos,
+    pub new_pos: NewPosReq,
     pub tick: BTickData,
     pub locked: f64,
     pub time_sec: u64,

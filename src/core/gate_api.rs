@@ -5,14 +5,14 @@ use std::fmt::Debug;
 pub trait GateWay: Debug {
     // Calls from brain1
     fn subscribe_pairs_req(&self, symbols: Vec<Pair>);
-    fn open_position_req_new(&self, new_pos: &NewPos) {}
-    fn update_position(&self, update: &UpdatePos);
+    fn open_position_req_new(&self, new_pos: &NewPosReq) {}
+    fn update_position(&self, update: &UpdatePosReq);
     // Others
     fn get_time_ms(&self) -> u64;
 }
 
 #[derive(Debug, Clone, Default)]
-pub struct NewPos {
+pub struct NewPosReq {
     pub pair: Pair,
     pub is_short: bool,
     pub base_asset_size: f64,
@@ -45,7 +45,7 @@ pub struct EventPosition {
 }
 
 #[derive(Debug, Clone, Default)]
-pub struct UpdatePos {
+pub struct UpdatePosReq {
     pub pos_id: u64,
     pub close: bool,
     pub exit_high_price: f64,

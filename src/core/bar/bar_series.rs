@@ -59,6 +59,7 @@ impl BarSeries {
         self.ticks_primary.push(tick.clone());
         self.ticks_big.push(tick.clone());
 
+        // we only run this block when we have enough ticks for primary
         if self.ticks_primary.len() == self.cfg.primary_ticks as usize {
             let mut finish_big = false;
             let mut bar_prim = Bar::new(&self.ticks_primary);
@@ -92,11 +93,14 @@ impl BarSeries {
             Some(ph)
         } else {
             // in here we could also build new Bars without changing states
+            //  we already build .build_ph_tip()
+            // inactive now
+            // Some(self.build_ph_tip())
             None
         }
     }
 
-    // build PH for not filled ticks bars.
+    // build PH for not filled ticks bars. No modification to state.
     pub fn build_ph_tip(&self) -> PrimaryHolder {
         if self.ticks_primary.len() == 0 {
             if self.bars_primary.len() == 0 {

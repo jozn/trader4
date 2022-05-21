@@ -4,6 +4,7 @@ pub mod gen;
 // Note: TAsset and TSymbol is the same of cli of assets cTrader lists downloader code, but in here
 //  we replace String types with "&'static str" for simple outcome. This two codes must
 //  be in sync.
+// T stand for Trader
 
 #[derive(Debug, Clone)]
 pub struct TAsset {

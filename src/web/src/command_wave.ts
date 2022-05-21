@@ -32,17 +32,17 @@ function makeBarChart() {
     // Add bull/bear channel to main bars
 //     fn.trendChannelChart(chart_major,jd.major);
     // fn.trendChannelChart(chart_medium,jd.medium);
-//     fn.trendChannelChart(chart_small,jd.small);
+    fn.trendChannelChart(chart_small,jd.small);
 
     // RPI indicaotr
     // fn.rpiOverIndicator(chart_major,jd.major);
-    // fn.rpiOverIndicator(chart_medium,jd.medium);
-    // fn.rpiOverIndicator(chart_small,jd.medium);
+    fn.rpiOverIndicator(chart_medium,jd.medium);
+    fn.rpiOverIndicator(chart_small,jd.medium);
 
     // MA
-//     fn.simpleLineOver(chart_major,jd.major.ma1);
-//     fn.simpleLineOver(chart_medium,jd.major.ma1);
-//     fn.simpleLineOver(chart_small,jd.major.ma1);
+    fn.simpleLineOver(chart_major,jd.major.ma1);
+    fn.simpleLineOver(chart_medium,jd.major.ma1);
+    fn.simpleLineOver(chart_small,jd.major.ma1);
 
     // DCSnake
 //     fn.simpleLineOver(chart_medium,jd.medium.dcs_high);
@@ -84,8 +84,8 @@ function makeBarChart() {
     
     // waves
     var wave1 = chart_medium.addLineSeries({
-        color: 'rgb(255,145,0)',
-        lineWidth: 1.,
+        color: 'rgb(13, 108, 56)', // 'rgb(0,255,0)',
+        lineWidth: .8,
     });
     wave1.setData(jd.wave1);
 

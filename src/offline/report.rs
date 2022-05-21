@@ -55,7 +55,7 @@ impl Report {
         self.middles.push(ms);
     }
 
-    pub fn on_new_trade(&mut self, t: &NewPos, money: &Money) {
+    pub fn on_new_trade(&mut self, t: &NewPosReq, money: &Money) {
         let ms = MiddleStatic {
             time_sec: t.time_sec,
             time_str: helper::to_date(t.time_sec),

@@ -22,7 +22,7 @@ impl Brain {
             let new_sl = pair.cal_price(tick.get_price(), -5.5);
             if p.exit_low_price < new_sl {
                 // println!(">>> update new sl {} -- {} {:?}", p.pos_id, new_sl,p);
-                let up = UpdatePos {
+                let up = UpdatePosReq {
                     pos_id: p.pos_id,
                     close: false,
                     exit_high_price: 0.,

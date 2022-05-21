@@ -68,7 +68,7 @@ impl BackendEngine {
         self.symbols = symbols;
     }
 
-    pub fn open_position_req_new(&mut self, param: &NewPos) {
+    pub fn open_position_req_new(&mut self, param: &NewPosReq) {
         assert!(param.virtual_id > 0);
 
         let money = self.get_money();
@@ -126,7 +126,7 @@ impl BackendEngine {
         self.close_stasfied_poss(symbol_id, false);
     }
 
-    fn update_position(&mut self, req: &UpdatePos) {
+    fn update_position(&mut self, req: &UpdatePosReq) {
         let pos_opt = self.opens.get(&req.pos_id);
         match pos_opt {
             None => {}
@@ -331,12 +331,12 @@ impl GateWay for BackendEngineOuter {
         x.subscribe_pairs_req(symbols);
     }
 
-    fn open_position_req_new(&self, new_pos: &NewPos) {
+    fn open_position_req_new(&self, new_pos: &NewPosReq) {
         let mut x = self.engine.borrow_mut();
         x.open_position_req_new(new_pos);
     }
 
-    fn update_position(&self, update: &UpdatePos) {
+    fn update_position(&self, update: &UpdatePosReq) {
         let mut x = self.engine.borrow_mut();
         x.update_position(update);
     }

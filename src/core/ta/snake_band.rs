@@ -42,6 +42,7 @@ impl SnakeBand {
         let price_tp = (candle.high() + candle.low() + candle.close()) / 3.0;
 
         let ma = self.ma.next(price_tp);
+        // todo: is it the bug below repeated code? (later review)
         let sd = self.std_div.next(price_tp);
         let sd = self.std_div.next(price_tp);
 

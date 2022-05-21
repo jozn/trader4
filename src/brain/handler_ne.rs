@@ -46,7 +46,7 @@ impl Brain {
                         return;
                     }
 
-                    let np = NewPos {
+                    let np = NewPosReq {
                         pair: pair.clone(),
                         is_short: false,
                         base_asset_size: 10_000.0,

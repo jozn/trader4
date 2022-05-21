@@ -54,6 +54,8 @@ impl Window {
         }
     }
 
+    // todo add tail_def(f64) -> f64
+
     pub fn size(&self) -> usize {
         self.arr.len()
     }
