@@ -1,9 +1,9 @@
 use super::*;
 use crate::bar::*;
-use crate::offline;
 use crate::offline::Position;
 use crate::ta::zigzag::{ZigZag, ZigZagRes};
 use crate::ta::Wave;
+use crate::{analyse, offline};
 use std::os::unix::raw::off_t;
 
 // todo: extract json to core
@@ -308,6 +308,15 @@ impl SkyEng {
                 value: z.price,
             });
         }
+
+        // Motion Analyse
+        use crate::core::analyse::wave_motion;
+        // let mots = analyse::gen_motion(&wave3.wave_ress);
+        let mo_gen =
+            wave_motion::MotionGen::new(&wave3.wave_ress, &wave2.wave_ress, &wave1.wave_ress);
+        // let mo_gen = analyse::MotionGen::new(&wave3.wave_ress,&wave1.wave_ress,&vec![]);
+        let mots = mo_gen.run();
+        println!("mots: {:#?}", mots);
 
         // Add trades(postions) to markers
         let trade_markers = offline::position_html::to_json_marker(&pos);

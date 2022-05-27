@@ -4,7 +4,7 @@ use super::*;
 use crate::base::*;
 use std::collections::VecDeque;
 
-// Vel2 is the proxy for Vel with filed added suffix 2 to support csv output
+// Vel2 is the proxy for Vel with filed added suffix v2 to support csv output
 
 // Velocity
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -15,8 +15,8 @@ pub struct Vel2 {
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct VelRes2 {
     pub v2_ma: f64,
-    pub v2_start_vel_pip: f64,
     pub v2_count: u32, // all positive/negative candles counts
+    pub v2_start_vel_pip: f64,
     pub v2_avg_vel_pip: f64,
     pub v2_end_vel_pip: f64,
 }
@@ -36,8 +36,8 @@ impl Vel2 {
 
         VelRes2 {
             v2_ma: v.ma,
-            v2_start_vel_pip: v.start_vel_pip,
             v2_count: v.count,
+            v2_start_vel_pip: v.start_vel_pip,
             v2_avg_vel_pip: v.avg_vel_pip,
             v2_end_vel_pip: v.end_vel_pip,
         }

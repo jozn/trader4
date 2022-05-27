@@ -30,8 +30,8 @@ pub fn run1() {
     // run_pair(&Pair::Gasoline);
 
     run_pair(&Pair::EURUSD);
-    run_pair(&Pair::USDCHF);
-    run_pair(&Pair::USDJPY);
+    // run_pair(&Pair::USDCHF);
+    // run_pair(&Pair::USDJPY);
 }
 
 pub fn run2() {
@@ -78,5 +78,5 @@ pub fn run_pair(pair: &Pair) {
     // run_cfg.run_web_sim(25..32);
     // run_cfg.run_web_sim(45..60);
     // run_cfg.run_web_sim(45..47);
-    run_cfg.run_web_sim(40..60);
+    run_cfg.run_web_sim(50..60);
 }

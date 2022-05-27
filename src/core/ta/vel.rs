@@ -20,8 +20,8 @@ pub struct Vel {
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct VelRes {
     pub ma: f64,
-    pub start_vel_pip: f64,
     pub count: u32, // all positive/negative candles counts
+    pub start_vel_pip: f64,
     pub avg_vel_pip: f64,
     pub end_vel_pip: f64,
 }
@@ -126,8 +126,8 @@ impl Vel {
 
         VelRes {
             ma: new_ema,
-            start_vel_pip: start_vel * 10_000.,
             count: count - 1,
+            start_vel_pip: start_vel * 10_000.,
             avg_vel_pip: avg_vel * 10_000.,
             end_vel_pip: end_vel * 10_000.,
         }
