@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use super::*;
 use crate::base::*;
 
-// Directional Movement MACD
+// ME: Directional Movement MACD
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DMMD {

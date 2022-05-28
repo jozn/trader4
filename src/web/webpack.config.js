@@ -3,7 +3,8 @@ const path = require('path');
 module.exports = {
     // entry: './src/index.ts',
 //    entry: './src/command.ts',
-    entry: './src/command_wave.ts',
+//    entry: './src/command_wave.ts',
+    entry: './src/command_v9.ts',
     mode: 'development', //'production'
     devtool: 'inline-source-map',
     watch: true,

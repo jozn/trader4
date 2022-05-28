@@ -5,6 +5,9 @@ use crate::base::*;
 
 // Moving Average Trend:
 // You can see an impl of this in TradingView with name of "SSL Channel"
+//
+// This indicator builds two moving average on low and high price candles and switch
+//  colors when trend direction changes.
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MATrend {

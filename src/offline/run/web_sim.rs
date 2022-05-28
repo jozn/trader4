@@ -3,14 +3,16 @@ use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
 use crate::gate_api::GateWay;
 use crate::offline::*;
-use crate::sky_eng::{SkyEng, SkyJsonOut};
+use crate::sky_eng::{SkyEng, SkyJsonOut, TrendAnalyseOut};
 use crate::types::WeekData;
 use crate::{collector, offline};
 use std::ops::Range;
 use std::sync::Arc;
+use crate::helper::to_csv_out_v2;
 
 // todo: migrate this
-const OUT_FOLDER: &'static str = "/mnt/t/trader_out/v8/data_sky_web_v8/";
+const OUT_FOLDER: &'static str = "/mnt/t/trader_out/v9/data_sky_web/";
+const OUT_FOLDER_TREND: &'static str = "/mnt/t/trader_out/v9/trend/";
 
 pub struct WebBackRunConfig {
     pub balance: f64,
@@ -86,6 +88,7 @@ impl WebBackRunConfig {
 
             for (_, pair_mem) in brain.db.iter() {
                 println!("web {:?} ...", &pair_mem.pair);
+                self.write_trend_analyse_output(&pair_mem.sky_eng, &postions);
                 self.write_web_output(&pair_mem.sky_eng, &postions);
             }
         }
@@ -115,6 +118,10 @@ impl WebBackRunConfig {
         let pair = &self.pair;
         for wd in &self.week_data {
             let poss = get_postions_range(&pos, wd.start, wd.end);
+            ///////// Hack: ma trend anlyse
+            sky_eng.to_trend_analyse(wd.start, wd.end, &poss);
+            /////////
+
             let jo = sky_eng.to_json(wd.start, wd.end, &poss);
             // println!("week m: {}", jo.major_ohlc.len());
             // println!("week s: {}", jo.small_ohlc.len());
@@ -145,6 +152,34 @@ impl WebBackRunConfig {
             // let jo = sky_eng.to_json(start, end);
             // let poss = get_postions_range(&pos, start, end);
             // write_json(&jo, &poss, &pair, wd.week_id, day_num);
+        }
+    }
+
+    // code copy of write_web_output
+    fn write_trend_analyse_output(&self, sky_eng: &SkyEng, pos: &Vec<Position>) {
+        let pair = &self.pair;
+        for wd in &self.week_data {
+            let poss = get_postions_range(&pos, wd.start, wd.end);
+            let jo = sky_eng.to_trend_analyse(wd.start, wd.end, &poss);
+            write_trend_anlyse(&jo, &poss, &pair, wd.week_id, 0);
+
+            let mut start = wd.start;
+            let mut end = start + 86_400_000;
+            let mut day_num = 1;
+            'days: loop {
+                if day_num == 8 {
+                    break 'days;
+                }
+                let poss = get_postions_range(&pos, start, end);
+                let jo = sky_eng.to_trend_analyse(start, end, &poss);
+                if jo.tt.len() == 0 {
+                    // break 'days;
+                }
+                write_trend_anlyse(&jo, &poss, &pair, wd.week_id, day_num);
+                start = end;
+                end = start + 86_400_000;
+                day_num += 1;
+            }
         }
     }
 }
@@ -182,12 +217,18 @@ pub fn write_json(jo: &SkyJsonOut, pos: &Vec<Position>, pair: &Pair, week_id: u1
     let json_text = serde_json::to_string_pretty(&jo).unwrap();
     let trades_text = offline::position_html::to_html_table(&pos);
 
-    let html_tmpl = std::fs::read_to_string("./src/web/html/ui5.html").unwrap();
+    let html_tmpl = std::fs::read_to_string("./src/web/html/ui6.html").unwrap();
     let js_script = std::fs::read_to_string("./src/web/dist/bundle.js").unwrap();
+    // JS libs (jQuery and lightweight)
+    let jquery = std::fs::read_to_string("./src/web/libs/jquery.min.js").unwrap();
+    let lighweight = std::fs::read_to_string("./src/web/libs/lightweight-charts.standalone.development.js").unwrap();
+    let libs = format!("{} \n {}",jquery, lighweight);
+
     // let js_script = std::fs::read_to_string("./src/web/ts/lib.js").unwrap();
     let html = html_tmpl.replace("{{TITLE}}", &title);
     let html = html.replace("{{JSON_DATA}}", &json_text);
     let html = html.replace("{{TRADE_DATA}}", &trades_text);
+    let html = html.replace("{{JS_LIBS}}", &libs);
     let html = html.replace("{{JS_SCRIPT}}", &js_script);
 
     // Write to file
@@ -209,4 +250,33 @@ fn get_postions_range(pos: &Vec<Position>, time_start: i64, time_end: i64) -> Ve
         }
     }
     out
+}
+
+pub fn write_trend_anlyse(jo: &TrendAnalyseOut, pos: &Vec<Position>, pair: &Pair, week_id: u16, day_num: u64) {
+    let title = if day_num == 0 {
+        format!("{:?}/{}", &pair, week_id)
+    } else {
+        format!("{:?}/{}_{}", &pair, week_id, day_num)
+    };
+
+    let file_path = if day_num == 0 {
+        format!("{}{}/{}.csv", OUT_FOLDER_TREND, &pair.folder_path(), week_id)
+    } else {
+        format!(
+            "{}{}/{}_{}.csv",
+            OUT_FOLDER_TREND,
+            pair.folder_path(),
+            week_id,
+            day_num
+        )
+    };
+    let html = to_csv_out_v2(&jo.tt,true,true);
+
+    // Write to file
+    let dir = format!("{}{}", OUT_FOLDER_TREND, pair.folder_path());
+
+    use std::fs;
+    fs::create_dir_all(&dir);
+    fs::write(&file_path, html);
+    println!("{}", &file_path);
 }

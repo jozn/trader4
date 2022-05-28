@@ -309,14 +309,16 @@ impl SkyEng {
             });
         }
 
-        // Motion Analyse
+        //////////// Motion Analyse
         use crate::core::analyse::wave_motion;
         // let mots = analyse::gen_motion(&wave3.wave_ress);
         let mo_gen =
             wave_motion::MotionGen::new(&wave3.wave_ress, &wave2.wave_ress, &wave1.wave_ress);
         // let mo_gen = analyse::MotionGen::new(&wave3.wave_ress,&wave1.wave_ress,&vec![]);
         let mots = mo_gen.run();
-        println!("mots: {:#?}", mots);
+        // println!("mots: {:#?}", mots);
+        ///////////
+
 
         // Add trades(postions) to markers
         let trade_markers = offline::position_html::to_json_marker(&pos);
@@ -328,4 +330,22 @@ impl SkyEng {
         // out.markers.clear();
         out
     }
+
+    pub fn to_trend_analyse(&self, start: i64, end: i64, pos: &Vec<Position>) -> TrendAnalyseOut{
+        println!("========================");
+        let mut tao = TrendAnalyseOut::default();
+        let s = &self;
+        for b in &s.medium_bars.bars_primary {
+            println!("====> {:}", b.primary.ta.vel.end_vel_pip);
+            tao.tt.push(b.big.ta.vel.end_vel_pip);
+        }
+        tao
+    }
+
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+pub struct TrendAnalyseOut {
+    pub major: TimeFrameJson,
+    pub tt: Vec<f64>,
 }
