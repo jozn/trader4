@@ -56,17 +56,19 @@ impl VelMom {
         let mut count = 0;
         for m in self.ma_mom_arr.iter() {
             let m = *m;
-            if (ma_mom > 0. && m >= 0.) || (ma_mom < 0. && m <= 0.) {
-                // if (ma_mom > 0. && m >= 0.) || (self.last_ma >= 0.  ) {
+            if ma_mom > 0. && m >= 0. {
                 ma_sum_un += m;
                 count += 1;
-            // } else if (ma_mom < 0. && m <= 0.) || ( self.last_ma <= 0. ) {
-            //     ma_sum += m;
-            //     count -= 1;
+            } else if ma_mom < 0. && m <= 0. {
+                ma_sum += m;
+                count -= 1;
             } else {
                 break;
             }
         }
+        // todo
+        // This is code is supposed to be a workaroudn for \USDCHF week 52 bug >> zero hit
+        // this code does not work
         let ma_sum = if count == 0 {
             // println!("=== zero {:?}=====================",self.ma_mom_arr.len());
             let ma_sum_past = self.last_ma;
@@ -75,7 +77,32 @@ impl VelMom {
         } else {
             ma_sum_un
         };
+        // temp
+        let ma_sum = ma_sum_un;
+
         // self.last_ma = ma_sum_un;
+        // for m in self.ma_mom_arr.iter() {
+        //     let m = *m;
+        //     if (ma_mom > 0. && m >= 0.) || (ma_mom < 0. && m <= 0.) {
+        //         // if (ma_mom > 0. && m >= 0.) || (self.last_ma >= 0.  ) {
+        //         ma_sum_un += m;
+        //         count += 1;
+        //     // } else if (ma_mom < 0. && m <= 0.) || ( self.last_ma <= 0. ) {
+        //     //     ma_sum += m;
+        //     //     count -= 1;
+        //     } else {
+        //         break;
+        //     }
+        // }
+        // let ma_sum = if count == 0 {
+        //     // println!("=== zero {:?}=====================",self.ma_mom_arr.len());
+        //     let ma_sum_past = self.last_ma;
+        //     self.last_ma = ma_sum_un;
+        //     ma_sum_past
+        // } else {
+        //     ma_sum_un
+        // };
+        // // self.last_ma = ma_sum_un;
 
         VelMomRes {
             ma,
