@@ -2,17 +2,17 @@ use crate::brain::*;
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
 use crate::gate_api::GateWay;
+use crate::helper::to_csv_out_v2;
 use crate::offline::*;
 use crate::sky_eng::{SkyEng, SkyJsonOut, TrendAnalyseOut};
 use crate::types::WeekData;
 use crate::{collector, offline};
 use std::ops::Range;
 use std::sync::Arc;
-use crate::helper::to_csv_out_v2;
 
 // todo: migrate this
-const OUT_FOLDER: &'static str = "/mnt/t/trader_out/v9/data_sky_web/";
-const OUT_FOLDER_TREND: &'static str = "/mnt/t/trader_out/v9/trend/";
+const OUT_FOLDER: &'static str = "/mnt/t/trader_out/v10/data_sky_web/";
+const OUT_FOLDER_TREND: &'static str = "/mnt/t/trader_out/v10/trend/";
 
 pub struct WebBackRunConfig {
     pub balance: f64,
@@ -221,8 +221,10 @@ pub fn write_json(jo: &SkyJsonOut, pos: &Vec<Position>, pair: &Pair, week_id: u1
     let js_script = std::fs::read_to_string("./src/web/dist/bundle.js").unwrap();
     // JS libs (jQuery and lightweight)
     let jquery = std::fs::read_to_string("./src/web/libs/jquery.min.js").unwrap();
-    let lighweight = std::fs::read_to_string("./src/web/libs/lightweight-charts.standalone.development.js").unwrap();
-    let libs = format!("{} \n {}",jquery, lighweight);
+    let lighweight =
+        std::fs::read_to_string("./src/web/libs/lightweight-charts.standalone.development.js")
+            .unwrap();
+    let libs = format!("{} \n {}", jquery, lighweight);
 
     // let js_script = std::fs::read_to_string("./src/web/ts/lib.js").unwrap();
     let html = html_tmpl.replace("{{TITLE}}", &title);
@@ -252,7 +254,13 @@ fn get_postions_range(pos: &Vec<Position>, time_start: i64, time_end: i64) -> Ve
     out
 }
 
-pub fn write_trend_anlyse(jo: &TrendAnalyseOut, pos: &Vec<Position>, pair: &Pair, week_id: u16, day_num: u64) {
+pub fn write_trend_anlyse(
+    jo: &TrendAnalyseOut,
+    pos: &Vec<Position>,
+    pair: &Pair,
+    week_id: u16,
+    day_num: u64,
+) {
     let title = if day_num == 0 {
         format!("{:?}/{}", &pair, week_id)
     } else {
@@ -260,7 +268,12 @@ pub fn write_trend_anlyse(jo: &TrendAnalyseOut, pos: &Vec<Position>, pair: &Pair
     };
 
     let file_path = if day_num == 0 {
-        format!("{}{}/{}.csv", OUT_FOLDER_TREND, &pair.folder_path(), week_id)
+        format!(
+            "{}{}/{}.csv",
+            OUT_FOLDER_TREND,
+            &pair.folder_path(),
+            week_id
+        )
     } else {
         format!(
             "{}{}/{}_{}.csv",
@@ -270,7 +283,7 @@ pub fn write_trend_anlyse(jo: &TrendAnalyseOut, pos: &Vec<Position>, pair: &Pair
             day_num
         )
     };
-    let html = to_csv_out_v2(&jo.tt,true,true);
+    let html = to_csv_out_v2(&jo.tt, true, true);
 
     // Write to file
     let dir = format!("{}{}", OUT_FOLDER_TREND, pair.folder_path());

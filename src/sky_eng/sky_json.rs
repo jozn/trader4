@@ -19,6 +19,15 @@ pub struct TimeFrameJson {
     pub ma1: Vec<RowJson>,
     pub ma_mom: Vec<RowJson>,
 
+    // Velocity
+    pub vel_avg: Vec<RowJson>,
+    pub vel_end: Vec<RowJson>,
+
+    // VelMom -- vm: vel_mom
+    pub vm_mom: Vec<RowJson>,
+    pub vm_sum: Vec<RowJson>,
+    pub vm_count: Vec<RowJson>,
+
     pub bull_line: Vec<RowJson>,
     pub bear_line: Vec<RowJson>,
 
@@ -129,6 +138,33 @@ fn bars_to_json(bars: Vec<PrimaryHolder>) -> TimeFrameJson {
         out.ma_mom.push(RowJson {
             time,
             value: bta.ma_mom,
+        });
+
+        // Velocity
+        let vel = &bta.vel;
+        out.vel_avg.push(RowJson {
+            time,
+            // value: vel.avg_vel_pip,
+            value: vel.count as f64,
+        });
+        out.vel_end.push(RowJson {
+            time,
+            value: vel.end_vel_pip,
+        });
+
+        // VelMom
+        let vm = &bta.vel_mom;
+        out.vm_mom.push(RowJson {
+            time,
+            value: vm.ma_mom,
+        });
+        out.vm_sum.push(RowJson {
+            time,
+            value: vm.ma_sum,
+        });
+        out.vm_count.push(RowJson {
+            time,
+            value: vm.count as f64,
         });
 
         // Trend line
@@ -319,7 +355,6 @@ impl SkyEng {
         // println!("mots: {:#?}", mots);
         ///////////
 
-
         // Add trades(postions) to markers
         let trade_markers = offline::position_html::to_json_marker(&pos);
         for tm in trade_markers {
@@ -331,17 +366,16 @@ impl SkyEng {
         out
     }
 
-    pub fn to_trend_analyse(&self, start: i64, end: i64, pos: &Vec<Position>) -> TrendAnalyseOut{
+    pub fn to_trend_analyse(&self, start: i64, end: i64, pos: &Vec<Position>) -> TrendAnalyseOut {
         println!("========================");
         let mut tao = TrendAnalyseOut::default();
         let s = &self;
         for b in &s.medium_bars.bars_primary {
-            println!("====> {:}", b.primary.ta.vel.end_vel_pip);
+            // println!("====> {:}", b.primary.ta.vel.end_vel_pip);
             tao.tt.push(b.big.ta.vel.end_vel_pip);
         }
         tao
     }
-
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]

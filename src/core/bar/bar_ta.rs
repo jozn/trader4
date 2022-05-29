@@ -24,6 +24,7 @@ pub struct TAMethods {
     pub stoch: ta::Stoch,
     pub trend: ta::MATrend,
     pub vel: ta::Vel,
+    pub vel_mom: ta::VelMom,
 }
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
@@ -44,6 +45,7 @@ pub struct BarTA {
     pub stoch: ta::StochRes,
     pub trend: ta::MATrendOut,
     pub vel: ta::VelRes,
+    pub vel_mom: ta::VelMomRes,
 }
 
 impl TAMethods {
@@ -65,6 +67,7 @@ impl TAMethods {
             stoch: ta::Stoch::new(14, 3, 5).unwrap(),
             trend: ta::MATrend::new(10).unwrap(),
             vel: ta::Vel::new(15).unwrap(),
+            vel_mom: ta::VelMom::new(25, 3).unwrap(),
         }
     }
 }
@@ -88,5 +91,6 @@ pub fn cal_indicators(tam: &mut TAMethods, bar: &Bar) -> BarTA {
         stoch: tam.stoch.next(&bar),
         trend: tam.trend.next(&bar),
         vel: tam.vel.next_ohlc(&bar),
+        vel_mom: tam.vel_mom.next(price),
     }
 }

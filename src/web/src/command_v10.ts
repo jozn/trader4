@@ -50,13 +50,36 @@ function makeBarChart() {
 //     fn.simpleLineOver(chart_medium,jd.medium.dcs_oversold,ORANGE,2);
 
     ///////////////////////////  Dynamic Sub Charts ////////////////////////
+    // VelMom
+    var vm1_el1 = fn.makeNextIndi("vm_mom",true,true);
+    var vm1_chart1 = fn.onelineSubIndiacor(vm1_el1,jd.major.vm_mom);
+    fn.syncCharts(chart_medium,vm1_chart1);
+
+    var vm1_el1 = fn.makeNextIndi("vm_sum",true,true);
+    var vm1_chart1 = fn.onelineSubIndiacor(vm1_el1,jd.major.vm_sum);
+    fn.syncCharts(chart_medium,vm1_chart1);
+
+    var vm1_el1 = fn.makeNextIndi("vm_count",true,true);
+    var vm1_chart1 = fn.onelineSubIndiacor(vm1_el1,jd.major.vm_count);
+    fn.syncCharts(chart_medium,vm1_chart1);
+
+    // Vel
+    var vel1_el1 = fn.makeNextIndi("vel_avg_cnt",false,true);
+    var vel1_chart1 = fn.onelineSubIndiacor(vel1_el1,jd.major.vel_avg);
+    fn.syncCharts(chart_medium,vel1_chart1);
+
+    var vel1_el1 = fn.makeNextIndi("vel_end",false,true);
+    var vel1_chart1 = fn.onelineSubIndiacor(vel1_el1,jd.major.vel_end);
+    fn.syncCharts(chart_medium,vel1_chart1);
+
+
     // new ma mom
-    var ma_mom_el1 = fn.makeNextIndi("ma_mom_new",true,true);
+    var ma_mom_el1 = fn.makeNextIndi("ma_mom_new",false,true);
     var ma_mom_chart1 = fn.onelineSubIndiacor(ma_mom_el1,jd.major.ma_mom);
     fn.syncCharts(chart_medium,ma_mom_chart1);
 
     // Sub Indicators
-    let el_macd = fn.makeNextIndi("macd",true,true);
+    let el_macd = fn.makeNextIndi("macd_major",true,true);
     // var macd_chart1 = fn.macdChart(el_macd,jd.medium);
     var macd_chart1 = fn.macdChart(el_macd,jd.major);
     fn.syncCharts(chart_medium,macd_chart1);
@@ -66,15 +89,15 @@ function makeBarChart() {
     var tscore_chart = fn.scoreChart(tscore_el,jd);
     fn.syncCharts(chart_medium,tscore_chart);
 
-    // MDI
-    var medium_dmi_el = fn.makeNextIndi("medium_dmi",true,false);
-    var medium_dmi = fn.mdi(medium_dmi_el,jd.medium);
-    fn.syncCharts(chart_medium,medium_dmi);
-
     // MA Mom
     var ma_mom_el = fn.makeNextIndi("ma_mom",true,true);
     var ma_mom_chart = fn.maMomChart(ma_mom_el,jd);
     fn.syncCharts(chart_medium,ma_mom_chart);
+
+    // MDI
+    var medium_dmi_el = fn.makeNextIndi("medium_dmi",true,false);
+    var medium_dmi = fn.mdi(medium_dmi_el,jd.medium);
+    fn.syncCharts(chart_medium,medium_dmi);
 
     var lowLine = chart_medium.addLineSeries({
         color: 'rgb(255,145,0)',

@@ -353,6 +353,13 @@ pub fn get_all_symbols() -> Vec<Pair> {
     pairs
 }
 
+pub fn get_symbols_samples() -> Vec<Pair> {
+    use Pair::*;
+    vec![
+        EURUSD, USDCHF, Apple, IBM, Gasoline, ETHUSD, NatGas, US30, UK100,
+    ]
+}
+
 pub fn get_all_usd_forex_symbols() -> Vec<Pair> {
     let paris = get_all_symbols();
     let mut res = vec![];

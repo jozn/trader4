@@ -39,10 +39,12 @@ pub fn run2() {
 
     let pairs = assets::get_all_usd_forex_symbols();
     let pairs = assets::get_all_symbols();
+    let pairs = assets::get_symbols_samples();
     for p in &pairs {
+        run_pair(p);
         // if p.is_us_stocks() || p.is_index(){
         if p.is_forex() {
-            run_pair(p);
+            // run_pair(p);
         }
     }
 }
