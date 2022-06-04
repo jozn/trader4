@@ -17,11 +17,11 @@ pub struct PairMemory {
 impl PairMemory {
     pub fn new(p: Pair) -> PairMemory {
         Self {
-            pair: p,
+            pair: p.clone(),
             last_tick: None,
             last_trade_time: 0,
             dep_signals_db: SignalsDB::new(),
-            sky_eng: SkyEng::new(),
+            sky_eng: SkyEng::new(&p),
         }
     }
 }

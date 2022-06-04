@@ -50,20 +50,20 @@ pub fn run2() {
 }
 
 pub fn run_pair(pair: &Pair) {
-    // let primary_ticks = 150;
+    let primary_ticks = 150;
     // match pair { }
-    let primary_ticks = if pair.is_forex() {
-        150
-    } else if pair.is_us_stocks() {
-        300
-    } else if pair.is_crypto() {
-        300
-    } else {
-        300
-    };
+    // let primary_ticks = if pair.is_forex() {
+    //     950
+    // } else if pair.is_us_stocks() {
+    //     900
+    // } else if pair.is_crypto() {
+    //     900
+    // } else {
+    //     900
+    // };
     let pair_cfg = (
         // Pair::EURUSD,
-        pair.clone(),
+        pair.clone(), // todo: not used this field - go to sky_eng in there we have this
         BarConfig {
             primary_ticks,
             big_ticks: primary_ticks * 3,

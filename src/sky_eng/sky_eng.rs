@@ -9,6 +9,7 @@ use crate::helper;
 use crate::ta::*;
 use crate::types::{ActionSignalDep, SignalMemDep};
 use serde::{Deserialize, Serialize};
+use crate::configs::assets::Pair;
 
 // Sky Engine
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -25,7 +26,8 @@ pub struct SkyEng {
 }
 
 impl SkyEng {
-    pub fn new() -> Self {
+    pub fn new(pair: &Pair) -> Self {
+        /*
         let major_ticks = 600;
         let major_cfg = BarConfig {
             primary_ticks: major_ticks,
@@ -39,6 +41,36 @@ impl SkyEng {
         };
 
         let small_ticks = 10;
+        let small_cfg = BarConfig {
+            primary_ticks: small_ticks,
+            big_ticks: small_ticks * 3,
+        };
+        */
+        // todo: migrate this
+        let primary_ticks = if pair.is_forex() {
+            150
+        } else if pair.is_us_stocks() {
+            300
+        } else if pair.is_crypto() {
+            300
+        } else {
+            300
+        };
+
+        let major_ticks = primary_ticks * 4;
+        let major_cfg = BarConfig {
+            primary_ticks: major_ticks,
+            big_ticks: major_ticks * 2,
+        };
+
+        // let primary_ticks = 150;
+        let medium_cfg = BarConfig {
+            primary_ticks,
+            big_ticks: primary_ticks * 3,
+        };
+
+        // let small_ticks = 10;
+        let small_ticks = primary_ticks/10;
         let small_cfg = BarConfig {
             primary_ticks: small_ticks,
             big_ticks: small_ticks * 3,
