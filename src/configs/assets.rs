@@ -356,7 +356,8 @@ pub fn get_all_symbols() -> Vec<Pair> {
 pub fn get_symbols_samples() -> Vec<Pair> {
     use Pair::*;
     vec![
-        EURUSD, USDCHF, Apple, IBM, Gasoline, ETHUSD, NatGas, US30, UK100,
+        EURUSD, USDCHF, XAUUSD, XPTUSD, Apple, IBM, Gasoline, SpotCrude, XTIUSD, ETHUSD, NatGas,
+        US30, UK100,
     ]
 }
 

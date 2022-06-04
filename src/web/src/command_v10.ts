@@ -30,8 +30,8 @@ function makeBarChart() {
     fn.syncCharts(chart_medium,chart_small);
 
     // Add bull/bear channel to main bars
-//     fn.trendChannelChart(chart_major,jd.major);
-    // fn.trendChannelChart(chart_medium,jd.medium);
+    fn.trendChannelChart(chart_major,jd.major);
+    fn.trendChannelChart(chart_medium,jd.medium);
     fn.trendChannelChart(chart_small,jd.small);
 
     // RPI indicaotr

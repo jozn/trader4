@@ -50,7 +50,17 @@ pub fn run2() {
 }
 
 pub fn run_pair(pair: &Pair) {
-    let primary_ticks = 150;
+    // let primary_ticks = 150;
+    // match pair { }
+    let primary_ticks = if pair.is_forex() {
+        150
+    } else if pair.is_us_stocks() {
+        300
+    } else if pair.is_crypto() {
+        300
+    } else {
+        300
+    };
     let pair_cfg = (
         // Pair::EURUSD,
         pair.clone(),
@@ -80,5 +90,5 @@ pub fn run_pair(pair: &Pair) {
     // run_cfg.run_web_sim(25..32);
     // run_cfg.run_web_sim(45..60);
     // run_cfg.run_web_sim(45..47);
-    run_cfg.run_web_sim(50..60);
+    run_cfg.run_web_sim(50..60, false);
 }

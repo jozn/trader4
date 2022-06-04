@@ -60,7 +60,7 @@ impl VelMom {
                 ma_sum_un += m;
                 count += 1;
             } else if ma_mom < 0. && m <= 0. {
-                ma_sum += m;
+                ma_sum_un += m;
                 count -= 1;
             } else {
                 break;

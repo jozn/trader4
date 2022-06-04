@@ -11,8 +11,8 @@ use std::ops::Range;
 use std::sync::Arc;
 
 // todo: migrate this
-const OUT_FOLDER: &'static str = "/mnt/t/trader_out/v10/data_sky_web/";
-const OUT_FOLDER_TREND: &'static str = "/mnt/t/trader_out/v10/trend/";
+const OUT_FOLDER: &'static str = "/mnt/t/trader_out/v12/data_sky_web/";
+const OUT_FOLDER_TREND: &'static str = "/mnt/t/trader_out/v12/trend/";
 
 pub struct WebBackRunConfig {
     pub balance: f64,
@@ -57,7 +57,7 @@ impl WebBackRunConfig {
         self.week_data = week_data;
     }
 
-    pub fn run_web_sim(&mut self, week_rng: Range<u16>) -> WebBackRunRes {
+    pub fn run_web_sim(&mut self, week_rng: Range<u16>, days_out: bool) -> WebBackRunRes {
         self.load_weeks_data(week_rng.clone());
         let backend = BackendEngineOuter::new(self.balance, &self.report_cfg);
         let mut back_arc = Arc::new(backend);
@@ -89,7 +89,7 @@ impl WebBackRunConfig {
             for (_, pair_mem) in brain.db.iter() {
                 println!("web {:?} ...", &pair_mem.pair);
                 self.write_trend_analyse_output(&pair_mem.sky_eng, &postions);
-                self.write_web_output(&pair_mem.sky_eng, &postions);
+                self.write_web_output(&pair_mem.sky_eng, &postions, days_out);
             }
         }
 
@@ -114,7 +114,7 @@ impl WebBackRunConfig {
     }
 
     // code copy of trans_wky_web3.rs
-    fn write_web_output(&self, sky_eng: &SkyEng, pos: &Vec<Position>) {
+    fn write_web_output(&self, sky_eng: &SkyEng, pos: &Vec<Position>, days_out: bool) {
         let pair = &self.pair;
         for wd in &self.week_data {
             let poss = get_postions_range(&pos, wd.start, wd.end);
@@ -131,22 +131,24 @@ impl WebBackRunConfig {
             let mut end = start + 86_400_000;
             let mut day_num = 1;
             // while end < wd.end {
-            'days: loop {
-                if day_num == 8 {
-                    break 'days;
+            if days_out {
+                'days: loop {
+                    if day_num == 8 {
+                        break 'days;
+                    }
+                    // println!("day m: {}", jo.major_ohlc.len());
+                    // println!("day s: {}", jo.small_ohlc.len());
+                    let poss = get_postions_range(&pos, start, end);
+                    let jo = sky_eng.to_json(start, end, &poss);
+                    if jo.medium.ohlc.len() == 0 {
+                        break 'days;
+                    }
+                    write_json(&jo, &poss, &pair, wd.week_id, day_num);
+                    start = end;
+                    end = start + 86_400_000;
+                    day_num += 1;
+                    // break; // todo remove
                 }
-                // println!("day m: {}", jo.major_ohlc.len());
-                // println!("day s: {}", jo.small_ohlc.len());
-                let poss = get_postions_range(&pos, start, end);
-                let jo = sky_eng.to_json(start, end, &poss);
-                if jo.medium.ohlc.len() == 0 {
-                    break 'days;
-                }
-                write_json(&jo, &poss, &pair, wd.week_id, day_num);
-                start = end;
-                end = start + 86_400_000;
-                day_num += 1;
-                // break; // todo remove
             }
             // last day
             // let jo = sky_eng.to_json(start, end);
