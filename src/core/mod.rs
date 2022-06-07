@@ -5,5 +5,6 @@ pub mod bar;
 pub mod cortex;
 pub mod gate_api;
 pub mod helper;
+pub mod json_output;
 pub mod ta;
 pub mod types;

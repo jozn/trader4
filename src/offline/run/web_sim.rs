@@ -3,8 +3,9 @@ use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
 use crate::gate_api::GateWay;
 use crate::helper::to_csv_out_v2;
+use crate::json_output::{SkyJsonOut, TrendAnalyseOut};
 use crate::offline::*;
-use crate::sky_eng::{SkyEng, SkyJsonOut, TrendAnalyseOut};
+use crate::sky_eng::{sky_eng_to_json, sky_eng_to_trend_analyse, SkyEng};
 use crate::types::WeekData;
 use crate::{collector, offline};
 use std::ops::Range;
@@ -121,10 +122,10 @@ impl WebBackRunConfig {
         for wd in &self.week_data {
             let poss = get_postions_range(&pos, wd.start, wd.end);
             ///////// Hack: ma trend anlyse
-            sky_eng.to_trend_analyse(wd.start, wd.end, &poss);
+            sky_eng_to_trend_analyse(sky_eng, wd.start, wd.end, &poss);
             /////////
 
-            let jo = sky_eng.to_json(wd.start, wd.end, &poss);
+            let jo = sky_eng_to_json(sky_eng, wd.start, wd.end, &poss);
             // println!("week m: {}", jo.major_ohlc.len());
             // println!("week s: {}", jo.small_ohlc.len());
             write_json(&jo, &poss, &pair, wd.week_id, 0);
@@ -141,7 +142,7 @@ impl WebBackRunConfig {
                     // println!("day m: {}", jo.major_ohlc.len());
                     // println!("day s: {}", jo.small_ohlc.len());
                     let poss = get_postions_range(&pos, start, end);
-                    let jo = sky_eng.to_json(start, end, &poss);
+                    let jo = sky_eng_to_json(sky_eng, start, end, &poss);
                     if jo.medium.ohlc.len() == 0 {
                         break 'days;
                     }
@@ -164,7 +165,7 @@ impl WebBackRunConfig {
         let pair = &self.pair;
         for wd in &self.week_data {
             let poss = get_postions_range(&pos, wd.start, wd.end);
-            let jo = sky_eng.to_trend_analyse(wd.start, wd.end, &poss);
+            let jo = sky_eng_to_trend_analyse(sky_eng, wd.start, wd.end, &poss);
             write_trend_anlyse(&jo, &poss, &pair, wd.week_id, 0);
 
             let mut start = wd.start;
@@ -175,7 +176,7 @@ impl WebBackRunConfig {
                     break 'days;
                 }
                 let poss = get_postions_range(&pos, start, end);
-                let jo = sky_eng.to_trend_analyse(start, end, &poss);
+                let jo = sky_eng_to_trend_analyse(sky_eng, start, end, &poss);
                 if jo.tt.len() == 0 {
                     // break 'days;
                 }

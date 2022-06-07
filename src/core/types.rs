@@ -1,13 +1,14 @@
 use serde::{Deserialize, Serialize};
+// todo: change all timesatps to millisconds only for internals?
 
 // We start weeks from first week in 2021. First week id 1.
 // Week day start from Sunday(1) to Saturday(7)
 // Note: We have not yet investigate for dates before 2021: negative numbers and zero
 // From history.rs
 const YEAR_ZERO_WEEK: i64 = 1609632000_000; // Sunday, 3 January 2021 00:00:00
-                                            // const START_WEEK: i64 = YEAR_ZERO_WEEK + 24 * MS_IN_WEEK; // 3 Jan 2021
 const MS_IN_WEEK: i64 = 7 * 86400_000;
 
+// dep
 pub struct WeekData {
     pub week_id: u16,
     pub start: i64,

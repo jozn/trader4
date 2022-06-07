@@ -4,6 +4,7 @@ use crate::bar::*;
 use crate::collector::row_data::BTickData;
 use crate::cortex::types::{ActionSignal, SignalMem};
 use crate::helper;
+use crate::json_output::MarkerJson;
 use crate::ta::*;
 use crate::types::SignalMemDep;
 use serde::{Deserialize, Serialize};
