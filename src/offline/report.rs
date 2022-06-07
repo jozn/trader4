@@ -108,13 +108,13 @@ impl Report {
         // Weeks reports
         for wd in week_data {
             let week_closed_pos =
-                get_all_postions_range(port, wd.start as u64 / 1000, wd.end as u64 / 1000);
+                get_all_postions_range(port, wd.start_ms as u64 / 1000, wd.end_ms as u64 / 1000);
             let week_folder = format!("{}weeks/{}/", main_folder, wd.week_id);
             let rnd = helper::get_rand(1000);
             write_reports(&week_folder, rnd, &week_closed_pos);
             reports.push((wd.week_id, report_summery(&week_closed_pos)));
 
-            let mids = self.get_all_middles_range(wd.start / 1000, wd.end / 1000);
+            let mids = self.get_all_middles_range(wd.start_ms / 1000, wd.end_ms / 1000);
             write_reports_middles(&week_folder, rnd, &mids);
         }
         std::env::set_current_dir(&main_folder);

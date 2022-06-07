@@ -45,8 +45,8 @@ impl WebBackRunConfig {
             }
             week_data.push(WeekData {
                 week_id,
-                start: ticks.first().unwrap().timestamp,
-                end: ticks.last().unwrap().timestamp,
+                start_ms: ticks.first().unwrap().timestamp,
+                end_ms: ticks.last().unwrap().timestamp,
             });
             for t in ticks {
                 all_ticks.push(t);
@@ -120,17 +120,17 @@ impl WebBackRunConfig {
     fn write_web_output(&self, sky_eng: &SkyEng, pos: &Vec<Position>, days_out: bool) {
         let pair = &self.pair;
         for wd in &self.week_data {
-            let poss = get_postions_range(&pos, wd.start, wd.end);
+            let poss = get_postions_range(&pos, wd.start_ms, wd.end_ms);
             ///////// Hack: ma trend anlyse
-            sky_eng_to_trend_analyse(sky_eng, wd.start, wd.end, &poss);
+            sky_eng_to_trend_analyse(sky_eng, wd.start_ms, wd.end_ms, &poss);
             /////////
 
-            let jo = sky_eng_to_json(sky_eng, wd.start, wd.end, &poss);
+            let jo = sky_eng_to_json(sky_eng, wd.start_ms, wd.end_ms, &poss);
             // println!("week m: {}", jo.major_ohlc.len());
             // println!("week s: {}", jo.small_ohlc.len());
             write_json(&jo, &poss, &pair, wd.week_id, 0);
 
-            let mut start = wd.start;
+            let mut start = wd.start_ms;
             let mut end = start + 86_400_000;
             let mut day_num = 1;
             // while end < wd.end {
@@ -164,11 +164,11 @@ impl WebBackRunConfig {
     fn write_trend_analyse_output(&self, sky_eng: &SkyEng, pos: &Vec<Position>) {
         let pair = &self.pair;
         for wd in &self.week_data {
-            let poss = get_postions_range(&pos, wd.start, wd.end);
-            let jo = sky_eng_to_trend_analyse(sky_eng, wd.start, wd.end, &poss);
+            let poss = get_postions_range(&pos, wd.start_ms, wd.end_ms);
+            let jo = sky_eng_to_trend_analyse(sky_eng, wd.start_ms, wd.end_ms, &poss);
             write_trend_anlyse(&jo, &poss, &pair, wd.week_id, 0);
 
-            let mut start = wd.start;
+            let mut start = wd.start_ms;
             let mut end = start + 86_400_000;
             let mut day_num = 1;
             'days: loop {
