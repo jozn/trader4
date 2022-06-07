@@ -14,7 +14,7 @@ fn main() {
 }
 
 const YEAR_ZERO_WEEK: i64 = 1609632000_000; // Sunday, 3 January 2021 00:00:00
-const START_WEEK: i64 = YEAR_ZERO_WEEK + 24 * MS_IN_WEEK; // 3 Jan 2021
+const START_WEEK: i64 = YEAR_ZERO_WEEK + 24 * MS_IN_WEEK; // week 24 s
 const MS_IN_WEEK: i64 = 7 * 86400_000;
 
 fn run() {

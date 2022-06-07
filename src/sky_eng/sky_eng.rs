@@ -3,13 +3,13 @@ use crate::bar::*;
 use crate::base::*;
 use crate::brain::{PairMemory, SignalsDB};
 use crate::collector::import_all::BTickData;
+use crate::configs::assets::Pair;
 use crate::cortex::eng_memory::CortexMem;
 use crate::cortex::types::ActionSignal;
 use crate::helper;
 use crate::ta::*;
 use crate::types::{ActionSignalDep, SignalMemDep};
 use serde::{Deserialize, Serialize};
-use crate::configs::assets::Pair;
 
 // Sky Engine
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -70,7 +70,7 @@ impl SkyEng {
         };
 
         // let small_ticks = 10;
-        let small_ticks = primary_ticks/10;
+        let small_ticks = primary_ticks / 10;
         let small_cfg = BarConfig {
             primary_ticks: small_ticks,
             big_ticks: small_ticks * 3,
