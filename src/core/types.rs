@@ -22,12 +22,12 @@ pub struct DayInfo {
     pub start_s: i64,
     pub end_s: i64,
 }
-
+// todo: remove second funs all should be milli
 #[derive(Debug, Default, Serialize, Deserialize, Clone)]
 pub struct WeekInfo {
     pub week_id: i32,
-    pub start_s: i64,
-    pub end_s: i64,
+    pub start: i64,
+    pub end: i64,
 }
 
 pub fn timestamp_to_week(m_seconds: i64) -> WeekInfo {
@@ -37,8 +37,8 @@ pub fn timestamp_to_week(m_seconds: i64) -> WeekInfo {
 
     WeekInfo {
         week_id: week_id as i32,
-        start_s: start / 1000,
-        end_s: end / 1000,
+        start: start / 1000,
+        end: end / 1000,
     }
 }
 
@@ -49,12 +49,12 @@ pub fn week_to_week_info(week_id: i32) -> WeekInfo {
 
 pub fn timestamp_to_day(mil_sec: i64) -> DayInfo {
     let wi = timestamp_to_week(mil_sec);
-    let dat_id = (mil_sec - wi.start_s * 1000) / 86400_000 + 1;
+    let dat_id = (mil_sec - wi.start * 1000) / 86400_000 + 1;
     DayInfo {
         week_id: wi.week_id,
         day_id: dat_id as i32,
-        start_s: wi.start_s,
-        end_s: wi.end_s,
+        start_s: wi.start,
+        end_s: wi.end,
     }
 }
 

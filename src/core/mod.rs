@@ -3,6 +3,7 @@ pub mod base;
 pub mod analyse;
 pub mod bar;
 pub mod cortex;
+pub mod file_output;
 pub mod gate_api;
 pub mod helper;
 pub mod json_output;
