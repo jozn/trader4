@@ -12,6 +12,7 @@ pub mod online;
 pub mod brain;
 pub mod ml_feed;
 pub mod offline;
-pub mod sky_eng;
+pub mod sig_engs;
+pub use sig_engs::sky_eng;
 
 pub use crate::core::*;
