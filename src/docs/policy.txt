@@ -1,3 +1,5 @@
+== 18 Khordad 1401:
+    new src/sim moudle replaces offline/run
 == 15 Far 1401:
     we do not need zigzag indicator in charts, but maybe for statical anylse we need a similer one, if
         needed dev one similer by yourself by inspiration of zigzag.
