@@ -78,7 +78,7 @@ pub fn run_pair(pair: &Pair) {
         pair: pair.clone(),
         out: FilesOutputConfig {
             week_data: vec![],
-            pair: Default::default(),
+            pair: pair.clone(),
             print: true,
             report: true,
             days_out: true,

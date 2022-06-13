@@ -12,9 +12,9 @@ use crate::core::json_output::*;
 pub fn sky_eng_to_json(sky: &SkyEng, start: i64, end: i64, pos: &Vec<Position>) -> SkyJsonOut {
     let s = sky;
     let mut out = SkyJsonOut::default();
-    out.major = bars_to_json(s.major_bars.get_bars_ph(start, end));
-    out.medium = bars_to_json(s.medium_bars.get_bars_ph(start, end));
-    out.small = bars_to_json(s.small_bars.get_bars_ph(start, end));
+    out.major = bars_to_json_old(s.major_bars.get_bars_ph(start, end));
+    out.medium = bars_to_json_old(s.medium_bars.get_bars_ph(start, end));
+    out.small = bars_to_json_old(s.small_bars.get_bars_ph(start, end));
 
     let mut zigzag = ZigZag::default();
     let mut wave1 = Wave::new(14, 7, 0.05).unwrap();

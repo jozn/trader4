@@ -33,6 +33,7 @@ impl Brain {
         let frame_opt = pari_mem
             .sky_eng
             .add_tick(&tick, &mut pari_mem.dep_signals_db);
+        pari_mem.ml_eng.add_tick(&tick);
         self.update_all_tailing_pos();
 
         match frame_opt {

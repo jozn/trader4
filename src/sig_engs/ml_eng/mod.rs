@@ -13,6 +13,58 @@ pub struct MLEng {
     pub mutli_bars: MultiBars,
 }
 
+impl MLEng {
+    pub fn new(pair: &Pair) -> Self {
+        MLEng {
+            cortex_mem: CortexMem::new(),
+            frames: vec![],
+            mutli_bars: MultiBars::new(pair),
+        }
+    }
+    pub fn add_tick(&mut self, tick: &BTickData) {
+        let mul_res = self.mutli_bars.add_tick(tick);
+        match mul_res {
+            None => {}
+            Some(mr) => {
+                let mut frame = new_frame(&mr);
+
+                if mr.medium_full {
+                    self.frames.push(frame);
+                }
+            }
+        }
+    }
+}
+
+// pub fn new_frame(ph_medium: &PrimaryHolder, ph_major: &PrimaryHolder) -> MLFrame {}
+pub fn new_frame(mbr: &MultiBarRes) -> MLFrame {
+    let p = &mbr.medium.primary;
+    let pta = &mbr.medium.primary.ta;
+    let b = &mbr.medium.big;
+    let bta = &mbr.medium.big.ta;
+
+    let mut f = MLFrameInfo {
+        med_low: pta.dc.low,
+        med_high: pta.dc.high,
+        med_mid: pta.dc.middle,
+        big_low: bta.dc.low,
+        big_high: bta.dc.high,
+        big_mid: bta.dc.middle,
+        med_dc_hl_pip: (pta.dc.high - pta.dc.low) * 10_000.,
+        big_dc_hl_pip: (bta.dc.high - bta.dc.low) * 10_000.,
+        bar_major: mbr.major.clone(),
+        bar_medium: mbr.medium.clone(),
+        bars_small: mbr.smalls.clone(),
+        bar_small_tip_: Default::default(),
+    };
+    MLFrame {
+        fid: p.seq,
+        info: f,
+        signal_mem: None,
+        signal_action: None,
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct MLFrame {
     pub fid: i32, // frame_id
@@ -44,11 +96,11 @@ pub struct MLFrameInfo {
     #[serde(skip)]
     pub bars_small: Vec<PrimaryHolder>,
     #[serde(skip)]
-    pub bar_small_tip: PrimaryHolder,
+    pub bar_small_tip_: PrimaryHolder,
 }
 
 // todo: to core
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct MultiBars {
     pub major_cfg: BarConfig,
     pub major_bars: BarSeries,
@@ -69,13 +121,7 @@ pub struct MultiBarRes {
     pub small_full: bool,
     pub medium_full: bool,
     pub major_full: bool,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct MultiBarResDep {
-    pub major: Option<PrimaryHolder>,
-    pub medium: Option<PrimaryHolder>,
-    pub small: Option<PrimaryHolder>,
+    pub smalls: Vec<PrimaryHolder>,
 }
 
 impl MultiBars {
@@ -152,6 +198,10 @@ impl MultiBars {
                     }
                 };
 
+                let smalls = self
+                    .small_bars
+                    .get_bars_ph(ph_medium.primary.open_time - 1, i64::MAX);
+
                 Some(MultiBarRes {
                     small: ph_small,
                     medium: ph_medium,
@@ -159,36 +209,21 @@ impl MultiBars {
                     small_full,
                     medium_full,
                     major_full,
+                    smalls,
                 })
             }
         };
         out
     }
 
-    /* pub fn add_tick2(&mut self, tick: &BTickData) -> MultiBarResDep {
-        let ph_big = self.major_bars.add_tick_mut(tick);
-        let ph_medium = self.medium_bars.add_tick_mut(tick);
-        let ph_small = self.small_bars.add_tick_mut(tick);
-
-        let _ph_small = match ph_small.clone() {
-            None => {
-                // self.small_bars.build_ph_tip()
-                PrimaryHolder::default()
-            }
-            Some(ph_small) => {
-                assert!(ph_medium.is_some());
-                assert!(ph_big.is_some());
-
-                should_run = true;
-                small_full = true;
-                ph_small
-            }
-        };
-
-        MultiBarResDep {
-            major: ph_big,
-            medium: ph_medium,
-            small: ph_small
-        }
-    }*/
+    // pub fn get_bars_ph(&self, start: i64, end: i64) -> Self {
+    //     Self {
+    //         major_cfg: self.major_cfg.clone(),
+    //         major_bars: self.major_bars.get_bars_ph(start, end),
+    //         medium_cfg: BarConfig {},
+    //         medium_bars: (),
+    //         small_cfg: BarConfig {},
+    //         small_bars: (),
+    //     }
+    // }
 }

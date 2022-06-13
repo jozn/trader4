@@ -102,9 +102,12 @@ pub struct MarkerJson {
     pub text: String,
 }
 
-pub fn bars_to_json(bars: Vec<PrimaryHolder>) -> TimeFrameJson {
+pub fn bars_to_json_old(bars: Vec<PrimaryHolder>) -> TimeFrameJson {
+    bars_to_json(&bars)
+}
+pub fn bars_to_json(bars: &Vec<PrimaryHolder>) -> TimeFrameJson {
     let mut out = TimeFrameJson::default();
-    for ph in &bars {
+    for ph in bars {
         out.ohlc.push(JsonRowOHLC::new(&ph.primary));
 
         let bar = &ph.primary;
