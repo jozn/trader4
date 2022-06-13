@@ -6,7 +6,7 @@ use crate::helper::to_csv_out_v2;
 use crate::json_output::{bars_to_json, RowJson, SkyJsonOut, TrendAnalyseOut};
 use crate::offline;
 use crate::offline::{Money, Position};
-use crate::sig_engs::ml_eng::{MLEng, MultiBars};
+use crate::sig_engs::ml_eng::MLEng;
 use crate::sig_engs::*;
 use crate::sky_eng::SkyEng;
 use crate::ta::zigzag::ZigZag;
