@@ -233,7 +233,7 @@ export function maMomChart(el,d) {
         },
     });
     // scoreBull.setData(d.major.ma_mom);
-    scoreBull.setData(d.major.ma_mom);
+    scoreBull.setData(d.major_ma_mom);
 
     var scoreBear = chart.addHistogramSeries({
         color: 'rgba(255,19,19,0.68)',

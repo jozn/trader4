@@ -21,6 +21,27 @@ const OUT_FOLDER_TREND: &'static str = "/mnt/t/trader_out/v13/trend/";
 
 //////////////////////////////////////// SkyEng fns /////////////////////////////////////////
 impl FilesOutput {
+    // dep: delete this- entire sky_eng
+    pub fn run_sky_eng_dep(
+        &mut self,
+        postions: &Vec<Position>,
+        pair_mem: &PairMemory,
+        money: &Money,
+    ) {
+        println!("web {:?} ...", &pair_mem.pair);
+        self.write_trend_analyse_output_sky_eng(&pair_mem.sky_eng_dep, &postions);
+        self.write_web_output_sky_eng(&pair_mem.sky_eng_dep, &postions, self.cfg.days_out);
+
+        if self.cfg.print {
+            // println!("{:#?}", x);
+            println!("{:#?}", money.balance);
+        }
+
+        // todo - get report by date range
+        if self.cfg.report {
+            // back_ref.report_to_folder(&self.week_data, &self.pair);
+        }
+    }
     // code copy of trans_wky_web3.rs
     pub fn write_web_output_sky_eng(&self, sky_eng: &SkyEng, pos: &Vec<Position>, days_out: bool) {
         let pair = &self.cfg.pair;

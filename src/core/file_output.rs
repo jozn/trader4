@@ -13,8 +13,8 @@ use crate::ta::Wave;
 use crate::types::{DayInfo, WeekInfo};
 use serde::{Deserialize, Serialize};
 
-const OUT_FOLDER: &'static str = "/mnt/t/trader_out/v13/data_sky_web/";
-const OUT_FOLDER_TREND: &'static str = "/mnt/t/trader_out/v13/trend/";
+const OUT_FOLDER: &'static str = "/mnt/t/trader_out/v14/data_sky_web/";
+const OUT_FOLDER_TREND: &'static str = "/mnt/t/trader_out/v14/trend/";
 
 #[derive(Clone, Debug, Default)]
 pub struct FilesOutputConfig {
@@ -47,21 +47,6 @@ impl FilesOutput {
             // back_ref.report_to_folder(&self.week_data, &self.pair);
         }
     }
-    pub fn run_sky_eng(&mut self, postions: &Vec<Position>, pair_mem: &PairMemory, money: &Money) {
-        println!("web {:?} ...", &pair_mem.pair);
-        self.write_trend_analyse_output_sky_eng(&pair_mem.sky_eng, &postions);
-        self.write_web_output_sky_eng(&pair_mem.sky_eng, &postions, self.cfg.days_out);
-
-        if self.cfg.print {
-            // println!("{:#?}", x);
-            println!("{:#?}", money.balance);
-        }
-
-        // todo - get report by date range
-        if self.cfg.report {
-            // back_ref.report_to_folder(&self.week_data, &self.pair);
-        }
-    }
 }
 
 impl FilesOutput {
@@ -76,6 +61,8 @@ impl FilesOutput {
                 day: None,
                 week_id: wd.week_id,
                 day_num: 0,
+                start: wd.start,
+                end: wd.end,
                 pos: vec![],
                 major_bars: vec![],
                 medium_bars: vec![],
@@ -99,12 +86,14 @@ impl FilesOutput {
                         day: None,
                         week_id: wd.week_id,
                         day_num: day_num,
+                        start,
+                        end,
                         pos: vec![],
                         major_bars: vec![],
                         medium_bars: vec![],
                         small_bars: vec![],
                     };
-                    sfg.set_data(&ml_eng.mutli_bars, pos, wd.start, wd.end);
+                    sfg.set_data(&ml_eng.mutli_bars, pos, start, end);
                     sfg.write_json();
 
                     start = end;
@@ -125,6 +114,8 @@ pub struct SingleFileGen {
     pub day: Option<DayInfo>, // manual is preferd for sunday workaround
     pub week_id: i32,
     pub day_num: i32,
+    pub start: i64,
+    pub end: i64,
     pub pos: Vec<Position>,
     pub major_bars: Vec<PrimaryHolder>,
     pub medium_bars: Vec<PrimaryHolder>,
@@ -158,6 +149,57 @@ impl SingleFileGen {
         let mut wave2 = Wave::new(14, 7, 0.10).unwrap();
         let mut wave3 = Wave::new(14, 7, 0.20).unwrap();
 
+        for fm in &s.medium_bars {
+            let bar = &fm.primary;
+            if !(bar.open_time >= self.start && bar.open_time <= self.end) {
+                continue;
+            }
+            let time = bar.open_time / 1000;
+            wave1.next(bar);
+            wave2.next(bar);
+            wave3.next(bar);
+            // zigzag
+            let zigr = zigzag.next(bar);
+            match zigr {
+                None => {}
+                Some(z) => {
+                    out.zigzag2.push(z.clone());
+                    // out.zigzag.push(RowJson {
+                    //     time: z.time/1000,
+                    //     value: z.price,
+                    // });
+                }
+            }
+
+            // Add scores
+            // let score = &fm.tscore;
+            // out.score_bull.push(RowJson {
+            //     time,
+            //     value: score.bull as f64,
+            // });
+            // out.score_bear.push(RowJson {
+            //     time,
+            //     value: -score.bear as f64,
+            // });
+            // out.score_diff.push(RowJson {
+            //     time,
+            //     value: score.diff as f64,
+            // });
+
+            out.major_ma_mom.push(RowJson {
+                time,
+                value: fm.big.ta.ma_mom,
+            });
+
+            // todo migrate markers from old frame
+            // Markers
+            /*            if fm.get_early_mark().is_some() {
+                out.markers.push(fm.get_early_mark().unwrap());
+            }
+            if fm.get_long_final_mark().is_some() {
+                out.markers.push(fm.get_long_final_mark().unwrap());
+            }*/
+        }
         /*for fm in &s.frames {
             let bar = &fm.bar_medium.primary;
             if !(bar.open_time >= start && bar.open_time <= end) {

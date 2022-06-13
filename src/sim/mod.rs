@@ -99,7 +99,8 @@ impl SimConfig {
                     cfg: self.out.clone(),
                     week_data: self.week_data.clone(),
                 };
-                file_out.run_sky_eng(&postions, &pair_mem, &back_ref.get_money());
+                // file_out.run_sky_eng(&postions, &pair_mem, &back_ref.get_money());
+                file_out.run_ml_eng(&postions, &pair_mem, &back_ref.get_money());
                 // todo below
                 // self.write_trend_analyse_output(&pair_mem.sky_eng, &postions);
                 // self.write_web_output(&pair_mem.sky_eng, &postions, days_out);

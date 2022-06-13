@@ -91,8 +91,8 @@ impl WebBackRunConfig {
 
             for (_, pair_mem) in brain.db.iter() {
                 println!("web {:?} ...", &pair_mem.pair);
-                self.write_trend_analyse_output(&pair_mem.sky_eng, &postions);
-                self.write_web_output(&pair_mem.sky_eng, &postions, days_out);
+                self.write_trend_analyse_output(&pair_mem.sky_eng_dep, &postions);
+                self.write_web_output(&pair_mem.sky_eng_dep, &postions, days_out);
             }
         }
 

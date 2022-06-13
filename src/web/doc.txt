@@ -1,7 +1,8 @@
 run webpack:
 npm run build
 
-
+== 23 Khordad 1401:
+    + folder bk/sky_eng is for old sky_eng scripts
 @todo:
 1- add hide/show lines in main chart >> add a list of lines needed and render main chart based on
     that list: ex: wave1 in list spec > if in list, then render - onChange of checkbox rerender the chart

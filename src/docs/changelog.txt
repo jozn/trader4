@@ -1,3 +1,5 @@
+== 23 Khordad 1401:
+    + sky_eng depreacted as it is not modular enough, keep the source
 == 21 Day 1400
  + Boundaray ailing in Brain3 is a good impl which needs works. >> migrate this later.
  + ne moudle uses a self contined Candle builder, ne2 used our old Canldes modules(3 small, medium, big)

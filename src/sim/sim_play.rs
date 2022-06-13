@@ -29,8 +29,8 @@ pub fn run1() {
     // run_pair(&Pair::IBM);
     // run_pair(&Pair::Gasoline);
 
-    run_pair(&Pair::EURUSD);
-    // run_pair(&Pair::USDCHF);
+    // run_pair(&Pair::EURUSD);
+    run_pair(&Pair::USDCHF);
     // run_pair(&Pair::USDJPY);
 }
 

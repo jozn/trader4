@@ -1,3 +1,5 @@
+== 23 Khordad 1401:
+    -No name reuse > always use new names: fox, tiger, lion, mars, titen,..
 == 18 Khordad 1401:
     new src/sim moudle replaces offline/run
 == 15 Far 1401:
