@@ -50,6 +50,15 @@ function makeBarChart() {
 //     fn.simpleLineOver(chart_medium,jd.medium.dcs_oversold,ORANGE,2);
 
     ///////////////////////////  Dynamic Sub Charts ////////////////////////
+    // Relative DC
+    var rel_dc_el = fn.makeNextIndi("rel_dc_per",true,true);
+    var medium_rdc = fn.relDc(rel_dc_el,jd);
+    fn.syncCharts(chart_medium,medium_rdc);
+    var rel_dc_el = fn.makeNextIndi("rel_dc_height",true,true);
+    var medium_rdc = fn.relDcHeight(rel_dc_el,jd);
+    fn.syncCharts(chart_medium,medium_rdc);
+
+
     // VelMom
     var vm1_el1 = fn.makeNextIndi("vm_mom",true,true);
     var vm1_chart1 = fn.onelineSubIndiacor(vm1_el1,jd.major.vm_mom);
@@ -98,6 +107,8 @@ function makeBarChart() {
     var medium_dmi_el = fn.makeNextIndi("medium_dmi",true,false);
     var medium_dmi = fn.mdi(medium_dmi_el,jd.medium);
     fn.syncCharts(chart_medium,medium_dmi);
+
+
 
     var lowLine = chart_medium.addLineSeries({
         color: 'rgb(255,145,0)',

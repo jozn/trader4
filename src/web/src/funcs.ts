@@ -212,6 +212,68 @@ export function mdi(el,d) {
     return chart;
 }
 
+// Relative DC percenatge
+export function relDc(el,d) {
+    var chart = LightweightCharts.createChart(el, {
+        width: width,
+        height: width/14,
+        crosshair: {
+            mode: 0
+        },
+        rightPriceScale: {
+            width: 60
+        },
+        timeScale: {
+            visible: false,
+        }
+    });
+    var line1 = chart.addLineSeries({
+        color: 'rgb(39,145,77)',
+        lineWidth: 1,
+    });
+    line1.setData(d.rdc_med);
+    var line2 = chart.addLineSeries({
+        color: 'rgb(203,66,66)',
+        lineWidth: 1,
+    });
+    line2.setData(d.rdc_big);
+//     var line3 = chart.addLineSeries({
+//         color: 'rgb(105,102,102)',
+//         lineWidth: 2,
+//         // priceScaleId: 'left',
+//     });
+//     line3.setData(d.dmi_diff);
+    return chart;
+}
+
+// Relative DC
+export function relDcHeight(el,d) {
+    var chart = LightweightCharts.createChart(el, {
+        width: width,
+        height: width/14,
+        crosshair: {
+            mode: 0
+        },
+        rightPriceScale: {
+            width: 60
+        },
+        timeScale: {
+            visible: false,
+        }
+    });
+    var line1 = chart.addLineSeries({
+        color: 'rgb(39,145,77)',
+        lineWidth: 1,
+    });
+    line1.setData(d.rdc_med_height);
+    var line2 = chart.addLineSeries({
+        color: 'rgb(203,66,66)',
+        lineWidth: 1,
+    });
+    line2.setData(d.rdc_big_height);
+    return chart;
+}
+
 export function maMomChart(el,d) {
     var chart = LightweightCharts.createChart(el, {
         width: width,

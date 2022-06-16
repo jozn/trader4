@@ -155,6 +155,26 @@ impl SingleFileGen {
                 continue;
             }
             let time = bar.open_time / 1000;
+
+            // Relative DC
+            let rdc_ta = &bar.ta.rdc;
+            out.rdc_med.push(RowJson {
+                time,
+                value: rdc_ta.perc_med,
+            });
+            out.rdc_big.push(RowJson {
+                time,
+                value: rdc_ta.perc_big,
+            });
+            out.rdc_med_height.push(RowJson {
+                time,
+                value: rdc_ta.height_med,
+            });
+            out.rdc_big_height.push(RowJson {
+                time,
+                value: rdc_ta.height_big,
+            });
+
             wave1.next(bar);
             wave2.next(bar);
             wave3.next(bar);

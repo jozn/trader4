@@ -65,6 +65,12 @@ pub struct SkyJsonOut {
     pub score_diff: Vec<RowJson>,
 
     pub major_ma_mom: Vec<RowJson>,
+
+    // RDC - Relative DC
+    pub rdc_med: Vec<RowJson>, // perc_med
+    pub rdc_big: Vec<RowJson>,
+    pub rdc_med_height: Vec<RowJson>,
+    pub rdc_big_height: Vec<RowJson>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
