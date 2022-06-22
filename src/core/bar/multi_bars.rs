@@ -95,7 +95,7 @@ impl MultiBars {
                 };
 
                 let ph_major = match ph_major.clone() {
-                    None => self.medium_bars.build_ph_tip(),
+                    None => self.major_bars.build_ph_tip(),
                     Some(ph_big) => {
                         major_full = true;
                         ph_big

@@ -1,4 +1,5 @@
 use std::sync::Arc;
+use rand::Rng;
 
 use crate::bar::BarConfig;
 use crate::collector;
@@ -39,13 +40,14 @@ pub fn run2() {
 
     let pairs = assets::get_all_usd_forex_symbols();
     let pairs = assets::get_all_symbols();
-    let pairs = assets::get_symbols_samples();
-    let pairs = assets::get_symbols_trnd();
+    // let pairs = assets::get_symbols_samples();
+    // let pairs = assets::get_symbols_trnd();
     for p in &pairs {
-        run_pair(p);
+        // run_pair(p);
         // if p.is_us_stocks() || p.is_index(){
-        if p.is_forex() {
-            // run_pair(p);
+        let r:f64 = rand::thread_rng().gen();
+        if !p.is_forex() && r > 0.7{
+            run_pair(p);
         }
     }
 }

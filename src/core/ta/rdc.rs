@@ -19,6 +19,8 @@ pub struct RDCRes {
 pub struct RDC {
     dc_medium: DC,
     dc_big: DC,
+    ma_height_med: SMA,
+    ma_height_big: SMA,
     past: VecDeque<RDCRes>,
 }
 
@@ -30,6 +32,8 @@ impl RDC {
             Ok(Self {
                 dc_medium: DC::new(period_med).unwrap(),
                 dc_big: DC::new(period_big).unwrap(),
+                ma_height_med: SMA::new(period_med * 2).unwrap(),
+                ma_height_big: SMA::new(period_big * 2).unwrap(),
                 past: VecDeque::new(),
             })
         }
@@ -43,6 +47,9 @@ impl RDC {
 
         let perc_med = (price - dc_med.low) / (dc_med.high - dc_med.low);
         let perc_big = (price - dc_big.low) / (dc_big.high - dc_big.low);
+
+        let perc_med = (price - dc_med.low) / self.ma_height_med.next(dc_med.high - dc_med.low);
+        let perc_big = (price - dc_big.low) / self.ma_height_big.next(dc_big.high - dc_big.low);
 
         let height_med = (dc_med.high - dc_med.low) * 10_000.;
         let height_big = (dc_big.high - dc_big.low) * 10_000.;
