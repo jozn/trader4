@@ -4,8 +4,8 @@ use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
 use crate::cortex::eng_memory::CortexMem;
 use crate::cortex::types::{ActionSignal, SignalMem};
-use serde::{Deserialize, Serialize};
 use crate::json_output::{JsonMaker, MarkerJson, SkyJsonOut};
+use serde::{Deserialize, Serialize};
 
 // Sky Engine
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -32,10 +32,10 @@ impl MLEng {
         // let kid = self.mutli_bars.medium_bars.primary_seq;
 
         match mul_res {
-            None => { None}
+            None => None,
             Some(mr) => {
                 let mut frame = new_frame(&mr);
-                self.set_signals_v5(&tick,&mut frame);
+                self.set_signals_v5(&tick, &mut frame);
 
                 let time_bar_med = mr.medium.primary.get_open_time_sec();
                 let kid = mr.small.primary.seq;
@@ -44,7 +44,7 @@ impl MLEng {
                 // let act = self.cortex_mem.consume_action(0);
 
                 if mr.medium_full {
-                    println!("{:?}",act);
+                    println!("{:?}", act);
                     // todo: make this better - entire memory
                     frame.signal_mem = self.cortex_mem.get_snapshot(kid);
                     // frame.signal_mem = self.cortex_mem.get_snapshot(0);
@@ -62,7 +62,7 @@ impl MLEng {
 
 impl JsonMaker for MLEng {
     fn get_bars(&self) -> MultiBars {
-       self.mutli_bars.clone()
+        self.mutli_bars.clone()
     }
 
     fn get_markers(&self, start: i64, end: i64) -> Vec<MarkerJson> {
@@ -84,7 +84,5 @@ impl JsonMaker for MLEng {
         out
     }
 
-    fn set_json_data(&self, jo: &mut SkyJsonOut) {
-
-    }
+    fn set_json_data(&self, jo: &mut SkyJsonOut) {}
 }

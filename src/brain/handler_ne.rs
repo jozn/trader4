@@ -5,8 +5,7 @@ use crate::collector::row_data::BTickData;
 use crate::configs::assets::*;
 use crate::gate_api::*;
 use crate::helper;
-use crate::sky_eng::SFrame;
-// use crate::sky_eng::SFrame;
+use crate::sig_engs::ml_eng::MLFrame;
 
 impl Brain {
     // todo fix panic
@@ -61,7 +60,7 @@ impl Brain {
                         signal_key: "sky_1".to_string(),
                         at_price: tick.ask_price,
                         time_sec: tick.timestamp_sec as u64,
-                        frame: SFrame::default(),
+                        frame: MLFrame::default(),
                     };
 
                     // println!("Open long {:#?}", np);

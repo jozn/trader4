@@ -2,12 +2,13 @@ use crate::bar::{MultiBars, PrimaryHolder};
 use crate::brain::PairMemory;
 use crate::configs::assets::Pair;
 use crate::helper::to_csv_out_v2;
-use crate::json_output::{bars_to_json, JsonMaker, MarkerJson, RowJson, SkyJsonOut, TrendAnalyseOut};
+use crate::json_output::{
+    bars_to_json, JsonMaker, MarkerJson, RowJson, SkyJsonOut, TrendAnalyseOut,
+};
 use crate::offline;
 use crate::offline::{Money, Position};
 use crate::sig_engs::ml_eng::MLEng;
 use crate::sig_engs::*;
-use crate::sky_eng::SkyEng;
 use crate::ta::zigzag::ZigZag;
 use crate::ta::Wave;
 use crate::types::{DayInfo, WeekInfo};
@@ -332,7 +333,7 @@ impl SingleFileGen {
         out
     }
 
-    fn write_json(&self,json_maker: &impl JsonMaker) {
+    fn write_json(&self, json_maker: &impl JsonMaker) {
         let mut jo = self.to_json();
         if jo.medium.ohlc.len() == 0 {
             return;

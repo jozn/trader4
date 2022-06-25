@@ -4,7 +4,6 @@ pub mod analyse;
 pub mod bar;
 pub mod cortex;
 pub mod file_output;
-pub mod file_output_old_sky_eng;
 pub mod gate_api;
 pub mod helper;
 pub mod json_output;

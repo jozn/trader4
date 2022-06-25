@@ -4,8 +4,9 @@ use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
 use crate::cortex::eng_memory::CortexMem;
 use crate::cortex::types::{ActionSignal, SignalMem};
-use serde::{Deserialize, Serialize};
 use crate::json_output::MarkerJson;
+use crate::ta::*;
+use serde::{Deserialize, Serialize};
 
 pub fn new_frame(mbr: &MultiBarRes) -> MLFrame {
     let p = &mbr.medium.primary;
@@ -69,8 +70,36 @@ pub struct MLFrameInfo {
     pub bar_small_tip_: PrimaryHolder,
 }
 
-impl MLFrame  {
+pub type FrameCsv = (
+    Bar,
+    MLFrameInfo,
+    RPIRes,
+    RPCRes,
+    MACDOutput,
+    DMIOutput,
+    StochRes,
+    MATrendOut,
+    MATrendOut,
+    MACDOutput,
+);
 
+impl MLFrame {
+    pub fn to_csv(&self) -> FrameCsv {
+        let pta = &self.info.bar_medium.primary.ta;
+        let bta = &self.info.bar_medium.primary.ta;
+        (
+            self.info.bar_medium.primary.clone(),
+            self.info.clone(),
+            pta.rpi.clone(),
+            pta.rpc.clone(),
+            pta.macd.clone(),
+            pta.dmi.clone(),
+            pta.stoch.clone(),
+            pta.trend.clone(),
+            bta.trend.clone(),
+            bta.macd.clone(),
+        )
+    }
     ///////////////// For Json Outputs //////////////////
     pub fn get_early_mark(&self) -> Option<MarkerJson> {
         match &self.signal_mem {

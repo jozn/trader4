@@ -25,7 +25,8 @@ pub struct NewPosReq {
     // Informative
     pub at_price: f64,
     pub time_sec: u64, // Brain time
-    pub frame: crate::sky_eng::SFrame,
+    // pub frame: crate::sky_eng::SFrame,
+    pub frame: crate::sig_engs::ml_eng::MLFrame,
 }
 
 // Send from backend, cTrader to Brain

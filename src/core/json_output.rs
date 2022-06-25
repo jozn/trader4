@@ -265,7 +265,7 @@ pub struct TrendAnalyseOut {
 // This trait must be implemented in sky_engs to extract jsons
 pub trait JsonMaker {
     fn get_bars(&self) -> MultiBars;
-    fn get_markers(&self,start: i64, end: i64) -> Vec<MarkerJson>;
+    fn get_markers(&self, start: i64, end: i64) -> Vec<MarkerJson>;
     // Last chanse to set engine specifec data in jsons
-    fn set_json_data(&self,jo: &mut SkyJsonOut);
+    fn set_json_data(&self, jo: &mut SkyJsonOut);
 }
