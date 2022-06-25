@@ -2,7 +2,7 @@ use crate::bar::{MultiBars, PrimaryHolder};
 use crate::brain::PairMemory;
 use crate::configs::assets::Pair;
 use crate::helper::to_csv_out_v2;
-use crate::json_output::{bars_to_json, RowJson, SkyJsonOut, TrendAnalyseOut};
+use crate::json_output::{bars_to_json, JsonMaker, MarkerJson, RowJson, SkyJsonOut, TrendAnalyseOut};
 use crate::offline;
 use crate::offline::{Money, Position};
 use crate::sig_engs::ml_eng::MLEng;
@@ -32,9 +32,9 @@ pub struct FilesOutput {
 }
 
 impl FilesOutput {
-    pub fn run_ml_eng(&mut self, postions: &Vec<Position>, pair_mem: &PairMemory, money: &Money) {
+    pub fn run_sig_eng(&mut self, postions: &Vec<Position>, pair_mem: &PairMemory, money: &Money) {
         println!("web {:?} ...", &pair_mem.pair);
-        self.write_web_output_ml_eng(&pair_mem.ml_eng, &postions);
+        self.write_web_output_one_eng(&pair_mem.ml_eng, &postions);
         // self.write_web_output_sky_eng(&pair_mem.sky_eng, &postions, self.cfg.days_out);
 
         if self.cfg.print {
@@ -51,7 +51,9 @@ impl FilesOutput {
 
 impl FilesOutput {
     // code copy of trans_wky_web3.rs
-    fn write_web_output_ml_eng(&self, ml_eng: &MLEng, pos: &Vec<Position>) {
+    // fn write_web_output_ml_eng(&self, ml_eng: &MLEng, pos: &Vec<Position>) {
+    fn write_web_output_one_eng(&self, json_maker: &impl JsonMaker, pos: &Vec<Position>) {
+        let _bars = json_maker.get_bars();
         let pair = &self.cfg.pair;
         for wd in &self.week_data {
             let poss = get_postions_range(&pos, wd.start, wd.end);
@@ -64,12 +66,13 @@ impl FilesOutput {
                 start: wd.start,
                 end: wd.end,
                 pos: vec![],
+                markers: vec![],
                 major_bars: vec![],
                 medium_bars: vec![],
                 small_bars: vec![],
             };
-            sfg.set_data(&ml_eng.mutli_bars, pos, wd.start, wd.end);
-            sfg.write_json();
+            sfg.set_data(json_maker, pos, wd.start, wd.end);
+            sfg.write_json(json_maker);
 
             // Daily
             let mut start = wd.start;
@@ -89,12 +92,14 @@ impl FilesOutput {
                         start,
                         end,
                         pos: vec![],
+                        markers: vec![],
                         major_bars: vec![],
                         medium_bars: vec![],
                         small_bars: vec![],
                     };
-                    sfg.set_data(&ml_eng.mutli_bars, pos, start, end);
-                    sfg.write_json();
+                    sfg.set_data(json_maker, pos, start, end);
+
+                    sfg.write_json(json_maker);
 
                     start = end;
                     end = start + 86_400_000;
@@ -117,6 +122,7 @@ pub struct SingleFileGen {
     pub start: i64,
     pub end: i64,
     pub pos: Vec<Position>,
+    pub markers: Vec<MarkerJson>,
     pub major_bars: Vec<PrimaryHolder>,
     pub medium_bars: Vec<PrimaryHolder>,
     pub small_bars: Vec<PrimaryHolder>,
@@ -126,16 +132,19 @@ impl SingleFileGen {
     // Common for week and days
     fn set_data(
         &mut self,
-        ml_eng: &MultiBars,
+        // bars: &MultiBars,
+        json_maker: &impl JsonMaker,
         pos: &Vec<Position>,
         time_start: i64,
         time_end: i64,
     ) {
         let pair = &self.cfg.pair;
+        let bars = json_maker.get_bars();
         self.pos = get_postions_range(&pos, time_start, time_end);
-        self.major_bars = ml_eng.major_bars.get_bars_ph(time_start, time_end);
-        self.medium_bars = ml_eng.medium_bars.get_bars_ph(time_start, time_end);
-        self.small_bars = ml_eng.small_bars.get_bars_ph(time_start, time_end);
+        self.markers = json_maker.get_markers(time_start, time_end);
+        self.major_bars = bars.major_bars.get_bars_ph(time_start, time_end);
+        self.medium_bars = bars.medium_bars.get_bars_ph(time_start, time_end);
+        self.small_bars = bars.small_bars.get_bars_ph(time_start, time_end);
     }
     fn to_json(&self) -> SkyJsonOut {
         let s = self;
@@ -316,16 +325,19 @@ impl SingleFileGen {
             out.markers.push(tm);
         }
         // Sort markets asending
+        out.markers = self.markers.clone();
         out.markers.sort_by(|o1, o2| o1.time.cmp(&o2.time));
+        println!("market lern: {:?}", out.markers.len());
         // out.markers.clear();
         out
     }
 
-    fn write_json(&self) {
-        let jo = self.to_json();
+    fn write_json(&self,json_maker: &impl JsonMaker) {
+        let mut jo = self.to_json();
         if jo.medium.ohlc.len() == 0 {
             return;
         }
+        json_maker.set_json_data(&mut jo);
 
         let pair = &self.cfg.pair;
         let week_id = self.week_id;

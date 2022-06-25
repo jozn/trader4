@@ -5,6 +5,7 @@ use crate::configs::assets::Pair;
 use crate::cortex::eng_memory::CortexMem;
 use crate::cortex::types::{ActionSignal, SignalMem};
 use serde::{Deserialize, Serialize};
+use crate::json_output::MarkerJson;
 
 pub fn new_frame(mbr: &MultiBarRes) -> MLFrame {
     let p = &mbr.medium.primary;
@@ -66,4 +67,41 @@ pub struct MLFrameInfo {
     pub bars_small: Vec<PrimaryHolder>,
     #[serde(skip)]
     pub bar_small_tip_: PrimaryHolder,
+}
+
+impl MLFrame  {
+
+    ///////////////// For Json Outputs //////////////////
+    pub fn get_early_mark(&self) -> Option<MarkerJson> {
+        match &self.signal_mem {
+            None => None,
+            Some(sm) => {
+                //todo short
+                Some(MarkerJson {
+                    time: sm.ps_time_sec,
+                    position: "belowBar".to_string(),
+                    color: "#ae4bd5".to_string(),
+                    shape: "circle".to_string(),
+                    text: format!(""),
+                })
+            }
+        }
+    }
+
+    pub fn get_long_final_mark(&self) -> Option<MarkerJson> {
+        match &self.signal_action {
+            None => None,
+            Some(sm) => {
+                //todo short
+                Some(MarkerJson {
+                    time: sm.time_sec,
+                    position: "belowBar".to_string(),
+                    color: "#2196F3".to_string(),
+                    // color: "#14a255".to_string(),
+                    shape: "arrowUp".to_string(),
+                    text: format!(""),
+                })
+            }
+        }
+    }
 }

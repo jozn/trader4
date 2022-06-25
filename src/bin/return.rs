@@ -38,5 +38,5 @@ fn sim() {
     let ret2 = (profit - decline) / (profit + decline);
     println!("win/lose {}/{}  {}  ret: {}", win, loose, ratio, ret);
     println!("ret2: {}", ret2);
-    println!("+{}  -{}", profit,decline);
+    println!("+{}  -{}", profit, decline);
 }

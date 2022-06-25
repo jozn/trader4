@@ -30,10 +30,13 @@ impl Brain {
         let symbol_id = pair.to_symbol_id();
         let mut pari_mem = self.borrow_pair_meta(symbol_id);
         pari_mem.last_tick = Some(tick.clone());
-        let frame_opt = pari_mem
-            .sky_eng_dep
-            .add_tick(&tick, &mut pari_mem.dep_signals_db);
-        pari_mem.ml_eng.add_tick(&tick);
+
+        // Disabled the sky_eng
+        // let frame_opt = pari_mem
+        //     .sky_eng_dep
+        //     .add_tick(&tick, &mut pari_mem.dep_signals_db);
+
+        let frame_opt = pari_mem.ml_eng.add_tick(&tick);
         self.update_all_tailing_pos();
 
         match frame_opt {

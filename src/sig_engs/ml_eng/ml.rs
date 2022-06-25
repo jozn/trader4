@@ -5,6 +5,7 @@ use crate::configs::assets::Pair;
 use crate::cortex::eng_memory::CortexMem;
 use crate::cortex::types::{ActionSignal, SignalMem};
 use serde::{Deserialize, Serialize};
+use crate::json_output::{JsonMaker, MarkerJson, SkyJsonOut};
 
 // Sky Engine
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -22,17 +23,68 @@ impl MLEng {
             mutli_bars: MultiBars::new(pair),
         }
     }
-    pub fn add_tick(&mut self, tick: &BTickData) {
+
+    pub fn add_tick(&mut self, tick: &BTickData) -> Option<ActionSignal> {
         let mul_res = self.mutli_bars.add_tick(tick);
+
+        // let bb = self.mutli_bars.medium_bars.bars_primary.last().unwrap();
+        // let time_bar_med = bb.primary.get_open_time_sec();
+        // let kid = self.mutli_bars.medium_bars.primary_seq;
+
         match mul_res {
-            None => {}
+            None => { None}
             Some(mr) => {
                 let mut frame = new_frame(&mr);
+                self.set_signals_v5(&tick,&mut frame);
+
+                let time_bar_med = mr.medium.primary.get_open_time_sec();
+                let kid = mr.small.primary.seq;
+
+                let act = self.cortex_mem.consume_action(time_bar_med);
+                // let act = self.cortex_mem.consume_action(0);
 
                 if mr.medium_full {
+                    println!("{:?}",act);
+                    // todo: make this better - entire memory
+                    frame.signal_mem = self.cortex_mem.get_snapshot(kid);
+                    // frame.signal_mem = self.cortex_mem.get_snapshot(0);
+                    frame.signal_action = self.cortex_mem.get_action(time_bar_med);
+                    // frame.signal_action = self.cortex_mem.get_action(0);
+                    self.cortex_mem.clear_old(time_bar_med);
+
                     self.frames.push(frame);
                 }
+                act
             }
         }
+    }
+}
+
+impl JsonMaker for MLEng {
+    fn get_bars(&self) -> MultiBars {
+       self.mutli_bars.clone()
+    }
+
+    fn get_markers(&self, start: i64, end: i64) -> Vec<MarkerJson> {
+        let mut out = vec![];
+        for fm in &self.frames {
+            let bar = &fm.info.bar_medium.primary;
+            if !(bar.open_time >= start && bar.open_time <= end) {
+                continue;
+            }
+            // Markers
+            if fm.get_early_mark().is_some() {
+                out.push(fm.get_early_mark().unwrap());
+            }
+            if fm.get_long_final_mark().is_some() {
+                out.push(fm.get_long_final_mark().unwrap());
+            }
+        }
+        // println!("markers {:?}",out);
+        out
+    }
+
+    fn set_json_data(&self, jo: &mut SkyJsonOut) {
+
     }
 }

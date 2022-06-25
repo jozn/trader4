@@ -1,5 +1,5 @@
-use std::sync::Arc;
 use rand::Rng;
+use std::sync::Arc;
 
 use crate::bar::BarConfig;
 use crate::collector;
@@ -31,8 +31,9 @@ pub fn run1() {
     // run_pair(&Pair::Gasoline);
 
     // run_pair(&Pair::EURUSD);
-    run_pair(&Pair::USDCHF);
+    // run_pair(&Pair::USDCHF);
     // run_pair(&Pair::USDJPY);
+    run_pair(&Pair::XAUUSD);
 }
 
 pub fn run2() {
@@ -45,8 +46,8 @@ pub fn run2() {
     for p in &pairs {
         // run_pair(p);
         // if p.is_us_stocks() || p.is_index(){
-        let r:f64 = rand::thread_rng().gen();
-        if !p.is_forex() && r > 0.7{
+        let r: f64 = rand::thread_rng().gen();
+        if !p.is_forex() && r > 0.7 {
             run_pair(p);
         }
     }
@@ -99,5 +100,6 @@ pub fn run_pair(pair: &Pair) {
     // run_cfg.run_web_sim(45..47);
     // run_cfg.run_web_sim(50..60, false);
     // run_cfg.run_web_sim(25..60, false);
-    run_cfg.run_web_sim(45..60, false);
+    // run_cfg.run_web_sim(45..60, false);
+    run_cfg.run_web_sim(50..60, false);
 }
