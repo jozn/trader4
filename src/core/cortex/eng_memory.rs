@@ -2,7 +2,7 @@ use super::types::*;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 
-// A memory engine to be embeded in each SkyEng
+// A memory engine to be embeded in each sig_engs (SkyEng, MLEng)
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CortexMem {
     pub signal_mem: Option<SignalMem>,
@@ -17,12 +17,13 @@ impl CortexMem {
         }
     }
 
-    pub fn mark_long_early(&mut self, kid: i32, time_sec: i64) {
+    // Early signal to remember for going long
+    pub fn mark_long_early(&mut self, med_kid: i32, time_sec: i64) {
         match self.signal_mem {
             None => {
                 self.signal_mem = Some(SignalMem {
                     ps_buy: true,
-                    ps_medium_bar_id: kid,
+                    ps_medium_bar_id: med_kid,
                     ps_time_sec: time_sec,
                     fs_buy: false,
                     fs_small_bar_id: 0,
@@ -32,11 +33,11 @@ impl CortexMem {
             Some(_) => {}
         }
     }
-    pub fn mark_long_final(&mut self, kid: i32, time_sec: i64) {
+    pub fn mark_long_final(&mut self, med_kid: i32, time_sec: i64) {
         let mut mem = match &self.signal_mem {
             None => SignalMem {
                 ps_buy: true,
-                ps_medium_bar_id: kid,
+                ps_medium_bar_id: med_kid,
                 ps_time_sec: time_sec,
                 fs_buy: false,
                 fs_small_bar_id: 0,
@@ -46,17 +47,17 @@ impl CortexMem {
         };
         mem.fs_buy = true;
         mem.fs_time_sec = time_sec;
-        mem.fs_small_bar_id = kid;
+        mem.fs_small_bar_id = med_kid;
     }
     pub fn cancel_long_mark(&mut self) {
         self.signal_mem = None
     }
-    pub fn get_snapshot(&self, kid: i32) -> Option<SignalMem> {
+    pub fn get_snapshot(&self, med_kid: i32) -> Option<SignalMem> {
         // self.signal_mem.clone()
         match &self.signal_mem {
             None => None,
             Some(sm) => {
-                if sm.ps_medium_bar_id == kid || kid == 0 {
+                if sm.ps_medium_bar_id == med_kid || med_kid == 0 {
                     Some(sm.clone())
                 } else {
                     None

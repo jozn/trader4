@@ -201,14 +201,19 @@ pub fn bars_to_json(bars: &Vec<PrimaryHolder>) -> TimeFrameJson {
         //     value: ta.bb.low_band,
         // });
 
+        // todo: Note: changed with DC for fast impl
+        // todo Note: rpi or boillerbands is still a very good one maybe shoudl swithc to rpi
         // Gorilla Bands
+        let rdcm = &ta.rdc.dcres_med;
         out.rpi_high.push(RowJson {
             time: time,
-            value: ta.sb.high_band,
+            // value: ta.sb.high_band,
+            value: rdcm.high,
         });
         out.rpi_low.push(RowJson {
             time: time,
-            value: ta.sb.low_band,
+            // value: ta.sb.low_band,
+            value: rdcm.low,
         });
 
         // DMI

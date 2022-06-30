@@ -14,8 +14,8 @@ use crate::ta::Wave;
 use crate::types::{DayInfo, WeekInfo};
 use serde::{Deserialize, Serialize};
 
-const OUT_FOLDER: &'static str = "/mnt/t/trader_out/v14/data_sky_web/";
-const OUT_FOLDER_TREND: &'static str = "/mnt/t/trader_out/v14/trend/";
+const OUT_FOLDER: &'static str = "/mnt/t/trader_out/v15/data_sky_web/";
+const OUT_FOLDER_TREND: &'static str = "/mnt/t/trader_out/v15/trend/";
 
 #[derive(Clone, Debug, Default)]
 pub struct FilesOutputConfig {
@@ -57,26 +57,26 @@ impl FilesOutput {
         let _bars = json_maker.get_bars();
         let pair = &self.cfg.pair;
         for wd in &self.week_data {
-            let poss = get_postions_range(&pos, wd.start, wd.end);
+            let poss = get_postions_range(&pos, wd.start_ms, wd.end_ms);
             let mut sfg = SingleFileGen {
                 cfg: self.cfg.clone(),
                 week: wd.clone(),
                 day: None,
                 week_id: wd.week_id,
                 day_num: 0,
-                start: wd.start,
-                end: wd.end,
+                start: wd.start_ms,
+                end: wd.end_ms,
                 pos: vec![],
                 markers: vec![],
                 major_bars: vec![],
                 medium_bars: vec![],
                 small_bars: vec![],
             };
-            sfg.set_data(json_maker, pos, wd.start, wd.end);
+            sfg.set_data(json_maker, pos, wd.start_ms, wd.end_ms);
             sfg.write_json(json_maker);
 
             // Daily
-            let mut start = wd.start;
+            let mut start = wd.start_ms;
             let mut end = start + 86_400_000;
             let mut day_num = 1;
             if self.cfg.days_out {
@@ -320,13 +320,15 @@ impl SingleFileGen {
         // println!("mots: {:#?}", mots);
         ///////////
 
+        /////////// Markers ////////////
+        // Sort markets asending
+        // Add sig_engs markers
+        out.markers = self.markers.clone();
         // Add trades(postions) to markers
         let trade_markers = offline::position_html::to_json_marker(&self.pos);
         for tm in trade_markers {
             out.markers.push(tm);
         }
-        // Sort markets asending
-        out.markers = self.markers.clone();
         out.markers.sort_by(|o1, o2| o1.time.cmp(&o2.time));
         println!("market lern: {:?}", out.markers.len());
         // out.markers.clear();

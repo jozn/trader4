@@ -8,7 +8,7 @@ use crate::gate_api::GateWay;
 use crate::helper::to_csv_out_v2;
 use crate::json_output::{SkyJsonOut, TrendAnalyseOut};
 use crate::offline::*;
-use crate::types::{WeekData, WeekInfo};
+use crate::types::{WeekDataDep, WeekInfo};
 use crate::{collector, offline, types};
 use std::ops::Range;
 use std::sync::Arc;
@@ -117,6 +117,10 @@ impl SimConfig {
             // back_ref.report_to_folder(&self.week_data, &self.pair);
 
         }
+
         */
+        if self.out.report {
+            back_ref.report_to_folder(&self.week_data, &self.pair);
+        }
     }
 }

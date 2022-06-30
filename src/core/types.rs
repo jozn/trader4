@@ -9,7 +9,7 @@ const YEAR_ZERO_WEEK: i64 = 1609632000_000; // Sunday, 3 January 2021 00:00:00
 const MS_IN_WEEK: i64 = 7 * 86400_000;
 
 // dep
-pub struct WeekData {
+pub struct WeekDataDep {
     pub week_id: u16,
     pub start_ms: i64, // In milli_second
     pub end_ms: i64,
@@ -22,12 +22,12 @@ pub struct DayInfo {
     pub start_ms: i64,
     pub end_ms: i64,
 }
-// todo: remove second funs all should be milli
+
 #[derive(Debug, Default, Serialize, Deserialize, Clone)]
 pub struct WeekInfo {
     pub week_id: i32,
-    pub start: i64,
-    pub end: i64,
+    pub start_ms: i64,
+    pub end_ms: i64,
 }
 
 pub fn timestamp_to_week(mil_seconds: i64) -> WeekInfo {
@@ -37,8 +37,8 @@ pub fn timestamp_to_week(mil_seconds: i64) -> WeekInfo {
 
     WeekInfo {
         week_id: week_id as i32,
-        start: start,
-        end: end,
+        start_ms: start,
+        end_ms: end,
     }
 }
 
@@ -49,12 +49,12 @@ pub fn week_to_week_info(week_id: i32) -> WeekInfo {
 
 pub fn timestamp_to_day(mil_sec: i64) -> DayInfo {
     let wi = timestamp_to_week(mil_sec);
-    let dat_id = (mil_sec - wi.start) / 86400_000 + 1;
+    let dat_id = (mil_sec - wi.start_ms) / 86400_000 + 1;
     DayInfo {
         week_id: wi.week_id,
         day_id: dat_id as i32,
-        start_ms: wi.start,
-        end_ms: wi.end,
+        start_ms: wi.start_ms,
+        end_ms: wi.end_ms,
     }
 }
 

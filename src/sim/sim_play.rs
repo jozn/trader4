@@ -31,9 +31,11 @@ pub fn run1() {
     // run_pair(&Pair::Gasoline);
 
     // run_pair(&Pair::EURUSD);
-    // run_pair(&Pair::USDCHF);
     // run_pair(&Pair::USDJPY);
+
     run_pair(&Pair::XAUUSD);
+    // run_pair(&Pair::SpotCrude);
+    // run_pair(&Pair::USDCHF);
 }
 
 pub fn run2() {
@@ -85,7 +87,7 @@ pub fn run_pair(pair: &Pair) {
             pair: pair.clone(),
             print: true,
             report: true,
-            days_out: true,
+            days_out: false,
             web: true,
         },
         report_cfg: BackReportConf {
@@ -99,7 +101,7 @@ pub fn run_pair(pair: &Pair) {
     // run_cfg.run_web_sim(45..60);
     // run_cfg.run_web_sim(45..47);
     // run_cfg.run_web_sim(50..60, false);
-    // run_cfg.run_web_sim(25..60, false);
+    run_cfg.run_web_sim(25..60, false);
     // run_cfg.run_web_sim(45..60, false);
-    run_cfg.run_web_sim(50..60, false);
+    // run_cfg.run_web_sim(25..60, false);
 }

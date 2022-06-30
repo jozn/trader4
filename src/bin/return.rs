@@ -14,7 +14,7 @@ fn sim() {
     let mut rng = rand::thread_rng();
     let mut win = 0;
     let mut loose = 0;
-    let mut profit = 0.;
+    let mut increase = 0.;
     let mut decline = 0.;
     for i in 1..=20 {
         let r: f64 = rng.gen(); // generates a float between 0 and 1
@@ -23,7 +23,7 @@ fn sim() {
             win += 1;
             let ch = balance * 0.4;
             balance += ch;
-            profit += ch;
+            increase += ch;
         } else {
             sign = "-";
             loose += 1;
@@ -35,8 +35,10 @@ fn sim() {
     }
     let ratio = win as f64 / (win + loose) as f64;
     let ret = (ratio * 2. - (1. - ratio) * 1.) / (ratio * 2. + (1. - ratio) * 1.); // retiontion
-    let ret2 = (profit - decline) / (profit + decline);
+    let ret2 = (increase - decline) / (increase + decline);
+    let ret3 = (increase - decline) / increase;
     println!("win/lose {}/{}  {}  ret: {}", win, loose, ratio, ret);
     println!("ret2: {}", ret2);
-    println!("+{}  -{}", profit, decline);
+    println!("+{}  -{}", increase, decline);
+    println!("ret3: {}", ret3);
 }

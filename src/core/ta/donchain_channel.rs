@@ -19,6 +19,16 @@ pub struct DCRes {
     pub low: f64,
 }
 
+impl DCRes {
+    pub fn height(&self) -> f64 {
+        self.high - self.low
+    }
+
+    pub fn height_pop(&self) -> f64 {
+        (self.high - self.low) * 10_000. / self.low
+    }
+}
+
 impl DonchainChannel {
     pub fn new(period: usize) -> TAResult<Self> {
         match period {

@@ -13,6 +13,8 @@ pub struct RDCRes {
     pub perc_big: f64,
     pub height_med: f64,
     pub height_big: f64,
+    pub dcres_med: DCRes,
+    pub dcres_big: DCRes,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -61,6 +63,8 @@ impl RDC {
             perc_big,
             height_med,
             height_big,
+            dcres_med: dc_med.clone(),
+            dcres_big: dc_big.clone(),
         };
         out
     }

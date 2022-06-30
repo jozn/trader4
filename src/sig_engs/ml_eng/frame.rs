@@ -2,7 +2,6 @@ use super::*;
 use crate::bar::*;
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
-use crate::cortex::eng_memory::CortexMem;
 use crate::cortex::types::{ActionSignal, SignalMem};
 use crate::json_output::MarkerJson;
 use crate::ta::*;

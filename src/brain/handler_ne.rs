@@ -52,7 +52,9 @@ impl Brain {
                     let np = NewPosReq {
                         pair: pair.clone(),
                         is_short: false,
-                        base_asset_size: 10_000.0,
+                        // base_asset_size: 10_000.0,
+                        base_asset_size: 10.0,
+                        // base_asset_size: 100.0,
                         exit_high_price: pair.cal_price(tick.bid_price, act.profit),
                         exit_low_price: pair.cal_price(tick.bid_price, act.loss),
                         virtual_id: self.sim_virtual.next_virtual_id(), // todo

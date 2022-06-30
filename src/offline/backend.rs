@@ -11,7 +11,7 @@ use crate::configs::assets;
 use crate::configs::assets::Pair;
 use crate::core::gate_api::*;
 use crate::gate_api::*;
-use crate::types::WeekData;
+use crate::types::WeekInfo;
 
 use super::*;
 
@@ -295,7 +295,7 @@ impl BackendEngine {
         // self.report.write_to_folder(&self, suffix);
     }
 
-    pub fn report_to_folder(&mut self, week_data: &Vec<WeekData>, pair: &Pair) {
+    pub fn report_to_folder(&mut self, week_data: &Vec<WeekInfo>, pair: &Pair) {
         self.report.write_to_folder_weeks(&self, week_data, pair);
     }
 }

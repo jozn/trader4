@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 
+// To send to Brain from each sig_engs
 #[derive(Debug, Default, Serialize, Deserialize, Clone)]
 pub struct ActionSignal {
     pub small_kid: i32,
@@ -10,7 +11,7 @@ pub struct ActionSignal {
     pub time_sec: i64,
 }
 
-// Internal to signals engines
+// Internal to signals engines to remember signaling
 // ps_ : primary_signal
 // fs_ : final_signal
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]

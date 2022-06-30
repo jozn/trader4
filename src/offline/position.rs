@@ -4,6 +4,7 @@ use crate::configs::assets;
 use crate::configs::assets::Pair;
 use crate::gate_api::*;
 use crate::helper;
+use crate::helper::rond;
 use crate::ta::round;
 use chrono::*;
 use serde::{Deserialize, Serialize};
@@ -57,6 +58,7 @@ pub struct Position {
     pub exit_high_price: f64,
     pub exit_low_price: f64,
     pub close_price: f64,
+    pub pl_ratio_s: f64,
     #[serde(skip)]
     pub close_time: u64, // seconds
     #[serde(rename = "time_c")]
@@ -99,6 +101,13 @@ impl Position {
             PosDir::Long
         };
 
+        let pl_ratio_s = if p.is_short {
+            (p.at_price - p.exit_low_price) / (p.exit_high_price - p.at_price)
+        } else {
+            (p.exit_high_price - p.at_price) / (p.at_price - p.exit_low_price)
+        };
+        let pl_ratio_s = rond(pl_ratio_s, 2);
+
         let pair = npi.new_pos.pair.clone();
 
         let spreed_open = npi.tick.get_spread_pip(&pair);
@@ -124,6 +133,7 @@ impl Position {
             exit_high_price: p.exit_high_price,
             exit_low_price: p.exit_low_price,
             close_price: 0.0,
+            pl_ratio_s,
             close_time: 0,
             close_time_str: "".to_string(),
             finished: false,

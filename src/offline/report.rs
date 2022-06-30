@@ -4,11 +4,11 @@ use crate::core::helper::get_time_sec;
 use crate::core::helper::*;
 use crate::gate_api::*;
 use crate::helper;
-use crate::types::WeekData;
+use crate::types::{WeekDataDep, WeekInfo};
 use rand::Rng;
 use serde::{Deserialize, Serialize};
 
-static OUTPUT_FOLDER: &str = "/mnt/t/trader_out/v12/trades_res/";
+static OUTPUT_FOLDER: &str = "/mnt/t/trader_out/v15/trades_res/";
 
 // todo: add week numbers to near rnd in file names
 
@@ -80,7 +80,8 @@ impl Report {
     pub fn write_to_folder_weeks(
         &self,
         port: &BackendEngine,
-        week_data: &Vec<WeekData>,
+        // week_data: &Vec<WeekData>,
+        week_data: &Vec<WeekInfo>,
         pair: &Pair,
     ) {
         let time = get_time_sec();
