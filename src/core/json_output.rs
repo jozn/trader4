@@ -44,6 +44,11 @@ pub struct TimeFrameJson {
     pub dcs_high: Vec<RowJson>,
     pub dcs_low: Vec<RowJson>,
     pub dcs_oversold: Vec<RowJson>,
+
+    // Trend Direction - TD
+    pub td_plus: Vec<RowJson>,
+    pub td_minus: Vec<RowJson>,
+    pub td_diff: Vec<RowJson>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
@@ -256,6 +261,23 @@ pub fn bars_to_json(bars: &Vec<PrimaryHolder>) -> TimeFrameJson {
         out.dcs_oversold.push(RowJson {
             time,
             value: pta.dc_snake.oversold_line,
+        });
+
+        // DMI
+        out.td_plus.push(RowJson {
+            time,
+            value: bta.td.plus, // green
+        });
+        out.td_minus.push(RowJson {
+            time,
+            value: bta.td.minus,
+        });
+        out.td_diff.push(RowJson {
+            time,
+            // value: bta.td.adx,
+            // value: bta.td.dmx,
+            // value: bta.td.diff_ma,
+            value: bta.td.diff,
         });
     }
     out

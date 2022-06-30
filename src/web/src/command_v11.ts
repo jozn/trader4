@@ -50,6 +50,21 @@ function makeBarChart() {
 //     fn.simpleLineOver(chart_medium,jd.medium.dcs_oversold,ORANGE,2);
 
     ///////////////////////////  Dynamic Sub Charts ////////////////////////
+
+    // Trend Direction
+    var tscore_el = fn.makeNextIndi("td_major",true,true);
+    var tscore_chart = fn.trendDirectionChart(tscore_el,jd.major);
+    fn.syncCharts(chart_medium,tscore_chart);
+    var tscore_el = fn.makeNextIndi("td_medium",true,true);
+    var tscore_chart = fn.trendDirectionChart(tscore_el,jd.medium);
+    fn.syncCharts(chart_medium,tscore_chart);
+
+    // MDI
+    var medium_dmi_el = fn.makeNextIndi("medium_dmi",true,true);
+    var medium_dmi = fn.mdi(medium_dmi_el,jd.medium);
+    fn.syncCharts(chart_medium,medium_dmi);
+
+
     // Relative DC
     var rel_dc_el = fn.makeNextIndi("rel_dc_per",true,true);
     var medium_rdc = fn.relDc(rel_dc_el,jd);
@@ -66,6 +81,7 @@ function makeBarChart() {
 
     var vm1_el1 = fn.makeNextIndi("vm_sum",true,true);
     var vm1_chart1 = fn.onelineSubIndiacor(vm1_el1,jd.major.vm_sum);
+    fn.syncCharts(chart_medium,vm1_chart1);
     fn.syncCharts(chart_medium,vm1_chart1);
 
     var vm1_el1 = fn.makeNextIndi("vm_count",true,true);
@@ -102,11 +118,6 @@ function makeBarChart() {
     var ma_mom_el = fn.makeNextIndi("ma_mom",true,true);
     var ma_mom_chart = fn.maMomChart(ma_mom_el,jd);
     fn.syncCharts(chart_medium,ma_mom_chart);
-
-    // MDI
-    var medium_dmi_el = fn.makeNextIndi("medium_dmi",true,false);
-    var medium_dmi = fn.mdi(medium_dmi_el,jd.medium);
-    fn.syncCharts(chart_medium,medium_dmi);
 
 
 

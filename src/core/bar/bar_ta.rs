@@ -26,6 +26,7 @@ pub struct TAMethods {
     pub vel: ta::Vel,
     pub vel_mom: ta::VelMom,
     pub rdc: ta::RDC,
+    pub td: ta::TD,
 }
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
@@ -48,6 +49,7 @@ pub struct BarTA {
     pub vel: ta::VelRes,
     pub vel_mom: ta::VelMomRes,
     pub rdc: ta::RDCRes,
+    pub td: ta::TDOut,
 }
 
 impl TAMethods {
@@ -71,6 +73,7 @@ impl TAMethods {
             vel: ta::Vel::new(15).unwrap(),
             vel_mom: ta::VelMom::new(25, 3).unwrap(),
             rdc: ta::RDC::new(20, 60).unwrap(),
+            td: ta::TD::new(14, 14).unwrap(),
         }
     }
 }
@@ -96,5 +99,6 @@ pub fn cal_indicators(tam: &mut TAMethods, bar: &Bar) -> BarTA {
         vel: tam.vel.next_ohlc(&bar),
         vel_mom: tam.vel_mom.next(price),
         rdc: tam.rdc.next(&bar),
+        td: tam.td.next(&bar),
     }
 }
