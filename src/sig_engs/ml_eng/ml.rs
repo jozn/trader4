@@ -4,7 +4,7 @@ use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
 use crate::cortex::eng_memory::CortexMem;
 use crate::cortex::types::{ActionSignal, SignalMem};
-use crate::json_output::{JsonMaker, MarkerJson, SkyJsonOut};
+use crate::json_output::{JsonMaker, MarkerJson, RowJson, SkyJsonOut};
 use serde::{Deserialize, Serialize};
 
 // Sky Engine
@@ -85,5 +85,29 @@ impl JsonMaker for MLEng {
         out
     }
 
-    fn set_json_data(&self, jo: &mut SkyJsonOut) {}
+    fn set_json_data(&self, jo: &mut SkyJsonOut) {
+        for fm in &self.frames {
+            let bar = &fm.info.bar_medium.primary;
+            // todo: fix this
+            // if !(bar.open_time >= start && bar.open_time <= end) {
+            //     continue;
+            // }
+            let time = bar.open_time / 1000;
+            let score = &fm.score;
+            // Add scores
+            //  let score = &fm.tscore;
+            jo.score_bull.push(RowJson {
+                time,
+                value: score.bull as f64,
+            });
+            jo.score_bear.push(RowJson {
+                time,
+                value: score.bear as f64,
+            });
+            jo.score_diff.push(RowJson {
+                time,
+                value: score.diff as f64,
+            });
+        }
+    }
 }

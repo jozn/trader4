@@ -50,6 +50,10 @@ function makeBarChart() {
 //     fn.simpleLineOver(chart_medium,jd.medium.dcs_oversold,ORANGE,2);
 
     ///////////////////////////  Dynamic Sub Charts ////////////////////////
+    // Score
+    var tscore_el = fn.makeNextIndi("tscore",true,true);
+    var tscore_chart = fn.scoreChart(tscore_el,jd);
+    fn.syncCharts(chart_medium,tscore_chart);
 
     // Trend Direction
     var tscore_el = fn.makeNextIndi("td_major",true,true);
@@ -110,9 +114,6 @@ function makeBarChart() {
     fn.syncCharts(chart_medium,macd_chart1);
 
     // Score
-//     var tscore_el = fn.makeNextIndi("tscore",true,true);
-//     var tscore_chart = fn.scoreChart(tscore_el,jd);
-//     fn.syncCharts(chart_medium,tscore_chart);
 
     // MA Mom
     var ma_mom_el = fn.makeNextIndi("ma_mom",true,true);

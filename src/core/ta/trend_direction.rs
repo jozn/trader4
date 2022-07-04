@@ -24,7 +24,7 @@ pub struct TrendDirection {
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct TrendDirectionOutput {
     pub plus: f64,
-    pub minus: f64,
+    pub minus: f64, // is negative always
     pub diff: f64,
     pub diff_ma: f64,
     pub adx: f64,

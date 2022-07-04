@@ -30,6 +30,7 @@ pub fn new_frame(mbr: &MultiBarRes) -> MLFrame {
     MLFrame {
         fid: p.seq,
         info: f,
+        score: TScore::new(mbr),
         signal_mem: None,
         signal_action: None,
     }
@@ -39,6 +40,8 @@ pub fn new_frame(mbr: &MultiBarRes) -> MLFrame {
 pub struct MLFrame {
     pub fid: i32, // frame_id
     pub info: MLFrameInfo,
+    #[serde(skip)]
+    pub score: TScore,
     #[serde(skip)]
     pub signal_mem: Option<SignalMem>,
     #[serde(skip)]
