@@ -7,7 +7,7 @@ import * as fn from "./funcs";
 function run() {
     console.log("------ Running run fn ----");
     makeBarChart();
-    fn.checkboxChange(null);
+    fn.checkboxChange(undefined);
 }
 
 const ORANGE = 'rgb(224,91,0)';

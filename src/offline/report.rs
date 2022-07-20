@@ -8,7 +8,7 @@ use crate::types::{WeekDataDep, WeekInfo};
 use rand::Rng;
 use serde::{Deserialize, Serialize};
 
-static OUTPUT_FOLDER: &str = "/mnt/t/trader_out/v15/trades_res/";
+static OUTPUT_FOLDER: &str = "/mnt/t/trader_out/v16/trades_res/";
 
 // todo: add week numbers to near rnd in file names
 

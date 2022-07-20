@@ -368,24 +368,63 @@ export function onelineSubIndiacor(el,d :ITimeValue[] ) {
     return chart;
 }
 
+function getStore(namespace:string,key:string,def?:any ) :any{
+    if(localStorage[namespace] == undefined) {
+        return def;
+    }
+    return localStorage[namespace][key];
+}
 
-const takenIds:any = {};
-export function makeNextIndi(name:string,visible:boolean,topHolder:boolean){
-    if (takenIds === undefined){
-        // takenIds ={};
+function setStore(namespace:string,key:string,val:any ) {
+    if(localStorage[namespace] == undefined) {
+        localStorage[namespace]={};
     }
-    if(takenIds[name] != undefined) {
-        console.log("indiactor name: {}" + name + " is already taken. abort");
-        return
+    localStorage[namespace][key]=val;
+}
+
+function getAndSetStore_old(namespace:string,key:string,val:any ):any {
+    let retStore = getStore(namespace,key,undefined);
+    if( retStore == undefined) {
+        setStore(namespace,key,val);
+        return val;
     }
-    takenIds[name] = name;
+    return retStore;
+}
+
+function getAndSetStore(namespace:string,key:string,val:any ):any {
+    let realKey = ""+namespace+key;
+    let retStore = localStorage[realKey];
+    if( retStore == undefined) {
+        localStorage[realKey]= val;
+        return val;
+    }
+    // return retStore;
+    return JSON.parse(retStore);
+}
+export function clearStore() {
+    // localStorage[INDI] = {};
+    localStorage.clear();
+}
+
+const INDI = "INDI_";
+// const takenIds:any = {};
+export function makeNextIndi(name:string,visibleOrg:boolean,topHolder:boolean){
+    var visible = getAndSetStore(INDI,name,visibleOrg);
+    // if (takenIds === undefined){
+    //     // takenIds ={};
+    // }
+    // if(takenIds[name] != undefined) {
+    //     console.log("indiactor name: {}" + name + " is already taken. abort");
+    //     return
+    // }
+    // takenIds[name] = name;
 
     var checked_attr = "checked";
     if(visible == false){
         checked_attr = "";
     }
     // jQuery
-    let check_txt = `<input type="checkbox" ${checked_attr} id="btn_${name}" onchange="checkboxChange(this)" class="checkbox"  > ${name} </input>`;
+    let check_txt = `<input type="checkbox" ${checked_attr} id="btn_${name}" data-name="${name}" onchange="checkboxChange(this)" class="checkbox"  > ${name} </input>`;
     $("form").append(check_txt);
 
     var el = document.createElement("div");
@@ -436,6 +475,133 @@ export function checkboxChange(th: HTMLElement){
         chartSmallEL.style.display = "none";
     }
 
+    // Swap inidicator show in LocalStorge
+    console.log(th);
+    window["go"] = th;
+    if(th == undefined){
+        return;
+    }
+    let nameKey = th.id.replace("btn_","");
+    let key = ""+INDI+nameKey;
+    let valShow = localStorage[key];
+    if(valShow == "true"){
+        localStorage[key]= "false";
+    } else{
+        localStorage[key] = "true";
+    }
+
+    for (const nameAll in localStorage) {
+        if(nameAll.search(INDI)==0) {
+            var name = nameAll.replace(INDI,"");
+            var valBoll = localStorage[nameAll];
+            let el = $$("btn_"+name);
+            let chart_el = $$("chart_"+name);
+            if(el != null && chart_el != null) {
+                if(valBoll=="true") {
+                    chart_el.style.display = "block";
+                } else {
+                    chart_el.style.display = "none";
+                }
+            }
+        }
+
+    }
+
+    // for (const nameAll in localStorage) {
+    //     if(nameAll.search(INDI)==0) {
+    //         var name = nameAll.replace(INDI,"");
+    //         let el = $$("btn_"+name);
+    //         let chart_el = $$("chart_"+name);
+    //         if(el != null && chart_el != null) {
+    //             if(el.checked) {
+    //                 localStorage[nameAll] = true;
+    //                 chart_el.style.display = "block";
+    //             } else {
+    //                 localStorage[nameAll] = false;
+    //                 chart_el.style.display = "none";
+    //             }
+    //         }
+    //     }
+    // }
+
+    // if (localStorage[INDI] != undefined) {
+    //     for (const name in localStorage[INDI]) {
+    //         let el = $$("btn_"+name);
+    //         let chart_el = $$("chart_"+name);
+    //         if(el.checked) {
+    //             chart_el.style.display = "block";
+    //         } else {
+    //             chart_el.style.display = "none";
+    //         }
+    //     }
+    // }
+}
+window.checkboxChange = checkboxChange;
+
+
+///////////////////// BK + Dep ////////////////////////
+const takenIds:any = {};
+export function makeNextIndi_bk(name:string,visible:boolean,topHolder:boolean){
+    if (takenIds === undefined){
+        // takenIds ={};
+    }
+    if(takenIds[name] != undefined) {
+        console.log("indiactor name: {}" + name + " is already taken. abort");
+        return
+    }
+    takenIds[name] = name;
+
+    var checked_attr = "checked";
+    if(visible == false){
+        checked_attr = "";
+    }
+    // jQuery
+    let check_txt = `<input type="checkbox" ${checked_attr} id="btn_${name}" onchange="checkboxChange(this)" class="checkbox"  > ${name} </input>`;
+    $("form").append(check_txt);
+
+    var el = document.createElement("div");
+    el.id = "chart_" + name;
+    el.classList.add("chart");
+    if(visible == false){
+        el.style.display ="none";
+    }
+
+    var par = $$("top_indicators");
+    if(topHolder == false){
+        par = $$("bottom_indicators");
+    }
+    par.append(el);
+
+    return el ;
+}
+
+export function checkboxChange_bk(th: HTMLElement){
+    var chartMajorEl = document.getElementById("chart_major");
+    var chartMediumEL = document.getElementById("chart_medium");
+    var chartSmallEL = document.getElementById("chart_small");
+
+    var major_check_btn = document.getElementById("major_check_btn");
+    var medium_check_btn = document.getElementById("medium_check_btn");
+    var small_check_btn = document.getElementById("small_check_btn");
+
+    if(major_check_btn.checked) {
+        chartMajorEl.style.display = "block";
+    } else {
+        chartMajorEl.style.display = "none";
+    }
+
+    if(medium_check_btn.checked) {
+        chartMediumEL.style.display = "block";
+    } else {
+        chartMediumEL.style.display = "none";
+    }
+
+    if(small_check_btn.checked) {
+        chartSmallEL.style.display = "block";
+    } else {
+        chartSmallEL.style.display = "none";
+    }
+
     for (const name in takenIds) {
         let el = $$("btn_"+name);
         let chart_el = $$("chart_"+name);
@@ -446,5 +612,3 @@ export function checkboxChange(th: HTMLElement){
         }
     }
 }
-window.checkboxChange = checkboxChange;
-
