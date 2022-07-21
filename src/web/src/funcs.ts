@@ -368,6 +368,7 @@ export function onelineSubIndiacor(el,d :ITimeValue[] ) {
     return chart;
 }
 
+//////////////////// LocalStorage fns ////////////////////////
 function getStore(namespace:string,key:string,def?:any ) :any{
     var dbNs = localStorage[namespace];
     if(dbNs == undefined) {
@@ -391,6 +392,7 @@ function setStore(namespace:string,key:string,val:any ) {
     db[key]=val;
     localStorage[namespace] = JSON.stringify(db);
 }
+
 function getStoreDB(namespace:string) {
     var dbNs = localStorage[namespace];
     if(dbNs == undefined) {
@@ -399,15 +401,6 @@ function getStoreDB(namespace:string) {
     }
     return JSON.parse(dbNs);
 }
-
-// function getAndSetStore_old(namespace:string,key:string,val:any ):any {
-//     let retStore = getStore(namespace,key,undefined);
-//     if( retStore == undefined) {
-//         setStore(namespace,key,val);
-//         return val;
-//     }
-//     return retStore;
-// }
 
 function getAndSetStore(namespace:string,key:string,val:any ):any {
     var storVal = getStore(namespace,key,undefined);
@@ -418,23 +411,16 @@ function getAndSetStore(namespace:string,key:string,val:any ):any {
     return storVal;
 }
 
-export function clearStore() {
-    // localStorage[INDI] = {};
+export function resetStorage(){
     localStorage.clear();
+    window.location.reload();
+    // runCheckboxIndicatorsShowHide();
 }
+////////////////////////// End ///////////////////////////
 
 const INDI = "INDI";
-// const takenIds:any = {};
 export function makeNextIndi(name:string,visibleOrg:boolean,topHolder:boolean){
     var visible = getAndSetStore(INDI,name,visibleOrg);
-    // if (takenIds === undefined){
-    //     // takenIds ={};
-    // }
-    // if(takenIds[name] != undefined) {
-    //     console.log("indiactor name: {}" + name + " is already taken. abort");
-    //     return
-    // }
-    // takenIds[name] = name;
 
     var checked_attr = "checked";
     if(visible == false){
@@ -495,23 +481,16 @@ export function checkboxChartChange(){
 
 export function checkboxChange(th: HTMLElement){
 //     checkboxChartChange();
-
-    // Swap inidicator show in LocalStorge
-    console.log(th);
-    window["go"] = th;
     if(th == undefined){
         return;
     }
     let nameKey = th.id.replace("btn_","");
-    // let key = ""+INDI+nameKey;
-    // let valShow = localStorage[key];
     let valShow = getStore(INDI,nameKey);
+    // Swap inidicator show in LocalStorge
     if(valShow == true){
         setStore(INDI,nameKey,false);
-        // localStorage[key]= "false";
     } else{
         setStore(INDI,nameKey,true);
-        // localStorage[key] = "true";
     }
 
     runCheckboxIndicatorsShowHide();
@@ -542,147 +521,8 @@ export function hideAllIndicators(){
     runCheckboxIndicatorsShowHide();
 }
 
-export function resetStorage(){
-    localStorage.clear();
-    window.location.reload();
-    // runCheckboxIndicatorsShowHide();
-}
 window.checkboxChartChange = checkboxChartChange;
 window.checkboxChange = checkboxChange;
 window["resetStorage"] = resetStorage;
 window["hideAllIndicators"] = hideAllIndicators;
 
-
-///////////////////// BK + Dep ////////////////////////
-const takenIds:any = {};
-export function makeNextIndi_bk(name:string,visible:boolean,topHolder:boolean){
-    if (takenIds === undefined){
-        // takenIds ={};
-    }
-    if(takenIds[name] != undefined) {
-        console.log("indiactor name: {}" + name + " is already taken. abort");
-        return
-    }
-    takenIds[name] = name;
-
-    var checked_attr = "checked";
-    if(visible == false){
-        checked_attr = "";
-    }
-    // jQuery
-    let check_txt = `<label class="label"> <input type="checkbox" ${checked_attr} id="btn_${name}" onchange="checkboxChange(this)" class="checkbox"  > ${name} </input> </label>`;
-    $("form").append(check_txt);
-
-    var el = document.createElement("div");
-    el.id = "chart_" + name;
-    el.classList.add("chart");
-    if(visible == false){
-        el.style.display ="none";
-    }
-
-    var par = $$("top_indicators");
-    if(topHolder == false){
-        par = $$("bottom_indicators");
-    }
-    par.append(el);
-
-    return el ;
-}
-
-export function checkboxChange_bk(th: HTMLElement){
-    var chartMajorEl = document.getElementById("chart_major");
-    var chartMediumEL = document.getElementById("chart_medium");
-    var chartSmallEL = document.getElementById("chart_small");
-
-    var major_check_btn = document.getElementById("major_check_btn");
-    var medium_check_btn = document.getElementById("medium_check_btn");
-    var small_check_btn = document.getElementById("small_check_btn");
-
-    if(major_check_btn.checked) {
-        chartMajorEl.style.display = "block";
-    } else {
-        chartMajorEl.style.display = "none";
-    }
-
-    if(medium_check_btn.checked) {
-        chartMediumEL.style.display = "block";
-    } else {
-        chartMediumEL.style.display = "none";
-    }
-
-    if(small_check_btn.checked) {
-        chartSmallEL.style.display = "block";
-    } else {
-        chartSmallEL.style.display = "none";
-    }
-
-    for (const name in takenIds) {
-        let el = $$("btn_"+name);
-        let chart_el = $$("chart_"+name);
-        if(el.checked) {
-            chart_el.style.display = "block";
-        } else {
-            chart_el.style.display = "none";
-        }
-    }
-}
-
-function getAndSetStore_bk(namespace:string,key:string,val:any ):any {
-    let realKey = ""+namespace+key;
-    let retStore = localStorage[realKey];
-    if( retStore == undefined) {
-        localStorage[realKey]= val;
-        return val;
-    }
-    // return retStore;
-    return JSON.parse(retStore);
-}
-function getStore_bk(namespace:string,key:string,def?:any ) :any{
-    if(localStorage[namespace] == undefined) {
-        return def;
-    }
-    return localStorage[namespace][key];
-}
-
-function setStore_bk(namespace:string,key:string,val:any ) {
-    if(localStorage[namespace] == undefined) {
-        localStorage[namespace]={};
-    }
-    localStorage[namespace][key]=val;
-}
-
-export function checkboxChange_bk2(th: HTMLElement){
-//     checkboxChartChange();
-
-    // Swap inidicator show in LocalStorge
-    console.log(th);
-    window["go"] = th;
-    if(th == undefined){
-        return;
-    }
-    let nameKey = th.id.replace("btn_","");
-    let key = ""+INDI+nameKey;
-    let valShow = localStorage[key];
-    if(valShow == "true"){
-        localStorage[key]= "false";
-    } else{
-        localStorage[key] = "true";
-    }
-
-// todo extrct
-    for (const nameAll in localStorage) {
-        if(nameAll.search(INDI)==0) {
-            var name = nameAll.replace(INDI,"");
-            var valBoll = localStorage[nameAll];
-            let el = $$("btn_"+name);
-            let chart_el = $$("chart_"+name);
-            if(el != null && chart_el != null) {
-                if(valBoll=="true") {
-                    chart_el.style.display = "block";
-                } else {
-                    chart_el.style.display = "none";
-                }
-            }
-        }
-    }
-}
