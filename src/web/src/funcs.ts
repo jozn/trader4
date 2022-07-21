@@ -441,7 +441,7 @@ export function makeNextIndi(name:string,visibleOrg:boolean,topHolder:boolean){
         checked_attr = "";
     }
     // jQuery
-    let check_txt = `<input type="checkbox" ${checked_attr} id="btn_${name}" data-name="${name}" onchange="checkboxChange(this)" class="checkbox"  > ${name} </input>`;
+    let check_txt = `<label class="label"><input type="checkbox" ${checked_attr} id="btn_${name}" data-name="${name}" onchange="checkboxChange(this)" class="checkbox"  > ${name} </input></label>`;
     $("form#form_sub_indicators").append(check_txt);
 
     var el = document.createElement("div");
@@ -544,6 +544,7 @@ export function hideAllIndicators(){
 
 export function resetStorage(){
     localStorage.clear();
+    window.location.reload();
     // runCheckboxIndicatorsShowHide();
 }
 window.checkboxChartChange = checkboxChartChange;
@@ -569,7 +570,7 @@ export function makeNextIndi_bk(name:string,visible:boolean,topHolder:boolean){
         checked_attr = "";
     }
     // jQuery
-    let check_txt = `<input type="checkbox" ${checked_attr} id="btn_${name}" onchange="checkboxChange(this)" class="checkbox"  > ${name} </input>`;
+    let check_txt = `<label class="label"> <input type="checkbox" ${checked_attr} id="btn_${name}" onchange="checkboxChange(this)" class="checkbox"  > ${name} </input> </label>`;
     $("form").append(check_txt);
 
     var el = document.createElement("div");
