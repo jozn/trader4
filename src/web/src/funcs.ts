@@ -369,44 +369,61 @@ export function onelineSubIndiacor(el,d :ITimeValue[] ) {
 }
 
 function getStore(namespace:string,key:string,def?:any ) :any{
-    if(localStorage[namespace] == undefined) {
+    var dbNs = localStorage[namespace];
+    if(dbNs == undefined) {
         return def;
     }
-    return localStorage[namespace][key];
+    var db = JSON.parse(dbNs);
+    var valStore = db[key];
+    if(valStore == undefined) {
+        return def;
+    }
+    return valStore;
 }
 
 function setStore(namespace:string,key:string,val:any ) {
-    if(localStorage[namespace] == undefined) {
-        localStorage[namespace]={};
+    var dbNs = localStorage[namespace];
+    if(dbNs == undefined) {
+        dbNs = JSON.stringify({});
+        localStorage[namespace] = dbNs;
     }
-    localStorage[namespace][key]=val;
+    var db = JSON.parse(dbNs);
+    db[key]=val;
+    localStorage[namespace] = JSON.stringify(db);
+}
+function getStoreDB(namespace:string) {
+    var dbNs = localStorage[namespace];
+    if(dbNs == undefined) {
+        dbNs = JSON.stringify({});
+        localStorage[namespace] = dbNs;
+    }
+    return JSON.parse(dbNs);
 }
 
-function getAndSetStore_old(namespace:string,key:string,val:any ):any {
-    let retStore = getStore(namespace,key,undefined);
-    if( retStore == undefined) {
+// function getAndSetStore_old(namespace:string,key:string,val:any ):any {
+//     let retStore = getStore(namespace,key,undefined);
+//     if( retStore == undefined) {
+//         setStore(namespace,key,val);
+//         return val;
+//     }
+//     return retStore;
+// }
+
+function getAndSetStore(namespace:string,key:string,val:any ):any {
+    var storVal = getStore(namespace,key,undefined);
+    if(storVal == undefined) {
         setStore(namespace,key,val);
         return val;
     }
-    return retStore;
+    return storVal;
 }
 
-function getAndSetStore(namespace:string,key:string,val:any ):any {
-    let realKey = ""+namespace+key;
-    let retStore = localStorage[realKey];
-    if( retStore == undefined) {
-        localStorage[realKey]= val;
-        return val;
-    }
-    // return retStore;
-    return JSON.parse(retStore);
-}
 export function clearStore() {
     // localStorage[INDI] = {};
     localStorage.clear();
 }
 
-const INDI = "INDI_";
+const INDI = "INDI";
 // const takenIds:any = {};
 export function makeNextIndi(name:string,visibleOrg:boolean,topHolder:boolean){
     var visible = getAndSetStore(INDI,name,visibleOrg);
@@ -425,7 +442,7 @@ export function makeNextIndi(name:string,visibleOrg:boolean,topHolder:boolean){
     }
     // jQuery
     let check_txt = `<input type="checkbox" ${checked_attr} id="btn_${name}" data-name="${name}" onchange="checkboxChange(this)" class="checkbox"  > ${name} </input>`;
-    $("form").append(check_txt);
+    $("form#form_sub_indicators").append(check_txt);
 
     var el = document.createElement("div");
     el.id = "chart_" + name;
@@ -448,7 +465,7 @@ export function syncCharts(chart1: IChartApi,chart2: IChartApi){
     chart1.timeScale().subscribeVisibleTimeRangeChange((t) => chart2.timeScale().setVisibleRange(t))
 }
 
-export function checkboxChange(th: HTMLElement){
+export function checkboxChartChange(){
     var chartMajorEl = document.getElementById("chart_major");
     var chartMediumEL = document.getElementById("chart_medium");
     var chartSmallEL = document.getElementById("chart_small");
@@ -474,6 +491,10 @@ export function checkboxChange(th: HTMLElement){
     } else {
         chartSmallEL.style.display = "none";
     }
+}
+
+export function checkboxChange(th: HTMLElement){
+//     checkboxChartChange();
 
     // Swap inidicator show in LocalStorge
     console.log(th);
@@ -482,61 +503,53 @@ export function checkboxChange(th: HTMLElement){
         return;
     }
     let nameKey = th.id.replace("btn_","");
-    let key = ""+INDI+nameKey;
-    let valShow = localStorage[key];
-    if(valShow == "true"){
-        localStorage[key]= "false";
+    // let key = ""+INDI+nameKey;
+    // let valShow = localStorage[key];
+    let valShow = getStore(INDI,nameKey);
+    if(valShow == true){
+        setStore(INDI,nameKey,false);
+        // localStorage[key]= "false";
     } else{
-        localStorage[key] = "true";
+        setStore(INDI,nameKey,true);
+        // localStorage[key] = "true";
     }
 
-    for (const nameAll in localStorage) {
-        if(nameAll.search(INDI)==0) {
-            var name = nameAll.replace(INDI,"");
-            var valBoll = localStorage[nameAll];
-            let el = $$("btn_"+name);
-            let chart_el = $$("chart_"+name);
-            if(el != null && chart_el != null) {
-                if(valBoll=="true") {
-                    chart_el.style.display = "block";
-                } else {
-                    chart_el.style.display = "none";
-                }
+    runCheckboxIndicatorsShowHide();
+}
+
+function runCheckboxIndicatorsShowHide() {
+    for (const name in getStoreDB(INDI)) {
+        var valBoll = getStore(INDI,name,false);
+        let el = $$("btn_"+name);
+        let chart_el = $$("chart_"+name);
+        if(el != null && chart_el != null) {
+            // if(valBoll=="true") {
+            if(valBoll) {
+                el.checked = true;
+                chart_el.style.display = "block";
+            } else {
+                el.checked = false;
+                chart_el.style.display = "none";
             }
         }
-
     }
-
-    // for (const nameAll in localStorage) {
-    //     if(nameAll.search(INDI)==0) {
-    //         var name = nameAll.replace(INDI,"");
-    //         let el = $$("btn_"+name);
-    //         let chart_el = $$("chart_"+name);
-    //         if(el != null && chart_el != null) {
-    //             if(el.checked) {
-    //                 localStorage[nameAll] = true;
-    //                 chart_el.style.display = "block";
-    //             } else {
-    //                 localStorage[nameAll] = false;
-    //                 chart_el.style.display = "none";
-    //             }
-    //         }
-    //     }
-    // }
-
-    // if (localStorage[INDI] != undefined) {
-    //     for (const name in localStorage[INDI]) {
-    //         let el = $$("btn_"+name);
-    //         let chart_el = $$("chart_"+name);
-    //         if(el.checked) {
-    //             chart_el.style.display = "block";
-    //         } else {
-    //             chart_el.style.display = "none";
-    //         }
-    //     }
-    // }
 }
+
+export function hideAllIndicators(){
+    for (const name in getStoreDB(INDI)) {
+        setStore(INDI,name,false);
+    }
+    runCheckboxIndicatorsShowHide();
+}
+
+export function resetStorage(){
+    localStorage.clear();
+    // runCheckboxIndicatorsShowHide();
+}
+window.checkboxChartChange = checkboxChartChange;
 window.checkboxChange = checkboxChange;
+window["resetStorage"] = resetStorage;
+window["hideAllIndicators"] = hideAllIndicators;
 
 
 ///////////////////// BK + Dep ////////////////////////
@@ -609,6 +622,66 @@ export function checkboxChange_bk(th: HTMLElement){
             chart_el.style.display = "block";
         } else {
             chart_el.style.display = "none";
+        }
+    }
+}
+
+function getAndSetStore_bk(namespace:string,key:string,val:any ):any {
+    let realKey = ""+namespace+key;
+    let retStore = localStorage[realKey];
+    if( retStore == undefined) {
+        localStorage[realKey]= val;
+        return val;
+    }
+    // return retStore;
+    return JSON.parse(retStore);
+}
+function getStore_bk(namespace:string,key:string,def?:any ) :any{
+    if(localStorage[namespace] == undefined) {
+        return def;
+    }
+    return localStorage[namespace][key];
+}
+
+function setStore_bk(namespace:string,key:string,val:any ) {
+    if(localStorage[namespace] == undefined) {
+        localStorage[namespace]={};
+    }
+    localStorage[namespace][key]=val;
+}
+
+export function checkboxChange_bk2(th: HTMLElement){
+//     checkboxChartChange();
+
+    // Swap inidicator show in LocalStorge
+    console.log(th);
+    window["go"] = th;
+    if(th == undefined){
+        return;
+    }
+    let nameKey = th.id.replace("btn_","");
+    let key = ""+INDI+nameKey;
+    let valShow = localStorage[key];
+    if(valShow == "true"){
+        localStorage[key]= "false";
+    } else{
+        localStorage[key] = "true";
+    }
+
+// todo extrct
+    for (const nameAll in localStorage) {
+        if(nameAll.search(INDI)==0) {
+            var name = nameAll.replace(INDI,"");
+            var valBoll = localStorage[nameAll];
+            let el = $$("btn_"+name);
+            let chart_el = $$("chart_"+name);
+            if(el != null && chart_el != null) {
+                if(valBoll=="true") {
+                    chart_el.style.display = "block";
+                } else {
+                    chart_el.style.display = "none";
+                }
+            }
         }
     }
 }

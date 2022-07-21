@@ -370,7 +370,7 @@ impl SingleFileGen {
         let json_text = serde_json::to_string_pretty(&jo).unwrap();
         let trades_text = offline::position_html::to_html_table(&self.pos);
 
-        let html_tmpl = std::fs::read_to_string("./src/web/html/ui6.html").unwrap();
+        let html_tmpl = std::fs::read_to_string("./src/web/html/ui7.html").unwrap();
         let js_script = std::fs::read_to_string("./src/web/dist/bundle.js").unwrap();
         // JS libs (jQuery and lightweight)
         let jquery = std::fs::read_to_string("./src/web/libs/jquery.min.js").unwrap();
