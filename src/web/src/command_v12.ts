@@ -8,6 +8,7 @@ function run() {
     console.log("------ Running run fn ----");
     makeBarChart();
     fn.checkboxChartChange();
+    fn.buildOverlyHtml();
 }
 
 const ORANGE = 'rgb(224,91,0)';
@@ -26,7 +27,7 @@ function makeBarChart() {
 
     // Create main Bar charts
     var chart_major = fn.buildBarChart({black: false, el: chartMajorEl, height: width/8, ohlc: jd.major.ohlc});
-    var chart_medium = fn.buildBarChart({black: true, el: chartMediumEL, height: width/5, ohlc: jd.medium.ohlc,markers: jd.markers});
+    var chart_medium = fn.buildBarChart({black: true, el: chartMediumEL, height: width/4, ohlc: jd.medium.ohlc,markers: jd.markers});
     var chart_small = fn.buildBarChart({black: false, el: chartSmallEL, height: width/6, ohlc: jd.small.ohlc,markers: jd.markers});
     // Syncs
     fn.syncCharts(chart_major,chart_medium);
@@ -35,26 +36,32 @@ function makeBarChart() {
     // chart_medium.remove()
 
     // Add bull/bear channel to main bars
-    if(hide["trend_channel"]) {
+    if(fn.getOverlyShow("trend_channel",true)) {
         fn.trendChannelChart(chart_major,jd.major);
         fn.trendChannelChart(chart_medium,jd.medium);
         fn.trendChannelChart(chart_small,jd.small);
     }
 
     // RPI indicaotr
-    // fn.rpiOverIndicator(chart_major,jd.major);
-    fn.rpiOverIndicator(chart_medium,jd.medium);
-    fn.rpiOverIndicator(chart_small,jd.medium);
+    if(fn.getOverlyShow("rpi",true)) {
+        // fn.rpiOverIndicator(chart_major,jd.major);
+        fn.rpiOverIndicator(chart_medium, jd.medium);
+        fn.rpiOverIndicator(chart_small, jd.medium);
+    }
 
     // MA
-    fn.simpleLineOver(chart_major,jd.major.ma1);
-    fn.simpleLineOver(chart_medium,jd.major.ma1);
-    fn.simpleLineOver(chart_small,jd.major.ma1);
+    if(fn.getOverlyShow("ma1",true)) {
+        fn.simpleLineOver(chart_major, jd.major.ma1);
+        fn.simpleLineOver(chart_medium, jd.major.ma1);
+        fn.simpleLineOver(chart_small, jd.major.ma1);
+    }
 
     // DCSnake
-//     fn.simpleLineOver(chart_medium,jd.medium.dcs_high);
-//     fn.simpleLineOver(chart_medium,jd.medium.dcs_low);
-//     fn.simpleLineOver(chart_medium,jd.medium.dcs_oversold,ORANGE,2);
+    if(fn.getOverlyShow("dc_snake",false)) {
+        fn.simpleLineOver(chart_medium,jd.medium.dcs_high);
+        fn.simpleLineOver(chart_medium,jd.medium.dcs_low);
+        fn.simpleLineOver(chart_medium,jd.medium.dcs_oversold,ORANGE,2);
+    }
 
     ///////////////////////////  Dynamic Sub Charts ////////////////////////
     // Score
@@ -129,29 +136,32 @@ function makeBarChart() {
 
 
 
-    var lowLine = chart_medium.addLineSeries({
-        color: 'rgb(255,145,0)',
-        lineWidth: 1.,
-    });
-//     lowLine.setData(jd.zigzag);
+    if(fn.getOverlyShow("zig_zag",false)) {
+        var lowLine = chart_medium.addLineSeries({
+            color: 'rgb(255,145,0)',
+            lineWidth: 1.,
+        });
+        lowLine.setData(jd.zigzag);
+    }
     
     // waves
-    var wave1 = chart_medium.addLineSeries({
-        color: 'rgb(13, 108, 56)', // 'rgb(0,255,0)',
-        lineWidth: .8,
-    });
-    wave1.setData(jd.wave1);
+    if(fn.getOverlyShow("waves",false)) {
+        var wave1 = chart_medium.addLineSeries({
+            color: 'rgb(13, 108, 56)', // 'rgb(0,255,0)',
+            lineWidth: .8,
+        });
+        wave1.setData(jd.wave1);
 
-    var wave2 = chart_medium.addLineSeries({
-        color: 'rgb(255,0,0)',
-        lineWidth: 0.6,
-    });
-    wave2.setData(jd.wave2);
+        var wave2 = chart_medium.addLineSeries({
+            color: 'rgb(255,0,0)',
+            lineWidth: 0.6,
+        });
+        wave2.setData(jd.wave2);
 
-    var wave3 = chart_medium.addLineSeries({
-        color: 'rgb(0,0,255)',
-        lineWidth: 1.,
-    });
-    wave3.setData(jd.wave3);
-    // Temp: zigzag
+        var wave3 = chart_medium.addLineSeries({
+            color: 'rgb(0,0,255)',
+            lineWidth: 1.,
+        });
+        wave3.setData(jd.wave3);
+    }
 }

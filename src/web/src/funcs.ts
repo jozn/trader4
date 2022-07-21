@@ -402,7 +402,7 @@ function getStoreDB(namespace:string) {
     return JSON.parse(dbNs);
 }
 
-function getAndSetStore(namespace:string,key:string,val:any ):any {
+function getOrSetStore(namespace:string,key:string,val:any ):any {
     var storVal = getStore(namespace,key,undefined);
     if(storVal == undefined) {
         setStore(namespace,key,val);
@@ -411,16 +411,18 @@ function getAndSetStore(namespace:string,key:string,val:any ):any {
     return storVal;
 }
 
-export function resetStorage(){
-    localStorage.clear();
+export function resetSubIndicatorsStorage(){
+    // localStorage.clear();
+    localStorage[INDI] = "{}";
     window.location.reload();
     // runCheckboxIndicatorsShowHide();
 }
 ////////////////////////// End ///////////////////////////
 
 const INDI = "INDI";
+const OVERLY = "OVERLY";
 export function makeNextIndi(name:string,visibleOrg:boolean,topHolder:boolean){
-    var visible = getAndSetStore(INDI,name,visibleOrg);
+    var visible = getOrSetStore(INDI,name,visibleOrg);
 
     var checked_attr = "checked";
     if(visible == false){
@@ -502,7 +504,6 @@ function runCheckboxIndicatorsShowHide() {
         let el = $$("btn_"+name);
         let chart_el = $$("chart_"+name);
         if(el != null && chart_el != null) {
-            // if(valBoll=="true") {
             if(valBoll) {
                 el.checked = true;
                 chart_el.style.display = "block";
@@ -514,15 +515,72 @@ function runCheckboxIndicatorsShowHide() {
     }
 }
 
-export function hideAllIndicators(){
+export function hideAllSubIndicators(){
     for (const name in getStoreDB(INDI)) {
         setStore(INDI,name,false);
     }
     runCheckboxIndicatorsShowHide();
 }
 
+// Overly
+export function getOverlyShow(name:string,visibleDef:boolean){
+    return getOrSetStore(OVERLY,name,visibleDef);
+}
+
+export function checkboxOverlyChange(th: HTMLElement){
+    if(th == undefined){
+        return;
+    }
+    let nameKey = th.id.replace("btn_o_","");
+    let valShow = getStore(OVERLY,nameKey);
+    // Swap inidicator show in LocalStorge
+    if(valShow == true){
+        setStore(OVERLY,nameKey,false);
+    } else{
+        setStore(OVERLY,nameKey,true);
+    }
+
+    runCheckboxOverlyShowHide();
+}
+
+function runCheckboxOverlyShowHide() {
+    for (const name in getStoreDB(OVERLY)) {
+        var valBoll = getStore(OVERLY,name,false);
+        let el = $$("btn_o_"+name);
+        if(el != null) {
+            if(valBoll) {
+                el.checked = true;
+            } else {
+                el.checked = false;
+            }
+        }
+    }
+}
+
+export function buildOverlyHtml(){
+    for (const name in getStoreDB(OVERLY)) {
+        var visible = getStore(OVERLY,name,false);
+        var checked_attr = "checked";
+        if(visible == false){
+            checked_attr = "";
+        }
+        // jQuery
+        let check_txt = `<label class="label"><input type="checkbox" ${checked_attr} id="btn_o_${name}" data-name="${name}" onchange="checkboxOverlyChange(this)" class="checkbox"  > ${name} </input></label>`;
+        $("form#form_overly_indicators").append(check_txt);
+    }
+}
+
+export function resetOverlyIndicators(){
+    localStorage[OVERLY] = "{}";
+    window.location.reload();
+}
+
+
 window.checkboxChartChange = checkboxChartChange;
 window.checkboxChange = checkboxChange;
-window["resetStorage"] = resetStorage;
-window["hideAllIndicators"] = hideAllIndicators;
+window["resetSubIndicatorsStorage"] = resetSubIndicatorsStorage;
+window["hideAllSubIndicators"] = hideAllSubIndicators;
+window["checkboxOverlyChange"] = checkboxOverlyChange;
+window["buildOverlyHtml"] = buildOverlyHtml;
+window["resetOverlyIndicators"] = resetOverlyIndicators;
 

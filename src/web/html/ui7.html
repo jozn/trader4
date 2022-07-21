@@ -74,15 +74,27 @@
 
 <div id="synced-charts">
     <div class="form_holder">
-        <div class="form_block">
-            <form id="form_sub_indicators" style="float: left;">
-                <input type="checkbox" checked id="major_check_btn" onchange="checkboxChartChange()" class="checkbox"  > Major </input>
-                <input type="checkbox" checked id="medium_check_btn" onchange="checkboxChartChange()" class="checkbox"  > Medium </input>
-                <input type="checkbox" checked1 id="small_check_btn" onchange="checkboxChartChange()" class="checkbox"  > Small </input>
-            </form>
-            <div style="float: right; margin-right:5px ">
-                <button id="hide_all" onclick="hideAllIndicators()">Hide All</button>
-                <button id="reset_storage_btn" onclick="resetStorage()">Reset</button>
+        <div >
+            <div style="margin-bottom: 0px" class="form_block">
+                <div style="float: left;">
+                    <form id="form_overly_indicators" style=""></form>
+                </div>
+                <div style="float: right; margin-right:5px">
+                    <button onclick="resetOverlyIndicators()">Reset</button>
+                </div>
+            </div>
+            <div class="form_block">
+                <div style="float: left;">
+                    <form id="form_sub_indicators" >
+                        <label class="label"><input type="checkbox" checked id="major_check_btn" onchange="checkboxChartChange()" class="checkbox"  > Major </input></label>
+                        <label class="label"><input type="checkbox" checked id="medium_check_btn" onchange="checkboxChartChange()" class="checkbox"  > Medium </input></label>
+                        <label class="label"><input type="checkbox" checked1 id="small_check_btn" onchange="checkboxChartChange()" class="checkbox"  > Small </input></label>
+                    </form>
+                </div>
+                <div style="float: right; margin-right:5px">
+                    <button id="hide_all" onclick="hideAllSubIndicators()">Hide All</button>
+                    <button id="reset_storage_btn" onclick="resetSubIndicatorsStorage()">Reset</button>
+                </div>
             </div>
         </div>
     </div>
