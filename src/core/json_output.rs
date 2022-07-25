@@ -76,6 +76,16 @@ pub struct SkyJsonOut {
     pub rdc_big: Vec<RowJson>,
     pub rdc_med_height: Vec<RowJson>,
     pub rdc_big_height: Vec<RowJson>,
+
+    // Relative Price  (rp)
+    pub rp_os_med: Vec<RowJson>, // for overly
+    pub rp_os_big: Vec<RowJson>,
+    pub rp_osi_med: Vec<RowJson>, // for index sub indicator
+    pub rp_osi_big: Vec<RowJson>,
+    pub rp_stoch_main: Vec<RowJson>, // for index sub indicator
+    pub rp_stoch_smooth: Vec<RowJson>,
+    pub rp_med_height: Vec<RowJson>,
+    pub rp_big_height: Vec<RowJson>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]

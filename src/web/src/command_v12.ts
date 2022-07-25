@@ -12,6 +12,8 @@ function run() {
 }
 
 const ORANGE = 'rgb(224,91,0)';
+const BLUE = 'rgb(0,108,224)';
+const BLUE2 = 'rgb(0,79,168)';
 var hide = {
     "trend_channel": true,
 };
@@ -25,10 +27,15 @@ function makeBarChart() {
     var jsonText = document.getElementById("json_data").innerText;
     var jd = JSON.parse(jsonText);
 
+    var markers = [];
+    if(fn.getOverlyShow("markers",true)) {
+        markers = jd.markers;
+    }
+
     // Create main Bar charts
     var chart_major = fn.buildBarChart({black: false, el: chartMajorEl, height: width/8, ohlc: jd.major.ohlc});
-    var chart_medium = fn.buildBarChart({black: true, el: chartMediumEL, height: width/4, ohlc: jd.medium.ohlc,markers: jd.markers});
-    var chart_small = fn.buildBarChart({black: false, el: chartSmallEL, height: width/6, ohlc: jd.small.ohlc,markers: jd.markers});
+    var chart_medium = fn.buildBarChart({black: true, el: chartMediumEL, height: width/5, ohlc: jd.medium.ohlc,markers: markers});
+    var chart_small = fn.buildBarChart({black: false, el: chartSmallEL, height: width/6, ohlc: jd.small.ohlc,markers: markers});
     // Syncs
     fn.syncCharts(chart_major,chart_medium);
     fn.syncCharts(chart_medium,chart_small);
@@ -62,7 +69,12 @@ function makeBarChart() {
         fn.simpleLineOver(chart_medium,jd.medium.dcs_low);
         fn.simpleLineOver(chart_medium,jd.medium.dcs_oversold,ORANGE,2);
     }
-
+    // Relative Price
+    if(fn.getOverlyShow("rel_price_os",true)) {
+        fn.simpleLineOver(chart_medium,jd.rp_os_med,BLUE);
+        // fn.simpleLineOver(chart_medium,jd.rp_os_big,BLUE2);
+        // fn.simpleLineOver(chart_medium,jd.medium.dcs_oversold,ORANGE,2);
+    }
     ///////////////////////////  Dynamic Sub Charts ////////////////////////
     // Score
     var tscore_el = fn.makeNextIndi("tscore",true,true);
@@ -76,6 +88,11 @@ function makeBarChart() {
     var tscore_el = fn.makeNextIndi("td_medium",true,true);
     var tscore_chart = fn.trendDirectionChart(tscore_el,jd.medium);
     fn.syncCharts(chart_medium,tscore_chart);
+
+    // Relative Price
+    // var medium_dmi_el = fn.makeNextIndi("medium_dmi",true,true);
+    // var medium_dmi = fn.mdi(medium_dmi_el,jd.medium);
+    // fn.syncCharts(chart_medium,medium_dmi);
 
     // MDI
     var medium_dmi_el = fn.makeNextIndi("medium_dmi",true,true);

@@ -16,6 +16,7 @@ pub struct RDCRes {
     pub dcres_med: DCRes,
     pub dcres_big: DCRes,
 }
+pub type RelDc = RDC; // Relative DC
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RDC {
@@ -53,8 +54,8 @@ impl RDC {
         let perc_med = (price - dc_med.low) / self.ma_height_med.next(dc_med.high - dc_med.low);
         let perc_big = (price - dc_big.low) / self.ma_height_big.next(dc_big.high - dc_big.low);
 
-        let height_med = (dc_med.high - dc_med.low) * 10_000.;
-        let height_big = (dc_big.high - dc_big.low) * 10_000.;
+        let height_med = (dc_med.high - dc_med.low) * 1.; // 10_000.;
+        let height_big = (dc_big.high - dc_big.low) * 1.; // 10_000.;
 
         // todo migrate weight,ratio,.. from DCS2
 

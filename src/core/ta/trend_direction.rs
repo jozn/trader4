@@ -11,7 +11,7 @@ pub type TDOut = TrendDirectionOutput;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TrendDirection {
     is_new: bool,
-    pre_high: f64,
+    pre_high: f64, // previous
     pre_low: f64,
     atr: ATR,
     plus_ma: EMA,
@@ -86,7 +86,7 @@ impl TrendDirection {
         let dmx = (plus + minus) * (plus - minus) / sum;
         // let dmx =(plus - minus)/ sum;
 
-        let diff = (plus - minus) * 2.;
+        let diff = (plus - minus) * 1.; //2.;
         let diff_ma = self.diff_ma.next(diff);
 
         let cr = self.cross.next_v2(plus, minus);

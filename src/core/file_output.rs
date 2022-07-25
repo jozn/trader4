@@ -185,6 +185,41 @@ impl SingleFileGen {
                 value: rdc_ta.height_big,
             });
 
+            // Relative Price (rp)
+            let rdc_ta = &bar.ta.rel_price;
+            out.rp_os_med.push(RowJson {
+                time,
+                value: rdc_ta.oversold_med,
+            });
+            out.rp_os_big.push(RowJson {
+                time,
+                value: rdc_ta.oversold_big,
+            });
+            out.rp_osi_med.push(RowJson {
+                time,
+                value: rdc_ta.osi_med,
+            });
+            out.rp_osi_big.push(RowJson {
+                time,
+                value: rdc_ta.osi_big,
+            });
+            out.rp_stoch_main.push(RowJson {
+                time,
+                value: rdc_ta.os_stoch_main,
+            });
+            out.rp_stoch_smooth.push(RowJson {
+                time,
+                value: rdc_ta.os_stoch_smooth,
+            });
+            out.rp_med_height.push(RowJson {
+                time,
+                value: rdc_ta.height_med,
+            });
+            out.rp_big_height.push(RowJson {
+                time,
+                value: rdc_ta.height_big,
+            });
+
             wave1.next(bar);
             wave2.next(bar);
             wave3.next(bar);
