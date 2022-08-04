@@ -27,6 +27,7 @@ pub struct TAMethods {
     pub vel_mom: ta::VelMom,
     pub rdc: ta::RDC,
     pub td: ta::TD,
+    pub rel_price_dep: ta::RelPriceDep,
     pub rel_price: ta::RelPrice,
 }
 
@@ -51,6 +52,7 @@ pub struct BarTA {
     pub vel_mom: ta::VelMomRes,
     pub rdc: ta::RDCRes,
     pub td: ta::TDOut,
+    pub rel_price_dep: ta::RelPriceResDep,
     pub rel_price: ta::RelPriceRes,
 }
 
@@ -76,7 +78,8 @@ impl TAMethods {
             vel_mom: ta::VelMom::new(25, 3).unwrap(),
             rdc: ta::RDC::new(20, 60).unwrap(),
             td: ta::TD::new(14, 14).unwrap(),
-            rel_price: ta::RelPrice::new(20, 60).unwrap(),
+            rel_price_dep: ta::RelPriceDep::new(20, 60).unwrap(),
+            rel_price: ta::RelPrice::new(20).unwrap(),
         }
     }
 }
@@ -103,6 +106,7 @@ pub fn cal_indicators(tam: &mut TAMethods, bar: &Bar) -> BarTA {
         vel_mom: tam.vel_mom.next(price),
         rdc: tam.rdc.next(&bar),
         td: tam.td.next(&bar),
+        rel_price_dep: tam.rel_price_dep.next(&bar),
         rel_price: tam.rel_price.next(&bar),
     }
 }

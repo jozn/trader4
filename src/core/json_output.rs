@@ -49,6 +49,17 @@ pub struct TimeFrameJson {
     pub td_plus: Vec<RowJson>,
     pub td_minus: Vec<RowJson>,
     pub td_diff: Vec<RowJson>,
+
+    // Relative Price
+    pub rp_dc_high: Vec<RowJson>,
+    pub rp_dc_middle: Vec<RowJson>,
+    pub rp_dc_low: Vec<RowJson>,
+    pub rp_oversold: Vec<RowJson>,
+    pub rp_os_index: Vec<RowJson>,
+    pub rp_os_stoch_main: Vec<RowJson>,
+    pub rp_os_stoch_smooth: Vec<RowJson>,
+    pub rp_height: Vec<RowJson>,
+    pub rp_height_ma: Vec<RowJson>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
@@ -77,7 +88,8 @@ pub struct SkyJsonOut {
     pub rdc_med_height: Vec<RowJson>,
     pub rdc_big_height: Vec<RowJson>,
 
-    // Relative Price  (rp)
+    // Relative Price Dep  (rp)
+    // DEPRECATED ALL
     pub rp_os_med: Vec<RowJson>, // for overly
     pub rp_os_big: Vec<RowJson>,
     pub rp_osi_med: Vec<RowJson>, // for index sub indicator
@@ -126,6 +138,7 @@ pub struct MarkerJson {
 pub fn bars_to_json_old(bars: Vec<PrimaryHolder>) -> TimeFrameJson {
     bars_to_json(&bars)
 }
+// todo: add small flage to not gen some data for small > reduce the size
 pub fn bars_to_json(bars: &Vec<PrimaryHolder>) -> TimeFrameJson {
     let mut out = TimeFrameJson::default();
     for ph in bars {
@@ -288,6 +301,45 @@ pub fn bars_to_json(bars: &Vec<PrimaryHolder>) -> TimeFrameJson {
             // value: bta.td.dmx,
             // value: bta.td.diff_ma,
             value: bta.td.diff,
+        });
+
+        // Relative Price -- no small later set
+        let rp = &bta.rel_price;
+        out.rp_dc_high.push(RowJson {
+            time,
+            value: rp.dc_high,
+        });
+        out.rp_dc_middle.push(RowJson {
+            time,
+            value: rp.dc_middle,
+        });
+        out.rp_dc_low.push(RowJson {
+            time,
+            value: rp.dc_low,
+        });
+        out.rp_oversold.push(RowJson {
+            time,
+            value: rp.oversold,
+        });
+        out.rp_os_index.push(RowJson {
+            time,
+            value: rp.os_index,
+        });
+        out.rp_os_stoch_main.push(RowJson {
+            time,
+            value: rp.os_stoch_main,
+        });
+        out.rp_os_stoch_smooth.push(RowJson {
+            time,
+            value: rp.os_stoch_smooth,
+        });
+        out.rp_height.push(RowJson {
+            time,
+            value: rp.height,
+        });
+        out.rp_height_ma.push(RowJson {
+            time,
+            value: rp.height_ma,
         });
     }
     out

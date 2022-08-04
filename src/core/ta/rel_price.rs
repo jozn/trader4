@@ -3,91 +3,67 @@ use serde::{Deserialize, Serialize};
 use std::collections::VecDeque;
 
 use super::*;
+// This is a simplified of RelPriceDep with removing of medium and big time frame, only one
+//  timeframe is used and the reset
 
 // RelativePrice
-//  The formula is a rewrite of rel_dc which itself is taken from DCS2
+//  The formula is a rewrite of RelPriceDep which is from rel_dc which itself is taken from DCS2
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct RelPriceRes {
-    pub oversold_med: f64,
-    pub oversold_big: f64,
-    pub osi_med: f64, // osi: oversold index: not overly chart but sub inditcator
-    pub osi_big: f64,
+    pub dc_high: f64,
+    pub dc_middle: f64,
+    pub dc_low: f64,
+    pub oversold: f64,        // os
+    pub os_index: f64,        // not overly chart but sub inditcator
     pub os_stoch_main: f64,   // os: oversold
     pub os_stoch_smooth: f64, // os: oversold
-    pub perc_med: f64,        // old
-    pub perc_big: f64,        // old
-    pub height_med: f64,
-    pub height_big: f64,
+    pub height: f64,
+    pub height_ma: f64,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RelPrice {
-    dc_medium: DC,
-    dc_big: DC,
-    ma_height_med: SMA,
-    ma_height_big: SMA,
+    dc: DC,
+    height_ma: SMA,
     stoch_med: Stoch,
-    past: VecDeque<RelPriceRes>,
 }
 
 impl RelPrice {
-    pub fn new(period_med: usize, period_big: usize) -> TAResult<Self> {
-        if period_med == 0 || period_big == 0 {
+    pub fn new(period: usize) -> TAResult<Self> {
+        if period == 0 {
             Err(TAErr::WrongArgs)
         } else {
             Ok(Self {
-                dc_medium: DC::new(period_med).unwrap(),
-                dc_big: DC::new(period_big).unwrap(),
-                ma_height_med: SMA::new(period_med * 2).unwrap(),
-                ma_height_big: SMA::new(period_big * 2).unwrap(),
-                stoch_med: Stoch::new(period_big, 3, 5).unwrap(),
-                past: VecDeque::new(),
+                dc: DC::new(period).unwrap(),
+                height_ma: SMA::new(period * 2).unwrap(),
+                stoch_med: Stoch::new(period, 3, 5).unwrap(),
             })
         }
     }
 
     pub fn next(&mut self, candle: impl OHLCV) -> RelPriceRes {
-        let dc_med = self.dc_medium.next(&candle);
-        let dc_big = self.dc_big.next(&candle);
-
+        let dc = self.dc.next(&candle);
         let price = candle.close();
-        let price_high = candle.high(); // todo no need for high.low > use clsoe
 
-        let perc_med = (price - dc_med.low) / (dc_med.high - dc_med.low);
-        let perc_big = (price - dc_big.low) / (dc_big.high - dc_big.low);
+        let height = dc.high - dc.low;
+        let height_ma = self.height_ma.next(height);
 
-        let ma_height_med = self.ma_height_med.next(dc_med.high - dc_med.low);
-        let ma_height_big = self.ma_height_big.next(dc_big.high - dc_big.low);
+        let oversold = dc.high - height_ma;
+        let os_index = (price - dc.low) / height_ma;
 
-        let oversold_med = dc_med.high - ma_height_med;
-        let oversold_big = dc_big.high - ma_height_big;
+        let stoch_res = self.stoch_med._next_raw(os_index, os_index, os_index);
 
-        let osi_med = (price_high - dc_med.low) / ma_height_med;
-        let osi_big = (price_high - dc_big.low) / ma_height_big;
-
-        let stoch_res = self.stoch_med._next_raw(osi_med, osi_med, osi_med);
-
-        let perc_med = (price - dc_med.low) / ma_height_med;
-        let perc_big = (price - dc_big.low) / ma_height_big;
-
-        let height_med = ma_height_med;
-        let height_big = ma_height_big;
-        let height_med = (dc_med.high - dc_med.low) * 1.; // 10_000.;
-        let height_big = (dc_big.high - dc_big.low) * 1.; // 10_000.;
-
-        let out = RelPriceRes {
-            oversold_med,
-            oversold_big,
-            osi_med,
-            osi_big,
+        RelPriceRes {
+            dc_high: dc.high,
+            dc_middle: dc.middle,
+            dc_low: dc.low,
+            oversold,
+            os_index,
             os_stoch_main: stoch_res.main_k,
             os_stoch_smooth: stoch_res.smooth_d,
-            perc_med,
-            perc_big,
-            height_med,
-            height_big,
-        };
-        out
+            height,
+            height_ma,
+        }
     }
 }

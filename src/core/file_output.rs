@@ -186,7 +186,7 @@ impl SingleFileGen {
             });
 
             // Relative Price (rp)
-            let rdc_ta = &bar.ta.rel_price;
+            let rdc_ta = &bar.ta.rel_price_dep;
             out.rp_os_med.push(RowJson {
                 time,
                 value: rdc_ta.oversold_med,
