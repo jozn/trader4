@@ -45,7 +45,7 @@ impl MLEng {
                 // let act = self.cortex_mem.consume_action(0);
 
                 if mr.medium_full {
-                    println!("{:?}", act);
+                    // println!("{:?}", act);
                     // todo: make this better - entire memory
                     frame.signal_mem = self.cortex_mem.get_snapshot(kid);
                     // frame.signal_mem = self.cortex_mem.get_snapshot(0);

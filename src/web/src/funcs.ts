@@ -343,6 +343,85 @@ export function maMomChart(el,d) {
     return chart;
 }
 
+////////////////// Relative Price (RP) ///////////////////
+export function relPrice(el,d) {
+    var chart = LightweightCharts.createChart(el, {
+        width: width,
+        height: width/14,
+        crosshair: {
+            mode: 0
+        },
+        rightPriceScale: {
+            width: 60
+        },
+        timeScale: {
+            visible: false,
+        }
+    });
+    var line1 = chart.addLineSeries({
+        color: 'rgb(39,145,77)',
+        lineWidth: 1,
+    });
+    line1.setData(d.medium.rp_os_index);
+    var line2 = chart.addLineSeries({
+        color: 'rgb(203,66,66)',
+        lineWidth: 1,
+    });
+    line2.setData(d.major.rp_os_index);
+//     var line3 = chart.addLineSeries({
+//         color: 'rgb(105,102,102)',
+//         lineWidth: 2,
+//         // priceScaleId: 'left',
+//     });
+//     line3.setData(d.dmi_diff);
+    return chart;
+}
+
+//////////////////////////////////////////////////////////
+
+
+////////////////// General Lines  ////////////////////////
+// for stochi for example
+export function threeLines(el,line1Data, line2Data,line3Data) {
+    var chart = LightweightCharts.createChart(el, {
+        width: width,
+        height: width/14,
+        crosshair: {
+            mode: 0
+        },
+        rightPriceScale: {
+            width: 60
+        },
+        timeScale: {
+            visible: false,
+        }
+    });
+    var line1 = chart.addLineSeries({
+        color: 'rgb(39,145,77)',
+        lineWidth: 1,
+    });
+    line1.setData(line1Data);
+
+    if(line2Data != undefined) {
+        var line2 = chart.addLineSeries({
+            color: 'rgb(203,66,66)',
+            lineWidth: 1,
+        });
+        line2.setData(line2Data);
+    }
+
+    if(line3Data != undefined) {
+        var line3 = chart.addLineSeries({
+            color: 'rgb(105,102,102)',
+            lineWidth: 2,
+            // priceScaleId: 'left',
+        });
+        line3.setData(line3Data);
+    }
+    return chart;
+}
+//////////////////////////////////////////////////////////
+
 export function onelineSubIndiacor(el,d :ITimeValue[] ) {
     var chart = LightweightCharts.createChart(el, {
         width: width,
@@ -575,6 +654,13 @@ export function resetOverlyIndicators(){
     window.location.reload();
 }
 
+export function hideAllOverlyIndicators(){
+    for (const name in getStoreDB(OVERLY)) {
+        setStore(OVERLY,name,false);
+    }
+    window.location.reload();
+}
+
 
 window.checkboxChartChange = checkboxChartChange;
 window.checkboxChange = checkboxChange;
@@ -583,4 +669,5 @@ window["hideAllSubIndicators"] = hideAllSubIndicators;
 window["checkboxOverlyChange"] = checkboxOverlyChange;
 window["buildOverlyHtml"] = buildOverlyHtml;
 window["resetOverlyIndicators"] = resetOverlyIndicators;
+window["hideAllOverlyIndicators"] = hideAllOverlyIndicators;
 

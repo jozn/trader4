@@ -14,6 +14,7 @@ function run() {
 const ORANGE = 'rgb(224,91,0)';
 const BLUE = 'rgb(0,108,224)';
 const BLUE2 = 'rgb(0,79,168)';
+const YELLOW = 'rgb(213,204,48)';
 var hide = {
     "trend_channel": true,
 };
@@ -41,6 +42,21 @@ function makeBarChart() {
     fn.syncCharts(chart_medium,chart_small);
 
     // chart_medium.remove()
+
+    // Relative Price
+    // Donchain Channel
+    if(fn.getOverlyShow("rp_dc", true)) {
+        fn.simpleLineOver(chart_medium,jd.medium.rp_dc_high,YELLOW);
+        fn.simpleLineOver(chart_medium,jd.medium.rp_dc_low,YELLOW);
+        fn.simpleLineOver(chart_medium,jd.major.rp_dc_high,ORANGE,1.0);
+        fn.simpleLineOver(chart_medium,jd.major.rp_dc_low,ORANGE,1.0);
+    }
+    if(fn.getOverlyShow("rp_os", true)) {
+        fn.simpleLineOver(chart_medium,jd.medium.rp_oversold,BLUE);
+        // fn.simpleLineOver(chart_medium,jd.medium.rp_dc_low,YELLOW);
+        // fn.simpleLineOver(chart_medium,jd.major.rp_dc_high,ORANGE,1.0);
+        // fn.simpleLineOver(chart_medium,jd.major.rp_dc_low,ORANGE,1.0);
+    }
 
     // Add bull/bear channel to main bars
     if(fn.getOverlyShow("trend_channel",true)) {
@@ -98,6 +114,20 @@ function makeBarChart() {
     var medium_dmi_el = fn.makeNextIndi("medium_dmi",true,true);
     var medium_dmi = fn.mdi(medium_dmi_el,jd.medium);
     fn.syncCharts(chart_medium,medium_dmi);
+
+    ///////////// Relative Price (RP)
+    var rel_dc_el = fn.makeNextIndi("rp_per",true,true);
+    var medium_rdc = fn.relPrice(rel_dc_el,jd);
+    fn.syncCharts(chart_medium,medium_rdc);
+    // Stoch
+    var rel_dc_el = fn.makeNextIndi("rp_stoch_med",true,true);
+    var medium_rdc = fn.threeLines(rel_dc_el,jd.medium.rp_os_stoch_main,jd.medium.rp_os_stoch_smooth);
+    fn.syncCharts(chart_medium,medium_rdc);
+    // Stoch major
+    var rel_dc_el = fn.makeNextIndi("rp_stoch_major",true,true);
+    var medium_rdc = fn.threeLines(rel_dc_el,jd.major.rp_os_stoch_main,jd.major.rp_os_stoch_smooth);
+    fn.syncCharts(chart_medium,medium_rdc);
+
 
 
     // Relative DC

@@ -37,7 +37,7 @@ impl RelPrice {
             Ok(Self {
                 dc: DC::new(period).unwrap(),
                 height_ma: SMA::new(period * 2).unwrap(),
-                stoch_med: Stoch::new(period, 3, 5).unwrap(),
+                stoch_med: Stoch::new(period / 2, 1, 5).unwrap(),
             })
         }
     }
@@ -50,7 +50,9 @@ impl RelPrice {
         let height_ma = self.height_ma.next(height);
 
         let oversold = dc.high - height_ma;
-        let os_index = (price - dc.low) / height_ma;
+        // let os_index = (price - dc.low) / height_ma;
+        // let os_index = (height_ma - dc.high - price) / height_ma;
+        let os_index = -(dc.high - price) / height_ma;
 
         let stoch_res = self.stoch_med._next_raw(os_index, os_index, os_index);
 
