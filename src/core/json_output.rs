@@ -89,7 +89,7 @@ pub struct SkyJsonOut {
     pub rdc_big_height: Vec<RowJson>,
 
     // Relative Price Dep  (rp)
-    // DEPRECATED ALL
+    // DEPRECATED ALL - @DELETE
     pub rp_os_med: Vec<RowJson>, // for overly
     pub rp_os_big: Vec<RowJson>,
     pub rp_osi_med: Vec<RowJson>, // for index sub indicator
