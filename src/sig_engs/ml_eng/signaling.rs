@@ -35,6 +35,7 @@ impl MLEng {
                     profit: pro * 0.80,
                     loss: -pro * 0.40,
                     time_sec: tick.timestamp_sec,
+                    frame_insight: sf.insight.clone(),
                 });
             }
         }
@@ -64,6 +65,7 @@ impl MLEng {
                 profit: pro * 0.80,
                 loss: -pro * 0.40,
                 time_sec: tick.timestamp_sec,
+                frame_insight: sf.insight.clone(),
             });
         } else {
         }

@@ -27,9 +27,14 @@ pub fn new_frame(mbr: &MultiBarRes) -> MLFrame {
         bars_small: mbr.smalls.clone(),
         bar_small_tip_: Default::default(),
     };
+    let insight = MLFrameInsight {
+        fid: 53,
+        bar: p.clone(),
+    };
     MLFrame {
         fid: p.seq,
         info: f,
+        insight,
         score: TScore::new(mbr),
         signal_mem: None,
         signal_action: None,
@@ -40,6 +45,7 @@ pub fn new_frame(mbr: &MultiBarRes) -> MLFrame {
 pub struct MLFrame {
     pub fid: i32, // frame_id
     pub info: MLFrameInfo,
+    pub insight: MLFrameInsight,
     #[serde(skip)]
     pub score: TScore,
     #[serde(skip)]
@@ -85,6 +91,8 @@ pub type FrameCsv = (
     MACDOutput,
 );
 
+pub type FrameCsvV2 = (Bar,);
+
 impl MLFrame {
     pub fn to_csv(&self) -> FrameCsv {
         let pta = &self.info.bar_medium.primary.ta;
@@ -101,6 +109,12 @@ impl MLFrame {
             bta.trend.clone(),
             bta.macd.clone(),
         )
+    }
+
+    pub fn to_csvv2(&self) -> FrameCsvV2 {
+        let pta = &self.info.bar_medium.primary.ta;
+        let bta = &self.info.bar_medium.primary.ta;
+        (self.info.bar_medium.primary.clone(),)
     }
     ///////////////// For Json Outputs //////////////////
     pub fn get_early_mark(&self) -> Option<MarkerJson> {

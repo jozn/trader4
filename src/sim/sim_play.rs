@@ -103,7 +103,7 @@ pub fn run_pair(pair: &Pair) {
     // run_cfg.run_web_sim(50..60, false);
     // run_cfg.run_web_sim(25..60, false);
     // run_cfg.run_web_sim(45..60, false);
-    // run_cfg.run_web_sim(52..60, false);
-    run_cfg.run_web_sim(45..60, false);
+    run_cfg.run_web_sim(52..60, false);
+    // run_cfg.run_web_sim(45..60, false);
     // run_cfg.run_web_sim(25..60, false);
 }

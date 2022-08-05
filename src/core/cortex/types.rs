@@ -1,4 +1,6 @@
+use crate::sig_engs::ml_eng::*;
 use serde::{Deserialize, Serialize};
+// use crate::sig_engs::ml_eng::MLFrame;
 
 // To send to Brain from each sig_engs
 #[derive(Debug, Default, Serialize, Deserialize, Clone)]
@@ -9,6 +11,7 @@ pub struct ActionSignal {
     pub profit: f64,
     pub loss: f64,
     pub time_sec: i64,
+    pub frame_insight: MLFrameInsight,
 }
 
 // Internal to signals engines to remember signaling

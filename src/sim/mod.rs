@@ -1,4 +1,6 @@
+pub mod ml_csv_writer;
 pub mod sim_play;
+use ml_csv_writer::*;
 
 use crate::brain::*;
 use crate::collector::row_data::BTickData;
@@ -122,5 +124,7 @@ impl SimConfig {
         if self.out.report {
             back_ref.report_to_folder(&self.week_data, &self.pair);
         }
+
+        write_ml_csv(&brain);
     }
 }

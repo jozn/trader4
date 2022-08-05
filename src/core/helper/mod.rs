@@ -1,6 +1,8 @@
 use chrono::NaiveDateTime;
 use rand::Rng;
+use regex::Regex;
 use serde::Serialize;
+use std::path::Path;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 pub fn get_time_sec() -> u64 {
@@ -28,6 +30,16 @@ pub fn get_rand(max: u64) -> u64 {
 pub fn rond(num: f64, fract: u32) -> f64 {
     let frac = 10_u32.pow(fract) as f64;
     ((num * frac) as i64) as f64 / frac
+}
+
+pub fn create_folders_for_file(file_abs_path: &str) {
+    let file_name = Path::new(file_abs_path)
+        .file_name()
+        .unwrap()
+        .to_str()
+        .unwrap();
+    let p = file_abs_path.replace(file_name, "");
+    std::fs::create_dir_all(p);
 }
 
 pub fn to_csv_out<T: Serialize>(arr: &Vec<T>, tab: bool) -> String {

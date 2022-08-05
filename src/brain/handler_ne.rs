@@ -62,7 +62,8 @@ impl Brain {
                         signal_key: "sky_1".to_string(),
                         at_price: tick.ask_price,
                         time_sec: tick.timestamp_sec as u64,
-                        frame: MLFrame::default(),
+                        // frame: MLFrame::default(),
+                        frame: act.frame_insight,
                     };
 
                     // println!("Open long {:#?}", np);

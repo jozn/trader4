@@ -14,8 +14,8 @@ use crate::ta::Wave;
 use crate::types::{DayInfo, WeekInfo};
 use serde::{Deserialize, Serialize};
 
-const OUT_FOLDER: &'static str = "/mnt/t/trader_out/v16/data_sky_web/";
-const OUT_FOLDER_TREND: &'static str = "/mnt/t/trader_out/v16/trend/";
+const OUT_FOLDER: &'static str = "/mnt/t/trader_out/v17/data_sky_web/";
+const OUT_FOLDER_TREND: &'static str = "/mnt/t/trader_out/v17/trend/";
 
 #[derive(Clone, Debug, Default)]
 pub struct FilesOutputConfig {
