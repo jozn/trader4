@@ -69,7 +69,7 @@ fn _get_weeks_times(weed_id: i64) -> (i64, i64) {
 }
 
 ////////////////////////////////////////////////////////
-// todo move all to cortex
+// todo move all to cortex_old
 
 #[derive(Debug, Default, Serialize, Deserialize, Clone)]
 pub struct ActionSignalDep {

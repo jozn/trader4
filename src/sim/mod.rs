@@ -107,24 +107,12 @@ impl SimConfig {
                 // self.write_web_output(&pair_mem.sky_eng, &postions, days_out);
             }
         }
-        /*
-        let money = back_ref.get_money();
-        if self.out.print {
-            // println!("{:#?}", x);
-            println!("{:#?}", money.balance);
-        }
 
-        // todo - get report by date range
-        if self.out.report {
-            // back_ref.report_to_folder(&self.week_data, &self.pair);
-
-        }
-
-        */
         if self.out.report {
             back_ref.report_to_folder(&self.week_data, &self.pair);
         }
 
+        // CSV of ML
         write_ml_csv(&brain);
     }
 }

@@ -1,7 +1,7 @@
 use super::*;
 use crate::bar::MultiBarRes;
 use crate::collector::row_data::BTickData;
-use crate::cortex::types::ActionSignal;
+use crate::cortex_old::types::ActionSignal;
 use rand::Rng;
 
 impl MLEng {

@@ -52,8 +52,8 @@ impl TickBinFast {
             timestamp_sec: self.timestamp / 1000,
             timestamp: self.timestamp,
             bid_price: self.bid_price,
-            // ask_price: self.ask_price,
-            ask_price: self.bid_price, // todo: remove temp testing no spread
+            ask_price: self.ask_price,
+            // ask_price: self.bid_price, // todo: remove temp testing no spread
         }
     }
 }

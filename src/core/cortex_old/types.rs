@@ -11,7 +11,7 @@ pub struct ActionSignal {
     pub profit: f64,
     pub loss: f64,
     pub time_sec: i64,
-    pub frame_insight: MLFrameInsight,
+    pub frame_insight: MLFrameTradeInsight,
 }
 
 // Internal to signals engines to remember signaling

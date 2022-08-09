@@ -2,7 +2,7 @@ use super::*;
 use crate::bar::*;
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
-use crate::cortex::types::{ActionSignal, SignalMem};
+use crate::cortex_old::types::{ActionSignal, SignalMem};
 use crate::json_output::MarkerJson;
 use crate::ta::*;
 use serde::{Deserialize, Serialize};
@@ -27,7 +27,7 @@ pub fn new_frame(mbr: &MultiBarRes) -> MLFrame {
         bars_small: mbr.smalls.clone(),
         bar_small_tip_: Default::default(),
     };
-    let insight = MLFrameInsight {
+    let insight = MLFrameTradeInsight {
         fid: 53,
         bar: p.clone(),
     };
@@ -45,7 +45,7 @@ pub fn new_frame(mbr: &MultiBarRes) -> MLFrame {
 pub struct MLFrame {
     pub fid: i32, // frame_id
     pub info: MLFrameInfo,
-    pub insight: MLFrameInsight,
+    pub insight: MLFrameTradeInsight,
     #[serde(skip)]
     pub score: TScore,
     #[serde(skip)]
@@ -111,7 +111,7 @@ impl MLFrame {
         )
     }
 
-    pub fn to_csvv2(&self) -> FrameCsvV2 {
+    pub fn to_csv_v2(&self) -> FrameCsvV2 {
         let pta = &self.info.bar_medium.primary.ta;
         let bta = &self.info.bar_medium.primary.ta;
         (self.info.bar_medium.primary.clone(),)
