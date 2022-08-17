@@ -1,6 +1,7 @@
 use super::*;
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::*;
+use crate::cortex::CortexRef;
 use crate::gate_api::GateWay;
 use crate::sig_engs::ml_eng::MLEng;
 use std::collections::BTreeMap;
@@ -15,13 +16,13 @@ pub struct PairMemory {
 }
 
 impl PairMemory {
-    pub fn new(p: Pair) -> PairMemory {
+    pub fn new(p: Pair, cortex_ref: CortexRef) -> PairMemory {
         Self {
             pair: p.clone(),
             last_tick: None,
             last_trade_time: 0,
             dep_signals_db: SignalsDB::new(),
-            ml_eng: MLEng::new(&p),
+            ml_eng: MLEng::new(&p, cortex_ref),
         }
     }
 }

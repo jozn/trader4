@@ -3,6 +3,8 @@ use crate::base::CrossRes;
 use crate::brain::sim_virtual::SimVirtual;
 use crate::configs::assets;
 use crate::configs::assets::*;
+use crate::cortex;
+use crate::cortex::{new_cortex_ref, CortexRef};
 use crate::gate_api::*;
 use std::borrow::BorrowMut;
 use std::collections::{BTreeMap, HashMap, HashSet};
@@ -15,6 +17,7 @@ pub type PairBarCfg = (Pair, BarConfig);
 #[derive(Debug)]
 pub struct Brain {
     pub con: Box<Arc<dyn GateWay>>,
+    pub cortex: CortexRef,
     pub acted: HashSet<String>,
     pub sim_virtual: SimVirtual,
     pub db: BTreeMap<i64, PairMemory>,
@@ -26,6 +29,7 @@ impl Brain {
     pub fn new(backend: Arc<impl GateWay + 'static>, pair_conf: PairBarCfg) -> Self {
         let mut brain = Self {
             con: Box::new(backend),
+            cortex: cortex::new_cortex_ref(),
             last_trade_time: 0,
             acted: Default::default(),
             sim_virtual: SimVirtual::new(),

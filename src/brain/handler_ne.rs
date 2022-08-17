@@ -6,6 +6,7 @@ use crate::configs::assets::*;
 use crate::gate_api::*;
 use crate::helper;
 use crate::sig_engs::ml_eng::MLFrame;
+use std::rc::Rc;
 
 impl Brain {
     // todo fix panic
@@ -17,7 +18,7 @@ impl Brain {
         let pm = self.db.get_mut(&si);
         if pm.is_none() {
             let pair = Pair::id_to_symbol(si);
-            let mut pm = PairMemory::new(pair);
+            let mut pm = PairMemory::new(pair, self.cortex.clone());
             self.db.insert(si, pm);
         }
         self.db.get_mut(&si).unwrap()
