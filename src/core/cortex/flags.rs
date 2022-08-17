@@ -7,6 +7,7 @@ use std::hash::Hash;
 pub struct FlagsDB {
     flag_id: i32,
     flags_set: HashSet<FlagsRow>,
+    flags_archive: Vec<FlagsRow>,
 }
 
 impl FlagsDB {
@@ -83,6 +84,7 @@ impl FlagsDB {
         }
         for f in arr {
             self.flags_set.remove(&f);
+            self.flags_archive.push(f);
         }
     }
 }
@@ -118,6 +120,7 @@ pub struct FlagsRow {
     pub medium_bar_id: i32,
     pub small_bar_id: i32, //?
     pub time_sec: i64,
+    pub ttl: i64, // time to live
 }
 
 pub struct FlagsRowCond {

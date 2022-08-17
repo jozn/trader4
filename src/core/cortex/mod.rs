@@ -9,9 +9,14 @@ use std::rc::Rc;
 
 pub type CortexRef = Rc<Cortex>;
 
+pub fn new_cortex_ref() -> CortexRef {
+    Rc::new(Cortex::default())
+}
+
 // Specs:
 //  no gateway in cortex - only brain
 
+#[derive(Debug, Default)]
 pub struct Cortex {
     pub time_ms: i64, // set in every small candle in brain
     pub flags: FlagsDB,
