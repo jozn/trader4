@@ -6,6 +6,7 @@ use crate::configs::assets::*;
 use crate::gate_api::*;
 use crate::helper;
 use crate::sig_engs::ml_eng::MLFrame;
+use std::borrow::BorrowMut;
 use std::rc::Rc;
 
 impl Brain {
@@ -24,13 +25,30 @@ impl Brain {
         self.db.get_mut(&si).unwrap()
     }
 
+    fn play_cortex(&self) {
+        // Play Cortex mut
+        let mut cort = self.cortex.as_ref().borrow_mut();
+        cort.policy += 2.0;
+        drop(cort);
+    }
+
     pub fn on_price_tick(&mut self, pair: &Pair, tick: BTickData) {
+        // self.play_cortex();
+        // self.play_cortex();
+        // self.play_cortex();
+        // self.play_cortex();
+        // // Play Cortex mut
+        // let mut cort = self.cortex.as_ref().borrow_mut();
+        // cort.policy += 2.0;
+        // drop(cort);
+
         self.sim_virtual.run_next_tick(tick.clone());
 
         let symbol_id = pair.to_symbol_id();
         let mut pari_mem = self.borrow_pair_meta(symbol_id);
         pari_mem.last_tick = Some(tick.clone());
 
+        // self.play_cortex();
         // Disabled the sky_eng
         // let frame_opt = pari_mem
         //     .sky_eng_dep
@@ -75,5 +93,6 @@ impl Brain {
                 }
             }
         }
+        // self.play_cortex();
     }
 }

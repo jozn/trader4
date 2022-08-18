@@ -1,16 +1,19 @@
 pub mod flags;
 
 pub use flags::*;
+use std::cell::{Cell, RefCell};
 
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
 use std::hash::Hash;
 use std::rc::Rc;
 
-pub type CortexRef = Rc<Cortex>;
+// In order to get mut of this use:
+//   let mut m = self.cortex.as_ref().borrow_mut();
+pub type CortexRef = Rc<RefCell<Cortex>>;
 
 pub fn new_cortex_ref() -> CortexRef {
-    Rc::new(Cortex::default())
+    Rc::new(RefCell::new(Cortex::default()))
 }
 
 // Specs:

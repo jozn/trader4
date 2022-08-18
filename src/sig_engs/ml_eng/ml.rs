@@ -2,11 +2,14 @@ use super::*;
 use crate::bar::*;
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
-use crate::cortex::CortexRef;
+use crate::cortex::{Cortex, CortexRef};
 use crate::cortex_old::eng_memory::CortexMem;
 use crate::cortex_old::types::{ActionSignal, SignalMem};
 use crate::json_output::{JsonMaker, MarkerJson, RowJson, SkyJsonOut};
 use serde::{Deserialize, Serialize};
+use std::borrow::{Borrow, BorrowMut};
+use std::cell::RefMut;
+use std::rc::Rc;
 
 // Sky Engine
 // #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -28,8 +31,33 @@ impl MLEng {
         }
     }
 
+    pub fn get_mut_cortex(&mut self) -> RefMut<Cortex> {
+        self.cortex.as_ref().borrow_mut()
+    }
+
     pub fn add_tick(&mut self, tick: &BTickData) -> Option<ActionSignal> {
         let mul_res = self.mutli_bars.add_tick(tick);
+        // let mut m = Rc::get_mut(&mut self.cortex).unwrap();
+        // m.orders +=1.0;
+        // self.cortex.orders += 1.0;
+
+        // let m = self.cortex.as_ptr();
+        // let mut m = self.cortex.as_ref().borrow_mut();
+        // let mut m = self.cortex.as_ref().get_mut();
+        // let  m = self.cortex.as_ref();
+        // let mut m = self.cortex.as_ref().borrow_mut();
+        // // let m = (*m);
+        // // let mut x = m.get_mut();
+        // // let mut x = self.cortex.get_mut();
+        // // println!("ord: {}", self.cortex.borrow_mut().);
+        // println!("ord: {:#?}", m);
+        // m.orders += 1.0;
+        // m.flags.remove_flags(vec![]);
+        // drop(m);
+        // println!("exxx: {:#?}", m.orders);
+        // self
+        // m. += 1.0;
+        // println!("ord: {}", self.cortex.borrow_mut().);
 
         // let bb = self.mutli_bars.medium_bars.bars_primary.last().unwrap();
         // let time_bar_med = bb.primary.get_open_time_sec();
