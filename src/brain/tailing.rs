@@ -8,7 +8,7 @@ use std::borrow::BorrowMut;
 use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
 
-impl Brain {
+impl BrainLegacy {
     pub fn update_all_tailing_pos(&mut self) {}
 
     pub fn update_all_tailing_pos2(&mut self) {

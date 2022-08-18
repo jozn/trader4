@@ -69,7 +69,8 @@ impl SimConfig {
         self.load_weeks_data(week_rng.clone());
         let backend = BackendEngineOuter::new(self.balance, &self.report_cfg);
         let mut back_arc = Arc::new(backend);
-        let mut brain = Brain::new(back_arc.clone(), self.pairs_conf.first().unwrap().clone());
+        let mut brain =
+            BrainLegacy::new(back_arc.clone(), self.pairs_conf.first().unwrap().clone());
         let pair = self.pair.clone();
         for (i, t) in self.ticks.iter().enumerate() {
             if i % 10000 == 0 {

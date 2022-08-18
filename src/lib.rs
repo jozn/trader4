@@ -17,5 +17,6 @@ pub mod sim;
 pub use crate::core::*;
 
 pub mod app {
+    pub use super::*;
     pub use crate::core::*;
 }

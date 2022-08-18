@@ -9,7 +9,7 @@ use crate::{app, clock, helper};
 use std::borrow::BorrowMut;
 use std::rc::Rc;
 
-impl Brain {
+impl BrainLegacy {
     // todo fix panic
     pub fn read_pair_meta(&self, si: i64) -> &PairMemory {
         self.db.get(&si).unwrap()

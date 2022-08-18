@@ -1,4 +1,4 @@
-use crate::brain::Brain;
+use crate::brain::BrainLegacy;
 use crate::configs::assets::Pair;
 use crate::helper;
 use crate::helper::*;
@@ -8,7 +8,7 @@ use rstats::Printing;
 
 const OUT_FOLDER_CSV: &'static str = "/mnt/t/trader_out/v17/data_sky_web/";
 
-pub fn write_ml_csv(brain: &Brain) {
+pub fn write_ml_csv(brain: &BrainLegacy) {
     for (_, pm) in brain.db.iter() {
         let pair = &pm.pair;
         let frames = &pm.ml_eng.frames;

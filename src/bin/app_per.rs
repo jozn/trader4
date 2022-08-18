@@ -1,8 +1,8 @@
 use std::borrow::BorrowMut;
 use std::cell::Cell;
-use trader4;
 use std::rc::Rc;
 use std::sync::Arc;
+use trader4;
 
 // Performance play of app
 
