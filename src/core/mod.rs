@@ -2,6 +2,7 @@ pub mod base;
 // pub mod candle;
 pub mod analyse;
 pub mod bar;
+pub mod clock;
 pub mod cortex;
 pub mod cortex_old;
 pub mod file_output;
