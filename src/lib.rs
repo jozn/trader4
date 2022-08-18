@@ -15,3 +15,7 @@ pub mod sig_engs;
 pub mod sim;
 
 pub use crate::core::*;
+
+pub mod app {
+    pub use crate::core::*;
+}

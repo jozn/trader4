@@ -4,8 +4,8 @@ use crate::base::SimpleCrossEvent;
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::*;
 use crate::gate_api::*;
-use crate::helper;
 use crate::sig_engs::ml_eng::MLFrame;
+use crate::{app, clock, helper};
 use std::borrow::BorrowMut;
 use std::rc::Rc;
 
@@ -42,6 +42,10 @@ impl Brain {
         // cort.policy += 2.0;
         // drop(cort);
 
+        // clock::
+        // trader4::
+        app::clock::set_clock_time(tick.timestamp);
+
         self.sim_virtual.run_next_tick(tick.clone());
 
         let symbol_id = pair.to_symbol_id();
@@ -60,6 +64,8 @@ impl Brain {
         match frame_opt {
             None => {}
             Some(act) => {
+                println!("time: {}", app::clock::get_clock_time_ms());
+
                 let f = &act;
                 let kline_id = f.small_kid;
 

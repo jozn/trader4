@@ -1,8 +1,6 @@
+use once_cell::sync::OnceCell;
 use std::sync::atomic::AtomicI64;
 use std::sync::Mutex;
-use std::{env, io};
-
-use once_cell::sync::OnceCell;
 
 #[derive(Debug)]
 struct Clock {
@@ -16,28 +14,29 @@ pub fn set_clock_time(time_ms: i64) {
         last_time_ms: AtomicI64::new(time_ms),
         mtx_last_time: Mutex::new(time_ms),
     });
-    let mut t = s.mtx_last_time.lock().unwrap();
-    let mut tf = *t;
-    if time_ms > tf {
-        *t = time_ms;
-        // tf = time_ms;
+    let mut last_guard = s.mtx_last_time.lock().unwrap();
+    let mut last_time = *last_guard;
+    if time_ms > last_time {
+        *last_guard = time_ms;
     }
-    // t = time_ms;
 }
 
-pub fn get_clock_time() -> i64 {
+// Return last ticks clock in ms
+pub fn get_clock_time_ms() -> i64 {
     let c = INSTANCE.get();
     match c {
         None => 0,
-        Some(c) => {
-            let mut t = c.mtx_last_time.lock().unwrap();
-            let out = *t;
-            out
+        Some(clock) => {
+            let mut last_guard = clock.mtx_last_time.lock().unwrap();
+            let time_ms = *last_guard;
+            time_ms
         }
     }
 }
 
-// static TIME : AtomicI64
+pub fn get_clock_time_sec() -> i64 {
+    get_clock_time_ms() / 1000
+}
 
 #[cfg(test)]
 mod tests {
@@ -47,7 +46,7 @@ mod tests {
     fn test_clock() {
         for i in 1..1000 {
             set_clock_time(i);
-            let time = get_clock_time();
+            let time = get_clock_time_ms();
             assert_eq!(time, i);
             if i % 100 == 0 {
                 // println!("{} , {}", i, time);
