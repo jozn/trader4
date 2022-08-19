@@ -1,14 +1,18 @@
 pub mod flags;
 pub mod pair_mem;
+pub mod sim_virtual;
 
 pub use flags::*;
 pub use pair_mem::*;
+pub use sim_virtual::*;
+
 use std::cell::{Cell, RefCell};
 
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
+use crate::gate_api::*;
 use serde::{Deserialize, Serialize};
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::hash::Hash;
 use std::rc::Rc;
 
@@ -17,25 +21,49 @@ use std::rc::Rc;
 pub type CortexRef = Rc<RefCell<Cortex>>;
 
 pub fn new_cortex_ref() -> CortexRef {
-    Rc::new(RefCell::new(Cortex::default()))
+    Rc::new(RefCell::new(Cortex::new()))
 }
 
 // Specs:
 //  no gateway in cortex - only brain
 
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct Cortex {
     pub time_ms: i64, // set in every small candle in brain
     pub flags: FlagsDB,
     pub pairs_mem: Vec<PairMemory>,
+    pub sim_virtual: SimVirtual,
+    pub open_pos: HashMap<u64, PosHolder>,
+    pub closed_pos: HashMap<u64, PosHolder>,
     pub orders: f64,
     pub v_orders: f64,
     pub wallet: f64,
     pub policy: f64,
     pub time_table: f64,
+
+    pub new_positions: Vec<NewPosReq>,
+    pub update_positions: Vec<UpdatePosReq>,
 }
 
 impl Cortex {
+    pub fn new() -> Self {
+        Self {
+            time_ms: 0,
+            flags: Default::default(),
+            pairs_mem: vec![],
+            sim_virtual: SimVirtual::new(),
+            open_pos: Default::default(),
+            closed_pos: Default::default(),
+            orders: 0.0,
+            v_orders: 0.0,
+            wallet: 0.0,
+            policy: 0.0,
+            time_table: 0.0,
+            new_positions: vec![],
+            update_positions: vec![],
+        }
+    }
+
     fn init_pair(&mut self, pair: &Pair) {
         if !self.pairs_mem.iter().any(|ps| &ps.pair == pair) {
             self.pairs_mem.push(PairMemory {
@@ -53,5 +81,56 @@ impl Cortex {
                 pm.last_tick = Some(tick.clone());
             }
         }
+
+        self.sim_virtual.run_next_tick(tick.clone());
     }
+
+    pub fn run_on_tick_end(&mut self) {
+        for np in self.new_positions.iter() {
+            self.sim_virtual.open_position(&np, "sky_1");
+        }
+        for up in &self.update_positions {
+            // self.sim_virtual.update_position(up);
+        }
+    }
+
+    pub fn on_notify_position(&mut self, pos: EventPosition) {
+        self._change_position(pos.clone());
+    }
+
+    fn _change_position(&mut self, pos: EventPosition) {
+        let pos_id = pos.pos_id;
+        if pos.is_closed {
+            let pos_end = self.open_pos.remove(&pos.pos_id);
+            match pos_end {
+                None => {}
+                Some(mut ph) => {
+                    println!("cortex: closing cortex postion {:?}", &ph);
+                    ph.pos_res = pos; // update
+                    self.closed_pos.insert(pos_id, ph.clone());
+                }
+            }
+        } else {
+            let mut res_opt = self.open_pos.get_mut(&pos.pos_id);
+            match res_opt {
+                None => {
+                    let ph = PosHolder {
+                        pos_res: pos.clone(),
+                        profit_level: 0,
+                    };
+                    println!("cortex: inserting cortex postion {:?}", &ph);
+                    self.open_pos.insert(pos.pos_id, ph);
+                }
+                Some(ph) => {
+                    ph.pos_res = pos; // update
+                }
+            }
+        }
+    }
+}
+
+#[derive(Debug, Clone, Default)]
+pub struct PosHolder {
+    pub pos_res: EventPosition,
+    pub profit_level: i32,
 }
