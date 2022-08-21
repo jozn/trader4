@@ -17,3 +17,4 @@ nohup.out
 /src/web/node_modules/
 /src/web/dist/
 /ml
+cortex*.txt
