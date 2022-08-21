@@ -8,6 +8,7 @@ pub use sim_virtual::*;
 
 use std::cell::{Cell, RefCell};
 
+use crate::app;
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
 use crate::gate_api::*;
@@ -132,6 +133,88 @@ impl Cortex {
             }
         }
     }
+
+    pub fn on_end(&mut self) {
+        let s = format!("{:#?}", self);
+        // println!("{}",s);
+        std::fs::write("./cortex.txt", s);
+    }
+
+    pub fn get_last_trade(&self, pair: Pair) -> LastTradeRes {
+        let open = self._get_open_trade(pair);
+        let closed = self._get_closed_trade(pair);
+        let c = match open {
+            None => {
+                match closed {
+                    None => LastTradeRes {
+                        trade_cnt: 0,
+                        is_closed: false,
+                        is_won: false,
+                        is_short: false,
+                        open_time: 0,
+                        time_elapsed: 0,
+                    },
+                    Some(t) => {
+                        let x = &t.pos_res;
+                        LastTradeRes {
+                            trade_cnt: 1,
+                            is_closed: true,
+                            is_won: x.profit > 0.,
+                            is_short: t.pos_res.is_short,
+                            open_time: x.open_time as i64,
+                            // fixme: from closed time
+                            time_elapsed: app::clock::get_clock_time_sec() - x.close_time as i64,
+                        }
+                    }
+                }
+            }
+            Some(t) => {
+                let x = &t.pos_res;
+                LastTradeRes {
+                    trade_cnt: 1,
+                    is_closed: false,
+                    is_won: false,
+                    is_short: t.pos_res.is_short,
+                    open_time: x.open_time as i64,
+                    // time_elapsed: 0
+                    // from open time
+                    time_elapsed: app::clock::get_clock_time_sec() - x.open_time as i64,
+                }
+            }
+        };
+        c
+    }
+
+    fn _get_open_trade(&self, pair: Pair) -> Option<PosHolder> {
+        let mut trade = None;
+        for (k, v) in self.open_pos.iter() {
+            if v.pos_res.pair == pair {
+                trade = Some(v.clone());
+            }
+        }
+        trade
+    }
+
+    fn _get_closed_trade(&self, pair: Pair) -> Option<PosHolder> {
+        let mut trade = None;
+        for (k, v) in self.closed_pos.iter() {
+            if v.pos_res.pair == pair {
+                trade = Some(v.clone());
+            }
+        }
+        trade
+    }
+}
+
+// todo add closed time
+#[derive(Debug, Clone, Default)]
+pub struct LastTradeRes {
+    pub trade_cnt: i32,
+    pub is_closed: bool,
+    pub is_won: bool,
+    pub is_short: bool,
+    pub open_time: i64,    // sec
+    pub time_elapsed: i64, // sec
 }
 
 #[derive(Debug, Clone, Default)]

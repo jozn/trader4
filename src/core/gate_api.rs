@@ -40,8 +40,11 @@ pub struct EventPosition {
     pub quote_asset_size: f64,
     pub exit_high_price: f64,
     pub exit_low_price: f64,
-    pub open_time: u64,
+    pub open_time: u64, // sec
     pub open_price: f64,
+
+    pub profit: f64,
+    pub close_time: i64, // sec
     pub position: Option<Position>,
 }
 

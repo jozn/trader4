@@ -90,6 +90,8 @@ impl SimConfig {
         }
         let mut back_ref = back_arc.engine.borrow_mut();
         back_ref.close_all_positions();
+        // End tear down
+        brain.on_end();
 
         let end_time = app::core::helper::get_time_ms();
         let run_time = (end_time - start_time) as f64;

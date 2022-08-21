@@ -249,6 +249,9 @@ impl Position {
             exit_low_price: s.exit_low_price,
             open_time: s.open_time,
             open_price: s.open_price,
+
+            profit: s.profit,
+            close_time: s.close_time as i64,
             position: Some(s.clone()),
         }
     }

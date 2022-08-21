@@ -39,7 +39,7 @@ fn get_pepperstone_symbol(sid: i64) -> TSymbol {
 
 // todo: Write a macro to seperate each Pari with catefory and then merge them
 //  in Pair.
-#[derive(Debug, Serialize, Deserialize, Clone, IntoEnumIterator, PartialEq)]
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, IntoEnumIterator, PartialEq)]
 pub enum Pair {
     // Forex -
     // "FX Majors" - 6

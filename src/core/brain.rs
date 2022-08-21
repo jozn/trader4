@@ -87,6 +87,11 @@ impl Brain {
         let mut cortex = self.get_cortex_mut();
         cortex.on_notify_position(pos);
     }
+
+    pub fn on_end(&self) {
+        let mut cortex = self.get_cortex_mut();
+        cortex.on_end();
+    }
 }
 
 #[derive(Debug)]

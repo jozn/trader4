@@ -90,7 +90,7 @@ impl MLEng {
                     self.frames.push(frame);
 
                     // Temp
-                    match act.clone() {
+                    /*match act.clone() {
                         None => {}
                         Some(act) => {
                             println!("time: {}", app::clock::get_clock_time_ms());
@@ -126,13 +126,13 @@ impl MLEng {
                                 }
                             }
                         }
-                    };
+                    };*/
                 }
                 act
             }
         };
         let sig2 = sig.clone();
-        /*       match sig {
+        match sig {
             None => {}
             Some(act) => {
                 println!("time: {}", app::clock::get_clock_time_ms());
@@ -154,8 +154,8 @@ impl MLEng {
                         // base_asset_size: 100.0,
                         exit_high_price: pair.cal_price(tick.bid_price, act.profit),
                         exit_low_price: pair.cal_price(tick.bid_price, act.loss),
-                        virtual_id: 1,//self.sim_virtual.next_virtual_id(), // todo
-                        is_virtual: false,                              // todo tailing
+                        virtual_id: 1,     //self.sim_virtual.next_virtual_id(), // todo
+                        is_virtual: false, // todo tailing
                         signal_key: "sky_1".to_string(),
                         at_price: tick.ask_price,
                         time_sec: tick.timestamp_sec as u64,
@@ -163,13 +163,16 @@ impl MLEng {
                         frame: act.frame_insight,
                     };
                     let mut cor = self.get_mut_cortex();
-                    if app::helper::get_rand(100) > 90 {
+                    let last = cor.get_last_trade(pair);
+                    if last.trade_cnt == 0 || last.is_closed {
                         cor.new_positions.push(np);
-
+                    }
+                    if app::helper::get_rand(100) > 90 {
+                        // cor.new_positions.push(np);
                     }
                 }
             }
-        };*/
+        };
         sig2
     }
 }
