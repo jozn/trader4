@@ -1,5 +1,5 @@
 use crate::bar::{MultiBars, PrimaryHolder};
-use crate::brain::PairMemory;
+use crate::brain::*;
 use crate::configs::assets::Pair;
 use crate::helper::to_csv_out_v2;
 use crate::json_output::{
@@ -33,7 +33,12 @@ pub struct FilesOutput {
 }
 
 impl FilesOutput {
-    pub fn run_sig_eng(&mut self, postions: &Vec<Position>, pair_mem: &PairMemory, money: &Money) {
+    pub fn run_sig_eng(
+        &mut self,
+        postions: &Vec<Position>,
+        pair_mem: &PairSigHolder,
+        money: &Money,
+    ) {
         println!("web {:?} ...", &pair_mem.pair);
         self.write_web_output_one_eng(&pair_mem.ml_eng, &postions);
         // self.write_web_output_sky_eng(&pair_mem.sky_eng, &postions, self.cfg.days_out);

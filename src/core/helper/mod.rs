@@ -20,7 +20,8 @@ pub fn get_time_ms() -> u64 {
         .duration_since(UNIX_EPOCH)
         .expect("Time went backwards");
     // println!("{:?}", since_the_epoch);
-    since_the_epoch.as_secs() * 1000
+    // since_the_epoch.as_secs() * 1000
+    since_the_epoch.as_millis() as u64
 }
 
 pub fn get_rand(max: u64) -> u64 {

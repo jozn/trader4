@@ -29,7 +29,6 @@ pub fn new_cortex_ref() -> CortexRef {
 
 #[derive(Debug)]
 pub struct Cortex {
-    pub time_ms: i64, // set in every small candle in brain
     pub flags: FlagsDB,
     pub pairs_mem: Vec<PairMemory>,
     pub sim_virtual: SimVirtual,
@@ -48,7 +47,6 @@ pub struct Cortex {
 impl Cortex {
     pub fn new() -> Self {
         Self {
-            time_ms: 0,
             flags: Default::default(),
             pairs_mem: vec![],
             sim_virtual: SimVirtual::new(),
@@ -67,7 +65,7 @@ impl Cortex {
     fn init_pair(&mut self, pair: &Pair) {
         if !self.pairs_mem.iter().any(|ps| &ps.pair == pair) {
             self.pairs_mem.push(PairMemory {
-                pair: Default::default(),
+                pair: pair.clone(),
                 last_tick: None,
             })
         }
@@ -105,7 +103,8 @@ impl Cortex {
             match pos_end {
                 None => {}
                 Some(mut ph) => {
-                    println!("cortex: closing cortex postion {:?}", &ph);
+                    // println!("cortex: closing cortex postion {:?}", &ph);
+                    println!("cortex: closing postion {:?}", pos_id);
                     ph.pos_res = pos; // update
                     self.closed_pos.insert(pos_id, ph.clone());
                 }
@@ -118,7 +117,8 @@ impl Cortex {
                         pos_res: pos.clone(),
                         profit_level: 0,
                     };
-                    println!("cortex: inserting cortex postion {:?}", &ph);
+                    // println!("cortex: inserting cortex postion {:?}", &ph);
+                    println!("cortex: inserting postion {:?}", pos_id);
                     self.open_pos.insert(pos.pos_id, ph);
                 }
                 Some(ph) => {

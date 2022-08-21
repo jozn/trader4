@@ -14,6 +14,7 @@ pub struct Brain {
     pub con: Box<Arc<dyn GateWay>>,
     pub cortex: CortexRef,
     pub db: Vec<PairSigHolder>,
+    pub set: bool,
 }
 
 impl Brain {
@@ -22,6 +23,7 @@ impl Brain {
             con: Box::new(backend),
             cortex: cortex::new_cortex_ref(),
             db: vec![],
+            set: false,
         };
         brain
     }
@@ -37,8 +39,9 @@ impl Brain {
 
     fn init_pair(&mut self, pair: &Pair) {
         if !self.db.iter().any(|ps| &ps.pair == pair) {
+            // println!("time: {}", app::clock::get_clock_time_ms());
             self.db.push(PairSigHolder {
-                pair: Default::default(),
+                pair: pair.clone(),
                 ml_eng: MLEng::new(pair, self.cortex.clone()),
             })
         }
@@ -47,10 +50,14 @@ impl Brain {
     pub fn on_price_tick(&mut self, pair: &Pair, tick: BTickData) {
         app::clock::set_clock_time(tick.timestamp);
         self.init_pair(pair);
+        if !self.set {
+            self.init_pair(pair);
+        }
+        self.set = true;
 
         let mut cortex = self.get_cortex_mut();
         cortex.on_price_tick(pair, tick.clone());
-
+        // return;
         drop(cortex);
 
         for ps in self.db.iter_mut() {
@@ -58,6 +65,7 @@ impl Brain {
                 ps.ml_eng.add_tick(&tick);
             }
         }
+        // println!("time: {}", app::clock::get_clock_time_ms());
 
         // To Gateway: New Positions and update them from Cortex
         let mut cortex = self.get_cortex_mut();

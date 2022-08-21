@@ -11,7 +11,7 @@ use crate::helper::to_csv_out_v2;
 use crate::json_output::{SkyJsonOut, TrendAnalyseOut};
 use crate::offline::*;
 use crate::types::{WeekDataDep, WeekInfo};
-use crate::{collector, offline, types};
+use crate::{app, collector, offline, types};
 use std::ops::Range;
 use std::sync::Arc;
 
@@ -58,7 +58,11 @@ impl SimConfig {
                 all_ticks.push(t);
             }
         }
-        println!("Ticks loaded.");
+        println!(
+            "Ticks loaded. Weeks: {}  Size: {}",
+            week_data.len(),
+            all_ticks.len()
+        );
 
         self.ticks = all_ticks;
         self.week_data = week_data.clone();
@@ -66,15 +70,15 @@ impl SimConfig {
     }
 
     pub fn run_web_sim(&mut self, week_rng: Range<u16>, days_out: bool) {
+        let start_time = app::core::helper::get_time_ms();
         self.load_weeks_data(week_rng.clone());
         let backend = BackendEngineOuter::new(self.balance, &self.report_cfg);
         let mut back_arc = Arc::new(backend);
-        let mut brain =
-            BrainLegacy::new(back_arc.clone(), self.pairs_conf.first().unwrap().clone());
+        let mut brain = Brain::new(back_arc.clone(), self.pairs_conf.first().unwrap().clone());
         let pair = self.pair.clone();
         for (i, t) in self.ticks.iter().enumerate() {
             if i % 10000 == 0 {
-                // println!("{}", i);
+                println!("{}", i);
             }
             back_arc.next_tick(t.clone());
             brain.on_price_tick(&pair, t.clone());
@@ -86,7 +90,9 @@ impl SimConfig {
         let mut back_ref = back_arc.engine.borrow_mut();
         back_ref.close_all_positions();
 
-        println!("Completed Brain.");
+        let end_time = app::core::helper::get_time_ms();
+        let run_time = (end_time - start_time) as f64;
+        println!("Completed Brain. Runtime: {} sec", run_time / 1000.);
 
         // Print Sky_Eng outputs
         if self.out.web {
@@ -95,7 +101,7 @@ impl SimConfig {
                 postions.push(p.clone());
             }
 
-            for (_, pair_mem) in brain.db.iter() {
+            for pair_mem in brain.db.iter() {
                 println!("web {:?} ...", &pair_mem.pair);
                 let mut file_out = FilesOutput {
                     cfg: self.out.clone(),
@@ -115,5 +121,13 @@ impl SimConfig {
 
         // CSV of ML
         write_ml_csv(&brain);
+
+        let end_time = app::core::helper::get_time_ms();
+        let run_time = (end_time - start_time) as f64;
+        println!(
+            "Fully end {:?} Runtime: {} sec",
+            &self.pair,
+            run_time / 1000.
+        );
     }
 }

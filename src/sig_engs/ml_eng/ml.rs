@@ -1,10 +1,12 @@
 use super::*;
+use crate::app;
 use crate::bar::*;
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
 use crate::cortex::{Cortex, CortexRef};
 use crate::cortex_old::eng_memory::CortexMem;
 use crate::cortex_old::types::{ActionSignal, SignalMem};
+use crate::gate_api::NewPosReq;
 use crate::json_output::{JsonMaker, MarkerJson, RowJson, SkyJsonOut};
 use serde::{Deserialize, Serialize};
 use std::borrow::{Borrow, BorrowMut};
@@ -63,7 +65,7 @@ impl MLEng {
         // let time_bar_med = bb.primary.get_open_time_sec();
         // let kid = self.mutli_bars.medium_bars.primary_seq;
 
-        match mul_res {
+        let sig = match mul_res {
             None => None,
             Some(mr) => {
                 let mut frame = new_frame(&mr);
@@ -86,10 +88,89 @@ impl MLEng {
                     self.cortex_mem.clear_old(time_bar_med);
 
                     self.frames.push(frame);
+
+                    // Temp
+                    match act.clone() {
+                        None => {}
+                        Some(act) => {
+                            println!("time: {}", app::clock::get_clock_time_ms());
+
+                            let f = &act;
+                            let kline_id = f.small_kid;
+                            let pair = tick.pair.clone();
+
+                            if act.long {
+                                // if self.already_acted(symbol_id, kline_id) {
+                                //
+                                // }
+
+                                let np = NewPosReq {
+                                    pair: tick.pair.clone(),
+                                    is_short: false,
+                                    // base_asset_size: 10_000.0,
+                                    base_asset_size: 10.0,
+                                    // base_asset_size: 100.0,
+                                    exit_high_price: pair.cal_price(tick.bid_price, act.profit),
+                                    exit_low_price: pair.cal_price(tick.bid_price, act.loss),
+                                    virtual_id: 1, //self.sim_virtual.next_virtual_id(), // todo
+                                    is_virtual: false, // todo tailing
+                                    signal_key: "sky_1".to_string(),
+                                    at_price: tick.ask_price,
+                                    time_sec: tick.timestamp_sec as u64,
+                                    // frame: MLFrame::default(),
+                                    frame: act.frame_insight,
+                                };
+                                let mut cor = self.get_mut_cortex();
+                                if app::helper::get_rand(100) > 0 {
+                                    cor.new_positions.push(np);
+                                }
+                            }
+                        }
+                    };
                 }
                 act
             }
-        }
+        };
+        let sig2 = sig.clone();
+        /*       match sig {
+            None => {}
+            Some(act) => {
+                println!("time: {}", app::clock::get_clock_time_ms());
+
+                let f = &act;
+                let kline_id = f.small_kid;
+                let pair = tick.pair.clone();
+
+                if act.long {
+                    // if self.already_acted(symbol_id, kline_id) {
+                    //
+                    // }
+
+                    let np = NewPosReq {
+                        pair: tick.pair.clone(),
+                        is_short: false,
+                        // base_asset_size: 10_000.0,
+                        base_asset_size: 10.0,
+                        // base_asset_size: 100.0,
+                        exit_high_price: pair.cal_price(tick.bid_price, act.profit),
+                        exit_low_price: pair.cal_price(tick.bid_price, act.loss),
+                        virtual_id: 1,//self.sim_virtual.next_virtual_id(), // todo
+                        is_virtual: false,                              // todo tailing
+                        signal_key: "sky_1".to_string(),
+                        at_price: tick.ask_price,
+                        time_sec: tick.timestamp_sec as u64,
+                        // frame: MLFrame::default(),
+                        frame: act.frame_insight,
+                    };
+                    let mut cor = self.get_mut_cortex();
+                    if app::helper::get_rand(100) > 90 {
+                        cor.new_positions.push(np);
+
+                    }
+                }
+            }
+        };*/
+        sig2
     }
 }
 
