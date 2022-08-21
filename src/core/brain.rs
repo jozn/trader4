@@ -1,4 +1,4 @@
-use crate::brain::PairBarCfg;
+use crate::bar::BarConfig;
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
 use crate::cortex::{Cortex, CortexRef};
@@ -7,6 +7,8 @@ use crate::sig_engs::ml_eng::MLEng;
 use crate::{app, cortex};
 use std::cell::RefMut;
 use std::sync::Arc;
+
+pub type PairBarCfg = (Pair, BarConfig);
 
 // todo: change the name
 #[derive(Debug)]

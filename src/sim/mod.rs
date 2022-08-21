@@ -2,7 +2,8 @@ pub mod ml_csv_writer;
 pub mod sim_play;
 use ml_csv_writer::*;
 
-use crate::brain::*;
+use crate::core::brain::*;
+// use crate::brain::*;
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
 use crate::file_output::{FilesOutput, FilesOutputConfig};

@@ -9,7 +9,6 @@ pub mod configs;
 pub mod core;
 pub mod online;
 // pub mod optimizer; // commented for migraion
-pub mod brain;
 pub mod offline;
 pub mod sig_engs;
 pub mod sim;
