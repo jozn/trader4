@@ -4,7 +4,6 @@ use crate::bar::*;
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
 use crate::cortex::{Cortex, CortexRef, FlagsRowCond};
-use crate::cortex_old::types::ActionSignal;
 use crate::gate_api::NewPosReq;
 use crate::json_output::{JsonMaker, MarkerJson, RowJson, SkyJsonOut};
 use serde::{Deserialize, Serialize};

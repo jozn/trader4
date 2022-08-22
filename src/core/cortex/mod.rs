@@ -16,6 +16,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, HashSet};
 use std::hash::Hash;
 use std::rc::Rc;
+use crate::sig_engs::ml_eng::MLFrameTradeInsight;
 
 // In order to get mut of this use:
 //   let mut m = self.cortex.as_ref().borrow_mut();
@@ -222,3 +223,15 @@ pub struct PosHolder {
     pub pos_res: EventPosition,
     pub profit_level: i32,
 }
+
+#[derive(Debug, Default, Serialize, Deserialize, Clone)]
+pub struct ActionSignal {
+    pub small_kid: i32,
+    pub consumed: bool,
+    pub long: bool,
+    pub profit: f64,
+    pub loss: f64,
+    pub time_sec: i64,
+    pub frame_insight: MLFrameTradeInsight,
+}
+

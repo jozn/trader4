@@ -2,8 +2,7 @@ use super::*;
 use crate::app;
 use crate::bar::MultiBarRes;
 use crate::collector::row_data::BTickData;
-use crate::cortex::FlagsRow;
-use crate::cortex_old::types::ActionSignal;
+use crate::cortex::*;
 use rand::Rng;
 
 impl MLEng {

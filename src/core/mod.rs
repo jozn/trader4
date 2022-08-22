@@ -5,7 +5,6 @@ pub mod bar;
 pub mod brain;
 pub mod clock;
 pub mod cortex;
-pub mod cortex_old;
 pub mod file_output;
 pub mod gate_api;
 pub mod helper;
