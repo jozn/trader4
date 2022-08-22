@@ -137,7 +137,7 @@ impl Cortex {
     pub fn on_end(&mut self) {
         let s = format!("{:#?}", self);
         // println!("{}",s);
-        std::fs::write("./cortex.txt", s);
+        std::fs::write("./cortex_dump.txt", s);
     }
 
     pub fn get_last_trade(&self, pair: Pair) -> LastTradeRes {

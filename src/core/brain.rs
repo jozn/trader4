@@ -88,9 +88,14 @@ impl Brain {
         cortex.on_notify_position(pos);
     }
 
+    // Call on_end on cortex and each sig_eng. For dumping memory in debugging.
     pub fn on_end(&self) {
         let mut cortex = self.get_cortex_mut();
         cortex.on_end();
+        // Each sig_eng
+        for ps in self.db.iter() {
+            ps.ml_eng.on_end();
+        }
     }
 }
 

@@ -5,19 +5,21 @@ use std::hash::Hash;
 // Flags is db for store of signals, markers,...
 #[derive(Debug, Default)]
 pub struct FlagsDB {
-    flag_id: i32,
+    flag_id_cnt: i32,
     flags_set: HashSet<FlagsRow>,
     flags_archive: Vec<FlagsRow>,
 }
 
 impl FlagsDB {
-    pub fn add_once(&mut self, flag_row: &mut FlagsRow) {
+    pub fn add_once(&mut self, flag_row: &FlagsRow) -> FlagsRow {
+        let mut flag_row = flag_row.clone();
         assert_eq!(flag_row.flag_id, 0);
-        assert_valid_flag_row(flag_row);
+        assert_valid_flag_row(&flag_row);
 
-        self.flag_id += 1;
-        flag_row.flag_id = self.flag_id;
+        self.flag_id_cnt += 1;
+        flag_row.flag_id = self.flag_id_cnt;
         self.flags_set.insert(flag_row.clone());
+        flag_row
     }
 
     pub fn replace(&mut self, flag_row: &FlagsRow) {
@@ -111,7 +113,7 @@ fn valid_equal_id(id_opt: Option<i32>, id: i32) -> bool {
 }
 
 // Flags: Signals,...
-#[derive(Debug, Clone, Default, Serialize, Deserialize, Eq, Hash, PartialEq)]
+#[derive(Debug, Clone, Default, Serialize, Eq, Hash, PartialEq)]
 pub struct FlagsRow {
     pub flag_id: i32,
     pub eng_key: &'static str,

@@ -18,3 +18,4 @@ nohup.out
 /src/web/dist/
 /ml
 cortex*.txt
+*dump*.txt

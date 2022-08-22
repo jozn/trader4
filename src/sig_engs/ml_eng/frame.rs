@@ -2,7 +2,8 @@ use super::*;
 use crate::bar::*;
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
-use crate::cortex_old::types::{ActionSignal, SignalMem};
+// use crate::cortex_old::types::{ActionSignal, SignalMem};
+use crate::cortex::FlagsRow;
 use crate::json_output::MarkerJson;
 use crate::ta::*;
 use serde::{Deserialize, Serialize};
@@ -36,22 +37,18 @@ pub fn new_frame(mbr: &MultiBarRes) -> MLFrame {
         info: f,
         insight,
         score: TScore::new(mbr),
-        signal_mem: None,
-        signal_action: None,
+        signals: vec![],
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+#[derive(Debug, Serialize, Clone, Default)]
 pub struct MLFrame {
     pub fid: i32, // frame_id
     pub info: MLFrameInfo,
     pub insight: MLFrameTradeInsight,
     #[serde(skip)]
     pub score: TScore,
-    #[serde(skip)]
-    pub signal_mem: Option<SignalMem>,
-    #[serde(skip)]
-    pub signal_action: Option<ActionSignal>,
+    pub signals: Vec<FlagsRow>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
@@ -68,9 +65,9 @@ pub struct MLFrameInfo {
 
     pub med_dc_hl_pip: f64,
     pub big_dc_hl_pip: f64,
-    #[serde(skip)]
+    // #[serde(skip)]
     pub bar_major: PrimaryHolder,
-    #[serde(skip)]
+    // #[serde(skip)]
     pub bar_medium: PrimaryHolder,
     #[serde(skip)]
     pub bars_small: Vec<PrimaryHolder>,
@@ -117,7 +114,36 @@ impl MLFrame {
         (self.info.bar_medium.primary.clone(),)
     }
     ///////////////// For Json Outputs //////////////////
-    pub fn get_early_mark(&self) -> Option<MarkerJson> {
+    //todo
+    pub fn get_frames_markers(&self) -> Vec<MarkerJson> {
+        let mut arr = vec![];
+        // let time =
+        for f in &self.signals {
+            // todo: mathc static &str
+            let m = if f.type_key == EARLY_LONG {
+                MarkerJson {
+                    time: f.time_sec,
+                    position: "belowBar".to_string(),
+                    color: "#ae4bd5".to_string(),
+                    shape: "circle".to_string(),
+                    text: format!(""),
+                }
+            } else if f.type_key == FINAL_LONG {
+                MarkerJson {
+                    time: f.time_sec,
+                    position: "belowBar".to_string(),
+                    color: "#2196F3".to_string(),
+                    shape: "arrowUp".to_string(),
+                    text: format!(""),
+                }
+            } else {
+                panic!("unknown signal marker to json")
+            };
+            arr.push(m);
+        }
+        arr
+    }
+    /*pub fn get_early_mark(&self) -> Option<MarkerJson> {
         match &self.signal_mem {
             None => None,
             Some(sm) => {
@@ -148,5 +174,5 @@ impl MLFrame {
                 })
             }
         }
-    }
+    }*/
 }

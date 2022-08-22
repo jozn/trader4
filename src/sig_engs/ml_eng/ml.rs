@@ -3,9 +3,8 @@ use crate::app;
 use crate::bar::*;
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
-use crate::cortex::{Cortex, CortexRef};
-use crate::cortex_old::eng_memory::CortexMem;
-use crate::cortex_old::types::{ActionSignal, SignalMem};
+use crate::cortex::{Cortex, CortexRef, FlagsRowCond};
+use crate::cortex_old::types::ActionSignal;
 use crate::gate_api::NewPosReq;
 use crate::json_output::{JsonMaker, MarkerJson, RowJson, SkyJsonOut};
 use serde::{Deserialize, Serialize};
@@ -17,7 +16,6 @@ use std::rc::Rc;
 // #[derive(Debug, Serialize, Deserialize, Clone)]
 #[derive(Debug, Clone)]
 pub struct MLEng {
-    pub cortex_mem: CortexMem,
     pub cortex: CortexRef,
     pub frames: Vec<MLFrame>,
     pub mutli_bars: MultiBars,
@@ -26,11 +24,20 @@ pub struct MLEng {
 impl MLEng {
     pub fn new(pair: &Pair, cortex_ref: CortexRef) -> Self {
         MLEng {
-            cortex_mem: CortexMem::new(),
             cortex: cortex_ref,
             frames: vec![],
             mutli_bars: MultiBars::new(pair),
         }
+    }
+
+    pub fn on_end(&self) {
+        // Note: we use frames only and in json fromat as in debug format the size of file output
+        //  too large (>500MB) as all Bars data are on debugs. We ignore Bar info in json format
+        // let s = format!("{:#?}", self); // only when needed -- (>500MB) file size
+        // todo: can we proude debug format but with serde ignore attrubtes? (check serde)
+        let s = serde_json::to_string_pretty(&self.frames).unwrap();
+        // println!("{}",s);
+        std::fs::write("./ml_eng_frames_dump_json.txt", s);
     }
 
     pub(super) fn get_cortex(&mut self) -> Ref<Cortex> {
@@ -48,23 +55,36 @@ impl MLEng {
             None => None,
             Some(mr) => {
                 let mut frame = new_frame(&mr);
-                self.set_signals_random1(&tick, &mut frame, &mr);
+                let act = self.set_signals_random1(&tick, &mut frame, &mr);
                 // self.set_signals_v1(&tick, &mut frame, &mr);
 
                 let time_bar_med = mr.medium.primary.get_open_time_sec();
                 let kid = mr.small.primary.seq;
+                let mid = mr.medium.primary.seq - 1;
 
-                let act = self.cortex_mem.consume_action(time_bar_med);
+                // let act = self.cortex_mem.consume_action(time_bar_med);
                 // let act = self.cortex_mem.consume_action(0);
+                let cor = self.get_cortex();
 
                 if mr.medium_full {
                     // println!("{:?}", act);
                     // todo: make this better - entire memory
-                    frame.signal_mem = self.cortex_mem.get_snapshot(kid);
+                    // frame.signal_mem = self.cortex_mem.get_snapshot(kid);
                     // frame.signal_mem = self.cortex_mem.get_snapshot(0);
-                    frame.signal_action = self.cortex_mem.get_action(time_bar_med);
+                    // frame.signal_action = self.cortex_mem.get_action(time_bar_med);
                     // frame.signal_action = self.cortex_mem.get_action(0);
-                    self.cortex_mem.clear_old(time_bar_med);
+                    // self.cortex_mem.clear_old(time_bar_med);
+                    // let co = self.get_cortex_mut();
+                    // co.flags.get_all()
+                    let sigs = cor.flags.get_all(&FlagsRowCond {
+                        eng_key: ML_ENG,
+                        type_key: "ALL",
+                        medium_bar_id: Some(mid as i32),
+                        small_bar_id: None,
+                        from_time_sec: None,
+                    });
+                    drop(cor);
+                    frame.signals = sigs;
 
                     self.frames.push(frame);
                 }
@@ -119,13 +139,18 @@ impl JsonMaker for MLEng {
             if !(bar.open_time >= start && bar.open_time <= end) {
                 continue;
             }
+            let marks = fm.get_frames_markers();
+            for m in marks {
+                out.push(m);
+            }
             // Markers
-            if fm.get_early_mark().is_some() {
-                out.push(fm.get_early_mark().unwrap());
-            }
-            if fm.get_long_final_mark().is_some() {
-                out.push(fm.get_long_final_mark().unwrap());
-            }
+            // todo: fixme impl
+            // if fm.get_early_mark().is_some() {
+            //     out.push(fm.get_early_mark().unwrap());
+            // }
+            // if fm.get_long_final_mark().is_some() {
+            //     out.push(fm.get_long_final_mark().unwrap());
+            // }
         }
         // println!("markers {:?}",out);
         out
