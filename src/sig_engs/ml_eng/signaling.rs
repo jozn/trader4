@@ -75,7 +75,7 @@ impl MLEng {
                 time_sec: time,
                 ttl: 0,
             };
-            cor.flags.add_once(&sig);
+            cor.flags.add_once_small(&sig);
         }
 
         if kid % 8 == 0 {
@@ -88,7 +88,7 @@ impl MLEng {
                 time_sec: time,
                 ttl: 0,
             };
-            cor.flags.add_once(&sig);
+            cor.flags.add_once_small(&sig);
         }
 
         if kid % 10 == 0 {

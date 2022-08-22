@@ -114,7 +114,6 @@ impl MLFrame {
         (self.info.bar_medium.primary.clone(),)
     }
     ///////////////// For Json Outputs //////////////////
-    //todo
     pub fn get_frames_markers(&self) -> Vec<MarkerJson> {
         let mut arr = vec![];
         // let time =
@@ -123,6 +122,7 @@ impl MLFrame {
             let m = if f.type_key == EARLY_LONG {
                 MarkerJson {
                     time: f.time_sec,
+                    marker_key: format!("el_{}", f.medium_bar_id),
                     position: "belowBar".to_string(),
                     color: "#ae4bd5".to_string(),
                     shape: "circle".to_string(),
@@ -131,6 +131,7 @@ impl MLFrame {
             } else if f.type_key == FINAL_LONG {
                 MarkerJson {
                     time: f.time_sec,
+                    marker_key: format!("ll_{}", f.medium_bar_id),
                     position: "belowBar".to_string(),
                     color: "#2196F3".to_string(),
                     shape: "arrowUp".to_string(),
@@ -143,36 +144,4 @@ impl MLFrame {
         }
         arr
     }
-    /*pub fn get_early_mark(&self) -> Option<MarkerJson> {
-        match &self.signal_mem {
-            None => None,
-            Some(sm) => {
-                //todo short
-                Some(MarkerJson {
-                    time: sm.ps_time_sec,
-                    position: "belowBar".to_string(),
-                    color: "#ae4bd5".to_string(),
-                    shape: "circle".to_string(),
-                    text: format!(""),
-                })
-            }
-        }
-    }
-
-    pub fn get_long_final_mark(&self) -> Option<MarkerJson> {
-        match &self.signal_action {
-            None => None,
-            Some(sm) => {
-                //todo short
-                Some(MarkerJson {
-                    time: sm.time_sec,
-                    position: "belowBar".to_string(),
-                    color: "#2196F3".to_string(),
-                    // color: "#14a255".to_string(),
-                    shape: "arrowUp".to_string(),
-                    text: format!(""),
-                })
-            }
-        }
-    }*/
 }

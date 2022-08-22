@@ -225,6 +225,7 @@ pub struct JsonOut {
     pub high_line: Vec<RowJson>,
     pub low_line: Vec<RowJson>,
     pub markers: Vec<MarkerJson>,
+    pub markers_med: Vec<MarkerJson>, //
 
     pub bull_line: Vec<RowJson>,
     pub bear_line: Vec<RowJson>,

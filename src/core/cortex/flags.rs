@@ -11,10 +11,23 @@ pub struct FlagsDB {
 }
 
 impl FlagsDB {
-    pub fn add_once(&mut self, flag_row: &FlagsRow) -> FlagsRow {
+    pub fn add_once_small(&mut self, flag_row: &FlagsRow) -> FlagsRow {
         let mut flag_row = flag_row.clone();
         assert_eq!(flag_row.flag_id, 0);
         assert_valid_flag_row(&flag_row);
+        // Only one flag in each small_bar and
+        let cond = FlagsRowCond {
+            eng_key: flag_row.eng_key,
+            type_key: flag_row.type_key,
+            medium_bar_id: Some(flag_row.medium_bar_id),
+            small_bar_id: Some(flag_row.small_bar_id),
+            // small_bar_id: None, // for unique in medium
+            from_time_sec: None,
+        };
+        let past_flag = self.get(&cond);
+        if past_flag.is_some() {
+            return past_flag.unwrap();
+        }
 
         self.flag_id_cnt += 1;
         flag_row.flag_id = self.flag_id_cnt;

@@ -13,6 +13,7 @@ use crate::ta::zigzag::ZigZag;
 use crate::ta::Wave;
 use crate::types::{DayInfo, WeekInfo};
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 const OUT_FOLDER: &'static str = "/mnt/t/trader_out/v17/data_sky_web/";
 const OUT_FOLDER_TREND: &'static str = "/mnt/t/trader_out/v17/trend/";
@@ -371,6 +372,16 @@ impl SingleFileGen {
         }
         out.markers.sort_by(|o1, o2| o1.time.cmp(&o2.time));
         println!("market lern: {:?}", out.markers.len());
+        // Medium markers unique
+        let cp_markers = out.markers.clone();
+        let mut mpm = HashMap::new();
+        cp_markers.iter().for_each(|m| {
+            mpm.insert(&m.marker_key, m.clone());
+        });
+        for (_, m) in mpm {
+            out.markers_med.push(m);
+        }
+        out.markers_med.sort_by(|o1, o2| o1.time.cmp(&o2.time));
         // out.markers.clear();
         out
     }

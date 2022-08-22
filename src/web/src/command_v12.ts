@@ -29,13 +29,15 @@ function makeBarChart() {
     var jd = JSON.parse(jsonText);
 
     var markers = [];
+    var markersMed = [];
     if(fn.getOverlyShow("markers",true)) {
         markers = jd.markers;
+        markersMed = jd.markers_med;
     }
 
     // Create main Bar charts
     var chart_major = fn.buildBarChart({black: false, el: chartMajorEl, height: width/8, ohlc: jd.major.ohlc});
-    var chart_medium = fn.buildBarChart({black: true, el: chartMediumEL, height: width/5, ohlc: jd.medium.ohlc,markers: markers});
+    var chart_medium = fn.buildBarChart({black: true, el: chartMediumEL, height: width/5, ohlc: jd.medium.ohlc,markers: markersMed});
     var chart_small = fn.buildBarChart({black: false, el: chartSmallEL, height: width/6, ohlc: jd.small.ohlc,markers: markers});
     // Syncs
     fn.syncCharts(chart_major,chart_medium);

@@ -68,7 +68,8 @@ pub struct SkyJsonOut {
     pub medium: TimeFrameJson,
     pub small: TimeFrameJson,
 
-    pub markers: Vec<MarkerJson>,
+    pub markers: Vec<MarkerJson>,     // All markers
+    pub markers_med: Vec<MarkerJson>, // marks on medium time frame (removed redunt of it)
     pub wave1: Vec<RowJson>,
     pub wave2: Vec<RowJson>,
     pub wave3: Vec<RowJson>,
@@ -129,6 +130,8 @@ pub struct RowJson {
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct MarkerJson {
     pub time: i64,
+    #[serde(skip)]
+    pub marker_key: String, // Internal: for making unique on medium time frames
     pub position: String,
     pub color: String,
     pub shape: String,

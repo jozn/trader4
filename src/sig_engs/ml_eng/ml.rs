@@ -80,6 +80,7 @@ impl MLEng {
                         eng_key: ML_ENG,
                         type_key: "ALL",
                         medium_bar_id: Some(mid as i32),
+                        // small_bar_id: Some(kid as i32),
                         small_bar_id: None,
                         from_time_sec: None,
                     });
@@ -143,14 +144,6 @@ impl JsonMaker for MLEng {
             for m in marks {
                 out.push(m);
             }
-            // Markers
-            // todo: fixme impl
-            // if fm.get_early_mark().is_some() {
-            //     out.push(fm.get_early_mark().unwrap());
-            // }
-            // if fm.get_long_final_mark().is_some() {
-            //     out.push(fm.get_long_final_mark().unwrap());
-            // }
         }
         // println!("markers {:?}",out);
         out

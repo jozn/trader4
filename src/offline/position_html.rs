@@ -1,5 +1,6 @@
 use super::*;
 use crate::helper::to_csv_out_v2;
+use std::fmt::format;
 // use crate::sky_eng::MarkerJson;
 use crate::json_output::MarkerJson;
 use std::iter::repeat_with;
@@ -103,6 +104,7 @@ pub fn to_json_marker(pos: &Vec<Position>) -> Vec<MarkerJson> {
         if p.is_long() {
             let m = MarkerJson {
                 time: p.open_time as i64,
+                marker_key: format!("p_{}", p.pos_id),
                 position: "belowBar".to_string(),
                 color: color.to_string(),
                 shape: "arrowUp".to_string(),
