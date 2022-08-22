@@ -36,7 +36,7 @@ impl MLEng {
         // todo: can we proude debug format but with serde ignore attrubtes? (check serde)
         let s = serde_json::to_string_pretty(&self.frames).unwrap();
         // println!("{}",s);
-        std::fs::write("./ml_eng_frames_dump_json.txt", s);
+        std::fs::write("./debug/runtime/ml_eng_frames_dump_json.txt", s);
     }
 
     pub(super) fn get_cortex(&mut self) -> Ref<Cortex> {

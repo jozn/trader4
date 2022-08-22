@@ -138,7 +138,7 @@ impl Cortex {
     pub fn on_end(&mut self) {
         let s = format!("{:#?}", self);
         // println!("{}",s);
-        std::fs::write("./cortex_dump.txt", s);
+        std::fs::write("./debug/runtime/cortex_dump.txt", s);
     }
 
     pub fn get_last_trade(&self, pair: Pair) -> LastTradeRes {
@@ -224,6 +224,7 @@ pub struct PosHolder {
     pub profit_level: i32,
 }
 
+// todo: update/redesign this class fields
 #[derive(Debug, Default, Serialize, Deserialize, Clone)]
 pub struct ActionSignal {
     pub small_kid: i32,

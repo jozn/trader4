@@ -12,10 +12,16 @@ o*.txt
 o*.json
 *.csv
 nohup.out
-/debug
-/arch/ts/node_modules/
+/old_codes/arch/ts/node_modules/
 /src/web/node_modules/
 /src/web/dist/
-/ml
+
 cortex*.txt
 *dump*.txt
+# old_codes
+/old_codes/ml
+
+# Deug folder
+/debug/*dump*.txt
+/debug/runtime/
+/debug/older/
