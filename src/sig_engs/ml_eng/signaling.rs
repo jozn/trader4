@@ -55,6 +55,7 @@ impl MLEng {
         sf: &mut MLFrame,
         mbr: &MultiBarRes,
     ) -> Option<ActionSignal> {
+        let pair = tick.pair;
         let kid = self.mutli_bars.medium_bars.primary_seq;
         let kid_small = self.mutli_bars.small_bars.primary_seq;
         let pro = 0.001;
@@ -68,6 +69,7 @@ impl MLEng {
         if kid % 5 == 0 {
             let sig = FlagsRow {
                 flag_id: 0,
+                pair,
                 eng_key: ML_ENG,
                 type_key: EARLY_LONG,
                 medium_bar_id: kid,
@@ -81,6 +83,7 @@ impl MLEng {
         if kid % 8 == 0 {
             let sig = FlagsRow {
                 flag_id: 0,
+                pair,
                 eng_key: ML_ENG,
                 type_key: FINAL_LONG,
                 medium_bar_id: kid,

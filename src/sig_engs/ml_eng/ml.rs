@@ -50,6 +50,7 @@ impl MLEng {
 
     pub fn add_tick(&mut self, tick: &BTickData) {
         let mul_res = self.mutli_bars.add_tick(tick);
+        let pair = tick.pair;
 
         let sig = match mul_res {
             None => None,
@@ -77,6 +78,7 @@ impl MLEng {
                     // let co = self.get_cortex_mut();
                     // co.flags.get_all()
                     let sigs = cor.flags.get_all(&FlagsRowCond {
+                        pair,
                         eng_key: ML_ENG,
                         type_key: "ALL",
                         medium_bar_id: Some(mid as i32),

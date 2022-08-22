@@ -1,12 +1,14 @@
+use crate::configs::assets::Pair;
 use serde::{Deserialize, Serialize};
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::hash::Hash;
 
 // Flags is db for store of signals, markers,...
 #[derive(Debug, Default)]
 pub struct FlagsDB {
     flag_id_cnt: i32,
-    flags_set: HashSet<FlagsRow>,
+    // flags_set: HashSet<FlagsRow>,
+    flags_set: HashMap<String,FlagsRow>,
     flags_archive: Vec<FlagsRow>,
 }
 
@@ -17,6 +19,7 @@ impl FlagsDB {
         assert_valid_flag_row(&flag_row);
         // Only one flag in each small_bar and
         let cond = FlagsRowCond {
+            pair: flag_row.pair,
             eng_key: flag_row.eng_key,
             type_key: flag_row.type_key,
             medium_bar_id: Some(flag_row.medium_bar_id),
@@ -31,7 +34,7 @@ impl FlagsDB {
 
         self.flag_id_cnt += 1;
         flag_row.flag_id = self.flag_id_cnt;
-        self.flags_set.insert(flag_row.clone());
+        self.flags_set.insert(flag_row.flag_key(),flag_row.clone());
         flag_row
     }
 
@@ -39,12 +42,12 @@ impl FlagsDB {
         assert!(flag_row.flag_id > 0);
         assert_valid_flag_row(flag_row);
 
-        self.flags_set.replace(flag_row.clone());
+        self.flags_set.insert(flag_row.flag_key(),flag_row.clone());
     }
 
     pub fn get_all(&self, param: &FlagsRowCond) -> Vec<FlagsRow> {
         let mut arr = vec![];
-        for f in self.flags_set.iter() {
+        for (_,f )in self.flags_set.iter() {
             if f.eng_key == f.eng_key || param.eng_key == "ALL" {
                 if f.type_key == f.type_key || param.type_key == "ALL" {
                     let valid_med = valid_equal_id(param.medium_bar_id, f.medium_bar_id);
@@ -90,7 +93,7 @@ impl FlagsDB {
 
     pub fn remove_flags(&mut self, flags: Vec<i32>) {
         let mut arr = vec![];
-        for f in self.flags_set.iter() {
+        for (fk,f) in self.flags_set.iter() {
             for fid in flags.iter() {
                 if f.flag_id == *fid {
                     arr.push(f.clone());
@@ -98,7 +101,7 @@ impl FlagsDB {
             }
         }
         for f in arr {
-            self.flags_set.remove(&f);
+            self.flags_set.remove(&f.flag_key());
             self.flags_archive.push(f);
         }
     }
@@ -126,9 +129,11 @@ fn valid_equal_id(id_opt: Option<i32>, id: i32) -> bool {
 }
 
 // Flags: Signals,...
-#[derive(Debug, Clone, Default, Serialize, Eq, Hash, PartialEq)]
+// #[derive(Debug, Clone, Default, Serialize, Eq, Hash, PartialEq)]
+#[derive(Debug, Clone, Default, Serialize)]
 pub struct FlagsRow {
     pub flag_id: i32,
+    pub pair: Pair,
     pub eng_key: &'static str,
     pub type_key: &'static str, // Give flexblity to sig_eng without the Enum -- "early_long",..
     // pub flag_type: FlagType, //?
@@ -138,9 +143,20 @@ pub struct FlagsRow {
     pub ttl: i64, // time to live
 }
 
+impl FlagsRow {
+    fn flag_key(&self) -> String {
+        let s = self;
+        format!(
+            "{:?}_{}_{}_{}_{}",
+            s.pair, s.eng_key, s.type_key, s.medium_bar_id, s.small_bar_id
+        )
+    }
+}
+
 pub struct FlagsRowCond {
     // We should always set keys -- the reason we do not use Option is that we should
     //  always use them; use the keyword "ALL" for explict igonres of them
+    pub pair: Pair,
     pub eng_key: &'static str,
     pub type_key: &'static str, // Option<str>,
     pub medium_bar_id: Option<i32>,
