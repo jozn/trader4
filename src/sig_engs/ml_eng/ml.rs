@@ -34,7 +34,15 @@ impl MLEng {
         //  too large (>500MB) as all Bars data are on debugs. We ignore Bar info in json format
         // let s = format!("{:#?}", self); // only when needed -- (>500MB) file size
         // todo: can we proude debug format but with serde ignore attrubtes? (check serde)
-        let s = serde_json::to_string_pretty(&self.frames).unwrap();
+
+        // Only 1000 first frames for reduce debug size
+        let mut frams = vec![];
+        for (id, f) in self.frames.iter().enumerate() {
+            if id < 1000 {
+                frams.push(f.clone());
+            }
+        }
+        let s = serde_json::to_string_pretty(&frams).unwrap();
         // println!("{}",s);
         std::fs::write("./debug/runtime/ml_eng_frames_dump_json.txt", s);
 

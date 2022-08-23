@@ -113,8 +113,8 @@ function makeBarChart() {
     // fn.syncCharts(chart_medium,medium_dmi);
 
     // Spreed
-    var medium_dmi_el = fn.makeNextIndi("spreedX",false,true);
-    var medium_dmi = fn.threeLines(medium_dmi_el,jd.spreed_max,jd.spreed_min);
+    var medium_dmi_el = fn.makeNextIndi("spreed",false,true);
+    var medium_dmi = fn.threeLines(medium_dmi_el,jd.spread_max,jd.spread_min);
     fn.syncCharts(chart_medium,medium_dmi);
 
     // MDI

@@ -106,12 +106,14 @@ impl Cortex {
                 None => {}
                 Some(mut ph) => {
                     // println!("cortex: closing cortex postion {:?}", &ph);
-                    println!(
+                    /*
+                      println!(
                         "cortex: closing postion {:?} -- open/closed cnt {}/{}",
                         pos_id,
                         self.open_pos.len(),
                         self.closed_pos.len()
                     );
+                    */
                     ph.pos_res = pos; // update
                     self.closed_pos.insert(pos_id, ph.clone());
                 }
@@ -125,7 +127,7 @@ impl Cortex {
                         profit_level: 0,
                     };
                     // println!("cortex: inserting cortex postion {:?}", &ph);
-                    println!("cortex: inserting postion {:?}", pos_id);
+                    // println!("cortex: inserting postion {:?}", pos_id);
                     self.open_pos.insert(pos.pos_id, ph);
                 }
                 Some(ph) => {

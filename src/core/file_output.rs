@@ -42,10 +42,8 @@ impl FilesOutput {
     ) {
         println!("web {:?} ...", &pair_mem.pair);
         self.write_web_output_one_eng(&pair_mem.ml_eng, &postions);
-        // self.write_web_output_sky_eng(&pair_mem.sky_eng, &postions, self.cfg.days_out);
 
         if self.cfg.print {
-            // println!("{:#?}", x);
             println!("{:#?}", money.balance);
         }
 
@@ -58,7 +56,6 @@ impl FilesOutput {
 
 impl FilesOutput {
     // code copy of trans_wky_web3.rs
-    // fn write_web_output_ml_eng(&self, ml_eng: &MLEng, pos: &Vec<Position>) {
     fn write_web_output_one_eng(&self, json_maker: &impl JsonMaker, pos: &Vec<Position>) {
         let _bars = json_maker.get_bars();
         let pair = &self.cfg.pair;
@@ -118,7 +115,6 @@ impl FilesOutput {
     }
 }
 
-// #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 #[derive(Debug, Clone, Default)]
 pub struct SingleFileGen {
     pub cfg: FilesOutputConfig,
@@ -252,94 +248,12 @@ impl SingleFileGen {
                 }
             }
 
-            // Add scores
-            // let score = &fm.tscore;
-            // out.score_bull.push(RowJson {
-            //     time,
-            //     value: score.bull as f64,
-            // });
-            // out.score_bear.push(RowJson {
-            //     time,
-            //     value: -score.bear as f64,
-            // });
-            // out.score_diff.push(RowJson {
-            //     time,
-            //     value: score.diff as f64,
-            // });
-
             out.major_ma_mom.push(RowJson {
                 time,
                 value: fm.big.ta.ma_mom,
             });
 
-            // todo migrate markers from old frame
-            // Markers
-            /*            if fm.get_early_mark().is_some() {
-                out.markers.push(fm.get_early_mark().unwrap());
-            }
-            if fm.get_long_final_mark().is_some() {
-                out.markers.push(fm.get_long_final_mark().unwrap());
-            }*/
         }
-        /*for fm in &s.frames {
-            let bar = &fm.bar_medium.primary;
-            if !(bar.open_time >= start && bar.open_time <= end) {
-                continue;
-            }
-            let time = bar.open_time / 1000;
-            wave1.next(bar);
-            wave2.next(bar);
-            wave3.next(bar);
-            // zigzag
-            let zigr = zigzag.next(bar);
-            match zigr {
-                None => {}
-                Some(z) => {
-                    out.zigzag2.push(z.clone());
-                    // out.zigzag.push(RowJson {
-                    //     time: z.time/1000,
-                    //     value: z.price,
-                    // });
-                }
-            }
-
-            // Add scores
-            let score = &fm.tscore;
-            out.score_bull.push(RowJson {
-                time,
-                value: score.bull as f64,
-            });
-            out.score_bear.push(RowJson {
-                time,
-                value: -score.bear as f64,
-            });
-            out.score_diff.push(RowJson {
-                time,
-                value: score.diff as f64,
-            });
-
-            out.major_ma_mom.push(RowJson {
-                time,
-                value: fm.bar_major.big.ta.ma_mom,
-            });
-
-            // todo migrate markers from old frame
-            // Markers
-            if fm.get_early_mark().is_some() {
-                out.markers.push(fm.get_early_mark().unwrap());
-            }
-            if fm.get_long_final_mark().is_some() {
-                out.markers.push(fm.get_long_final_mark().unwrap());
-            }
-        }*/
-
-        // for z in &zigzag.store {
-        // for z in &wave1.wave_ress {
-        //     out.zigzag.push(RowJson {
-        //         time: z.time / 1000,
-        //         value: z.price,
-        //     });
-        // }
 
         // Waves
         for z in &wave1.wave_ress {
@@ -363,16 +277,13 @@ impl SingleFileGen {
 
         //////////// Motion Analyse
         use crate::core::analyse::wave_motion;
-        // let mots = analyse::gen_motion(&wave3.wave_ress);
         let mo_gen =
             wave_motion::MotionGen::new(&wave3.wave_ress, &wave2.wave_ress, &wave1.wave_ress);
-        // let mo_gen = analyse::MotionGen::new(&wave3.wave_ress,&wave1.wave_ress,&vec![]);
         let mots = mo_gen.run();
         // println!("mots: {:#?}", mots);
         ///////////
 
         /////////// Markers ////////////
-        // Sort markets asending
         // Add sig_engs markers
         out.markers = self.markers.clone();
         // Add trades(postions) to markers
@@ -380,6 +291,7 @@ impl SingleFileGen {
         for tm in trade_markers {
             out.markers.push(tm);
         }
+        // Sort markets asending
         out.markers.sort_by(|o1, o2| o1.time.cmp(&o2.time));
         println!("market lern: {:?}", out.markers.len());
         // Medium markers unique
@@ -425,9 +337,6 @@ impl SingleFileGen {
             )
         };
 
-        // let trade_markers = offline::position_html::to_json_marker(&pos);
-        // let mut jo = jo.clone();
-        // jo.markers.
         let json_text = serde_json::to_string_pretty(&jo).unwrap();
         let trades_text = offline::position_html::to_html_table(&self.pos);
 
@@ -440,7 +349,6 @@ impl SingleFileGen {
                 .unwrap();
         let libs = format!("{} \n {}", jquery, lighweight);
 
-        // let js_script = std::fs::read_to_string("./src/web/ts/lib.js").unwrap();
         let html = html_tmpl.replace("{{TITLE}}", &title);
         let html = html.replace("{{JSON_DATA}}", &json_text);
         let html = html.replace("{{TRADE_DATA}}", &trades_text);
