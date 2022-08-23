@@ -159,6 +159,22 @@ impl BarSeries {
         out
     }
 
+    pub(super) fn get_bars_first_last(&self, size: i64) -> Vec<PrimaryHolder> {
+        let mut out = vec![];
+        let len = self.bars_primary.len();
+        let mut indx = 0; //todo: vec iter with index
+        for b in self.bars_primary.iter() {
+            if size > 0 &&  indx  <= size {
+                out.push(b.clone());
+            }
+            if size < 0 &&  indx >= len as i64 + size {
+                out.push(b.clone());
+            }
+            indx += 1;
+        }
+        out
+    }
+
     pub(super) fn get_bars_index(&self, rng: Range<usize>) -> Vec<PrimaryHolder> {
         let mut out = vec![];
         let mut indx = 0; //todo: vec iter with index
