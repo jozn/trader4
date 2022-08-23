@@ -37,6 +37,11 @@ impl MLEng {
         let s = serde_json::to_string_pretty(&self.frames).unwrap();
         // println!("{}",s);
         std::fs::write("./debug/runtime/ml_eng_frames_dump_json.txt", s);
+
+        // get DebugDumpBars
+        let debug_bars = self.mutli_bars.get_bars_dump(6);
+        let s = format!("{:#?}", debug_bars);
+        std::fs::write("./debug/runtime/ml_eng_bars_dump.txt", s);
     }
 
     pub(super) fn get_cortex(&mut self) -> Ref<Cortex> {

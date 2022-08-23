@@ -120,6 +120,30 @@ impl MultiBars {
         out
     }
 
+    pub fn get_bars_dump(&self, size: i64) -> DumpDebugMultiBar {
+        let size = size as usize;
+        let med_len = self.major_bars.bars_primary.len();
+        if size * 2 > med_len {
+            return DumpDebugMultiBar::default();
+        }
+        let mid = self.medium_bars.bars_primary.get(size as usize).unwrap();
+        let end_inx = self.major_bars.bars_primary.len() - size as usize;
+        let mid_end = self.medium_bars.bars_primary.get(end_inx).unwrap();
+
+        DumpDebugMultiBar {
+            first_bars: self._get_bars(0, mid.primary.open_time),
+            last_bars: self._get_bars(mid_end.primary.open_time, i64::MAX),
+        }
+    }
+
+    fn _get_bars(&self, start: i64, end: i64) -> DumpDebugBar {
+        DumpDebugBar {
+            big: self.major_bars.get_bars_ph(start, end),
+            med: self.medium_bars.get_bars_ph(start, end),
+            small: self.small_bars.get_bars_ph(start, end),
+        }
+    }
+
     // pub fn get_bars_ph(&self, start: i64, end: i64) -> Self {
     //     Self {
     //         major_cfg: self.major_cfg.clone(),
@@ -130,4 +154,17 @@ impl MultiBars {
     //         small_bars: (),
     //     }
     // }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+pub struct DumpDebugMultiBar {
+    pub first_bars: DumpDebugBar,
+    pub last_bars: DumpDebugBar,
+    // pub bars_big: Vec<Bar>,
+}
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+pub struct DumpDebugBar {
+    pub big: Vec<PrimaryHolder>,
+    pub med: Vec<PrimaryHolder>,
+    pub small: Vec<PrimaryHolder>,
 }

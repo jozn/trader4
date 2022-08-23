@@ -2,6 +2,7 @@ use super::*;
 use crate::collector::row_data::BTickData;
 use prost::Message;
 use serde::{Deserialize, Serialize};
+use std::ops::Range;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct BarSeries {
@@ -138,11 +139,11 @@ impl BarSeries {
         out
     }
 
-    pub fn get_bars_ph(&self, start: i64, end: i64) -> Vec<PrimaryHolder> {
+    pub fn get_bars_ph(&self, start_time: i64, end_time: i64) -> Vec<PrimaryHolder> {
         let mut out = vec![];
         let niddle_opt = self
             .bars_primary
-            .binary_search_by(|o| o.primary.open_time.cmp(&start));
+            .binary_search_by(|o| o.primary.open_time.cmp(&start_time));
         let idx = match niddle_opt {
             Ok(i) => i,
             Err(i) => i,
@@ -150,11 +151,22 @@ impl BarSeries {
         let idx = (idx as i64 - 2).max(0) as usize; // go 2 index before
         for ph in self.bars_primary.iter().skip(idx) {
             let b = &ph.primary;
-            if b.open_time >= start && b.open_time <= end {
+            if b.open_time >= start_time && b.open_time <= end_time {
                 out.push(ph.clone())
             }
         }
 
+        out
+    }
+
+    pub(super) fn get_bars_index(&self, rng: Range<usize>) -> Vec<PrimaryHolder> {
+        let mut out = vec![];
+        let mut indx = 0; //todo: vec iter with index
+        for b in self.bars_primary.iter() {
+            if rng.contains(&indx) {
+                out.push(b.clone())
+            }
+        }
         out
     }
 }

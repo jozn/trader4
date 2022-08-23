@@ -107,9 +107,6 @@ pub fn to_csv_out_v2<T: Serialize>(arr: &Vec<T>, tab: bool, header: bool) -> Str
 //  with header flag off.
 pub fn to_csv_out_v3<T: Serialize + Clone>(arr: &Vec<T>, tab: bool, header: bool) -> String {
     let first_row = arr.get(0).unwrap().clone();
-    // let mut v1 :Vec<T> = vec![];
-    // v1.push(o.clone());
-    // let first = to_csv_out_v2(&v1,tab,header);
     let first_arr = vec![first_row];
     let first_csv = to_csv_out_v2(&first_arr, tab, header);
     let rest_rows: Vec<T> = arr.iter().skip(1).map(|v| v.clone()).collect();
