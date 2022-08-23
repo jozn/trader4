@@ -172,6 +172,16 @@ impl SingleFileGen {
             }
             let time = bar.open_time / 1000;
 
+            // Spread
+            out.spread_max.push(RowJson {
+                time,
+                value: bar.spreed_max,
+            });
+            out.spread_min.push(RowJson {
+                time,
+                value: bar.spreed_min,
+            });
+
             // Relative DC
             let rdc_ta = &bar.ta.rdc;
             out.rdc_med.push(RowJson {

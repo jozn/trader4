@@ -112,6 +112,11 @@ function makeBarChart() {
     // var medium_dmi = fn.mdi(medium_dmi_el,jd.medium);
     // fn.syncCharts(chart_medium,medium_dmi);
 
+    // Spreed
+    var medium_dmi_el = fn.makeNextIndi("spreedX",false,true);
+    var medium_dmi = fn.threeLines(medium_dmi_el,jd.spreed_max,jd.spreed_min);
+    fn.syncCharts(chart_medium,medium_dmi);
+
     // MDI
     var medium_dmi_el = fn.makeNextIndi("medium_dmi",true,true);
     var medium_dmi = fn.mdi(medium_dmi_el,jd.medium);

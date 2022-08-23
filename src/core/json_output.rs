@@ -70,6 +70,10 @@ pub struct SkyJsonOut {
 
     pub markers: Vec<MarkerJson>,     // All markers
     pub markers_med: Vec<MarkerJson>, // marks on medium time frame (removed redunt of it)
+
+    pub spread_max: Vec<RowJson>,
+    pub spread_min: Vec<RowJson>,
+
     pub wave1: Vec<RowJson>,
     pub wave2: Vec<RowJson>,
     pub wave3: Vec<RowJson>,

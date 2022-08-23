@@ -39,7 +39,7 @@ impl MLEng {
         std::fs::write("./debug/runtime/ml_eng_frames_dump_json.txt", s);
 
         // get DebugDumpBars
-        let debug_bars = self.mutli_bars.get_bars_dump(6);
+        let debug_bars = self.mutli_bars.get_bars_dump(3);
         let s = format!("{:#?}", debug_bars);
         std::fs::write("./debug/runtime/ml_eng_bars_dump.txt", s);
     }
