@@ -3,6 +3,7 @@ use crate::bar::MultiBarRes;
 use crate::ta::TDOut;
 pub use serde::{Deserialize, Serialize};
 
+// Trend Score
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct TScore {
     pub bull: f64,

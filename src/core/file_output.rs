@@ -252,7 +252,6 @@ impl SingleFileGen {
                 time,
                 value: fm.big.ta.ma_mom,
             });
-
         }
 
         // Waves

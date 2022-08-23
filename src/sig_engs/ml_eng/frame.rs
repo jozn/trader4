@@ -64,90 +64,12 @@ pub struct MLFrameInfo {
 
     pub med_dc_hl_pip: f64,
     pub big_dc_hl_pip: f64,
-    // #[serde(skip)]
+    #[serde(skip)]
     pub bar_major: PrimaryHolder,
-    // #[serde(skip)]
+    #[serde(skip)]
     pub bar_medium: PrimaryHolder,
     #[serde(skip)]
     pub bars_small: Vec<PrimaryHolder>,
     #[serde(skip)]
     pub bar_small_tip_: PrimaryHolder,
-}
-
-pub type FrameCsv = (
-    Bar,
-    MLFrameInfo,
-    RPIRes,
-    RPCRes,
-    MACDOutput,
-    DMIOutput,
-    StochRes,
-    MATrendOut,
-    MATrendOut,
-    MACDOutput,
-);
-
-pub type FrameCsvV2 = (Bar, FrameCsv);
-
-impl MLFrame {
-    pub fn to_csv_v2_(&self) -> FrameCsv {
-        self.to_csv_old_not_used()
-    }
-    pub fn to_csv_v2(&self) -> FrameCsvV2 {
-        let pta = &self.info.bar_medium.primary.ta;
-        let bta = &self.info.bar_medium.primary.ta;
-        (
-            self.info.bar_medium.primary.clone(),
-            self.to_csv_old_not_used(),
-        )
-    }
-
-    pub fn to_csv_old_not_used(&self) -> FrameCsv {
-        let pta = &self.info.bar_medium.primary.ta;
-        let bta = &self.info.bar_medium.primary.ta;
-        (
-            self.info.bar_medium.primary.clone(),
-            self.info.clone(),
-            pta.rpi.clone(),
-            pta.rpc.clone(),
-            pta.macd.clone(),
-            pta.dmi.clone(),
-            pta.stoch.clone(),
-            pta.trend.clone(),
-            bta.trend.clone(),
-            bta.macd.clone(),
-        )
-    }
-
-    ///////////////// For Json Outputs //////////////////
-    pub fn get_frames_markers(&self) -> Vec<MarkerJson> {
-        let mut arr = vec![];
-        // let time =
-        for f in &self.signals {
-            // todo: mathc static &str
-            let m = if f.type_key == EARLY_LONG {
-                MarkerJson {
-                    time: f.time_sec,
-                    marker_key: format!("el_{}", f.medium_bar_id),
-                    position: "belowBar".to_string(),
-                    color: "#ae4bd5".to_string(),
-                    shape: "circle".to_string(),
-                    text: format!(""),
-                }
-            } else if f.type_key == FINAL_LONG {
-                MarkerJson {
-                    time: f.time_sec,
-                    marker_key: format!("ll_{}", f.medium_bar_id),
-                    position: "belowBar".to_string(),
-                    color: "#2196F3".to_string(),
-                    shape: "arrowUp".to_string(),
-                    text: format!(""),
-                }
-            } else {
-                panic!("unknown signal marker to json")
-            };
-            arr.push(m);
-        }
-        arr
-    }
 }
