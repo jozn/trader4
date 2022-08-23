@@ -8,7 +8,7 @@ use std::hash::Hash;
 pub struct FlagsDB {
     flag_id_cnt: i32,
     // flags_set: HashSet<FlagsRow>,
-    flags_set: HashMap<String,FlagsRow>,
+    flags_set: HashMap<String, FlagsRow>,
     flags_archive: Vec<FlagsRow>,
 }
 
@@ -34,7 +34,7 @@ impl FlagsDB {
 
         self.flag_id_cnt += 1;
         flag_row.flag_id = self.flag_id_cnt;
-        self.flags_set.insert(flag_row.flag_key(),flag_row.clone());
+        self.flags_set.insert(flag_row.flag_key(), flag_row.clone());
         flag_row
     }
 
@@ -42,12 +42,12 @@ impl FlagsDB {
         assert!(flag_row.flag_id > 0);
         assert_valid_flag_row(flag_row);
 
-        self.flags_set.insert(flag_row.flag_key(),flag_row.clone());
+        self.flags_set.insert(flag_row.flag_key(), flag_row.clone());
     }
 
     pub fn get_all(&self, param: &FlagsRowCond) -> Vec<FlagsRow> {
         let mut arr = vec![];
-        for (_,f )in self.flags_set.iter() {
+        for (_, f) in self.flags_set.iter() {
             if f.eng_key == f.eng_key || param.eng_key == "ALL" {
                 if f.type_key == f.type_key || param.type_key == "ALL" {
                     let valid_med = valid_equal_id(param.medium_bar_id, f.medium_bar_id);
@@ -93,7 +93,7 @@ impl FlagsDB {
 
     pub fn remove_flags(&mut self, flags: Vec<i32>) {
         let mut arr = vec![];
-        for (fk,f) in self.flags_set.iter() {
+        for (fk, f) in self.flags_set.iter() {
             for fid in flags.iter() {
                 if f.flag_id == *fid {
                     arr.push(f.clone());

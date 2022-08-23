@@ -71,6 +71,7 @@ impl SimConfig {
     }
 
     pub fn run_web_sim(&mut self, week_rng: Range<u16>, days_out: bool) {
+        make_output_dirs();
         let start_time = app::core::helper::get_time_ms();
         self.load_weeks_data(week_rng.clone());
         let backend = BackendEngineOuter::new(self.balance, &self.report_cfg);
@@ -133,4 +134,8 @@ impl SimConfig {
             run_time / 1000.
         );
     }
+}
+
+fn make_output_dirs() {
+    std::fs::create_dir_all("./debug/runtime/");
 }

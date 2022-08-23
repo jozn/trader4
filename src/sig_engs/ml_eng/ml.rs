@@ -55,7 +55,8 @@ impl MLEng {
             None => None,
             Some(mr) => {
                 let mut frame = new_frame(&mr);
-                let act = self.set_signals_random1(&tick, &mut frame, &mr);
+                // let act = self.set_signals_random1(&tick, &mut frame, &mr);
+                let act = self.set_signals_v1(&tick, &mut frame, &mr);
                 // self.set_signals_v1(&tick, &mut frame, &mr);
 
                 let time_bar_med = mr.medium.primary.get_open_time_sec();

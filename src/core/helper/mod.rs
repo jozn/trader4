@@ -101,6 +101,22 @@ pub fn to_csv_out_v2<T: Serialize>(arr: &Vec<T>, tab: bool, header: bool) -> Str
     format!("{:}", s)
 }
 
+// v3 is our workaround the csv problem, currently if we send nested tuple to csv and the
+//  header flag be on it cause it to only print the headers for all rows. This function
+//  works around this by sending first row with headers on (if set) and the rest of rows
+//  with header flag off.
+pub fn to_csv_out_v3<T: Serialize + Clone>(arr: &Vec<T>, tab: bool, header: bool) -> String {
+    let first_row = arr.get(0).unwrap().clone();
+    // let mut v1 :Vec<T> = vec![];
+    // v1.push(o.clone());
+    // let first = to_csv_out_v2(&v1,tab,header);
+    let first_arr = vec![first_row];
+    let first_csv = to_csv_out_v2(&first_arr, tab, header);
+    let rest_rows: Vec<T> = arr.iter().skip(1).map(|v| v.clone()).collect();
+    let rest_csv = to_csv_out_v2(&rest_rows, tab, false);
+    format!("{}{}", first_csv, rest_csv)
+}
+
 pub fn to_time_string(time_sec: i64) -> String {
     let open_time = NaiveDateTime::from_timestamp(time_sec, 0);
     let ots = open_time.format("%Y-%m-%d %H:%M:%S").to_string();

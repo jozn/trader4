@@ -12,11 +12,11 @@ use crate::app;
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
 use crate::gate_api::*;
+use crate::sig_engs::ml_eng::MLFrameTradeInsight;
 use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, HashSet};
 use std::hash::Hash;
 use std::rc::Rc;
-use crate::sig_engs::ml_eng::MLFrameTradeInsight;
 
 // In order to get mut of this use:
 //   let mut m = self.cortex.as_ref().borrow_mut();
@@ -235,4 +235,3 @@ pub struct ActionSignal {
     pub time_sec: i64,
     pub frame_insight: MLFrameTradeInsight,
 }
-

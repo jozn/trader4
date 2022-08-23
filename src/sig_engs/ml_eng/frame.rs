@@ -2,7 +2,6 @@ use super::*;
 use crate::bar::*;
 use crate::collector::row_data::BTickData;
 use crate::configs::assets::Pair;
-// use crate::cortex_old::types::{ActionSignal, SignalMem};
 use crate::cortex::FlagsRow;
 use crate::json_output::MarkerJson;
 use crate::ta::*;
@@ -88,10 +87,22 @@ pub type FrameCsv = (
     MACDOutput,
 );
 
-pub type FrameCsvV2 = (Bar,);
+pub type FrameCsvV2 = (Bar, FrameCsv);
 
 impl MLFrame {
-    pub fn to_csv(&self) -> FrameCsv {
+    pub fn to_csv_v2_(&self) -> FrameCsv {
+        self.to_csv_old_not_used()
+    }
+    pub fn to_csv_v2(&self) -> FrameCsvV2 {
+        let pta = &self.info.bar_medium.primary.ta;
+        let bta = &self.info.bar_medium.primary.ta;
+        (
+            self.info.bar_medium.primary.clone(),
+            self.to_csv_old_not_used(),
+        )
+    }
+
+    pub fn to_csv_old_not_used(&self) -> FrameCsv {
         let pta = &self.info.bar_medium.primary.ta;
         let bta = &self.info.bar_medium.primary.ta;
         (
@@ -108,11 +119,6 @@ impl MLFrame {
         )
     }
 
-    pub fn to_csv_v2(&self) -> FrameCsvV2 {
-        let pta = &self.info.bar_medium.primary.ta;
-        let bta = &self.info.bar_medium.primary.ta;
-        (self.info.bar_medium.primary.clone(),)
-    }
     ///////////////// For Json Outputs //////////////////
     pub fn get_frames_markers(&self) -> Vec<MarkerJson> {
         let mut arr = vec![];

@@ -18,5 +18,5 @@ nohup.out
 # deug folder
 /debug/*dump*.txt
 /debug/o*.txt
-/debug/runtime/
+/debug/runtime*/
 /debug/older/

@@ -51,6 +51,6 @@ fn write_csv2(frames: &Vec<MLFrame>, pair: &Pair, week_id: &str) {
 
     let fff: Vec<FrameCsvV2> = frames.iter().map(|f| f.to_csv_v2()).collect();
     // let fff :Vec<FrameCsv> = frames.iter().map(|f| f.to_csv()).collect();
-    let csv = to_csv_out_v2(&fff, false, true);
+    let csv = to_csv_out_v3(&fff, false, true);
     std::fs::write(folder, csv);
 }
