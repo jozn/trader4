@@ -3,7 +3,7 @@ use crate::bar::{MultiBars, PrimaryHolder};
 use crate::configs::assets::Pair;
 use crate::helper::to_csv_out_v2;
 use crate::json_output::{
-    bars_to_json, JsonMaker, MarkerJson, RowJson, SkyJsonOut, TrendAnalyseOut,
+    bars_to_json, JsonMaker, MarkerJson, RowJson, SkyJsonOut, TradeCharting, TrendAnalyseOut,
 };
 use crate::offline;
 use crate::offline::{Money, Position};
@@ -116,7 +116,7 @@ impl FilesOutput {
 }
 
 #[derive(Debug, Clone, Default)]
-pub struct SingleFileGen {
+struct SingleFileGen {
     pub cfg: FilesOutputConfig,
     pub week: WeekInfo,
     pub day: Option<DayInfo>, // manual is preferd for sunday workaround
@@ -304,6 +304,66 @@ impl SingleFileGen {
         }
         out.markers_med.sort_by(|o1, o2| o1.time.cmp(&o2.time));
         // out.markers.clear();
+
+        // todo: extract this fn to a utlity
+        // Set Trades on chart
+        for p in &self.pos {
+            // Duration with color
+            let color = if p.profit > 0. {
+                "rgba(0,256,0,0.5)".to_string()
+            } else {
+                "rgba(256,0,0,0.5)".to_string()
+            };
+            // let mut arr = vec![];
+            let a = vec![
+                RowJson {
+                    time: p.open_time as i64,
+                    value: p.open_price,
+                },
+                RowJson {
+                    time: p.close_time as i64,
+                    // value: p.open_price,
+                    value: p.close_price,
+                },
+            ];
+            out.trades_dur.push(TradeCharting {
+                color: color,
+                rows: a,
+            });
+
+            // Traders take profit
+            let a = vec![
+                RowJson {
+                    time: p.open_time as i64,
+                    value: p.open_price,
+                },
+                RowJson {
+                    time: p.open_time as i64,
+                    // value: p.open_price,
+                    value: p.exit_high_price,
+                },
+            ];
+            out.trades_profit.push(TradeCharting {
+                color: "rgba(57, 99, 73,0.9)".to_string(),
+                rows: a,
+            });
+
+            // Traders take profit
+            let a = vec![
+                RowJson {
+                    time: p.open_time as i64,
+                    value: p.open_price,
+                },
+                RowJson {
+                    time: p.open_time as i64,
+                    value: p.exit_low_price,
+                },
+            ];
+            out.trades_loose.push(TradeCharting {
+                color: "rgba(90,0,0,0.9)".to_string(),
+                rows: a,
+            });
+        }
         out
     }
 

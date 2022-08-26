@@ -46,7 +46,8 @@ impl MLEng {
                 let mut frame = new_frame(&mr);
 
                 // let act = self.set_signals_random1(&tick, &mut frame, &mr);
-                let act = self.set_signals_v1(&tick, &mut frame, &mr);
+                // let act = self.set_signals_v1(&tick, &mut frame, &mr);
+                let act = self.set_signals_random2(&tick, &mut frame, &mr);
 
                 let time_bar_med = mr.medium.primary.get_open_time_sec();
                 let kid = mr.small.primary.seq;
@@ -105,8 +106,13 @@ impl MLEng {
             };
             let mut cor = self.get_cortex_mut();
             let last = cor.get_last_trade(pair);
+
+            // Temp
+            cor.new_positions.push(np);
+
+            // Real
             if last.trade_cnt == 0 || last.is_closed {
-                cor.new_positions.push(np);
+                // cor.new_positions.push(np);
             }
         }
     }

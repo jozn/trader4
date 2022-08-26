@@ -71,6 +71,11 @@ pub struct SkyJsonOut {
     pub markers: Vec<MarkerJson>,     // All markers
     pub markers_med: Vec<MarkerJson>, // marks on medium time frame (removed redunt of it)
 
+    // pub trades_dur:Vec<Vec<RowJson>>,
+    pub trades_dur: Vec<TradeCharting>,
+    pub trades_profit: Vec<TradeCharting>,
+    pub trades_loose: Vec<TradeCharting>,
+
     pub spread_max: Vec<RowJson>,
     pub spread_min: Vec<RowJson>,
 
@@ -140,6 +145,12 @@ pub struct MarkerJson {
     pub color: String,
     pub shape: String,
     pub text: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
+pub struct TradeCharting {
+    pub color: String,
+    pub rows: Vec<RowJson>,
 }
 
 pub fn bars_to_json_old(bars: Vec<PrimaryHolder>) -> TimeFrameJson {

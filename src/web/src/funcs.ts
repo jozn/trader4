@@ -50,6 +50,8 @@ export function buildBarChart(p: {el: HTMLElement,height:number,black:boolean,oh
     var chart = LightweightCharts.createChart(p.el, getChartCfg(width, p.height));
     let barSeriesOpt :BarSeriesPartialOptions = {
         thinBars: false,
+        lastValueVisible: false,
+        priceLineVisible: false,
         priceFormat: {
             minMove: 0.00001,
             precision: 5,
@@ -73,12 +75,16 @@ export function trendChannelChart(chart: IChartApi, d) {
     var bullLine = chart.addLineSeries({
         color: 'rgb(34,215,104)',
         lineWidth: 1,
+        lastValueVisible: false,
+        priceLineVisible: false,
     });
     bullLine.setData(d.bull_line);
 
     var bearLine = chart.addLineSeries({
         color: 'rgb(215,49,68)',
         lineWidth: 1,
+        lastValueVisible: false,
+        priceLineVisible: false,
     });
     bearLine.setData(d.bear_line);
 }
@@ -87,12 +93,16 @@ export function rpiOverIndicator(chart: IChartApi, d) {
     var highLine = chart.addLineSeries({
         color: 'rgb(255,145,0)',
         lineWidth: 1.5,
+        lastValueVisible: false,
+        priceLineVisible: false,
     });
     highLine.setData(d.rpi_high);
 
     var lowLine = chart.addLineSeries({
         color: 'rgb(255,145,0)',
         lineWidth: 1.5,
+        lastValueVisible: false,
+        priceLineVisible: false,
     });
     lowLine.setData(d.rpi_low);
 }
@@ -108,6 +118,9 @@ export function simpleLineOver(chart: IChartApi, d, color?: string,lineWidth?:nu
     var line = chart.addLineSeries({
         color: color,
         lineWidth: lineWidth,
+        lastValueVisible: false,
+        priceLineVisible: false,
+
     });
     line.setData(d);
 }
@@ -130,16 +143,22 @@ export function macdChart(el,d) {
     var lineMacd = chart.addLineSeries({
         color: 'rgb(17,66,148)',
         lineWidth: 1,
+        lastValueVisible: false,
+        priceLineVisible: false,
     });
     lineMacd.setData(d.macd_macd);
     var lineSignal = chart.addLineSeries({
         color: 'rgb(203,66,66)',
         lineWidth: 1,
+        lastValueVisible: false,
+        priceLineVisible: false,
     });
     lineSignal.setData(d.macd_signal);
     var histogram = chart.addHistogramSeries({
         color: 'rgb(105,102,102)',
         lineWidth: 2,
+        lastValueVisible: false,
+        priceLineVisible: false,
         // priceScaleId: 'left',
     });
     histogram.setData(d.macd_histogram);
@@ -162,18 +181,24 @@ export function scoreChart(el,d) {
     var scoreBull = chart2TV.addHistogramSeries({
         color: 'rgba(34,140,74,0.69)',
         lineWidth: 1,
+        lastValueVisible: false,
+        priceLineVisible: false,
     });
     scoreBull.setData(d.score_bull);
 
     var scoreBear = chart2TV.addHistogramSeries({
         color: 'rgba(224,49,68,0.68)',
         lineWidth: 1,
+        lastValueVisible: false,
+        priceLineVisible: false,
     });
     scoreBear.setData(d.score_bear);
 
     var scoreDiff = chart2TV.addLineSeries({
         color: 'rgb(1,5,2)',
         lineWidth: 2,
+        lastValueVisible: false,
+        priceLineVisible: false,
     });
     scoreDiff.setData(d.score_diff);
     return chart2TV;
@@ -195,18 +220,24 @@ export function trendDirectionChart(el,d) {
     var scoreBull = chart2TV.addHistogramSeries({
         color: 'rgba(34,140,74,0.69)',
         lineWidth: 1,
+        lastValueVisible: false,
+        priceLineVisible: false,
     });
     scoreBull.setData(d.td_plus);
 
     var scoreBear = chart2TV.addHistogramSeries({
         color: 'rgba(224,49,68,0.68)',
         lineWidth: 1,
+        lastValueVisible: false,
+        priceLineVisible: false,
     });
     scoreBear.setData(d.td_minus);
 
     var scoreDiff = chart2TV.addLineSeries({
         color: 'rgb(1,5,2)',
         lineWidth: 2,
+        lastValueVisible: false,
+        priceLineVisible: false,
     });
     scoreDiff.setData(d.td_diff);
     return chart2TV;
@@ -229,16 +260,22 @@ export function mdi(el,d) {
     var line1 = chart.addLineSeries({
         color: 'rgb(39,145,77)',
         lineWidth: 1,
+        lastValueVisible: false,
+        priceLineVisible: false,
     });
     line1.setData(d.dmi_plus);
     var line2 = chart.addLineSeries({
         color: 'rgb(203,66,66)',
         lineWidth: 1,
+        lastValueVisible: false,
+        priceLineVisible: false,
     });
     line2.setData(d.dmi_minus);
     var line3 = chart.addLineSeries({
         color: 'rgb(105,102,102)',
         lineWidth: 2,
+        lastValueVisible: false,
+        priceLineVisible: false,
         // priceScaleId: 'left',
     });
     line3.setData(d.dmi_diff);
@@ -263,11 +300,15 @@ export function relDc(el,d) {
     var line1 = chart.addLineSeries({
         color: 'rgb(39,145,77)',
         lineWidth: 1,
+        lastValueVisible: false,
+        priceLineVisible: false,
     });
     line1.setData(d.rdc_med);
     var line2 = chart.addLineSeries({
         color: 'rgb(203,66,66)',
         lineWidth: 1,
+        lastValueVisible: false,
+        priceLineVisible: false,
     });
     line2.setData(d.rdc_big);
 //     var line3 = chart.addLineSeries({
@@ -297,11 +338,15 @@ export function relDcHeight(el,d) {
     var line1 = chart.addLineSeries({
         color: 'rgb(39,145,77)',
         lineWidth: 1,
+        lastValueVisible: false,
+        priceLineVisible: false,
     });
     line1.setData(d.rdc_med_height);
     var line2 = chart.addLineSeries({
         color: 'rgb(203,66,66)',
         lineWidth: 1,
+        lastValueVisible: false,
+        priceLineVisible: false,
     });
     line2.setData(d.rdc_big_height);
     return chart;
@@ -322,6 +367,8 @@ export function maMomChart(el,d) {
     var scoreBull = chart.addHistogramSeries({
         color: 'rgba(21,71,166,0.69)',
         lineWidth: 1,
+        lastValueVisible: false,
+        priceLineVisible: false,
         priceFormat: {
             minMove: 0.00001,
             precision: 5,
@@ -332,6 +379,8 @@ export function maMomChart(el,d) {
 
     var scoreBear = chart.addHistogramSeries({
         color: 'rgba(255,19,19,0.68)',
+        lastValueVisible: false,
+        priceLineVisible: false,
         lineWidth: 1,
         priceFormat: {
             minMove: 0.00001,
@@ -361,11 +410,15 @@ export function relPrice(el,d) {
     var line1 = chart.addLineSeries({
         color: 'rgb(39,145,77)',
         lineWidth: 1,
+        lastValueVisible: false,
+        priceLineVisible: false,
     });
     line1.setData(d.medium.rp_os_index);
     var line2 = chart.addLineSeries({
         color: 'rgb(203,66,66)',
         lineWidth: 1,
+        lastValueVisible: false,
+        priceLineVisible: false,
     });
     line2.setData(d.major.rp_os_index);
 //     var line3 = chart.addLineSeries({
@@ -399,6 +452,8 @@ export function threeLines(el,line1Data, line2Data,line3Data) {
     var line1 = chart.addLineSeries({
         color: 'rgb(39,145,77)',
         lineWidth: 1,
+        lastValueVisible: false,
+        priceLineVisible: false,
     });
     line1.setData(line1Data);
 
@@ -406,6 +461,8 @@ export function threeLines(el,line1Data, line2Data,line3Data) {
         var line2 = chart.addLineSeries({
             color: 'rgb(203,66,66)',
             lineWidth: 1,
+            lastValueVisible: false,
+            priceLineVisible: false,
         });
         line2.setData(line2Data);
     }
@@ -414,6 +471,8 @@ export function threeLines(el,line1Data, line2Data,line3Data) {
         var line3 = chart.addLineSeries({
             color: 'rgb(105,102,102)',
             lineWidth: 2,
+            lastValueVisible: false,
+            priceLineVisible: false,
             // priceScaleId: 'left',
         });
         line3.setData(line3Data);
@@ -437,6 +496,8 @@ export function onelineSubIndiacor(el,d :ITimeValue[] ) {
     var scoreBull = chart.addHistogramSeries({
         color: 'rgba(21,71,166,0.69)',
         lineWidth: 1,
+        lastValueVisible: false,
+        priceLineVisible: false,
         priceFormat: {
             minMove: 0.00001,
             precision: 5,

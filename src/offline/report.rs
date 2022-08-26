@@ -126,8 +126,8 @@ impl Report {
         let mut cs_txt = String::new();
         for (w, r) in &reports {
             let s = format!(
-                "{}   {:>5.2} - wr:{:.2}   w:{}  l:{} \n",
-                w, r.all_profit_perc, r.win_ratio, r.win_cnt, r.lose_cnt
+                "{}   {:>5.2} - wr:{:.2}   w:{}  l:{} -- net:{:.2}\n",
+                w, r.all_profit_perc, r.win_ratio, r.win_cnt, r.lose_cnt, r.net_profit,
             );
             cs_txt.push_str(&s);
             if r.all_profit_perc > 0. {

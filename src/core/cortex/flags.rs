@@ -45,29 +45,32 @@ impl FlagsDB {
         self.flags_set.insert(flag_row.flag_key(), flag_row.clone());
     }
 
+    // todo: imple pair
     pub fn get_all(&self, param: &FlagsRowCond) -> Vec<FlagsRow> {
         let mut arr = vec![];
         for (_, f) in self.flags_set.iter() {
-            if f.eng_key == f.eng_key || param.eng_key == "ALL" {
-                if f.type_key == f.type_key || param.type_key == "ALL" {
-                    let valid_med = valid_equal_id(param.medium_bar_id, f.medium_bar_id);
-                    let valid_small = valid_equal_id(param.small_bar_id, f.small_bar_id);
+            if f.pair == param.pair {
+                if f.eng_key == param.eng_key || param.eng_key == "ALL" {
+                    if f.type_key == param.type_key || param.type_key == "ALL" {
+                        let valid_med = valid_equal_id(param.medium_bar_id, f.medium_bar_id);
+                        let valid_small = valid_equal_id(param.small_bar_id, f.small_bar_id);
 
-                    // todo: we need current time
-                    let valid_time = match param.from_time_sec {
-                        None => true,
-                        Some(time) => {
-                            // fix
-                            if f.time_sec == time {
-                                true
-                            } else {
-                                false
+                        // todo: we need current time
+                        let valid_time = match param.from_time_sec {
+                            None => true,
+                            Some(time) => {
+                                // fix
+                                if f.time_sec == time {
+                                    true
+                                } else {
+                                    false
+                                }
                             }
-                        }
-                    };
+                        };
 
-                    if valid_med && valid_small && valid_time {
-                        arr.push(f.clone());
+                        if valid_med && valid_small && valid_time {
+                            arr.push(f.clone());
+                        }
                     }
                 }
             }

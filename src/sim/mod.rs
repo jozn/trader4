@@ -79,7 +79,7 @@ impl SimConfig {
         let mut brain = Brain::new(back_arc.clone(), self.pairs_conf.first().unwrap().clone());
         let pair = self.pair.clone();
         for (i, t) in self.ticks.iter().enumerate() {
-            if i % 10000 == 0 {
+            if i % 1_000_000 == 0 {
                 println!("{}", i);
             }
             back_arc.next_tick(t.clone());
