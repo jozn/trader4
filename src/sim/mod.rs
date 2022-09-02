@@ -15,8 +15,24 @@ use crate::types::{WeekDataDep, WeekInfo};
 use crate::{app, collector, offline, types};
 use std::ops::Range;
 use std::sync::Arc;
+use clap::Parser;
 
 // Sim is the simiulater for offline testing with web output and backtest.
+
+/// A Battleship Trader Bot!
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct Args {
+    /// Setting josn file path, no .json extiontion (def: "settings")
+    #[clap(short, long, default_value = "settings")]
+    setting: String,
+
+    /// Number of times to greet (not used)
+    #[clap(short, long, default_value_t = 7)]
+    count_not: u8,
+}
+
+// todo add JSMin
 #[derive(Debug, Default, serde::Serialize, serde::Deserialize, Clone)]
 pub struct Setting {
     pub pairs: Vec<Pair>,

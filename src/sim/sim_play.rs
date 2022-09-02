@@ -13,7 +13,12 @@ use crate::offline::*;
 use super::*;
 
 pub fn run_setting() {
-    let js = std::fs::read_to_string("./settings.json").unwrap();
+    let args: Args = Args::parse();
+    println!("Hello {:#?}!", args);
+
+    let set_path = format!("./{}.json",args.setting);
+    // let js = std::fs::read_to_string("./settings.json").unwrap();
+    let js = std::fs::read_to_string(set_path).unwrap();
     let set: app::sim::Setting = serde_json::from_str(&js).unwrap();
     // println!("{:#?}", set);
 
@@ -59,6 +64,8 @@ fn run_pair_setting(pair: &Pair, setting: &Setting) {
     run_cfg.run_web_sim(rng, false);
 }
 
+/*
+
 /////// Deprecated - not Setting based /////////////
 //// todo del
 
@@ -87,7 +94,6 @@ pub fn run1() {
     // run_pair(&Pair::SpotCrude);
     // run_pair(&Pair::USDCHF);
 }
-
 pub fn run2() {
     // run_pair(&Pair::USDCNH);
 
@@ -161,3 +167,4 @@ pub fn run_pair(pair: &Pair) {
     // one
     // run_cfg.run_web_sim(54..60, false);
 }
+*/

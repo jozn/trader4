@@ -10,13 +10,12 @@ use std::sync::Arc;
 
 pub type PairBarCfg = (Pair, BarConfig);
 
-// todo: change the name
 #[derive(Debug)]
 pub struct Brain {
     pub con: Box<Arc<dyn GateWay>>,
     pub cortex: CortexRef,
     pub db: Vec<PairSigHolder>,
-    pub set: bool,
+    pub set_dep: bool,
 }
 
 impl Brain {
@@ -25,7 +24,7 @@ impl Brain {
             con: Box::new(backend),
             cortex: cortex::new_cortex_ref(),
             db: vec![],
-            set: false,
+            set_dep: false,
         };
         brain
     }
@@ -52,10 +51,10 @@ impl Brain {
     pub fn on_price_tick(&mut self, pair: &Pair, tick: BTickData) {
         app::clock::set_clock_time(tick.timestamp);
         self.init_pair(pair);
-        if !self.set {
+        if !self.set_dep {
             self.init_pair(pair);
         }
-        self.set = true;
+        self.set_dep = true;
 
         let mut cortex = self.get_cortex_mut();
         cortex.on_price_tick(pair, tick.clone());
