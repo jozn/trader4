@@ -6,7 +6,7 @@ use crate::sig_engs::ml_eng::{FrameCsv, FrameCsvV2, MLFrame};
 use crate::types::*;
 use rstats::Printing;
 
-const OUT_FOLDER_CSV: &'static str = "/mnt/t/trader_out/v17/data_sky_web/";
+pub const OUT_FOLDER_CSV: &'static str = "/mnt/t/trader_out/v17/data_sky_web/";
 
 pub fn write_ml_csv(brain: &Brain) {
     for pm in brain.db.iter() {

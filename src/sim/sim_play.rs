@@ -16,7 +16,7 @@ pub fn run_setting() {
     let args: Args = Args::parse();
     println!("Hello {:#?}!", args);
 
-    let set_path = format!("./{}.json",args.setting);
+    let set_path = format!("./{}.json", args.setting);
     // let js = std::fs::read_to_string("./settings.json").unwrap();
     let js = std::fs::read_to_string(set_path).unwrap();
     let set: app::sim::Setting = serde_json::from_str(&js).unwrap();

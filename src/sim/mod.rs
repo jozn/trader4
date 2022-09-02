@@ -1,5 +1,8 @@
+mod ml_csv_feeder;
 pub mod ml_csv_writer;
 pub mod sim_play;
+
+use ml_csv_feeder::*;
 use ml_csv_writer::*;
 
 use crate::core::brain::*;
@@ -13,9 +16,9 @@ use crate::json_output::{SkyJsonOut, TrendAnalyseOut};
 use crate::offline::*;
 use crate::types::{WeekDataDep, WeekInfo};
 use crate::{app, collector, offline, types};
+use clap::Parser;
 use std::ops::Range;
 use std::sync::Arc;
-use clap::Parser;
 
 // Sim is the simiulater for offline testing with web output and backtest.
 
@@ -151,6 +154,8 @@ impl SimConfig {
 
         // CSV of ML
         write_ml_csv(&brain);
+        let trades: Vec<Position> = back_ref.closed.iter().map(|(_, p)| p.clone()).collect();
+        write_ml_csv_feed(trades, pair);
 
         let end_time = app::core::helper::get_time_ms();
         let run_time = (end_time - start_time) as f64;
