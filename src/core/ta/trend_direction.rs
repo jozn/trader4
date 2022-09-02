@@ -18,6 +18,8 @@ pub struct TrendDirection {
     minus_ma: EMA,
     adx_ma: EMA,
     diff_ma: EMA,
+    ma_mom: Momentum,
+    mom_mom: Momentum,
     cross: SimpleCross,
 }
 
@@ -27,6 +29,8 @@ pub struct TrendDirectionOutput {
     pub minus: f64, // is negative always
     pub diff: f64,
     pub diff_ma: f64,
+    pub ma_mom: f64,
+    pub mom_mom: f64,
     pub adx: f64,
     pub dmx: f64,         // My me: Dim Move Index -- see below for formula
     pub plus_above: bool, // true when plus crossed above the minus line - bullish
@@ -47,6 +51,8 @@ impl TrendDirection {
                 minus_ma: EMA::new_alpha(period, 1.)?,
                 adx_ma: EMA::new_alpha(adx_smooth, 1.)?,
                 diff_ma: EMA::new_alpha(adx_smooth, 1.)?,
+                ma_mom: Momentum::new(5).unwrap(),
+                mom_mom: Momentum::new(5).unwrap(),
                 cross: Default::default(),
             })
         }
@@ -68,7 +74,7 @@ impl TrendDirection {
         let plus_dm = if up > down && up > 0. { up } else { 0. };
         let minus_dm = if down > up && down > 0. { down } else { 0. };
 
-        let atr = self.atr.next(&candle);
+        let _atr = self.atr.next(&candle);
 
         // let plus = 100. * self.plus_ma.next(plus_dm) / atr;
         let plus = 100. * self.plus_ma.next(plus_dm);
@@ -94,6 +100,9 @@ impl TrendDirection {
         self.pre_high = candle.high();
         self.pre_low = candle.low();
 
+        let ma_mom = self.ma_mom.next(diff_ma);
+        let mom_mom = self.mom_mom.next(ma_mom);
+
         TrendDirectionOutput {
             adx,
             plus,
@@ -103,6 +112,8 @@ impl TrendDirection {
             plus_above: cr.crossed_above,
             plus_under: cr.crossed_under,
             diff_ma,
+            ma_mom,
+            mom_mom,
         }
     }
 }

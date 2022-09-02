@@ -61,6 +61,16 @@ function makeBarChart() {
         }
     }
 
+    // MAMom
+    if(fn.getOverlyShow("ma_mom", true)) {
+        fn.simpleLineOver(chart_major, jd.major.mm_ma);
+        fn.simpleLineOver(chart_medium, jd.major.mm_ma);
+        fn.simpleLineOver(chart_small, jd.major.mm_ma);
+
+        fn.simpleLineOver(chart_major, jd.medium.mm_ma,BLUE);
+        fn.simpleLineOver(chart_medium, jd.medium.mm_ma,BLUE);
+        fn.simpleLineOver(chart_small, jd.medium.mm_ma,BLUE);
+    }
     // Relative Price
     // Donchain Channel
     if(fn.getOverlyShow("rp_dc", true)) {
@@ -123,6 +133,24 @@ function makeBarChart() {
     var tscore_chart = fn.trendDirectionChart(tscore_el,jd.medium);
     fn.syncCharts(chart_medium,tscore_chart);
 
+    //MAMom
+    var medium_dmi_el = fn.makeNextIndi("ma_mom1",true,true);
+    var medium_dmi = fn.threeLines(medium_dmi_el,jd.major.mm_mom,jd.medium.mm_mom);
+    fn.syncCharts(chart_medium,medium_dmi);
+    var medium_dmi_el = fn.makeNextIndi("ma_mom2m",true,true);
+    var medium_dmi = fn.threeLines(medium_dmi_el,jd.major.mm_mom_mom,jd.medium.mm_mom_mom);
+    fn.syncCharts(chart_medium,medium_dmi);
+
+    // TD Mom
+    var medium_dmi_el = fn.makeNextIndi("td_moms",true,true);
+    var medium_dmi = fn.threeLines(medium_dmi_el,jd.major.ma_mom,jd.medium.ma_mom);
+    // var medium_dmi = fn.threeLines(medium_dmi_el,jd.major.ma_mom,jd.major.td_mom_mom);
+    fn.syncCharts(chart_medium,medium_dmi);
+
+    var medium_dmi_el = fn.makeNextIndi("td_moms2",true,true);
+    // var medium_dmi = fn.threeLines(medium_dmi_el,jd.major.ma_mom,jd.medium.ma_mom);
+    var medium_dmi = fn.threeLines(medium_dmi_el,jd.major.td_mom_mom,jd.medium.td_mom_mom);
+    fn.syncCharts(chart_medium,medium_dmi);
     // Relative Price
     // var medium_dmi_el = fn.makeNextIndi("medium_dmi",true,true);
     // var medium_dmi = fn.mdi(medium_dmi_el,jd.medium);

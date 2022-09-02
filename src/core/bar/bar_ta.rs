@@ -11,7 +11,7 @@ pub struct TAMethods {
     pub atr: ta::ATR,
     pub ma1: ta::EMA,
     pub dc_snake: ta::DCSnake,
-    pub ma_mom: ta::MAMom,
+    pub ma_mom_dep: ta::MAMomDep,
     pub bb: ta::BB,
     pub sb: ta::SB,
     pub gb: ta::GB,
@@ -26,16 +26,18 @@ pub struct TAMethods {
     pub vel: ta::Vel,
     pub vel_mom: ta::VelMom,
     pub rdc: ta::RDC,
-    pub td: ta::TD,
+    // pub td: ta::TD,
+    pub td: ta::TrendDirection,
     pub rel_price_dep: ta::RelPriceDep,
     pub rel_price: ta::RelPrice,
+    pub ma_mom: ta::MAMom,
 }
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct BarTA {
     pub atr: f64,
     pub ma1: f64,
-    pub ma_mom: f64,
+    pub ma_mom_dep: f64,
     pub dc_snake: ta::DCSnakeRes,
     pub bb: ta::BBOut,
     pub sb: ta::SBOut,
@@ -54,6 +56,7 @@ pub struct BarTA {
     pub td: ta::TDOut,
     pub rel_price_dep: ta::RelPriceResDep,
     pub rel_price: ta::RelPriceRes,
+    pub ma_mom: ta::MAMomOut,
 }
 
 impl TAMethods {
@@ -62,7 +65,7 @@ impl TAMethods {
             atr: ta::ATR::new(14).unwrap(),
             ma1: ta::EMA::new(25).unwrap(),
             dc_snake: ta::DCSnake::new(20).unwrap(),
-            ma_mom: ta::MAMom::new(25, 3).unwrap(),
+            ma_mom_dep: ta::MAMomDep::new(25, 3).unwrap(),
             bb: ta::BB::new(20, 1.5).unwrap(),
             sb: ta::SB::new(20, 2.0).unwrap(),
             gb: ta::GB::new(20, 2.).unwrap(),
@@ -77,9 +80,10 @@ impl TAMethods {
             vel: ta::Vel::new(15).unwrap(),
             vel_mom: ta::VelMom::new(25, 3).unwrap(),
             rdc: ta::RDC::new(20, 60).unwrap(),
-            td: ta::TD::new(14, 14).unwrap(),
+            td: ta::TrendDirection::new(14, 14).unwrap(),
             rel_price_dep: ta::RelPriceDep::new(20, 60).unwrap(),
             rel_price: ta::RelPrice::new(20).unwrap(),
+            ma_mom: ta::MAMom::new(25, 5, 5).unwrap(),
         }
     }
 }
@@ -90,7 +94,7 @@ pub fn cal_indicators(tam: &mut TAMethods, bar: &Bar) -> BarTA {
         atr: tam.atr.next(&bar),
         ma1: tam.ma1.next(price),
         dc_snake: tam.dc_snake.next(&bar),
-        ma_mom: tam.ma_mom.next(price),
+        ma_mom_dep: tam.ma_mom_dep.next(price),
         bb: tam.bb.next(&bar),
         sb: tam.sb.next(&bar),
         gb: tam.gb.next(&bar),
@@ -108,5 +112,6 @@ pub fn cal_indicators(tam: &mut TAMethods, bar: &Bar) -> BarTA {
         td: tam.td.next(&bar),
         rel_price_dep: tam.rel_price_dep.next(&bar),
         rel_price: tam.rel_price.next(&bar),
+        ma_mom: tam.ma_mom.next(price),
     }
 }

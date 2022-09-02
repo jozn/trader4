@@ -240,6 +240,13 @@ export function trendDirectionChart(el,d) {
         priceLineVisible: false,
     });
     scoreDiff.setData(d.td_diff);
+    var scoreDiff = chart2TV.addLineSeries({
+        color: 'rgb(43,50,79)',
+        lineWidth: 2,
+        lastValueVisible: false,
+        priceLineVisible: false,
+    });
+    scoreDiff.setData(d.td_ma);
     return chart2TV;
 }
 

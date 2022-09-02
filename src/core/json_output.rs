@@ -14,6 +14,11 @@ pub struct TimeFrameJson {
     pub ma1: Vec<RowJson>,
     pub ma_mom: Vec<RowJson>,
 
+    // MAMom
+    pub mm_ma: Vec<RowJson>,
+    pub mm_mom: Vec<RowJson>,
+    pub mm_mom_mom: Vec<RowJson>,
+
     // Velocity
     pub vel_avg: Vec<RowJson>,
     pub vel_end: Vec<RowJson>,
@@ -49,6 +54,9 @@ pub struct TimeFrameJson {
     pub td_plus: Vec<RowJson>,
     pub td_minus: Vec<RowJson>,
     pub td_diff: Vec<RowJson>,
+    pub td_ma: Vec<RowJson>,
+    pub td_mom: Vec<RowJson>,
+    pub td_mom_mom: Vec<RowJson>,
 
     // Relative Price
     pub rp_dc_high: Vec<RowJson>,
@@ -90,6 +98,7 @@ pub struct SkyJsonOut {
     pub score_bear: Vec<RowJson>,
     pub score_diff: Vec<RowJson>,
 
+    // dep
     pub major_ma_mom: Vec<RowJson>,
 
     // RDC - Relative DC
@@ -187,7 +196,22 @@ pub fn bars_to_json(bars: &Vec<PrimaryHolder>) -> TimeFrameJson {
         // MA Mom
         out.ma_mom.push(RowJson {
             time,
-            value: bta.ma_mom,
+            value: bta.ma_mom_dep,
+        });
+
+        // MAMom
+        let ma_mom = &bta.ma_mom;
+        out.mm_ma.push(RowJson {
+            time,
+            value: ma_mom.ma,
+        });
+        out.mm_mom.push(RowJson {
+            time,
+            value: ma_mom.mom,
+        });
+        out.mm_mom_mom.push(RowJson {
+            time,
+            value: ma_mom.mom_mom,
         });
 
         // Velocity
@@ -319,6 +343,18 @@ pub fn bars_to_json(bars: &Vec<PrimaryHolder>) -> TimeFrameJson {
             // value: bta.td.dmx,
             // value: bta.td.diff_ma,
             value: bta.td.diff,
+        });
+        out.td_ma.push(RowJson {
+            time,
+            value: bta.td.diff_ma,
+        });
+        out.td_mom.push(RowJson {
+            time,
+            value: bta.td.ma_mom,
+        });
+        out.td_mom_mom.push(RowJson {
+            time,
+            value: bta.td.mom_mom,
         });
 
         // Relative Price -- no small later set

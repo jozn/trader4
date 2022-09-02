@@ -15,6 +15,7 @@
             z-index: 999;
             width: -webkit-fill-available;
             margin-left: -10px;
+            background: #383838;
         }
         .form_block{
             min-height: 20px;
@@ -73,7 +74,7 @@
 <body style="background-color:white ">
 
 <div id="synced-charts">
-    <div class="form_holder">
+    <div class="form_holder;background: #383838">
         <div >
             <div style="margin-bottom: 0px" class="form_block">
                 <div style="float: left;">
@@ -85,11 +86,11 @@
                 </div>
             </div>
             <div class="form_block">
-                <div style="float: left;">
+                <div style="float: none;">
                     <form id="form_sub_indicators" >
                         <label class="label"><input type="checkbox" checked id="major_check_btn" onchange="checkboxChartChange()" class="checkbox"  > Major </input></label>
                         <label class="label"><input type="checkbox" checked id="medium_check_btn" onchange="checkboxChartChange()" class="checkbox"  > Medium </input></label>
-                        <label class="label"><input type="checkbox" checked id="small_check_btn" onchange="checkboxChartChange()" class="checkbox"  > Small </input></label>
+                        <label class="label"><input type="checkbox" checked1 id="small_check_btn" onchange="checkboxChartChange()" class="checkbox"  > Small </input></label>
                     </form>
                 </div>
                 <div style="float: right; margin-right:5px">

@@ -49,5 +49,15 @@ fn write_csv_feed(frames: &Vec<Position>, pair: Pair, file_ext_name: &str, rnd: 
         .collect();
     // let fff :Vec<FrameCsv> = frames.iter().map(|f| f.to_csv()).collect();
     let csv = to_csv_out_v3(&fff, false, true);
+    std::fs::write(folder, &csv);
+
+    //  Copy in main folder
+    let folder = format!(
+        "{}/{}/ml_feed/{}_{}.csv",
+        OUT_FOLDER_CSV,
+        pair.folder_path(),
+        file_ext_name,
+        &pair.to_string(),
+    );
     std::fs::write(folder, csv);
 }

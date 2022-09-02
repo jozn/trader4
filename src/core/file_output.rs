@@ -250,7 +250,7 @@ impl SingleFileGen {
 
             out.major_ma_mom.push(RowJson {
                 time,
-                value: fm.big.ta.ma_mom,
+                value: fm.big.ta.ma_mom_dep,
             });
         }
 
