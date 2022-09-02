@@ -1,0 +1,13 @@
+{
+  "pairs": [
+    "XAUUSD",
+    "USDCHF",
+    "SpotCrude"
+  ],
+  "week_start": 54,
+  "week_end": 55,
+  "print": true,
+  "report": true,
+  "days_out": false,
+  "web": true
+}

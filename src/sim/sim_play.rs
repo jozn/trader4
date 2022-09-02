@@ -12,6 +12,56 @@ use crate::offline::*;
 // use super::web_sim::*;
 use super::*;
 
+pub fn run_setting() {
+    let js = std::fs::read_to_string("./settings.json").unwrap();
+    let set: app::sim::Setting = serde_json::from_str(&js).unwrap();
+    // println!("{:#?}", set);
+
+    for p in &set.pairs {
+        run_pair_setting(p, &set);
+    }
+}
+fn run_pair_setting(pair: &Pair, setting: &Setting) {
+    let primary_ticks = 150;
+    let pair_cfg = (
+        // Pair::EURUSD,
+        pair.clone(), // todo: not used this field - go to sky_eng in there we have this
+        BarConfig {
+            primary_ticks,
+            big_ticks: primary_ticks * 3,
+        },
+    );
+
+    let mut run_cfg = SimConfig {
+        balance: 100_000.,
+        pairs_conf: vec![pair_cfg],
+        ticks: vec![],
+        week_data: vec![],
+        pair: pair.clone(),
+        out: FilesOutputConfig {
+            week_data: vec![],
+            pair: pair.clone(),
+            print: setting.print,
+            report: setting.report,
+            // days_out: false,
+            days_out: setting.days_out,
+            web: setting.web,
+        },
+        report_cfg: BackReportConf {
+            report_folder: "".to_string(),
+            report_sub_folder: "".to_string(),
+        },
+    };
+    let rng = Range {
+        start: setting.week_start,
+        end: setting.week_end,
+    };
+    run_cfg.run_web_sim(rng, false);
+}
+
+/////// Deprecated - not Setting based /////////////
+//// todo del
+
 pub fn run1() {
     // rstats::MinMax{}
     // run_pair(&Pair::EURUSD);
@@ -87,7 +137,8 @@ pub fn run_pair(pair: &Pair) {
             pair: pair.clone(),
             print: true,
             report: true,
-            days_out: false,
+            // days_out: false,
+            days_out: true,
             web: true,
         },
         report_cfg: BackReportConf {
@@ -104,9 +155,9 @@ pub fn run_pair(pair: &Pair) {
     // run_cfg.run_web_sim(25..60, false);
     // run_cfg.run_web_sim(45..60, false);
     // run_cfg.run_web_sim(52..60, false);
-    // run_cfg.run_web_sim(45..60, false);
-    // run_cfg.run_web_sim(50..55, false);
+    // run_cfg.run_web_sim(45..55, false);
+    run_cfg.run_web_sim(50..55, false);
 
     // one
-    run_cfg.run_web_sim(54..60, false);
+    // run_cfg.run_web_sim(54..60, false);
 }

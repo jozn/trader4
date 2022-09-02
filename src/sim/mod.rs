@@ -17,6 +17,16 @@ use std::ops::Range;
 use std::sync::Arc;
 
 // Sim is the simiulater for offline testing with web output and backtest.
+#[derive(Debug, Default, serde::Serialize, serde::Deserialize, Clone)]
+pub struct Setting {
+    pub pairs: Vec<Pair>,
+    pub week_start: u16,
+    pub week_end: u16,
+    pub print: bool,
+    pub report: bool,
+    pub days_out: bool,
+    pub web: bool,
+}
 
 pub struct SimConfig {
     pub balance: f64,

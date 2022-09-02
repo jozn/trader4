@@ -44,11 +44,11 @@ function makeBarChart() {
     fn.syncCharts(chart_medium,chart_small);
 
     // chart_medium.remove()
-    if(markers.length > 0) {
+    if(fn.getOverlyShow("trades",true)) {
         function writeLine(trade) {
-            fn.simpleLineOver(chart_medium,trade.rows,trade.color,5);
-            fn.simpleLineOver(chart_small,trade.rows,trade.color,5);
-            fn.simpleLineOver(chart_major,trade.rows,trade.color,5);
+            fn.simpleLineOver(chart_medium,trade.rows,trade.color,4);
+            fn.simpleLineOver(chart_small,trade.rows,trade.color,4);
+            fn.simpleLineOver(chart_major,trade.rows,trade.color,4);
         }
         for (var i=0; i< jd.trades_dur.length; i++){
             var trade = jd.trades_dur[i];

@@ -13,6 +13,7 @@ nohup.out
 
 # old_codes folder
 /old_codes/ml
+/old_codes/_lib/
 /old_codes/arch/ts/node_modules/
 
 # deug folder

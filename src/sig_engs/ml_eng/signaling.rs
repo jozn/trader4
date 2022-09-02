@@ -59,13 +59,16 @@ impl MLEng {
         let kid_small = self.mutli_bars.small_bars.primary_seq;
         let pro = 0.001;
         let pro = mbr.medium.primary.ta.dc.height_pop();
+        // let pro = 15_0.;
+        let pro = 15.; // 1.5$
         let r: f32 = rand::thread_rng().gen();
         let mut cor = self.get_cortex_mut();
         // cor.flags.add_once();
 
         let time = app::clock::get_clock_time_sec();
 
-        if kid % 5 == 0 {
+        // if kid % 5 == 0 {
+        if mbr.major_full {
             let sig = FlagsRow {
                 flag_id: 0,
                 pair,
@@ -79,7 +82,8 @@ impl MLEng {
             cor.flags.add_once_small(&sig);
         }
 
-        if kid % 8 == 0 {
+        // if kid % 8 == 0 {
+        if mbr.medium_full {
             let sig = FlagsRow {
                 flag_id: 0,
                 pair,
@@ -93,7 +97,9 @@ impl MLEng {
             cor.flags.add_once_small(&sig);
         }
 
-        if kid % 10 == 0 {
+        if mbr.medium_full {}
+        // if kid % 10 == 0 && mbr.medium_full {
+        if mbr.medium_full {
             // if r > 0.8 {
             // println!("{}",kid);
             // self.cortex_mem.mark_long_final(kid, tick.timestamp_sec);
