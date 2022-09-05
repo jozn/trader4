@@ -43,9 +43,9 @@ fn write_csv_feed(frames: &Vec<Position>, pair: Pair, file_ext_name: &str, rnd: 
     );
     helper::create_folders_for_file(&folder);
 
-    let fff: Vec<MLFrameFeedCsv> = frames
+    let fff: Vec<MLFrameFeed> = frames
         .iter()
-        .map(|f| f.new_pos.new_pos.frame.to_ml_feed_csv(f))
+        .map(|f| f.new_pos.new_pos.frame_ml.to_ml_feed_csv(f))
         .collect();
     // let fff :Vec<FrameCsv> = frames.iter().map(|f| f.to_csv()).collect();
     let csv = to_csv_out_v3(&fff, false, true);

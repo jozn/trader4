@@ -15,7 +15,7 @@ use std::rc::Rc;
 #[derive(Debug, Clone)]
 pub struct MLEng {
     pub cortex: CortexRef,
-    pub frames: Vec<MLFrame>,
+    pub frames: Vec<MLFrame>,// todo: make it RC
     pub mutli_bars: MultiBars,
 }
 
@@ -103,6 +103,9 @@ impl MLEng {
                 time_sec: tick.timestamp_sec as u64,
                 // frame: MLFrame::default(),
                 frame: act.frame_insight,
+                // frame_ml: self.frames.last().unwrap().clone()
+                frame_ml: Box::new(self.frames.last().unwrap().clone()),
+                // frame_ml: Default::default(),
             };
             let mut cor = self.get_cortex_mut();
             let last = cor.get_last_trade(pair);
