@@ -35,8 +35,8 @@ struct Args {
     count_not: u8,
 }
 
-// todo add JSMin
-#[derive(Debug, Default, serde::Serialize, serde::Deserialize, Clone)]
+// We use deser_hjson for deserializing
+#[derive(Debug, Default, serde::Deserialize, serde::Serialize, Clone)]
 pub struct Setting {
     pub pairs: Vec<Pair>,
     pub week_start: u16,

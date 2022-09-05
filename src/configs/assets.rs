@@ -41,6 +41,7 @@ fn get_pepperstone_symbol(sid: i64) -> TSymbol {
 //  in Pair.
 #[derive(Debug, Serialize, Deserialize, Clone, Copy, IntoEnumIterator, PartialEq)]
 pub enum Pair {
+    // EMPTY, // Used for json primariy -- funk pair
     // Forex -
     // "FX Majors" - 6
     EURUSD,
