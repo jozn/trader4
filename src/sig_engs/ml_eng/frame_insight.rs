@@ -30,6 +30,9 @@ impl MLFrameTradeInsight {
 }
 
 impl MLFrame {
+    pub fn to_insight_csv(&self) -> MLFrameInsightCsv {
+        self.insight.to_csv()
+    }
     pub fn to_ml_feed_csv(&self, po: &Position) -> MLFrameFeed {
         let m = &self.info.bar_medium.big.ta;
         let b = &self.info.bar_major.big.ta;

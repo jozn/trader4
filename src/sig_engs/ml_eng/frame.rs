@@ -6,6 +6,7 @@ use crate::cortex::FlagsRow;
 use crate::json_output::MarkerJson;
 use crate::ta::*;
 use serde::{Deserialize, Serialize};
+use std::rc::Rc;
 
 pub fn new_frame(mbr: &MultiBarRes) -> MLFrame {
     let p = &mbr.medium.primary;
@@ -39,6 +40,8 @@ pub fn new_frame(mbr: &MultiBarRes) -> MLFrame {
         signals: vec![],
     }
 }
+
+pub type MLFrameRef = Rc<MLFrame>;
 
 #[derive(Debug, Serialize, Clone, Default)]
 pub struct MLFrame {

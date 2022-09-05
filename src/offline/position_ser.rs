@@ -7,7 +7,7 @@ use csv::Writer;
 pub fn serialize_position_v4(poss: &Vec<Position>) -> String {
     let mut arr = vec![];
     for mut p in poss.clone() {
-        let frame = p.new_pos.new_pos.frame.to_csv();
+        let frame = p.new_pos.new_pos.frame_ml_ref.to_insight_csv();
         p.fid = frame.0.seq as u64;
         arr.push((p.clone(), frame));
     }
@@ -19,7 +19,7 @@ pub fn serialize_position_v4(poss: &Vec<Position>) -> String {
 pub fn serialize_position_v5_html(poss: &Vec<Position>) -> String {
     let mut arr = vec![];
     for mut p in poss.clone() {
-        let frame = p.new_pos.new_pos.frame.to_csv();
+        let frame = p.new_pos.new_pos.frame_ml_ref.to_insight_csv();
         p.fid = frame.0.seq as u64;
         // arr.push((p.clone(), frame));
         arr.push(p.clone());

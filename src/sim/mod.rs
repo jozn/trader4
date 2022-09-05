@@ -108,7 +108,7 @@ impl SimConfig {
         let mut brain = Brain::new(back_arc.clone(), self.pairs_conf.first().unwrap().clone());
         let pair = self.pair.clone();
         for (i, t) in self.ticks.iter().enumerate() {
-            if i % 1_000_000 == 0 {
+            if i % 1_00_000 == 0 {
                 println!("{}", i);
             }
             back_arc.next_tick(t.clone());
@@ -118,8 +118,11 @@ impl SimConfig {
                 brain.on_notify_position(not);
             }
         }
+        println!("Completed ");
         let mut back_ref = back_arc.engine.borrow_mut();
         back_ref.close_all_positions();
+        println!("Completed 2");
+
         // End tear down
         brain.on_end();
 

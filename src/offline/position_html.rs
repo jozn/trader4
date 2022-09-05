@@ -53,7 +53,7 @@ pub fn to_html_table_bk2(pos: &Vec<Position>) -> String {
 pub fn position_to_csv(poss: &Position, header: bool) -> String {
     let mut arr = vec![];
     let mut p = poss.clone();
-    let frame = p.new_pos.new_pos.frame.to_csv();
+    let frame = p.new_pos.new_pos.frame_ml_ref.to_insight_csv();
     p.fid = frame.0.seq as u64;
     arr.push(p.clone());
     let os = to_csv_out_v2(&arr, false, header);

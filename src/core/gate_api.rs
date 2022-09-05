@@ -26,10 +26,11 @@ pub struct NewPosReq {
     pub at_price: f64,
     pub time_sec: u64, // Brain time
     // pub frame: crate::sky_eng::SFrame,
-    pub frame: crate::sig_engs::ml_eng::MLFrameTradeInsight,
+    // pub frame: crate::sig_engs::ml_eng::MLFrameTradeInsight,
     // todo: fixme:This ml_frame caused the software become so slow
     // pub frame_ml: crate::sig_engs::ml_eng::MLFrame,
-    pub frame_ml: Box<crate::sig_engs::ml_eng::MLFrame>,
+    // pub frame_ml: Box<crate::sig_engs::ml_eng::MLFrame>,
+    pub frame_ml_ref: crate::sig_engs::ml_eng::MLFrameRef,
 }
 
 // Send from backend, cTrader to Brain

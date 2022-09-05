@@ -150,3 +150,32 @@ pub fn remove_json_comments(str: &str) -> String {
         .read_to_string(&mut stripped);
     stripped
 }
+
+//////////// Timer
+
+pub struct RunTimer {
+    start: u64,
+    end: u64,
+}
+
+impl RunTimer {
+    pub fn new(tag: &str) -> Self {
+        if tag.len() > 0 {
+            println!("starting {} ...", tag);
+        }
+        Self {
+            start: get_time_ms(),
+            end: 0,
+        }
+    }
+
+    pub fn end(&mut self) {
+        self.end = get_time_ms();
+    }
+
+    pub fn end_print(&self, msg: &str) {
+        let end_time = get_time_ms();
+        let run_time = (end_time - self.start) as f64;
+        println!("{} [{} sec]", msg, run_time / 1000.);
+    }
+}

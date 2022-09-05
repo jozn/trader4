@@ -138,7 +138,19 @@ impl Cortex {
     }
 
     pub fn on_end(&mut self) {
-        let s = format!("{:#?}", self);
+        // Ignore big runtime dump
+        let MAX = 300;
+        let s = if self.closed_pos.len() > MAX || self.sim_virtual._closed.len() > MAX {
+            let s = format!(
+                "too big for print \n closed orders: {:#?}",
+                self.closed_pos.len()
+            );
+            // return;
+            s
+        } else {
+            let s = format!("{:#?}", self);
+            s
+        };
         // println!("{}",s);
         std::fs::write("./debug/runtime/cortex_dump.txt", s);
     }

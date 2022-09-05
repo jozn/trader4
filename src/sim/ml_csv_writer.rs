@@ -2,7 +2,7 @@ use crate::configs::assets::Pair;
 use crate::core::brain::*;
 use crate::helper;
 use crate::helper::*;
-use crate::sig_engs::ml_eng::{FrameCsv, FrameCsvV2, MLFrame};
+use crate::sig_engs::ml_eng::{FrameCsv, FrameCsvV2, MLFrame, MLFrameRef};
 use crate::types::*;
 use rstats::Printing;
 
@@ -39,7 +39,7 @@ pub fn write_ml_csv(brain: &Brain) {
     }
 }
 
-fn write_csv2(frames: &Vec<MLFrame>, pair: &Pair, week_id: &str) {
+fn write_csv2(frames: &Vec<MLFrameRef>, pair: &Pair, week_id: &str) {
     let folder = format!(
         "{}/{}/ml_csv/{}_{}.csv",
         OUT_FOLDER_CSV,

@@ -45,7 +45,7 @@ fn write_csv_feed(frames: &Vec<Position>, pair: Pair, file_ext_name: &str, rnd: 
 
     let fff: Vec<MLFrameFeed> = frames
         .iter()
-        .map(|f| f.new_pos.new_pos.frame_ml.to_ml_feed_csv(f))
+        .map(|f| f.new_pos.new_pos.frame_ml_ref.to_ml_feed_csv(f))
         .collect();
     // let fff :Vec<FrameCsv> = frames.iter().map(|f| f.to_csv()).collect();
     let csv = to_csv_out_v3(&fff, false, true);

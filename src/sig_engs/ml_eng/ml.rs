@@ -9,13 +9,14 @@ use crate::json_output::{JsonMaker, MarkerJson, RowJson, SkyJsonOut};
 use serde::{Deserialize, Serialize};
 use std::borrow::{Borrow, BorrowMut};
 use std::cell::{Ref, RefMut};
+use std::ops::Deref;
 use std::rc::Rc;
 
 // Sky Engine
 #[derive(Debug, Clone)]
 pub struct MLEng {
     pub cortex: CortexRef,
-    pub frames: Vec<MLFrame>, // todo: make it RC
+    pub frames: Vec<MLFrameRef>,
     pub mutli_bars: MultiBars,
 }
 
@@ -46,6 +47,7 @@ impl MLEng {
                 let mut frame = new_frame(&mr);
 
                 let act = self.set_signals_random1(&tick, &mut frame, &mr);
+                // let act = None;
                 // let act = self.set_signals_v1(&tick, &mut frame, &mr);
                 // let act = self.set_signals_random2(&tick, &mut frame, &mr);
 
@@ -68,7 +70,8 @@ impl MLEng {
                     drop(cor);
                     frame.signals = sigs;
 
-                    self.frames.push(frame);
+                    let fr = Rc::new(frame);
+                    self.frames.push(fr);
                 }
                 act
             }
@@ -102,9 +105,10 @@ impl MLEng {
                 at_price: tick.ask_price,
                 time_sec: tick.timestamp_sec as u64,
                 // frame: MLFrame::default(),
-                frame: act.frame_insight,
+                // frame: act.frame_insight,
                 // frame_ml: self.frames.last().unwrap().clone()
-                frame_ml: Box::new(self.frames.last().unwrap().clone()),
+                // frame_ml: Box::new(self.frames.last().unwrap().clone()),
+                frame_ml_ref: Rc::clone(self.frames.last().unwrap()),
                 // frame_ml: Default::default(),
             };
             let mut cor = self.get_cortex_mut();
@@ -132,7 +136,9 @@ impl MLEng {
         let mut frams = vec![];
         for (id, f) in self.frames.iter().enumerate() {
             if id < 1000 {
-                frams.push(f.clone());
+                frams.push(f.deref().clone());
+            } else {
+                break;
             }
         }
         let s = serde_json::to_string_pretty(&frams).unwrap();
