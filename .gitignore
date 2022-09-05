@@ -21,3 +21,5 @@ nohup.out
 /debug/o*.txt
 /debug/runtime*/
 /debug/older/
+
+./settings*.json

@@ -8,7 +8,9 @@ fn main() {
 
 fn load_sttings() {
     let js = std::fs::read_to_string("./settings.json").unwrap();
+    let js = app::helper::remove_json_comments(&js);
     let set: app::sim::Setting = serde_json::from_str(&js).unwrap();
+    // let set: app::sim::Setting = serde_jsonrc::from_str(&js).unwrap();
     println!("{:#?}", set);
 }
 

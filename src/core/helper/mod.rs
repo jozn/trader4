@@ -2,6 +2,7 @@ use chrono::NaiveDateTime;
 use rand::Rng;
 use regex::Regex;
 use serde::Serialize;
+use std::io::Read;
 use std::path::Path;
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -140,4 +141,12 @@ pub fn to_duration(time_s: i64) -> String {
     let minutes = (time_s / 60) % 60;
     let hours = (time_s / 3660);
     format!("{}:{:02}:{:02}", hours, minutes, seconds)
+}
+
+pub fn remove_json_comments(str: &str) -> String {
+    let mut stripped = String::new();
+    json_comments::CommentSettings::all()
+        .strip_comments(str.as_bytes())
+        .read_to_string(&mut stripped);
+    stripped
 }

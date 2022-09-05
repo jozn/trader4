@@ -15,7 +15,7 @@ use std::rc::Rc;
 #[derive(Debug, Clone)]
 pub struct MLEng {
     pub cortex: CortexRef,
-    pub frames: Vec<MLFrame>,// todo: make it RC
+    pub frames: Vec<MLFrame>, // todo: make it RC
     pub mutli_bars: MultiBars,
 }
 
