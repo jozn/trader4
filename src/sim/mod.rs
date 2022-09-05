@@ -118,10 +118,8 @@ impl SimConfig {
                 brain.on_notify_position(not);
             }
         }
-        println!("Completed ");
         let mut back_ref = back_arc.engine.borrow_mut();
         back_ref.close_all_positions();
-        println!("Completed 2");
 
         // End tear down
         brain.on_end();
