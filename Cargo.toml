@@ -51,6 +51,12 @@ linfa = "0.6.0"
 approx = "0.4"
 linfa-datasets = { version = "0.6.0", path = "./old_codes/_lib/datasets", features = ["winequality"] }
 
+# todo: add profile dev optimztions level =1
+[profile.release]
+#opt-level = "z"  # Optimize for size.
+#lto = true
+#strip = true  # Automatically strip symbols from the binary.
+
 [build-dependencies]
 prost-build = { version ="0.8.0" }
 

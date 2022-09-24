@@ -1,16 +1,17 @@
 {
   "pairs": [
-    "XAUUSD",
+//    "XAUUSD",
 //    "USDCHF",
     "SpotCrude"
   ],
-//  "week_start": 50,
+  "week_start": 25,
 //  "week_start": 45,
 //  "week_start": 50,
-  "week_start": 54,
+//  "week_start": 54,
+
   "week_end": 55,
   "print": true,
   "report": true,
-  "days_out": true,
+  "days_out": false,
   "web": true
 }

@@ -46,8 +46,8 @@ impl MLEng {
             Some(mr) => {
                 let mut frame = new_frame(&mr);
 
-                let act = self.set_signals_random1(&tick, &mut frame, &mr);
-                // let act = None;
+                // let act = self.set_signals_random1(&tick, &mut frame, &mr);
+                let act = None;
                 // let act = self.set_signals_v1(&tick, &mut frame, &mr);
                 // let act = self.set_signals_random2(&tick, &mut frame, &mr);
 
@@ -104,12 +104,8 @@ impl MLEng {
                 signal_key: "sky_1".to_string(),
                 at_price: tick.ask_price,
                 time_sec: tick.timestamp_sec as u64,
-                // frame: MLFrame::default(),
-                // frame: act.frame_insight,
-                // frame_ml: self.frames.last().unwrap().clone()
-                // frame_ml: Box::new(self.frames.last().unwrap().clone()),
                 frame_ml_ref: Rc::clone(self.frames.last().unwrap()),
-                // frame_ml: Default::default(),
+                // frame_ml_ref: Rc::new(MLFrame::default()),
             };
             let mut cor = self.get_cortex_mut();
             let last = cor.get_last_trade(pair);

@@ -8,7 +8,7 @@ fn main() {
     rc();
     arc();
 
-    let c = Cell;
+    // let c = Cell;
 }
 
 struct Abc {

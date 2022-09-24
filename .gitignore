@@ -23,3 +23,5 @@ nohup.out
 /debug/older/
 
 ./settings*.json
+
+./venv
