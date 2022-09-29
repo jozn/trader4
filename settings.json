@@ -1,8 +1,8 @@
 {
   "pairs": [
-//    "XAUUSD",
+    "XAUUSD",
 //    "USDCHF",
-    "SpotCrude"
+//    "SpotCrude"
   ],
   "week_start": 25,
 //  "week_start": 45,

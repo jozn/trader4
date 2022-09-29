@@ -461,6 +461,7 @@ export function threeLines(el,line1Data, line2Data,line3Data) {
         lineWidth: 1,
         lastValueVisible: false,
         priceLineVisible: false,
+        baseLineColor: 'rgb(12,5,5)'
     });
     line1.setData(line1Data);
 

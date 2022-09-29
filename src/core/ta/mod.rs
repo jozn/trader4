@@ -14,6 +14,7 @@ pub use ema::*;
 pub use fisher::*;
 pub use gorilla_band::*;
 pub use hull::*;
+pub use line_dir::*;
 pub use ma_mom::*;
 pub use ma_mom_dep::*;
 pub use ma_trend::*;
@@ -44,6 +45,7 @@ pub use vel_mom::*;
 pub use wave::*;
 pub use window::*;
 pub use wma::*;
+// pub use vel_trend::*;
 
 pub mod average_absolute_deviation;
 pub mod average_true_range;
@@ -59,6 +61,7 @@ pub mod ema;
 pub mod fisher;
 pub mod gorilla_band;
 pub mod hull;
+pub mod line_dir;
 pub mod ma_mom;
 pub mod ma_mom_dep;
 pub mod ma_trend;
@@ -90,6 +93,7 @@ pub mod wave;
 pub mod window;
 pub mod wma;
 pub mod zigzag;
+// pub mod vel_trend;
 
 ////////// Some other shared types //////////
 
