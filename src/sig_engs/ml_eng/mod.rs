@@ -1,6 +1,7 @@
 pub mod frame;
 pub mod frame_insight;
 pub mod ml;
+pub mod ml_feeding;
 pub mod ml_json_csv;
 pub mod signaling;
 pub mod signaling_v2;
@@ -9,6 +10,7 @@ pub mod tscore;
 pub use frame::*;
 pub use frame_insight::*;
 pub use ml::*;
+pub use ml_feeding::*;
 pub use ml_json_csv::*;
 pub use signaling::*;
 pub use signaling_v2::*;

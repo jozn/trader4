@@ -31,6 +31,7 @@ pub struct TAMethods {
     pub rel_price_dep: ta::RelPriceDep,
     pub rel_price: ta::RelPrice,
     pub ma_mom: ta::MAMom,
+    pub line_dir: ta::LineDir,
 }
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
@@ -57,6 +58,7 @@ pub struct BarTA {
     pub rel_price_dep: ta::RelPriceResDep,
     pub rel_price: ta::RelPriceRes,
     pub ma_mom: ta::MAMomOut,
+    pub line_dir: ta::LineDirOut,
 }
 
 impl TAMethods {
@@ -84,15 +86,19 @@ impl TAMethods {
             rel_price_dep: ta::RelPriceDep::new(20, 60).unwrap(),
             rel_price: ta::RelPrice::new(20).unwrap(),
             ma_mom: ta::MAMom::new(25, 5, 5).unwrap(),
+            line_dir: ta::LineDir::new(0, 5, 5).unwrap(),
         }
     }
 }
 
 pub fn cal_indicators(tam: &mut TAMethods, bar: &Bar) -> BarTA {
     let price = bar.hlc3();
+    let ma1 = tam.ma1.next(price);
+
     BarTA {
         atr: tam.atr.next(&bar),
-        ma1: tam.ma1.next(price),
+        // ma1: tam.ma1.next(price),
+        ma1: ma1,
         dc_snake: tam.dc_snake.next(&bar),
         ma_mom_dep: tam.ma_mom_dep.next(price),
         bb: tam.bb.next(&bar),
@@ -113,5 +119,6 @@ pub fn cal_indicators(tam: &mut TAMethods, bar: &Bar) -> BarTA {
         rel_price_dep: tam.rel_price_dep.next(&bar),
         rel_price: tam.rel_price.next(&bar),
         ma_mom: tam.ma_mom.next(price),
+        line_dir: tam.line_dir.next(ma1),
     }
 }

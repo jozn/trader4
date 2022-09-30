@@ -46,8 +46,8 @@ impl MLEng {
             Some(mr) => {
                 let mut frame = new_frame(&mr);
 
-                // let act = self.set_signals_random1(&tick, &mut frame, &mr);
-                let act = None;
+                let act = self.set_signals_random1(&tick, &mut frame, &mr);
+                // let act = None;
                 // let act = self.set_signals_v1(&tick, &mut frame, &mr);
                 // let act = self.set_signals_random2(&tick, &mut frame, &mr);
 
