@@ -172,7 +172,7 @@ impl Cortex {
                     Some(t) => {
                         let x = &t.pos_res;
                         LastTradeRes {
-                            trade_cnt: 1,
+                            trade_cnt: 3,
                             is_closed: true,
                             is_won: x.profit > 0.,
                             is_short: t.pos_res.is_short,
@@ -202,8 +202,10 @@ impl Cortex {
 
     fn _get_open_trade(&self, pair: Pair) -> Option<PosHolder> {
         let mut trade = None;
+        let mut last_time = 0;
         for (k, v) in self.open_pos.iter() {
-            if v.pos_res.pair == pair {
+            if v.pos_res.pair == pair && last_time < v.pos_res.open_time {
+                last_time = v.pos_res.open_time;
                 trade = Some(v.clone());
             }
         }
@@ -212,8 +214,10 @@ impl Cortex {
 
     fn _get_closed_trade(&self, pair: Pair) -> Option<PosHolder> {
         let mut trade = None;
+        let mut last_time = 0;
         for (k, v) in self.closed_pos.iter() {
-            if v.pos_res.pair == pair {
+            if v.pos_res.pair == pair && last_time < v.pos_res.open_time {
+                last_time = v.pos_res.open_time;
                 trade = Some(v.clone());
             }
         }

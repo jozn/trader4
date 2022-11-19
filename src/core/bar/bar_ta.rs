@@ -50,7 +50,7 @@ pub struct BarTA {
     pub dmi: ta::DMIOutput,
     pub dmmd: ta::DMMDOutput,
     pub stoch: ta::StochRes,
-    pub trend: ta::MATrendOut,
+    pub trend: ta::MATrendOut, // todo change name to trend_channel
     pub vel: ta::VelRes,
     pub vel_mom: ta::VelMomRes,
     pub rdc: ta::RDCRes,
@@ -86,7 +86,7 @@ impl TAMethods {
             rel_price_dep: ta::RelPriceDep::new(20, 60).unwrap(),
             rel_price: ta::RelPrice::new(20).unwrap(),
             ma_mom: ta::MAMom::new(25, 5, 5).unwrap(),
-            line_dir: ta::LineDir::new(0, 5, 5).unwrap(),
+            line_dir: ta::LineDir::new(3, 5, 5).unwrap(),
         }
     }
 }
@@ -94,6 +94,7 @@ impl TAMethods {
 pub fn cal_indicators(tam: &mut TAMethods, bar: &Bar) -> BarTA {
     let price = bar.hlc3();
     let ma1 = tam.ma1.next(price);
+    let td = tam.td.next(&bar);
 
     BarTA {
         atr: tam.atr.next(&bar),
@@ -115,10 +116,10 @@ pub fn cal_indicators(tam: &mut TAMethods, bar: &Bar) -> BarTA {
         vel: tam.vel.next_ohlc(&bar),
         vel_mom: tam.vel_mom.next(price),
         rdc: tam.rdc.next(&bar),
-        td: tam.td.next(&bar),
+        td: td.clone(),
         rel_price_dep: tam.rel_price_dep.next(&bar),
         rel_price: tam.rel_price.next(&bar),
         ma_mom: tam.ma_mom.next(price),
-        line_dir: tam.line_dir.next(ma1),
+        line_dir: tam.line_dir.next(td.diff),
     }
 }

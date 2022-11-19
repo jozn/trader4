@@ -4,8 +4,9 @@
 //    "USDCHF",
 //    "SpotCrude"
   ],
-  "week_start": 25,
+//  "week_start": 25,
 //  "week_start": 45,
+  "week_start": 42,
 //  "week_start": 50,
 //  "week_start": 52,
 //  "week_start": 54,

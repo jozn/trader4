@@ -46,7 +46,8 @@ impl MLEng {
             Some(mr) => {
                 let mut frame = new_frame(&mr);
 
-                let act = self.set_signals_random1(&tick, &mut frame, &mr);
+                // let act = self.set_signals_random1(&tick, &mut frame, &mr);
+                let act = self.set_signals_for_ml_v1(&tick, &mut frame, &mr);
                 // let act = None;
                 // let act = self.set_signals_v1(&tick, &mut frame, &mr);
                 // let act = self.set_signals_random2(&tick, &mut frame, &mr);
@@ -89,6 +90,18 @@ impl MLEng {
         let f = &act;
         let kline_id = f.small_kid;
         let pair = tick.pair.clone();
+
+        let cortex = self.get_cortex();
+        let last_trade = cortex.get_last_trade(tick.pair);
+
+        // skip timing -- evey 20 min one
+        if last_trade.trade_cnt > 0
+            && last_trade.open_time + 10 * 60 > app::clock::get_clock_time_sec()
+        {
+            println!("skiping trade {:?}", last_trade);
+            return;
+        }
+        drop(cortex);
 
         if act.long {
             let np = NewPosReq {
