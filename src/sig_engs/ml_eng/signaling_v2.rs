@@ -38,7 +38,7 @@ impl MLEng {
         }
 
         let trend_ch = &mbr.small.big.ta.trend;
-        if trend_ch.bull_above && kid_small > 50{
+        if trend_ch.bull_above && kid_small > 50 {
             let sig = FlagsRow {
                 flag_id: 0,
                 pair,

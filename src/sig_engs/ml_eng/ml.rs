@@ -129,7 +129,7 @@ impl MLEng {
 
             let now = app::clock::get_clock_time_sec();
             // Real - every 15min one trade at most
-            if last.trade_cnt == 0 || ( last.is_closed && last.open_time + 900 < now) {
+            if last.trade_cnt == 0 || (last.is_closed && last.open_time + 900 < now) {
                 cor.new_positions.push(np);
             }
         }

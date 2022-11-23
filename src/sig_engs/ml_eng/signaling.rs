@@ -126,8 +126,8 @@ impl MLEng {
         mbr: &MultiBarRes,
     ) -> Option<ActionSignal> {
         let pair = tick.pair;
-        let kid = self.mutli_bars.medium_bars.primary_seq  ;
-        let kid_small = self.mutli_bars.small_bars.primary_seq ;
+        let kid = self.mutli_bars.medium_bars.primary_seq;
+        let kid_small = self.mutli_bars.small_bars.primary_seq;
         let pro = 0.001;
         let pro = mbr.medium.big.ta.dc.height_pop();
         // let pro = 15_0.;
