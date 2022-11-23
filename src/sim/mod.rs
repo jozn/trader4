@@ -101,6 +101,7 @@ impl SimConfig {
 
     pub fn run_web_sim(&mut self, week_rng: Range<u16>, days_out: bool) {
         make_output_dirs();
+        app::clock::reset_clock();
         let start_time = app::core::helper::get_time_ms();
         self.load_weeks_data(week_rng.clone());
         let backend = BackendEngineOuter::new(self.balance, &self.report_cfg);

@@ -4,14 +4,14 @@ use std::sync::Mutex;
 
 #[derive(Debug)]
 struct Clock {
-    last_time_ms: AtomicI64,
+    last_time_ms_dep: AtomicI64,
     mtx_last_time: Mutex<i64>,
 }
 static INSTANCE: OnceCell<Clock> = OnceCell::new();
 
 pub fn set_clock_time(time_ms: i64) {
     let mut s = INSTANCE.get_or_init(|| Clock {
-        last_time_ms: AtomicI64::new(time_ms),
+        last_time_ms_dep: AtomicI64::new(time_ms),
         mtx_last_time: Mutex::new(time_ms),
     });
     let mut last_guard = s.mtx_last_time.lock().unwrap();
@@ -19,6 +19,14 @@ pub fn set_clock_time(time_ms: i64) {
     if time_ms > last_time {
         *last_guard = time_ms;
     }
+}
+
+// Rest timer at the end of each simulations
+pub fn reset_clock() {
+    set_clock_time(0); // init it
+    let mut s = INSTANCE.get().unwrap();
+    let mut last_guard = s.mtx_last_time.lock().unwrap();
+    *last_guard = 0;
 }
 
 // Return last ticks clock in ms

@@ -30,7 +30,7 @@ function makeBarChart() {
 
     var markers = [];
     var markersMed = [];
-    if(fn.getOverlyShow("markers",true)) {
+    if(fn.getOverlyShow("markers",false)) {
         markers = jd.markers;
         markersMed = jd.markers_med;
     }
@@ -44,7 +44,7 @@ function makeBarChart() {
     fn.syncCharts(chart_medium,chart_small);
 
     // chart_medium.remove()
-    if(fn.getOverlyShow("trades",true)) {
+    if(fn.getOverlyShow("trades",false)) {
         function writeLine(trade) {
             fn.simpleLineOver(chart_medium,trade.rows,trade.color,4);
             fn.simpleLineOver(chart_small,trade.rows,trade.color,4);
@@ -73,13 +73,13 @@ function makeBarChart() {
     }
     // Relative Price
     // Donchain Channel
-    if(fn.getOverlyShow("rp_dc", true)) {
+    if(fn.getOverlyShow("rp_dc", false)) {
         fn.simpleLineOver(chart_medium,jd.medium.rp_dc_high,YELLOW);
         fn.simpleLineOver(chart_medium,jd.medium.rp_dc_low,YELLOW);
         fn.simpleLineOver(chart_medium,jd.major.rp_dc_high,ORANGE,1.0);
         fn.simpleLineOver(chart_medium,jd.major.rp_dc_low,ORANGE,1.0);
     }
-    if(fn.getOverlyShow("rp_os", true)) {
+    if(fn.getOverlyShow("rp_os", false)) {
         fn.simpleLineOver(chart_medium,jd.medium.rp_oversold,BLUE);
         // fn.simpleLineOver(chart_medium,jd.medium.rp_dc_low,YELLOW);
         // fn.simpleLineOver(chart_medium,jd.major.rp_dc_high,ORANGE,1.0);
@@ -94,7 +94,7 @@ function makeBarChart() {
     }
 
     // RPI indicaotr
-    if(fn.getOverlyShow("rpi",true)) {
+    if(fn.getOverlyShow("rpi",false)) {
         // fn.rpiOverIndicator(chart_major,jd.major);
         fn.rpiOverIndicator(chart_medium, jd.medium);
         fn.rpiOverIndicator(chart_small, jd.medium);
@@ -114,7 +114,7 @@ function makeBarChart() {
         fn.simpleLineOver(chart_medium,jd.medium.dcs_oversold,ORANGE,2);
     }
     // Relative Price
-    if(fn.getOverlyShow("rel_price_os",true)) {
+    if(fn.getOverlyShow("rel_price_os",false)) {
         fn.simpleLineOver(chart_medium,jd.rp_os_med,BLUE);
         // fn.simpleLineOver(chart_medium,jd.rp_os_big,BLUE2);
         // fn.simpleLineOver(chart_medium,jd.medium.dcs_oversold,ORANGE,2);
@@ -195,23 +195,25 @@ function makeBarChart() {
     var vm1_chart1 = fn.onelineSubIndiacor(vm1_el1,jd.major.vm_mom);
     fn.syncCharts(chart_medium,vm1_chart1);
 
-    var vm1_el1 = fn.makeNextIndi("vm_sum",true,true);
-    var vm1_chart1 = fn.onelineSubIndiacor(vm1_el1,jd.major.vm_sum);
-    fn.syncCharts(chart_medium,vm1_chart1);
-    fn.syncCharts(chart_medium,vm1_chart1);
+// Commented for showcase
+//     var vm1_el1 = fn.makeNextIndi("vm_sum",true,true);
+//     var vm1_chart1 = fn.onelineSubIndiacor(vm1_el1,jd.major.vm_sum);
+//     fn.syncCharts(chart_medium,vm1_chart1);
+//     fn.syncCharts(chart_medium,vm1_chart1);
 
     var vm1_el1 = fn.makeNextIndi("vm_count",true,true);
     var vm1_chart1 = fn.onelineSubIndiacor(vm1_el1,jd.major.vm_count);
     fn.syncCharts(chart_medium,vm1_chart1);
 
+// Commented for showcase
     // Vel
-    var vel1_el1 = fn.makeNextIndi("vel_avg_cnt",false,true);
+/*     var vel1_el1 = fn.makeNextIndi("vel_avg_cnt",false,true);
     var vel1_chart1 = fn.onelineSubIndiacor(vel1_el1,jd.major.vel_avg);
     fn.syncCharts(chart_medium,vel1_chart1);
 
     var vel1_el1 = fn.makeNextIndi("vel_end",false,true);
     var vel1_chart1 = fn.onelineSubIndiacor(vel1_el1,jd.major.vel_end);
-    fn.syncCharts(chart_medium,vel1_chart1);
+    fn.syncCharts(chart_medium,vel1_chart1); */
 
 
     // new ma mom
